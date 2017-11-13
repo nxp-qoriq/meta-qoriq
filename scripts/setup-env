@@ -73,8 +73,8 @@ For more information about OpenEmbedded see their website:
     http://www.openembedded.org/
 
 You can now run 'bitbake <target>'
-    fsl-image-core
-    fsl-image-full
+    fsl-image-networking
+    fsl-image-networking-full
 "
     echo "To return to this build environment later please run:"
     echo "    . $PROJECT_DIR/SOURCE_THIS"
@@ -294,6 +294,7 @@ DL_DIR = "$DOWNLOADS"
 SSTATE_DIR = "$CACHES"
 INHERIT += "own-mirrors"
 SOURCE_MIRROR_URL ?= "http://git.freescale.com/source/"
+INITRAMFS_IMAGE = "fsl-image-networking"
 EOF
 
 for s in $HOME/.oe $HOME/.yocto; do

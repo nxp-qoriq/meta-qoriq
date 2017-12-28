@@ -45,7 +45,6 @@ RDEPENDS_${PN} = "\
 RDEPENDS_${PN}_append_ls1043ardb = " \
     ceetm \
     dpdk \
-    dpdk-extras \
     optee-os \
     optee-client \
     optee-test \
@@ -53,7 +52,6 @@ RDEPENDS_${PN}_append_ls1043ardb = " \
 RDEPENDS_${PN}_append_ls1046ardb = " \
     ceetm \
     dpdk \
-    dpdk-extras \
     optee-os \
     optee-client \
     optee-test \
@@ -67,13 +65,11 @@ RDEPENDS_${PN}_append_ls1012ardb = " \
 RDEPENDS_${PN}_append_ls1088a = " \
     aiopsl \
     dpdk \
-    dpdk-extras \
     odp \
 "
 RDEPENDS_${PN}_append_ls2088a = " \
     aiopsl \
     dpdk \
-    dpdk-extras \
     odp \
 "
 

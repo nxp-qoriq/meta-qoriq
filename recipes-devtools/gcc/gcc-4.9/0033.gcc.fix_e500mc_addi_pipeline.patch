@@ -1,0 +1,44 @@
+# Problem Statement:
+  Fix consumer-1.rgbyiq01 benchmark degradation with GCC v492.
+
+  Target: e500mc.
+
+  There were 2 issues:
+  * add/addi/addis instrutions were scheduled too close.
+  * Fixing the above issue lead to degradation in rgbcmy01 benchmark.
+    Reason being 'nor' instructions were scheduled too close.
+
+# Owned by:
+  Rohit
+
+# Action:
+  * Allocate SU resource such that "add/addi/addis" and "nor" instructions are
+    not scheduled closer.
+
+diff -Naur gcc-4.9.2/gcc/config/rs6000/rs6000.md gcc-4.9.2-rgbyiq/gcc/config/rs6000/rs6000.md
+--- gcc-4.9.2/gcc/config/rs6000/rs6000.md	2014-12-22 06:46:25.860952006 -0600
++++ gcc-4.9.2-rgbyiq/gcc/config/rs6000/rs6000.md	2014-12-31 06:25:34.421951939 -0600
+@@ -1863,7 +1863,10 @@
+    addi %0,%1,%2
+    addic %0,%1,%2
+    addis %0,%1,%v2"
+-  [(set_attr "length" "4,4,4,4")])
++  [(set_attr "length" "4,4,4,4")
++   (set (attr "type")
++        (if_then_else (match_test "rs6000_cpu_attr == CPU_PPCE500MC")
++                      (const_string "two") (const_string "*")))])
+ 
+ (define_insn "addsi3_high"
+   [(set (match_operand:SI 0 "gpc_reg_operand" "=b")
+@@ -1982,7 +1985,10 @@
+   [(set (match_operand:GPR 0 "gpc_reg_operand" "=r")
+ 	(not:GPR (match_operand:GPR 1 "gpc_reg_operand" "r")))]
+   ""
+-  "nor %0,%1,%1")
++  "nor %0,%1,%1"
++  [(set (attr "type")
++        (if_then_else (match_test "rs6000_cpu_attr == CPU_PPCE500MC")
++                      (const_string "two") (const_string "*")))])
+ 
+ (define_insn ""
+   [(set (match_operand:CC 0 "cc_reg_operand" "=x,?y")

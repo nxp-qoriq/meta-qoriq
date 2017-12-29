@@ -1,0 +1,25 @@
+From 2b5bef22e2d2891b568ca9ba6b8f0df88609cc7d Mon Sep 17 00:00:00 2001
+From: Cedric Bastoul <cedric.bastoul@unistra.fr>
+Date: Fri, 4 Oct 2013 00:13:56 +0200
+Subject: [PATCH] Fix include directory for libcloog-isl
+
+---
+ Makefile.am |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index fd0f5c3..0425400 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -89,7 +89,7 @@ SOURCES_CORE = \
+ 
+ AM_CPPFLAGS = -I. -I$(top_builddir)/include -I$(top_srcdir)/include
+ AM_CFLAGS = $(CFLAGS_WARN)
+-libcloog_isl_la_CPPFLAGS = @ISL_CPPFLAGS@ @OSL_CPPFLAGS@
++libcloog_isl_la_CPPFLAGS = -I. -I$(top_builddir)/include -I$(top_srcdir)/include @ISL_CPPFLAGS@ @OSL_CPPFLAGS@
+ libcloog_isl_la_LDFLAGS = -version-info @versioninfo@ \
+ 	-rpath $(libdir) @ISL_LDFLAGS@ @OSL_LDFLAGS@
+ libcloog_isl_la_LIBADD = @ISL_LIBS@ @OSL_LIBS@ $(ISL_LA) $(OSL_LA)
+-- 
+1.7.0.9.GIT
+

@@ -1,0 +1,22 @@
+# Problem Statement:
+  Windows toolchain gave an ICE in pass manager.
+
+# Owned by:
+  Rohit
+
+# Referred from patch by:
+  David Malcolm
+
+# Action:
+  * Backport r217807 trunk to add all_late_ipa_passes to GCC_PASS_LISTS
+
+--- trunk/gcc/pass_manager.h	2014/11/19 20:21:19	217806
++++ trunk/gcc/pass_manager.h	2014/11/19 20:26:57	217807
+@@ -29,6 +29,7 @@
+   DEF_PASS_LIST (all_lowering_passes) \
+   DEF_PASS_LIST (all_small_ipa_passes) \
+   DEF_PASS_LIST (all_regular_ipa_passes) \
++  DEF_PASS_LIST (all_late_ipa_passes) \
+   DEF_PASS_LIST (all_passes)
+ 
+ #define DEF_PASS_LIST(LIST) PASS_LIST_NO_##LIST,

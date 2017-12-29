@@ -1,0 +1,709 @@
+# Problem Statement:
+  Eliminate sign and zero extensions in PPC generated code based on
+  Value Range Information.
+
+# Owned by:
+  Rohit
+
+# Referred from patch by:
+  Kugan Vivekanandarajah
+
+# Action:
+  * Backport r213749 and r213750 from trunk to remove
+    redundant sign/zero extensions during RTL expansion.
+  * Fix ENGR00340415 and add test case.
+  * Add code to eliminate sign/zero extension for ternary operation.
+
+diff -Naur gcc-4.9.2/gcc/calls.c gcc-4.9.2-kugan-extelim-patch/gcc/calls.c
+--- gcc-4.9.2/gcc/calls.c	2014-03-20 06:35:22.000000000 -0500
++++ gcc-4.9.2-kugan-extelim-patch/gcc/calls.c	2014-11-12 06:58:40.207947839 -0600
+@@ -1499,8 +1499,10 @@
+ 	      args[i].initial_value
+ 		= gen_lowpart_SUBREG (mode, args[i].value);
+ 	      SUBREG_PROMOTED_VAR_P (args[i].initial_value) = 1;
+-	      SUBREG_PROMOTED_UNSIGNED_SET (args[i].initial_value,
+-					    args[i].unsignedp);
++	      if (promoted_for_signed_and_unsigned_p (args[i].tree_value, mode))
++		SUBREG_PROMOTED_SET (args[i].initial_value, SRP_SIGNED_AND_UNSIGNED);
++	      else
++		SUBREG_PROMOTED_SET (args[i].initial_value, args[i].unsignedp);
+ 	    }
+ 	}
+     }
+@@ -3375,7 +3377,7 @@
+ 
+ 	  target = gen_rtx_SUBREG (TYPE_MODE (type), target, offset);
+ 	  SUBREG_PROMOTED_VAR_P (target) = 1;
+-	  SUBREG_PROMOTED_UNSIGNED_SET (target, unsignedp);
++	  SUBREG_PROMOTED_SET (target, unsignedp);
+ 	}
+ 
+       /* If size of args is variable or this was a constructor call for a stack
+diff -Naur gcc-4.9.2/gcc/cfgexpand.c gcc-4.9.2-kugan-extelim-patch/gcc/cfgexpand.c
+--- gcc-4.9.2/gcc/cfgexpand.c	2014-04-22 08:15:24.000000000 -0500
++++ gcc-4.9.2-kugan-extelim-patch/gcc/cfgexpand.c	2014-11-12 06:58:40.208947888 -0600
+@@ -3265,7 +3265,7 @@
+ 	      ;
+ 	    else if (promoted)
+ 	      {
+-		int unsignedp = SUBREG_PROMOTED_UNSIGNED_P (target);
++		int unsignedp = SUBREG_PROMOTED_SIGN (target);
+ 		/* If TEMP is a VOIDmode constant, use convert_modes to make
+ 		   sure that we properly convert it.  */
+ 		if (CONSTANT_P (temp) && GET_MODE (temp) == VOIDmode)
+@@ -3277,7 +3277,13 @@
+ 					  GET_MODE (target), temp, unsignedp);
+ 		  }
+ 
+-		convert_move (SUBREG_REG (target), temp, unsignedp);
++		if ((SUBREG_PROMOTED_GET (target) == SRP_SIGNED_AND_UNSIGNED)
++		    && (GET_CODE (temp) == SUBREG)
++		    && (GET_MODE (target) == GET_MODE (temp))
++		    && (GET_MODE (SUBREG_REG (target)) == GET_MODE (SUBREG_REG (temp))))
++		  emit_move_insn (SUBREG_REG (target), SUBREG_REG (temp));
++		else
++		  convert_move (SUBREG_REG (target), temp, unsignedp);
+ 	      }
+ 	    else if (nontemporal && emit_storent_insn (target, temp))
+ 	      ;
+diff -Naur gcc-4.9.2/gcc/combine.c gcc-4.9.2-kugan-extelim-patch/gcc/combine.c
+--- gcc-4.9.2/gcc/combine.c	2014-07-08 10:43:39.000000000 -0500
++++ gcc-4.9.2-kugan-extelim-patch/gcc/combine.c	2014-11-12 06:58:40.211948210 -0600
+@@ -12433,7 +12433,7 @@
+       rsp = &reg_stat[regno];
+       if (rsp->last_set == insn)
+ 	{
+-	  if (SUBREG_PROMOTED_UNSIGNED_P (subreg) > 0)
++	  if (SUBREG_PROMOTED_UNSIGNED_P (subreg))
+ 	    rsp->last_set_nonzero_bits &= GET_MODE_MASK (mode);
+ 	}
+ 
+diff -Naur gcc-4.9.2/gcc/expr.c gcc-4.9.2-kugan-extelim-patch/gcc/expr.c
+--- gcc-4.9.2/gcc/expr.c	2014-09-01 05:14:22.000000000 -0500
++++ gcc-4.9.2-kugan-extelim-patch/gcc/expr.c	2014-11-12 06:59:50.555951666 -0600
+@@ -67,6 +67,7 @@
+ #include "params.h"
+ #include "tree-ssa-address.h"
+ #include "cfgexpand.h"
++#include "tree-ssa.h"
+ 
+ /* Decide whether a function's arguments should be processed
+    from first to last or from last to first.
+@@ -344,7 +345,7 @@
+   if (GET_CODE (from) == SUBREG && SUBREG_PROMOTED_VAR_P (from)
+       && (GET_MODE_PRECISION (GET_MODE (SUBREG_REG (from)))
+ 	  >= GET_MODE_PRECISION (to_mode))
+-      && SUBREG_PROMOTED_UNSIGNED_P (from) == unsignedp)
++      && SUBREG_CHECK_PROMOTED_SIGN (from, unsignedp))
+     from = gen_lowpart (to_mode, from), from_mode = to_mode;
+ 
+   gcc_assert (GET_CODE (to) != SUBREG || !SUBREG_PROMOTED_VAR_P (to));
+@@ -718,7 +719,7 @@
+ 
+   if (GET_CODE (x) == SUBREG && SUBREG_PROMOTED_VAR_P (x)
+       && GET_MODE_SIZE (GET_MODE (SUBREG_REG (x))) >= GET_MODE_SIZE (mode)
+-      && SUBREG_PROMOTED_UNSIGNED_P (x) == unsignedp)
++      && SUBREG_CHECK_PROMOTED_SIGN (x, unsignedp))
+     x = gen_lowpart (mode, SUBREG_REG (x));
+ 
+   if (GET_MODE (x) != VOIDmode)
+@@ -5226,25 +5227,25 @@
+ 	  && GET_MODE_PRECISION (GET_MODE (target))
+ 	     == TYPE_PRECISION (TREE_TYPE (exp)))
+ 	{
+-	  if (TYPE_UNSIGNED (TREE_TYPE (exp))
+-	      != SUBREG_PROMOTED_UNSIGNED_P (target))
++	  if (!SUBREG_CHECK_PROMOTED_SIGN (target,
++					  TYPE_UNSIGNED (TREE_TYPE (exp))))
+ 	    {
+ 	      /* Some types, e.g. Fortran's logical*4, won't have a signed
+ 		 version, so use the mode instead.  */
+ 	      tree ntype
+ 		= (signed_or_unsigned_type_for
+-		   (SUBREG_PROMOTED_UNSIGNED_P (target), TREE_TYPE (exp)));
++		   (SUBREG_PROMOTED_SIGN (target), TREE_TYPE (exp)));
+ 	      if (ntype == NULL)
+ 		ntype = lang_hooks.types.type_for_mode
+ 		  (TYPE_MODE (TREE_TYPE (exp)),
+-		   SUBREG_PROMOTED_UNSIGNED_P (target));
++		   SUBREG_PROMOTED_SIGN (target));
+ 
+ 	      exp = fold_convert_loc (loc, ntype, exp);
+ 	    }
+ 
+ 	  exp = fold_convert_loc (loc, lang_hooks.types.type_for_mode
+ 				  (GET_MODE (SUBREG_REG (target)),
+-				   SUBREG_PROMOTED_UNSIGNED_P (target)),
++				   SUBREG_PROMOTED_SIGN (target)),
+ 				  exp);
+ 
+ 	  inner_target = SUBREG_REG (target);
+@@ -5258,14 +5259,14 @@
+       if (CONSTANT_P (temp) && GET_MODE (temp) == VOIDmode)
+ 	{
+ 	  temp = convert_modes (GET_MODE (target), TYPE_MODE (TREE_TYPE (exp)),
+-				temp, SUBREG_PROMOTED_UNSIGNED_P (target));
++				temp, SUBREG_PROMOTED_SIGN (target));
+ 	  temp = convert_modes (GET_MODE (SUBREG_REG (target)),
+ 			        GET_MODE (target), temp,
+-			        SUBREG_PROMOTED_UNSIGNED_P (target));
++				SUBREG_PROMOTED_SIGN (target));
+ 	}
+ 
+       convert_move (SUBREG_REG (target), temp,
+-		    SUBREG_PROMOTED_UNSIGNED_P (target));
++		    SUBREG_PROMOTED_SIGN (target));
+ 
+       return NULL_RTX;
+     }
+@@ -9232,6 +9233,35 @@
+ }
+ #undef REDUCE_BIT_FIELD
+ 
++/* Return TRUE if value in SSA is zero and sign extended for wider mode MODE
++   using value range information stored.  Return FALSE otherwise.
++
++   This is used to check if SUBREG is zero and sign extended and to set
++   promoted mode SRP_SIGNED_AND_UNSIGNED to SUBREG.  */
++
++bool
++promoted_for_signed_and_unsigned_p (tree ssa, enum machine_mode mode)
++{
++  wide_int min, max;
++
++  if (ssa == NULL_TREE
++      || TREE_CODE (ssa) != SSA_NAME
++      || !INTEGRAL_TYPE_P (TREE_TYPE (ssa))
++      || (TYPE_PRECISION (TREE_TYPE (ssa)) != GET_MODE_PRECISION (mode)))
++    return false;
++
++  /* Return FALSE if value_range is not recorded for SSA.  */
++  if (get_range_info (ssa, &min, &max) != VR_RANGE)
++    return false;
++
++  /* Return true (to set SRP_SIGNED_AND_UNSIGNED to SUBREG) if MSB of the
++     smaller mode is not set (i.e.  MSB of ssa is not set).  */
++  if (!wi::neg_p (min, SIGNED) && !wi::neg_p(max, SIGNED))
++    return true;
++  else
++    return false;
++
++}
+ 
+ /* Return TRUE if expression STMT is suitable for replacement.  
+    Never consider memory loads as replaceable, because those don't ever lead 
+@@ -9514,7 +9544,10 @@
+ 
+ 	  temp = gen_lowpart_SUBREG (mode, decl_rtl);
+ 	  SUBREG_PROMOTED_VAR_P (temp) = 1;
+-	  SUBREG_PROMOTED_UNSIGNED_SET (temp, unsignedp);
++	  if (promoted_for_signed_and_unsigned_p (ssa_name, mode))
++	    SUBREG_PROMOTED_SET (temp, SRP_SIGNED_AND_UNSIGNED);
++	  else
++	    SUBREG_PROMOTED_SET (temp, unsignedp);
+ 	  return temp;
+ 	}
+ 
+diff -Naur gcc-4.9.2/gcc/expr.h gcc-4.9.2-kugan-extelim-patch/gcc/expr.h
+--- gcc-4.9.2/gcc/expr.h	2014-03-24 12:38:09.000000000 -0500
++++ gcc-4.9.2-kugan-extelim-patch/gcc/expr.h	2014-11-12 06:58:40.205947702 -0600
+@@ -446,6 +446,7 @@
+ 			       enum expand_modifier, rtx *, bool);
+ extern rtx expand_expr_real_2 (sepops, rtx, enum machine_mode,
+ 			       enum expand_modifier);
++extern bool promoted_for_signed_and_unsigned_p (tree, enum machine_mode);
+ 
+ /* Generate code for computing expression EXP.
+    An rtx for the computed value is returned.  The value is never null.
+diff -Naur gcc-4.9.2/gcc/function.c gcc-4.9.2-kugan-extelim-patch/gcc/function.c
+--- gcc-4.9.2/gcc/function.c	2014-07-10 05:41:15.000000000 -0500
++++ gcc-4.9.2-kugan-extelim-patch/gcc/function.c	2014-11-12 06:58:40.206947771 -0600
+@@ -3085,7 +3085,7 @@
+ 	  /* The argument is already sign/zero extended, so note it
+ 	     into the subreg.  */
+ 	  SUBREG_PROMOTED_VAR_P (tempreg) = 1;
+-	  SUBREG_PROMOTED_UNSIGNED_SET (tempreg, unsignedp);
++	  SUBREG_PROMOTED_SET (tempreg, unsignedp);
+ 	}
+ 
+       /* TREE_USED gets set erroneously during expand_assignment.  */
+diff -Naur gcc-4.9.2/gcc/ifcvt.c gcc-4.9.2-kugan-extelim-patch/gcc/ifcvt.c
+--- gcc-4.9.2/gcc/ifcvt.c	2014-09-30 05:33:25.000000000 -0500
++++ gcc-4.9.2-kugan-extelim-patch/gcc/ifcvt.c	2014-11-12 06:58:40.202947490 -0600
+@@ -1473,8 +1473,8 @@
+ 	  || byte_vtrue != byte_vfalse
+ 	  || (SUBREG_PROMOTED_VAR_P (vtrue)
+ 	      != SUBREG_PROMOTED_VAR_P (vfalse))
+-	  || (SUBREG_PROMOTED_UNSIGNED_P (vtrue)
+-	      != SUBREG_PROMOTED_UNSIGNED_P (vfalse)))
++	  || (SUBREG_PROMOTED_GET (vtrue)
++	      != SUBREG_PROMOTED_GET (vfalse)))
+ 	return NULL_RTX;
+ 
+       promoted_target = gen_reg_rtx (GET_MODE (reg_vtrue));
+@@ -1488,7 +1488,7 @@
+ 
+       target = gen_rtx_SUBREG (GET_MODE (vtrue), promoted_target, byte_vtrue);
+       SUBREG_PROMOTED_VAR_P (target) = SUBREG_PROMOTED_VAR_P (vtrue);
+-      SUBREG_PROMOTED_UNSIGNED_SET (target, SUBREG_PROMOTED_UNSIGNED_P (vtrue));
++      SUBREG_PROMOTED_SET (target, SUBREG_PROMOTED_GET (vtrue));
+       emit_move_insn (x, target);
+       return x;
+     }
+diff -Naur gcc-4.9.2/gcc/internal-fn.c gcc-4.9.2-kugan-extelim-patch/gcc/internal-fn.c
+--- gcc-4.9.2/gcc/internal-fn.c	2014-10-16 08:51:45.000000000 -0500
++++ gcc-4.9.2-kugan-extelim-patch/gcc/internal-fn.c	2014-11-12 06:58:40.196947034 -0600
+@@ -600,12 +600,12 @@
+ 	  if (GET_CODE (lopart0) == SUBREG)
+ 	    {
+ 	      SUBREG_PROMOTED_VAR_P (lopart0) = 1;
+-	      SUBREG_PROMOTED_UNSIGNED_SET (lopart0, 0);
++	      SUBREG_PROMOTED_SET (lopart0, 0);
+ 	    }
+ 	  if (GET_CODE (lopart1) == SUBREG)
+ 	    {
+ 	      SUBREG_PROMOTED_VAR_P (lopart1) = 1;
+-	      SUBREG_PROMOTED_UNSIGNED_SET (lopart1, 0);
++	      SUBREG_PROMOTED_SET (lopart1, 0);
+ 	    }
+ 	  tree halfstype = build_nonstandard_integer_type (hprec, 0);
+ 	  ops.op0 = make_tree (halfstype, lopart0);
+diff -Naur gcc-4.9.2/gcc/optabs.c gcc-4.9.2-kugan-extelim-patch/gcc/optabs.c
+--- gcc-4.9.2/gcc/optabs.c	2014-08-14 04:32:17.000000000 -0500
++++ gcc-4.9.2-kugan-extelim-patch/gcc/optabs.c	2014-11-12 06:58:40.193946790 -0600
+@@ -349,7 +349,7 @@
+      a promoted object differs from our extension.  */
+   if (! no_extend
+       || (GET_CODE (op) == SUBREG && SUBREG_PROMOTED_VAR_P (op)
+-	  && SUBREG_PROMOTED_UNSIGNED_P (op) == unsignedp))
++	  && SUBREG_CHECK_PROMOTED_SIGN (op, unsignedp)))
+     return convert_modes (mode, oldmode, op, unsignedp);
+ 
+   /* If MODE is no wider than a single word, we return a lowpart or paradoxical
+diff -Naur gcc-4.9.2/gcc/rtlanal.c gcc-4.9.2-kugan-extelim-patch/gcc/rtlanal.c
+--- gcc-4.9.2/gcc/rtlanal.c	2014-03-26 02:38:30.000000000 -0500
++++ gcc-4.9.2-kugan-extelim-patch/gcc/rtlanal.c	2014-11-12 06:58:40.195946953 -0600
+@@ -670,7 +670,7 @@
+     return true;
+ 
+   if (GET_CODE (op) == SUBREG
+-      && SUBREG_PROMOTED_UNSIGNED_P (op))
++      && SUBREG_PROMOTED_SIGN (op))
+     return true;
+ 
+   return false;
+@@ -4299,7 +4299,7 @@
+ 	 been zero-extended, we know that at least the high-order bits
+ 	 are zero, though others might be too.  */
+ 
+-      if (SUBREG_PROMOTED_VAR_P (x) && SUBREG_PROMOTED_UNSIGNED_P (x) > 0)
++      if (SUBREG_PROMOTED_VAR_P (x) && SUBREG_PROMOTED_UNSIGNED_P (x))
+ 	nonzero = GET_MODE_MASK (GET_MODE (x))
+ 		  & cached_nonzero_bits (SUBREG_REG (x), GET_MODE (x),
+ 					 known_x, known_mode, known_ret);
+@@ -4609,7 +4609,7 @@
+ 	 and we are looking at it in a wider mode, we know that at least the
+ 	 high-order bits are known to be sign bit copies.  */
+ 
+-      if (SUBREG_PROMOTED_VAR_P (x) && ! SUBREG_PROMOTED_UNSIGNED_P (x))
++      if (SUBREG_PROMOTED_VAR_P (x) && SUBREG_PROMOTED_SIGNED_P (x))
+ 	{
+ 	  num0 = cached_num_sign_bit_copies (SUBREG_REG (x), mode,
+ 					     known_x, known_mode, known_ret);
+diff -Naur gcc-4.9.2/gcc/rtl.h gcc-4.9.2-kugan-extelim-patch/gcc/rtl.h
+--- gcc-4.9.2/gcc/rtl.h	2014-01-23 02:24:38.000000000 -0600
++++ gcc-4.9.2-kugan-extelim-patch/gcc/rtl.h	2014-11-12 06:58:40.209947977 -0600
+@@ -1390,29 +1390,75 @@
+ #define SUBREG_PROMOTED_VAR_P(RTX)					\
+   (RTL_FLAG_CHECK1 ("SUBREG_PROMOTED", (RTX), SUBREG)->in_struct)
+ 
+-#define SUBREG_PROMOTED_UNSIGNED_SET(RTX, VAL)				\
+-do {									\
+-  rtx const _rtx = RTL_FLAG_CHECK1 ("SUBREG_PROMOTED_UNSIGNED_SET",	\
+-				    (RTX), SUBREG);			\
+-  if ((VAL) < 0)							\
+-    _rtx->volatil = 1;							\
+-  else {								\
+-    _rtx->volatil = 0;							\
+-    _rtx->unchanging = (VAL);						\
+-  }									\
+-} while (0)
+-
+ /* Valid for subregs which are SUBREG_PROMOTED_VAR_P().  In that case
+    this gives the necessary extensions:
+-   0  - signed
+-   1  - normal unsigned
++   0  - signed (SPR_SIGNED)
++   1  - normal unsigned (SPR_UNSIGNED)
++   2  - value is both sign and unsign extended for mode
++	(SPR_SIGNED_AND_UNSIGNED).
+    -1 - pointer unsigned, which most often can be handled like unsigned
+         extension, except for generating instructions where we need to
+-	emit special code (ptr_extend insns) on some architectures.  */
++	emit special code (ptr_extend insns) on some architectures
++	(SPR_POINTER). */
++
++const int SRP_POINTER = -1;
++const int SRP_SIGNED = 0;
++const int SRP_UNSIGNED = 1;
++const int SRP_SIGNED_AND_UNSIGNED = 2;
++
++/* Sets promoted mode for SUBREG_PROMOTED_VAR_P().  */
++#define SUBREG_PROMOTED_SET(RTX, VAL)		                        \
++do {								        \
++  rtx const _rtx = RTL_FLAG_CHECK1 ("SUBREG_PROMOTED_SET",		\
++                                    (RTX), SUBREG);			\
++  switch (VAL)								\
++  {									\
++    case SRP_POINTER:							\
++      _rtx->volatil = 0;						\
++      _rtx->unchanging = 0;						\
++      break;								\
++    case SRP_SIGNED:							\
++      _rtx->volatil = 0;						\
++      _rtx->unchanging = 1;						\
++      break;								\
++    case SRP_UNSIGNED:							\
++      _rtx->volatil = 1;						\
++      _rtx->unchanging = 0;						\
++      break;								\
++    case SRP_SIGNED_AND_UNSIGNED:					\
++      _rtx->volatil = 1;						\
++      _rtx->unchanging = 1;						\
++      break;								\
++  }									\
++} while (0)
+ 
++/* Gets the value stored in promoted mode for SUBREG_PROMOTED_VAR_P(),
++   including SRP_SIGNED_AND_UNSIGNED if promoted for
++   both signed and unsigned.  */
++#define SUBREG_PROMOTED_GET(RTX)	\
++  (2 * (RTL_FLAG_CHECK1 ("SUBREG_PROMOTED_GET", (RTX), SUBREG)->volatil)\
++   + (RTX)->unchanging - 1)
++
++/* Returns sign of promoted mode for SUBREG_PROMOTED_VAR_P().  */
++#define SUBREG_PROMOTED_SIGN(RTX)	\
++  ((RTL_FLAG_CHECK1 ("SUBREG_PROMOTED_SIGN", (RTX), SUBREG)->volatil) ? 1\
++   : (RTX)->unchanging - 1)
++
++/* Predicate to check if RTX of SUBREG_PROMOTED_VAR_P() is promoted
++   for SIGNED type.  */
++#define SUBREG_PROMOTED_SIGNED_P(RTX)	\
++  (RTL_FLAG_CHECK1 ("SUBREG_PROMOTED_SIGNED_P", (RTX), SUBREG)->unchanging)
++
++/* Predicate to check if RTX of SUBREG_PROMOTED_VAR_P() is promoted
++   for UNSIGNED type.  */
+ #define SUBREG_PROMOTED_UNSIGNED_P(RTX)	\
+-  ((RTL_FLAG_CHECK1 ("SUBREG_PROMOTED_UNSIGNED_P", (RTX), SUBREG)->volatil) \
+-   ? -1 : (int) (RTX)->unchanging)
++  (RTL_FLAG_CHECK1 ("SUBREG_PROMOTED_UNSIGNED_P", (RTX), SUBREG)->volatil)
++
++/* Checks if RTX of SUBREG_PROMOTED_VAR_P() is promoted for given SIGN.  */
++#define SUBREG_CHECK_PROMOTED_SIGN(RTX, SIGN)	\
++((SIGN) == SRP_POINTER ? SUBREG_PROMOTED_GET (RTX) == SRP_POINTER	\
++ : (SIGN) == SRP_SIGNED ? SUBREG_PROMOTED_SIGNED_P (RTX)		\
++ : SUBREG_PROMOTED_UNSIGNED_P (RTX))
+ 
+ /* True if the subreg was generated by LRA for reload insns.  Such
+    subregs are valid only during LRA.  */
+diff -Naur gcc-4.9.2/gcc/simplify-rtx.c gcc-4.9.2-kugan-extelim-patch/gcc/simplify-rtx.c
+--- gcc-4.9.2/gcc/simplify-rtx.c	2014-11-11 05:07:43.178952003 -0600
++++ gcc-4.9.2-kugan-extelim-patch/gcc/simplify-rtx.c	2014-11-12 06:58:40.209947977 -0600
+@@ -1335,7 +1335,7 @@
+ 	 target mode is the same as the variable's promotion.  */
+       if (GET_CODE (op) == SUBREG
+ 	  && SUBREG_PROMOTED_VAR_P (op)
+-	  && ! SUBREG_PROMOTED_UNSIGNED_P (op)
++	  && SUBREG_PROMOTED_SIGNED_P (op)
+ 	  && GET_MODE_SIZE (mode) <= GET_MODE_SIZE (GET_MODE (XEXP (op, 0))))
+ 	{
+ 	  temp = rtl_hooks.gen_lowpart_no_emit (mode, op);
+@@ -1402,7 +1402,7 @@
+ 	 target mode is the same as the variable's promotion.  */
+       if (GET_CODE (op) == SUBREG
+ 	  && SUBREG_PROMOTED_VAR_P (op)
+-	  && SUBREG_PROMOTED_UNSIGNED_P (op) > 0
++	  && SUBREG_PROMOTED_UNSIGNED_P (op)
+ 	  && GET_MODE_SIZE (mode) <= GET_MODE_SIZE (GET_MODE (XEXP (op, 0))))
+ 	{
+ 	  temp = rtl_hooks.gen_lowpart_no_emit (mode, op);
+@@ -5990,7 +5990,7 @@
+ 	{
+ 	  newx = gen_rtx_SUBREG (outermode, SUBREG_REG (op), final_offset);
+ 	  if (SUBREG_PROMOTED_VAR_P (op)
+-	      && SUBREG_PROMOTED_UNSIGNED_P (op) >= 0
++	      && SUBREG_PROMOTED_SIGN (op) >= 0
+ 	      && GET_MODE_CLASS (outermode) == MODE_INT
+ 	      && IN_RANGE (GET_MODE_SIZE (outermode),
+ 			   GET_MODE_SIZE (innermode),
+@@ -5998,8 +5998,7 @@
+ 	      && subreg_lowpart_p (newx))
+ 	    {
+ 	      SUBREG_PROMOTED_VAR_P (newx) = 1;
+-	      SUBREG_PROMOTED_UNSIGNED_SET
+-		(newx, SUBREG_PROMOTED_UNSIGNED_P (op));
++	      SUBREG_PROMOTED_SET (newx, SUBREG_PROMOTED_GET (op));
+ 	    }
+ 	  return newx;
+ 	}
+diff -Naur gcc-4.9.2/gcc/testsuite/gcc.dg/zero_sign_ext_test.c gcc-4.9.2-kugan-extelim-patch/gcc/testsuite/gcc.dg/zero_sign_ext_test.c
+--- gcc-4.9.2/gcc/testsuite/gcc.dg/zero_sign_ext_test.c	1969-12-31 18:00:00.000000000 -0600
++++ gcc-4.9.2-kugan-extelim-patch/gcc/testsuite/gcc.dg/zero_sign_ext_test.c	2014-11-12 06:58:40.200947342 -0600
+@@ -0,0 +1,136 @@
++extern void abort (void);
++
++/* { dg-options "-O2" } */
++/* { dg-do run } */
++
++#define TYPE_MAX(type, sign)	\
++  ((!sign) ? ((1 << (sizeof (type) * 8 - 1)) - 1) :	\
++   ((1 << (sizeof (type) * 8)) - 1))
++#define TYPE_MIN(type, sign)	\
++  ((!sign) ? -(1 << (sizeof (type) * 8 - 1)) : 0)
++
++#define TEST_FN(NAME, ARG_TYPE, RET_TYPE, CAST_TYPE, VAL, VR_MIN, VR_MAX)\
++  __attribute__((noinline, noclone)) RET_TYPE				\
++      NAME (ARG_TYPE arg){						\
++      RET_TYPE ret = VAL;						\
++      if (arg + 1 < VR_MIN || arg + 1 > VR_MAX) return ret;		\
++      /* Value Range of arg at this point will be  [VR_min, VR_max].  */\
++      arg = arg + VAL;							\
++      ret = (CAST_TYPE)arg;						\
++      return arg;							\
++  }
++
++/* Signed to signed conversion with value in-range.  */
++TEST_FN (foo1, short, short, char, 1, TYPE_MIN (char, 0), TYPE_MAX (char, 0));
++TEST_FN (foo2, short, short, char, 1, TYPE_MIN (char, 0) + 1,\
++	TYPE_MAX (char, 0) - 1);
++
++/* Signed to signed conversion with value not in-range.  */
++TEST_FN (foo3, short, short, char, -1, TYPE_MIN (short, 0) + 1,  100);
++TEST_FN (foo4, short, short, char, 1, 12, TYPE_MAX (short, 0) + 1);
++
++/* Unsigned to unsigned conversion with value in-range.  */
++TEST_FN (foo5, unsigned short, unsigned short, unsigned char, 1,\
++	TYPE_MIN (char, 1) + 1, TYPE_MAX (char, 1) - 1);
++TEST_FN (foo6, unsigned short, unsigned short, unsigned char, 1,\
++	TYPE_MIN (char, 1), TYPE_MAX (char, 1));
++
++/* Unsigned to unsigned conversion with value not in-range.  */
++TEST_FN (foo7, unsigned short, unsigned short, unsigned char, 1,\
++	TYPE_MIN (short, 1) + 1, TYPE_MAX (short, 1) - 1);
++TEST_FN (foo8, unsigned short, unsigned short, unsigned char, 1,\
++	TYPE_MIN (short, 1), TYPE_MAX (short, 1));
++
++/* Signed to unsigned conversion with value range positive.  */
++TEST_FN (foo9, short, short, unsigned char, -1, 1,\
++	TYPE_MAX (char, 1) - 1);
++TEST_FN (foo10, short, short, unsigned char, 1, 0,\
++	TYPE_MAX (char, 1));
++
++/* Signed to unsigned conversion with value range negative.  */
++TEST_FN (foo11, short, short, unsigned char, 1,\
++	TYPE_MIN (char, 0) + 1, TYPE_MAX (char, 0) - 1);
++TEST_FN (foo12, short, short, unsigned char, 1,\
++	TYPE_MIN (char, 0), TYPE_MAX (char, 0));
++
++/* Unsigned to Signed conversion with value range in signed equiv range.  */
++TEST_FN (foo13, unsigned short, unsigned short, char, 1,\
++	TYPE_MIN (char, 1) + 1, TYPE_MAX (char, 0) - 1);
++TEST_FN (foo14, unsigned short, unsigned short, char, 1,\
++	TYPE_MIN (char, 1), TYPE_MAX (char, 0));
++
++/* Unsigned to Signed conversion with value range not-in signed range.  */
++TEST_FN (foo15, unsigned short, unsigned short, char, 1,\
++	TYPE_MIN (char, 1) + 1, TYPE_MAX (char, 1) - 1);
++TEST_FN (foo16, unsigned short, unsigned short, char, 1,\
++	TYPE_MIN (char, 1), TYPE_MAX (char, 1));
++
++int main ()
++{
++  /* Signed to signed conversion with value in-range.  */
++  /* arg + 1.  */
++  if (foo1 (-32) != -31)
++    abort ();
++  /* arg + 1.  */
++  if (foo2 (32) != 33)
++    abort ();
++
++  /* Signed to signed conversion with value not in-range.  */
++  /* arg - 1.  */
++  if (foo3 (-512) != -513)
++    abort ();
++  /* arg + 1.  */
++  if (foo4 (512) != 513)
++    abort ();
++
++  /* Unsigned to unsigned conversion with value in-range.  */
++  /* arg + 1.  */
++  if (foo5 (64) != 65)
++    abort ();
++  /* arg + 1.  */
++  if (foo6 (64) != 65)
++    abort ();
++
++  /* Unsigned to unsigned conversion with value not in-range.  */
++  /* arg + 1.  */
++  if (foo7 (512) != 513)
++    abort ();
++  /* arg + 1.  */
++  if (foo8 (512) != 513)
++    abort ();
++
++  /* Signed to unsigned conversion with value range positive.  */
++  /* arg - 1.  */
++  if (foo9 (2) != 1)
++    abort ();
++  /* arg + 1.  */
++  if (foo10 (2) != 3)
++    abort ();
++
++  /* Signed to unsigned conversion with value range negative.  */
++  /* arg + 1.  */
++  if (foo11 (-125) != -124)
++    abort ();
++  /* arg + 1.  */
++  if (foo12 (-125) != -124)
++    abort ();
++
++  /* Unsigned to Signed conversion with value range in signed equiv range.  */
++  /* arg + 1.  */
++  if (foo13 (125) != 126)
++    abort ();
++  /* arg + 1.  */
++  if (foo14 (125) != 126)
++    abort ();
++
++  /* Unsigned to Signed conversion with value range not-in signed range.  */
++  /* arg + 1.  */
++  if (foo15 (250) != 251)
++    abort ();
++  /* arg + 1.  */
++  if (foo16 (250) != 251)
++    abort ();
++
++  return 0;
++}
++
+diff -Naur gcc-4.9.2-kugan-extelim-patch/gcc/expr.c gcc-4.9.2-kugan-extelim-patch-wideint/gcc/expr.c
+--- gcc-4.9.2-kugan-extelim-patch/gcc/expr.c	2014-11-12 06:59:50.555951666 -0600
++++ gcc-4.9.2-kugan-extelim-patch-wideint/gcc/expr.c	2014-11-12 09:15:55.581951625 -0600
+@@ -9242,7 +9242,7 @@
+ bool
+ promoted_for_signed_and_unsigned_p (tree ssa, enum machine_mode mode)
+ {
+-  wide_int min, max;
++  double_int min, max;
+ 
+   if (ssa == NULL_TREE
+       || TREE_CODE (ssa) != SSA_NAME
+@@ -9256,7 +9256,7 @@
+ 
+   /* Return true (to set SRP_SIGNED_AND_UNSIGNED to SUBREG) if MSB of the
+      smaller mode is not set (i.e.  MSB of ssa is not set).  */
+-  if (!wi::neg_p (min, SIGNED) && !wi::neg_p(max, SIGNED))
++  if (!min.is_negative () && !max.is_negative ())
+     return true;
+   else
+     return false;
+diff -Naur gcc-4.9.2/gcc/cfgexpand.c gcc-4.9.2-patch/gcc/cfgexpand.c
+--- gcc-4.9.2/gcc/cfgexpand.c	2014-11-19 11:04:17.743217000 -0600
++++ gcc-4.9.2-patch/gcc/cfgexpand.c	2014-11-19 12:58:35.510217000 -0600
+@@ -3279,6 +3279,7 @@
+ 
+ 		if ((SUBREG_PROMOTED_GET (target) == SRP_SIGNED_AND_UNSIGNED)
+ 		    && (GET_CODE (temp) == SUBREG)
++		    && SUBREG_PROMOTED_VAR_P (temp)
+ 		    && (GET_MODE (target) == GET_MODE (temp))
+ 		    && (GET_MODE (SUBREG_REG (target)) == GET_MODE (SUBREG_REG (temp))))
+ 		  emit_move_insn (SUBREG_REG (target), SUBREG_REG (temp));
+--- gcc-4.9.2/gcc/expr.c	2014-11-19 15:06:13.333217000 -0600
++++ gcc-4.9.2-patch/gcc/expr.c	2014-11-22 04:38:45.998447007 -0600
+@@ -7973,6 +7973,7 @@
+   int unsignedp = TYPE_UNSIGNED (type);
+   enum machine_mode mode = TYPE_MODE (type);
+   enum machine_mode orig_mode = mode;
++  bool promoted = false;
+ 
+   /* If we cannot do a conditional move on the mode, try doing it
+      with the promoted mode. */
+@@ -8019,6 +8020,12 @@
+       comparison_mode = TYPE_MODE (TREE_TYPE (treeop0));
+     }
+ 
++  if (GET_MODE (op1) == GET_MODE (op2)
++      && (GET_MODE_SIZE (mode) > GET_MODE_SIZE (orig_mode))
++      && SUBREG_PROMOTED_VAR_P (op1)
++      && SUBREG_PROMOTED_VAR_P (op2))
++    promoted = true;
++  
+   if (GET_MODE (op1) != mode)
+     op1 = gen_lowpart (mode, op1);
+ 
+@@ -8035,10 +8042,14 @@
+      and return.  */
+   if (insn)
+     {
++      rtx target;
+       rtx seq = get_insns ();
+       end_sequence ();
+       emit_insn (seq);
+-      return convert_modes (orig_mode, mode, temp, 0);
++      target = convert_modes (orig_mode, mode, temp, 0);
++      if (promoted)
++        SUBREG_PROMOTED_VAR_P (target) = 1;
++      return target;
+     }
+ 
+   /* Otherwise discard the sequence and fall back to code with
+diff -Naur gcc-4.8.3/gcc/testsuite/gcc.target/powerpc/ppc-fsl-extelim.c gcc-4.8.3-patch/gcc/testsuite/gcc.target/powerpc/ppc-fsl-extelim.c
+--- gcc-4.8.3/gcc/testsuite/gcc.target/powerpc/ppc-fsl-extelim.c	1969-12-31 18:00:00.000000000 -0600
++++ gcc-4.8.3-patch/gcc/testsuite/gcc.target/powerpc/ppc-fsl-extelim.c	2014-12-05 02:51:47.985670000 -0600
+@@ -0,0 +1,46 @@
++/* { dg-do compile { target { powerpc*-*-* } } } */
++/* { dg-options "-O2 -std=c99" } */
++/* { dg-final { scan-assembler-times "rlwinm" 2 { target { ilp32 } } } } */
++/* { dg-final { scan-assembler-times "rldicl" 2 { target { lp64 } } } } */
++
++int hipBugTest_c1 ();
++
++int hipBugTest_c1 ()
++{
++  const int iN = 16;
++
++  signed char pcIn[iN];
++  unsigned char pucOut[iN];
++
++  for (int i = 0; i < iN; i++)
++  {
++    pcIn[i] = (signed char) (i - 11);
++    pucOut[i] = 0;
++  }
++
++  for (int i = 0; i < iN; i++)
++  {
++    const unsigned char ucGain = 3;
++    const unsigned char ucLimit = 100;
++
++    unsigned char ucIn;
++    unsigned char ucErr;
++    unsigned int uiVal;
++
++    if (pcIn[i] < 0)
++      ucIn = (unsigned char) ( pcIn[i] * -1);
++    else
++      ucIn = (unsigned char) pcIn[i];
++
++    uiVal = ucIn - 3;
++    uiVal = uiVal * (unsigned int) ucGain;
++
++    if (uiVal > ucLimit)
++      ucErr = ucLimit;
++    else
++      ucErr = (unsigned char)uiVal;
++
++    pucOut[i] = ucErr;
++  }
++  return pucOut[0];
++}

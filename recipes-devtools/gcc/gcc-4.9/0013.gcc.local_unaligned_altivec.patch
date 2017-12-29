@@ -1,0 +1,32 @@
+gcc.local_unaligned_altivec
+
+Optimization:
+On Altivec targets, make all char arrays 128 bits aligned (instead of 
+32 bits aligned)
+
+diff -Naur gcc-4.8.3/gcc/config/rs6000/rs6000.c gcc-4.8.3-local_unaligned_altivec/gcc/config/rs6000/rs6000.c
+--- gcc-4.8.3/gcc/config/rs6000/rs6000.c	2014-09-12 07:30:11.089024245 -0500
++++ gcc-4.8.3-local_unaligned_altivec/gcc/config/rs6000/rs6000.c	2014-09-12 07:32:21.384037349 -0500
+@@ -5853,8 +5853,8 @@
+       if (TREE_CODE (type) == ARRAY_TYPE
+ 	  && TYPE_MODE (TREE_TYPE (type)) == QImode)
+ 	{
+-	  if (align < BITS_PER_WORD)
+-	    align = BITS_PER_WORD;
++	  if (align < (TARGET_ALTIVEC ? 128 : BITS_PER_WORD))
++	    align = (TARGET_ALTIVEC ? 128 : BITS_PER_WORD);
+ 	}
+     }
+ 
+diff -Naur gcc-4.8.3/gcc/testsuite/gcc.dg/stack-usage-1.c gcc-4.8.3-local_unaligned_altivec/gcc/testsuite/gcc.dg/stack-usage-1.c
+--- gcc-4.8.3/gcc/testsuite/gcc.dg/stack-usage-1.c	2014-04-04 09:17:55.000000000 -0500
++++ gcc-4.8.3-local_unaligned_altivec/gcc/testsuite/gcc.dg/stack-usage-1.c	2014-09-12 07:35:23.139055629 -0500
+@@ -46,7 +46,7 @@
+ #elif defined (__powerpc__) || defined (__PPC__) || defined (__ppc__) \
+       || defined (__POWERPC__) || defined (PPC) || defined (_IBMR2)
+ #  if defined (__ALTIVEC__)
+-#    if defined (__APPLE__)
++#    if defined (__APPLE__) || defined (__APPLE_ALTIVEC__)
+ #      define SIZE 204
+ #    else
+ #      define SIZE 220

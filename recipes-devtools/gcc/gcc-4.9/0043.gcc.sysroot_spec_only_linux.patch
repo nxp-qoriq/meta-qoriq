@@ -1,0 +1,30 @@
+# Problem Statement:
+  The compiler driver doesn't pick the right libraries and other initialization
+  routines when '-msoft-float' option is passed.
+
+# Owned by:
+  Andrei (b14391)
+
+# Action
+  Add sysroot suffix 'nof' if '-msoft-float' options is passed for linux targets.
+
+diff -ruN gcc-4.9.2.old/gcc/config/rs6000/fsl-linux.h gcc-4.9.2.new/gcc/config/rs6000/fsl-linux.h
+--- gcc-4.9.2.old/gcc/config/rs6000/fsl-linux.h	1970-01-01 02:00:00.000000000 +0200
++++ gcc-4.9.2.new/gcc/config/rs6000/fsl-linux.h	2015-06-18 12:46:06.264520800 +0300
+@@ -0,0 +1,4 @@
++
++/* The C soft-float libraries have their own subdirectory.  */
++#undef SYSROOT_SUFFIX_SPEC
++#define SYSROOT_SUFFIX_SPEC  "%{msoft-float:/nof}"
+diff -ruN gcc-4.9.2.old/gcc/config.gcc gcc-4.9.2.new/gcc/config.gcc
+--- gcc-4.9.2.old/gcc/config.gcc	2015-06-15 19:05:43.000000000 +0300
++++ gcc-4.9.2.new/gcc/config.gcc	2015-06-18 12:42:10.951991900 +0300
+@@ -2290,7 +2290,7 @@
+ 	tmake_file="${tmake_file} rs6000/t-fprules rs6000/t-rtems rs6000/t-ppccomm"
+ 	;;
+ powerpc*-*-linux*)
+-	tm_file="${tm_file} dbxelf.h elfos.h freebsd-spec.h rs6000/sysv4.h"
++	tm_file="${tm_file} dbxelf.h elfos.h freebsd-spec.h rs6000/sysv4.h rs6000/fsl-linux.h"
+ 	extra_options="${extra_options} rs6000/sysv4.opt"
+ 	tmake_file="rs6000/t-fprules rs6000/t-ppcos ${tmake_file} rs6000/t-ppccomm"
+ 	extra_objs="$extra_objs rs6000-linux.o"

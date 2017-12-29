@@ -1,0 +1,36 @@
+# Problem Statement:
+  Fix consumer-1.rgbyiq01 degradation with GCC v492.
+  Target: e5500 64-bit.
+
+# Owned by:
+  Rohit
+
+# Action:
+  Add mulli pipeline to make sure that new multiply instruction cannot start
+  execution if another multiply is executing and is 3 cycles or less from
+  finishing execution.
+
+diff -Naur gcc-4.9.2/gcc/config/rs6000/e5500.md gcc-4.9.2-patch/gcc/config/rs6000/e5500.md
+--- gcc-4.9.2/gcc/config/rs6000/e5500.md	2014-01-02 16:23:26.000000000 -0600
++++ gcc-4.9.2-patch/gcc/config/rs6000/e5500.md	2014-12-06 10:19:45.328762009 -0600
+@@ -33,6 +33,9 @@
+ ;; Non-pipelined division.
+ (define_cpu_unit "e5500_cfx_div" "e5500_long")
+ 
++;; Mulli pipeline
++(define_cpu_unit "e5500_cfx_mulli" "e5500_long")
++
+ ;; LSU.
+ (define_cpu_unit "e5500_lsu" "e5500_most")
+ 
+@@ -108,8 +111,8 @@
+ (define_insn_reservation "e5500_multiply_i" 5
+   (and (eq_attr "type" "imul2,imul3,imul_compare")
+        (eq_attr "cpu" "ppce5500"))
+-  "e5500_decode,e5500_cfx_stage0,\
+-   e5500_cfx_stage0+e5500_cfx_stage1,e5500_cfx_stage1")
++  "e5500_decode,e5500_cfx_stage0+e5500_cfx_mulli,\
++   e5500_cfx_mulli*2")
+ 
+ ;; CFX - Divide.
+ (define_insn_reservation "e5500_divide" 16

@@ -1,0 +1,29 @@
+# Problem Statement:
+  Office-2.gs8 ICE for alitvec targets e600/e6500.
+  Fix secondary reload addresses for Altivec targets.
+  
+# Reported by:
+  Rohit
+
+# Action:
+  This issue was first reported with one of the IBM's LE patch.
+  Reverted the change.
+
+diff -Naur gcc-4.8.3/gcc/config/rs6000/rs6000.c gcc-4.8.3-gs8-ice/gcc/config/rs6000/rs6000.c
+--- gcc-4.8.3/gcc/config/rs6000/rs6000.c	2014-08-31 01:54:57.844015000 -0500
++++ gcc-4.8.3-gs8-ice/gcc/config/rs6000/rs6000.c	2014-08-31 03:36:31.520015000 -0500
+@@ -17329,12 +17329,11 @@
+ 
+       if (legitimate_indirect_address_p (addr, false)	/* reg */
+ 	  || legitimate_indexed_address_p (addr, false)	/* reg+reg */
++	  || GET_CODE (addr) == PRE_MODIFY		/* VSX pre-modify */
+ 	  || (GET_CODE (addr) == AND			/* Altivec memory */
+-	      && rclass == ALTIVEC_REGS
+ 	      && GET_CODE (XEXP (addr, 1)) == CONST_INT
+ 	      && INTVAL (XEXP (addr, 1)) == -16
+-	      && (legitimate_indirect_address_p (XEXP (addr, 0), false)
+-		  || legitimate_indexed_address_p (XEXP (addr, 0), false))))
++	      && VECTOR_MEM_ALTIVEC_P (mode)))
+ 	;
+ 
+       else if (GET_CODE (addr) == PLUS)

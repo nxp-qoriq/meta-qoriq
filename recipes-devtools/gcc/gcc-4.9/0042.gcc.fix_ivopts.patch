@@ -1,0 +1,157 @@
+# Problem Statement:
+  Fix telecom degradation around 30% to 40% without any degradations
+  in other benchmarks or keep them as minimum as possible.
+  below pattern causing pipeline stall resulting in huge degradations.
+  lhau 4,2(10)
+  lhax 9,10,12
+  the above pattern needs to converted to something like this
+  lhax 4,3,10
+  lhax 9,12,10
+  addi 10,10,2
+
+# Owned by:
+  Srinivas
+
+# Action:
+  Root cause of the problem lies in selecting optimal iv set selected
+  for loop.making cost adjustments resulting in huge degradations in
+  other benchmarks and this approach makes every load updates to be
+  replacedload indexed at least in telecom case.
+  Approach: skip replacing original iv candidate which will result in
+  load index with the address candidate which results in load update.
+  use pattern is identified with some hueristics as given in fix.
+  this bebehaviour is guarded with -fuse-seq-load-indexes switch.
+  this switch is on by default at -O1 and above.
+  use -fno-use-seq-load-indexes to supress this behaviour.
+
+diff -Naur gcc-4.9.2/gcc/common.opt gcc-4.9.2-ivopts-fix/gcc/common.opt
+--- gcc-4.9.2/gcc/common.opt	2014-04-07 08:27:39.000000000 -0500
++++ gcc-4.9.2-ivopts-fix/gcc/common.opt	2015-01-15 13:37:12.895409095 -0600
+@@ -1467,6 +1467,10 @@
+ Common Report Var(flag_ivopts) Init(1) Optimization
+ Optimize induction variables on trees
+ 
++fuse-seq-load-indexes
++Common Report Var(flag_use_seq_load_indexes) Init(1) Optimization
++Supress sequential load update and indexed loads with two indexed loads which exploits pipeline
++
+ fjump-tables
+ Common Var(flag_jump_tables) Init(1) Optimization
+ Use jump tables for sufficiently large switch statements
+diff -Naur gcc-4.9.2/gcc/testsuite/gcc.target/powerpc/ppc-fsl-fuse-seq-load-indexes.c gcc-4.9.2-ivopts-fix/gcc/testsuite/gcc.target/powerpc/ppc-fsl-fuse-seq-load-indexes.c
+--- gcc-4.9.2/gcc/testsuite/gcc.target/powerpc/ppc-fsl-fuse-seq-load-indexes.c	1969-12-31 18:00:00.000000000 -0600
++++ gcc-4.9.2-ivopts-fix/gcc/testsuite/gcc.target/powerpc/ppc-fsl-fuse-seq-load-indexes.c	2015-01-16 20:08:49.786531453 -0600
+@@ -0,0 +1,29 @@
++/* { dg-do compile { target powerpc*-*-* } } */
++/* { dg-options "-O2 -fuse-seq-load-indexes" } */
++
++void
++testloadindex (
++    short   *Data,     
++    short   *AccData,  
++    short   DataSize,       
++    short   NumberOfLags,   
++    short   Scale           
++)
++{
++    int   i;
++    int   lag;
++    int   LastIndex;
++    int   Accumulator;
++
++    for (lag = 0; lag < NumberOfLags; lag++) {
++        Accumulator = 0;
++        LastIndex = DataSize - lag;
++        for (i = 0; i < LastIndex; i++) {
++            Accumulator += ((int) Data[i] * (int) Data[i+lag]) >> Scale;
++        }
++        AccData[lag] = (short) (Accumulator >> 16) ;
++    }
++}
++/* { dg-final { scan-assembler-not "lhau" } }*/
++/* { dg-final { scan-assembler-times "lhax" 2 } }*/
++
+diff -Naur gcc-4.9.2/gcc/tree-ssa-loop-ivopts.c gcc-4.9.2-ivopts-fix/gcc/tree-ssa-loop-ivopts.c
+--- gcc-4.9.2/gcc/tree-ssa-loop-ivopts.c	2014-08-06 06:42:22.000000000 -0500
++++ gcc-4.9.2-ivopts-fix/gcc/tree-ssa-loop-ivopts.c	2015-01-16 00:32:23.754306622 -0600
+@@ -5671,6 +5671,69 @@
+       }
+   fprintf (file, "\n\n");
+ }
++/* Find out if the given iv use pattern for a given candidate which would
++ * generate two sequential load indexes so that they can be pipelined and
++ * result in performance improvement over one load update and load index.
++ * Below are the heuristics.
++ * 1)IV candidate base object should be same as that of IV uses for which
++ *   two loads would be generated.
++ * 2)base values of two uses should be different and the first base should
++ *   be just an object name.
++ * 3)both the uses should be consecutive.
++ *   returns true if above hueristics are matched otherwise return false.
++ */
++static bool
++iv_use_pipeline_possibility (struct ivopts_data *data,struct iv_ca *ivs,
++                             struct iv_cand *cand)
++{
++  unsigned i,count = 0;
++  struct iv_use *use;
++  int base_check = true;
++  tree cand_base_obj,base_obj;
++  tree cur_base = NULL,prev_base = NULL;
++  cand_base_obj = cand->iv->base_object;
++
++  if (cand_base_obj)
++   STRIP_NOPS (cand_base_obj);
++  for (i = 0; i < ivs->upto; i++)
++    {
++      use = iv_use (data, i);
++      base_obj = use->iv->base_object;
++      cur_base = use->iv->base;
++      if (cur_base)
++        {
++          STRIP_NOPS (cur_base);
++        }
++      if (base_obj)
++        {
++          STRIP_NOPS (base_obj);
++        }
++      if (count == 2)
++       break;
++      if (prev_base && count == 1)
++	{
++         if (TREE_CODE (prev_base) == SSA_NAME &&
++             TREE_CODE (cur_base) != SSA_NAME)
++          base_check=true;
++         else
++          base_check = false;
++        }
++      else
++       base_check = true;
++	
++      if ((cand_base_obj == base_obj) &&
++           (use->type == USE_ADDRESS) && base_check)
++       count++;
++      else
++       count = 0;
++ 
++       prev_base = cur_base;
++    }
++     if (count == 2)
++      return true;
++     else
++      return false;
++}
+ 
+ /* Try changing candidate in IVS to CAND for each use.  Return cost of the
+    new set, and store differences in DELTA.  Number of induction variables
+@@ -5707,6 +5770,10 @@
+       if (!min_ncand && !cheaper_cost_pair (new_cp, old_cp))
+         continue;
+ 
++      if (flag_use_seq_load_indexes &&
++          iv_use_pipeline_possibility (data,ivs,cand))
++        continue;
++
+       *delta = iv_ca_delta_add (use, old_cp, new_cp, *delta);
+     }
+ 

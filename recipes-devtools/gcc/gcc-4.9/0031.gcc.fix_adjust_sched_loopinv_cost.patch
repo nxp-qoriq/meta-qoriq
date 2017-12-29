@@ -1,0 +1,154 @@
+# Problem Statement:
+  Fix office-1.dither01 degradation with GCC v492.
+
+  Targets: e500mc & e5500 (32-bit).
+
+  There were 2 issues:
+  
+  a) lwzx and dependent cmp instruction were scheduled too close.
+  b) Loop invariant code being not moved out.
+
+# Owned by:
+  Rohit
+
+# Action:
+  a) Adjust the scheduler cost between lwzx and dependent cmp instruction
+     so that the lwzx instruction gets scheduled earlier.
+
+  b) Adjust the address cost so that the loop invariant code gets moved out.
+     Since the same cost calculation affects forward propagation, it causes
+     degradation in other benchmarks. So make this change specific to loop 
+     invariant code optimization.
+
+  c) Referenced test case is part of 'dither' benchmark code.
+
+diff -Naur gcc-4.9.2/gcc/config/rs6000/rs6000.c gcc-4.9.2-patch/gcc/config/rs6000/rs6000.c
+--- gcc-4.9.2/gcc/config/rs6000/rs6000.c	2014-12-05 08:22:21.436670465 -0600
++++ gcc-4.9.2-patch/gcc/config/rs6000/rs6000.c	2014-12-05 08:24:04.223669496 -0600
+@@ -27009,6 +27009,19 @@
+             break;
+           }
+ 
++      if ((rs6000_cpu == CPU_PPCE500MC
++          || rs6000_cpu_attr == CPU_PPCE500MC64
++          || rs6000_cpu_attr == CPU_PPCE5500
++          || rs6000_cpu_attr == CPU_PPCE6500)
++          && recog_memoized (dep_insn)
++          && (INSN_CODE (dep_insn) >= 0)
++          && (GET_CODE (PATTERN (insn)) == SET)
++          && (GET_CODE (PATTERN (dep_insn)) == SET) 
++          && (get_attr_type (insn) == TYPE_CMP)
++          && (get_attr_type (dep_insn) == TYPE_LOAD)
++          && (GET_CODE (XEXP (PATTERN (dep_insn), 1)) == MEM)
++          && legitimate_indexed_address_p (XEXP((XEXP (PATTERN (dep_insn), 1)),0), false))
++        return cost + 3;
+ 	/* Fall out to return default cost.  */
+       }
+       break;
+diff -Naur gcc-4.9.2/gcc/config/rs6000/rs6000.c gcc-4.9.2-loop-invariant/gcc/config/rs6000/rs6000.c
+--- gcc-4.9.2/gcc/config/rs6000/rs6000.c	2014-12-29 08:34:13.858952006 -0600
++++ gcc-4.9.2-loop-invariant/gcc/config/rs6000/rs6000.c	2014-12-30 08:19:22.263951826 -0600
+@@ -85,6 +85,7 @@
+ #if TARGET_MACHO
+ #include "gstab.h"  /* for N_SLINE */
+ #endif
++#include "tree-pass.h"	/* for current_pass */
+ 
+ #ifndef TARGET_NO_PROTOTYPE
+ #define TARGET_NO_PROTOTYPE 0
+@@ -30547,6 +30548,11 @@
+         return 0;
+       return 5;
+     }
++  if (!strcmp (current_pass->name, "loop2_invariant")
++      && (GET_CODE (x) == LO_SUM)
++      && GET_CODE (XEXP (x, 1)) == SYMBOL_REF)
++    return 5;
++
+   return 0; 
+ }
+ 
+diff -Naur gcc-4.9.2/gcc/testsuite/gcc.target/powerpc/ppc-fsl-loop-inv.c gcc-4.9.2-deja/gcc/testsuite/gcc.target/powerpc/ppc-fsl-loop-inv.c
+--- gcc-4.9.2/gcc/testsuite/gcc.target/powerpc/ppc-fsl-loop-inv.c	1969-12-31 18:00:00.000000000 -0600
++++ gcc-4.9.2-deja/gcc/testsuite/gcc.target/powerpc/ppc-fsl-loop-inv.c	2014-12-31 02:25:10.562952006 -0600
+@@ -0,0 +1,80 @@
++/* { dg-do compile { target { powerpc*-*-* && ilp32 } } } */
++/* { dg-options "-O3 -fdump-rtl-loop2_invariant" } */
++/* { dg-final { scan-rtl-dump-times "Decided to move" 10 "loop2_invariant"} } */
++/* { dg-final { cleanup-rtl-dump "loop2_invariant" } } */
++
++#include <string.h>
++unsigned char setmask[] =
++{
++    0x01, 0x02, 0x04, 0x08,
++    0x10, 0x20, 0x40, 0x80,
++};
++
++
++int threashold[] = { 139,138,122,120,131,135,109,130 };
++void ditherImage (unsigned char *input_buffer, int input_height,
++                         int input_width, unsigned char *output_buffer)
++{
++  int * c0;
++  int * c1;
++  int column;
++  int pixel;
++  unsigned char byte = 0;
++  int error;
++  int row;
++  int bit = 0;
++  int * temp;
++  int * err0;
++  int storage_err0[(2) * (256 +2*(1))];
++
++  memset((void*)output_buffer, 0,
++              (input_height * ((input_width-1)/(8)+1)));
++
++  err0 = storage_err0;
++  memset((void*)err0, 0,
++              (2) * (input_width+2*(1)) * sizeof(int));
++
++  c0 = err0 + (1);
++  c1 = c0 + input_width + 2*(1);
++
++  for (row = 0; row < input_height; ++row)
++  {
++    error = 0;
++    for (column = 0; column < input_width; ++column)
++    {
++      if ((pixel = *(input_buffer++)) == (255))
++        c0[column] = error = 0;
++      else
++      {
++        pixel += ((error * 8 + c1[column+1] * 3 + c1[column] * 5
++                  + c1[column-1] * 1)/16);
++        if (pixel < threashold[bit])
++        {
++          byte |= setmask[bit];
++          c0[column] = error = pixel;
++        }
++        else
++        {
++          c0[column] = error = pixel - (255);
++        }
++      }
++
++      if (++bit >= (8))
++      {
++        *(output_buffer++) = byte;
++        byte = bit = 0;
++      }
++    }
++
++    if (bit != 0)
++    {
++      *(output_buffer++) = byte;
++      byte = bit = 0;
++    }
++
++    temp = c0;
++    c0 = c1;
++    c1 = temp;
++  }
++  return;
++}

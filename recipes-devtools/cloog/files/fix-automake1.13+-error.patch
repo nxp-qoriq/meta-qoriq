@@ -1,0 +1,57 @@
+From 61259c7d2f4a81ddc3efc2ce333f7499c632f44b Mon Sep 17 00:00:00 2001
+From: Lnc <hnc@singularity.fr>
+Date: Mon, 19 Aug 2013 15:28:09 +0200
+Subject: [PATCH] Fix error with automake 1.13+
+
+---
+ Makefile.am      |    3 +--
+ test/Makefile.am |   12 ++++++------
+ 2 files changed, 7 insertions(+), 8 deletions(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index 1749c95..5ac1b75 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -87,8 +87,7 @@ SOURCES_CORE = \
+ 	source/union_domain.c \
+ 	source/version.c
+ 
+-DEFAULT_INCLUDES = -I.
+-INCLUDES = -I$(top_builddir)/include -I$(top_srcdir)/include
++AM_CPPFLAGS = -I. -I$(top_builddir)/include -I$(top_srcdir)/include
+ AM_CFLAGS = $(CFLAGS_WARN)
+ libcloog_isl_la_CPPFLAGS = @ISL_CPPFLAGS@ @OSL_CPPFLAGS@
+ libcloog_isl_la_LDFLAGS = -version-info @versioninfo@ \
+diff --git a/test/Makefile.am b/test/Makefile.am
+index 65a8e5a..c97678b 100644
+--- a/test/Makefile.am
++++ b/test/Makefile.am
+@@ -43,7 +43,7 @@ else
+ GENERATE_TEST = generate_test
+ endif
+ noinst_PROGRAMS = $(GENERATE_TEST)
+-INCLUDES = -I$(top_builddir)/include -I$(top_srcdir)/include
++AM_CPPFLAGS = -I$(top_builddir)/include -I$(top_srcdir)/include
+ LDADD = ../libcloog-isl.la
+ generate_test_SOURCES = generate_test.c
+ 
+@@ -319,11 +319,11 @@ test_run: generate_test$(EXEEXT)
+ 	$(srcdir)/check_run.sh
+ 
+ check_SCRIPTS = \
+-	$(srcdir)/check_c.sh \
+-	$(srcdir)/check_fortran.sh \
+-	$(srcdir)/check_strided.sh \
+-	$(srcdir)/check_openscop.sh \
+-	$(srcdir)/check_special.sh
++	check_c.sh \
++	check_fortran.sh \
++	check_strided.sh \
++	check_openscop.sh \
++	check_special.sh
+ 
+ TESTS = $(check_SCRIPTS)
+ 
+-- 
+1.7.0.9.GIT
+

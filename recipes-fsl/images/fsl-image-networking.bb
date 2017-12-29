@@ -16,6 +16,9 @@ EXTRA_IMAGEDEPENDS_append_ls2088a = " rcw-bin mc-utils"
 EXTRA_IMAGEDEPENDS_remove_ls1012ardb = " rcw"
 EXTRA_IMAGEDEPENDS_append_ls1012ardb = " rcw-bin"
 
+EXTRA_IMAGEDEPENDS_remove_ls1012afrdm = " rcw"
+EXTRA_IMAGEDEPENDS_append_ls1012afrdm = " rcw-bin"
+
 SUMMARY = "Small image to be used for evaluating the Freescale socs"
 DESCRIPTION = "Small image which includes some helpful tools and \
 Freescale-specific packages. It is much more embedded-oriented \

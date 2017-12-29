@@ -1,0 +1,530 @@
+# Problem Statement:
+  ENGR00215432:
+  The purpose of this patch is to disable the use of dcbz in the 32-bit memset.
+  However, this does not fix the root problem because any program
+  -- not just one using eglibc's memset -- can contain dcbz instruction,
+  so it is an incomplete fix anyway.
+
+  There is support in the Linux kernel as of 2.6.33 to emulate the correct
+  behavior (though it seems nobody really knows how well the workaround works),
+  so if the program that uses libc is running on this or a later kernel it does
+  not need to check for an 8xx.
+
+  Therefore one solution is to require kernel 2.6.33 or later.
+
+diff -Naur glibc-2.20/sysdeps/unix/sysv/linux/powerpc/powerpc32/801/dl-sysdep.c glibc-2.20-patch/sysdeps/unix/sysv/linux/powerpc/powerpc32/801/dl-sysdep.c
+--- glibc-2.20/sysdeps/unix/sysv/linux/powerpc/powerpc32/801/dl-sysdep.c	1969-12-31 18:00:00.000000000 -0600
++++ glibc-2.20-patch/sysdeps/unix/sysv/linux/powerpc/powerpc32/801/dl-sysdep.c	2015-02-24 13:57:36.709739425 -0600
+@@ -0,0 +1,35 @@
++/* Operating system support for run-time dynamic linker.  Linux/PPC version.
++   Copyright (C) 1997-2014 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <http://www.gnu.org/licenses/>.  */
++
++#include <config.h>
++#include <ldsodefs.h>
++
++int __cache_line_size attribute_hidden;
++
++/* Scan the Aux Vector for the "Data Cache Block Size" entry.  If found
++   verify that the static extern __cache_line_size is defined by checking
++   for not NULL.  If it is defined then assign the cache block size
++   value to __cache_line_size. This is used by memset to
++   optimize setting to zero.  We have to detect 8xx processors, which
++   have buggy dcbz implementations that cannot report page faults
++   correctly. */
++#define DL_PLATFORM_AUXV						      \
++      case AT_DCACHEBSIZE:						      \
++	break;
++
++#include <sysdeps/unix/sysv/linux/dl-sysdep.c>
+diff -Naur glibc-2.20/sysdeps/unix/sysv/linux/powerpc/powerpc32/801/libc-start.c glibc-2.20-patch/sysdeps/unix/sysv/linux/powerpc/powerpc32/801/libc-start.c
+--- glibc-2.20/sysdeps/unix/sysv/linux/powerpc/powerpc32/801/libc-start.c	1969-12-31 18:00:00.000000000 -0600
++++ glibc-2.20-patch/sysdeps/unix/sysv/linux/powerpc/powerpc32/801/libc-start.c	2015-02-24 13:53:49.721737701 -0600
+@@ -0,0 +1,86 @@
++/* Copyright (C) 1998-2014 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <http://www.gnu.org/licenses/>.  */
++
++#include <stdlib.h>
++#include <unistd.h>
++#include <ldsodefs.h>
++#include <sysdep.h>
++
++
++int __cache_line_size attribute_hidden;
++/* The main work is done in the generic function.  */
++#define LIBC_START_MAIN generic_start_main
++#define LIBC_START_DISABLE_INLINE
++#define LIBC_START_MAIN_AUXVEC_ARG
++#define MAIN_AUXVEC_ARG
++#define INIT_MAIN_ARGS
++#include <csu/libc-start.c>
++
++struct startup_info
++  {
++    void *sda_base;
++    int (*main) (int, char **, char **, void *);
++    int (*init) (int, char **, char **, void *);
++    void (*fini) (void);
++  };
++
++int
++__libc_start_main (int argc, char **argv,
++		   char **ev,
++		   ElfW (auxv_t) * auxvec,
++		   void (*rtld_fini) (void),
++		   struct startup_info *stinfo,
++		   char **stack_on_entry)
++{
++  /* the PPC SVR4 ABI says that the top thing on the stack will
++     be a NULL pointer, so if not we assume that we're being called
++     as a statically-linked program by Linux...  */
++  if (*stack_on_entry != NULL)
++    {
++      char **temp;
++      /* ...in which case, we have argc as the top thing on the
++         stack, followed by argv (NULL-terminated), envp (likewise),
++         and the auxiliary vector.  */
++      /* 32/64-bit agnostic load from stack */
++      argc = *(long int *) stack_on_entry;
++      argv = stack_on_entry + 1;
++      ev = argv + argc + 1;
++#ifdef HAVE_AUX_VECTOR
++      temp = ev;
++      while (*temp != NULL)
++	++temp;
++      auxvec = (ElfW (auxv_t) *)++ temp;
++#endif
++      rtld_fini = NULL;
++    }
++
++  /* Initialize the __cache_line_size variable from the aux vector.
++     This is used by memset to optimize setting to zero.  We have to
++     detect 8xx processors, which have buggy dcbz implementations that
++     cannot report page faults correctly.  That requires reading SPR,
++     which is a privileged operation.*/
++  for (ElfW (auxv_t) * av = auxvec; av->a_type != AT_NULL; ++av)
++    switch (av->a_type)
++      {
++      case AT_DCACHEBSIZE:
++	break;
++      }
++
++  return generic_start_main (stinfo->main, argc, argv, auxvec,
++			     stinfo->init, stinfo->fini, rtld_fini,
++			     stack_on_entry);
++}
+diff -Naur glibc-2.20/sysdeps/unix/sysv/linux/powerpc/powerpc32/821/dl-sysdep.c glibc-2.20-patch/sysdeps/unix/sysv/linux/powerpc/powerpc32/821/dl-sysdep.c
+--- glibc-2.20/sysdeps/unix/sysv/linux/powerpc/powerpc32/821/dl-sysdep.c	1969-12-31 18:00:00.000000000 -0600
++++ glibc-2.20-patch/sysdeps/unix/sysv/linux/powerpc/powerpc32/821/dl-sysdep.c	2015-02-24 13:58:00.043738993 -0600
+@@ -0,0 +1,35 @@
++/* Operating system support for run-time dynamic linker.  Linux/PPC version.
++   Copyright (C) 1997-2014 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <http://www.gnu.org/licenses/>.  */
++
++#include <config.h>
++#include <ldsodefs.h>
++
++int __cache_line_size attribute_hidden;
++
++/* Scan the Aux Vector for the "Data Cache Block Size" entry.  If found
++   verify that the static extern __cache_line_size is defined by checking
++   for not NULL.  If it is defined then assign the cache block size
++   value to __cache_line_size. This is used by memset to
++   optimize setting to zero.  We have to detect 8xx processors, which
++   have buggy dcbz implementations that cannot report page faults
++   correctly. */
++#define DL_PLATFORM_AUXV						      \
++      case AT_DCACHEBSIZE:						      \
++	break;
++
++#include <sysdeps/unix/sysv/linux/dl-sysdep.c>
+diff -Naur glibc-2.20/sysdeps/unix/sysv/linux/powerpc/powerpc32/821/libc-start.c glibc-2.20-patch/sysdeps/unix/sysv/linux/powerpc/powerpc32/821/libc-start.c
+--- glibc-2.20/sysdeps/unix/sysv/linux/powerpc/powerpc32/821/libc-start.c	1969-12-31 18:00:00.000000000 -0600
++++ glibc-2.20-patch/sysdeps/unix/sysv/linux/powerpc/powerpc32/821/libc-start.c	2015-02-24 13:58:00.043738993 -0600
+@@ -0,0 +1,86 @@
++/* Copyright (C) 1998-2014 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <http://www.gnu.org/licenses/>.  */
++
++#include <stdlib.h>
++#include <unistd.h>
++#include <ldsodefs.h>
++#include <sysdep.h>
++
++
++int __cache_line_size attribute_hidden;
++/* The main work is done in the generic function.  */
++#define LIBC_START_MAIN generic_start_main
++#define LIBC_START_DISABLE_INLINE
++#define LIBC_START_MAIN_AUXVEC_ARG
++#define MAIN_AUXVEC_ARG
++#define INIT_MAIN_ARGS
++#include <csu/libc-start.c>
++
++struct startup_info
++  {
++    void *sda_base;
++    int (*main) (int, char **, char **, void *);
++    int (*init) (int, char **, char **, void *);
++    void (*fini) (void);
++  };
++
++int
++__libc_start_main (int argc, char **argv,
++		   char **ev,
++		   ElfW (auxv_t) * auxvec,
++		   void (*rtld_fini) (void),
++		   struct startup_info *stinfo,
++		   char **stack_on_entry)
++{
++  /* the PPC SVR4 ABI says that the top thing on the stack will
++     be a NULL pointer, so if not we assume that we're being called
++     as a statically-linked program by Linux...  */
++  if (*stack_on_entry != NULL)
++    {
++      char **temp;
++      /* ...in which case, we have argc as the top thing on the
++         stack, followed by argv (NULL-terminated), envp (likewise),
++         and the auxiliary vector.  */
++      /* 32/64-bit agnostic load from stack */
++      argc = *(long int *) stack_on_entry;
++      argv = stack_on_entry + 1;
++      ev = argv + argc + 1;
++#ifdef HAVE_AUX_VECTOR
++      temp = ev;
++      while (*temp != NULL)
++	++temp;
++      auxvec = (ElfW (auxv_t) *)++ temp;
++#endif
++      rtld_fini = NULL;
++    }
++
++  /* Initialize the __cache_line_size variable from the aux vector.
++     This is used by memset to optimize setting to zero.  We have to
++     detect 8xx processors, which have buggy dcbz implementations that
++     cannot report page faults correctly.  That requires reading SPR,
++     which is a privileged operation.*/
++  for (ElfW (auxv_t) * av = auxvec; av->a_type != AT_NULL; ++av)
++    switch (av->a_type)
++      {
++      case AT_DCACHEBSIZE:
++	break;
++      }
++
++  return generic_start_main (stinfo->main, argc, argv, auxvec,
++			     stinfo->init, stinfo->fini, rtld_fini,
++			     stack_on_entry);
++}
+diff -Naur glibc-2.20/sysdeps/unix/sysv/linux/powerpc/powerpc32/823/dl-sysdep.c glibc-2.20-patch/sysdeps/unix/sysv/linux/powerpc/powerpc32/823/dl-sysdep.c
+--- glibc-2.20/sysdeps/unix/sysv/linux/powerpc/powerpc32/823/dl-sysdep.c	1969-12-31 18:00:00.000000000 -0600
++++ glibc-2.20-patch/sysdeps/unix/sysv/linux/powerpc/powerpc32/823/dl-sysdep.c	2015-02-24 13:58:03.323739026 -0600
+@@ -0,0 +1,35 @@
++/* Operating system support for run-time dynamic linker.  Linux/PPC version.
++   Copyright (C) 1997-2014 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <http://www.gnu.org/licenses/>.  */
++
++#include <config.h>
++#include <ldsodefs.h>
++
++int __cache_line_size attribute_hidden;
++
++/* Scan the Aux Vector for the "Data Cache Block Size" entry.  If found
++   verify that the static extern __cache_line_size is defined by checking
++   for not NULL.  If it is defined then assign the cache block size
++   value to __cache_line_size. This is used by memset to
++   optimize setting to zero.  We have to detect 8xx processors, which
++   have buggy dcbz implementations that cannot report page faults
++   correctly. */
++#define DL_PLATFORM_AUXV						      \
++      case AT_DCACHEBSIZE:						      \
++	break;
++
++#include <sysdeps/unix/sysv/linux/dl-sysdep.c>
+diff -Naur glibc-2.20/sysdeps/unix/sysv/linux/powerpc/powerpc32/823/libc-start.c glibc-2.20-patch/sysdeps/unix/sysv/linux/powerpc/powerpc32/823/libc-start.c
+--- glibc-2.20/sysdeps/unix/sysv/linux/powerpc/powerpc32/823/libc-start.c	1969-12-31 18:00:00.000000000 -0600
++++ glibc-2.20-patch/sysdeps/unix/sysv/linux/powerpc/powerpc32/823/libc-start.c	2015-02-24 13:58:03.323739026 -0600
+@@ -0,0 +1,86 @@
++/* Copyright (C) 1998-2014 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <http://www.gnu.org/licenses/>.  */
++
++#include <stdlib.h>
++#include <unistd.h>
++#include <ldsodefs.h>
++#include <sysdep.h>
++
++
++int __cache_line_size attribute_hidden;
++/* The main work is done in the generic function.  */
++#define LIBC_START_MAIN generic_start_main
++#define LIBC_START_DISABLE_INLINE
++#define LIBC_START_MAIN_AUXVEC_ARG
++#define MAIN_AUXVEC_ARG
++#define INIT_MAIN_ARGS
++#include <csu/libc-start.c>
++
++struct startup_info
++  {
++    void *sda_base;
++    int (*main) (int, char **, char **, void *);
++    int (*init) (int, char **, char **, void *);
++    void (*fini) (void);
++  };
++
++int
++__libc_start_main (int argc, char **argv,
++		   char **ev,
++		   ElfW (auxv_t) * auxvec,
++		   void (*rtld_fini) (void),
++		   struct startup_info *stinfo,
++		   char **stack_on_entry)
++{
++  /* the PPC SVR4 ABI says that the top thing on the stack will
++     be a NULL pointer, so if not we assume that we're being called
++     as a statically-linked program by Linux...  */
++  if (*stack_on_entry != NULL)
++    {
++      char **temp;
++      /* ...in which case, we have argc as the top thing on the
++         stack, followed by argv (NULL-terminated), envp (likewise),
++         and the auxiliary vector.  */
++      /* 32/64-bit agnostic load from stack */
++      argc = *(long int *) stack_on_entry;
++      argv = stack_on_entry + 1;
++      ev = argv + argc + 1;
++#ifdef HAVE_AUX_VECTOR
++      temp = ev;
++      while (*temp != NULL)
++	++temp;
++      auxvec = (ElfW (auxv_t) *)++ temp;
++#endif
++      rtld_fini = NULL;
++    }
++
++  /* Initialize the __cache_line_size variable from the aux vector.
++     This is used by memset to optimize setting to zero.  We have to
++     detect 8xx processors, which have buggy dcbz implementations that
++     cannot report page faults correctly.  That requires reading SPR,
++     which is a privileged operation.*/
++  for (ElfW (auxv_t) * av = auxvec; av->a_type != AT_NULL; ++av)
++    switch (av->a_type)
++      {
++      case AT_DCACHEBSIZE:
++	break;
++      }
++
++  return generic_start_main (stinfo->main, argc, argv, auxvec,
++			     stinfo->init, stinfo->fini, rtld_fini,
++			     stack_on_entry);
++}
+diff -Naur glibc-2.20/sysdeps/unix/sysv/linux/powerpc/powerpc32/860/dl-sysdep.c glibc-2.20-patch/sysdeps/unix/sysv/linux/powerpc/powerpc32/860/dl-sysdep.c
+--- glibc-2.20/sysdeps/unix/sysv/linux/powerpc/powerpc32/860/dl-sysdep.c	1969-12-31 18:00:00.000000000 -0600
++++ glibc-2.20-patch/sysdeps/unix/sysv/linux/powerpc/powerpc32/860/dl-sysdep.c	2015-02-24 13:58:41.664736975 -0600
+@@ -0,0 +1,35 @@
++/* Operating system support for run-time dynamic linker.  Linux/PPC version.
++   Copyright (C) 1997-2014 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <http://www.gnu.org/licenses/>.  */
++
++#include <config.h>
++#include <ldsodefs.h>
++
++int __cache_line_size attribute_hidden;
++
++/* Scan the Aux Vector for the "Data Cache Block Size" entry.  If found
++   verify that the static extern __cache_line_size is defined by checking
++   for not NULL.  If it is defined then assign the cache block size
++   value to __cache_line_size. This is used by memset to
++   optimize setting to zero.  We have to detect 8xx processors, which
++   have buggy dcbz implementations that cannot report page faults
++   correctly. */
++#define DL_PLATFORM_AUXV						      \
++      case AT_DCACHEBSIZE:						      \
++	break;
++
++#include <sysdeps/unix/sysv/linux/dl-sysdep.c>
+diff -Naur glibc-2.20/sysdeps/unix/sysv/linux/powerpc/powerpc32/860/libc-start.c glibc-2.20-patch/sysdeps/unix/sysv/linux/powerpc/powerpc32/860/libc-start.c
+--- glibc-2.20/sysdeps/unix/sysv/linux/powerpc/powerpc32/860/libc-start.c	1969-12-31 18:00:00.000000000 -0600
++++ glibc-2.20-patch/sysdeps/unix/sysv/linux/powerpc/powerpc32/860/libc-start.c	2015-02-24 13:58:41.664736975 -0600
+@@ -0,0 +1,86 @@
++/* Copyright (C) 1998-2014 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <http://www.gnu.org/licenses/>.  */
++
++#include <stdlib.h>
++#include <unistd.h>
++#include <ldsodefs.h>
++#include <sysdep.h>
++
++
++int __cache_line_size attribute_hidden;
++/* The main work is done in the generic function.  */
++#define LIBC_START_MAIN generic_start_main
++#define LIBC_START_DISABLE_INLINE
++#define LIBC_START_MAIN_AUXVEC_ARG
++#define MAIN_AUXVEC_ARG
++#define INIT_MAIN_ARGS
++#include <csu/libc-start.c>
++
++struct startup_info
++  {
++    void *sda_base;
++    int (*main) (int, char **, char **, void *);
++    int (*init) (int, char **, char **, void *);
++    void (*fini) (void);
++  };
++
++int
++__libc_start_main (int argc, char **argv,
++		   char **ev,
++		   ElfW (auxv_t) * auxvec,
++		   void (*rtld_fini) (void),
++		   struct startup_info *stinfo,
++		   char **stack_on_entry)
++{
++  /* the PPC SVR4 ABI says that the top thing on the stack will
++     be a NULL pointer, so if not we assume that we're being called
++     as a statically-linked program by Linux...  */
++  if (*stack_on_entry != NULL)
++    {
++      char **temp;
++      /* ...in which case, we have argc as the top thing on the
++         stack, followed by argv (NULL-terminated), envp (likewise),
++         and the auxiliary vector.  */
++      /* 32/64-bit agnostic load from stack */
++      argc = *(long int *) stack_on_entry;
++      argv = stack_on_entry + 1;
++      ev = argv + argc + 1;
++#ifdef HAVE_AUX_VECTOR
++      temp = ev;
++      while (*temp != NULL)
++	++temp;
++      auxvec = (ElfW (auxv_t) *)++ temp;
++#endif
++      rtld_fini = NULL;
++    }
++
++  /* Initialize the __cache_line_size variable from the aux vector.
++     This is used by memset to optimize setting to zero.  We have to
++     detect 8xx processors, which have buggy dcbz implementations that
++     cannot report page faults correctly.  That requires reading SPR,
++     which is a privileged operation.*/
++  for (ElfW (auxv_t) * av = auxvec; av->a_type != AT_NULL; ++av)
++    switch (av->a_type)
++      {
++      case AT_DCACHEBSIZE:
++	break;
++      }
++
++  return generic_start_main (stinfo->main, argc, argv, auxvec,
++			     stinfo->init, stinfo->fini, rtld_fini,
++			     stack_on_entry);
++}

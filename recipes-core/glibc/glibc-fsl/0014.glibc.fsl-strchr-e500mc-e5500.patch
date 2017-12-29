@@ -1,0 +1,659 @@
+# Problem Statement:
+  Implement target specific optimized strchr for e500mc & e5500 32-bit.
+
+# Owned by:
+  Mahesh [based on existing 'asm' implementation of eglibc strchr]
+
+# Actions:
+  * For e500mc target, default glibc implementation was reading
+    two words at a time. Current implementation unrolls the loop to 
+    read sixteen words.
+
+  * For e5500 [32-bit] target, use cmpb instruction to check the occurance
+    of NULL and expected character in a string.
+
+  * Reordered the instruction to get the better performance
+
+  * Got time out error with e5500 (32-bit) target on eglibc test suite.
+    Didn't find any degradation with our performance tests.
+    So updating TIMEOUT boundary to 10.
+
+diff -Naur vanilla/string/stratcliff.c patched/string/stratcliff.c
+--- vanilla/string/stratcliff.c	2015-03-12 05:07:11.970952217 -0500
++++ patched/string/stratcliff.c	2015-03-12 05:18:29.166952009 -0500
+@@ -18,6 +18,7 @@
+    <http://www.gnu.org/licenses/>.  */
+ 
+ #define _GNU_SOURCE 1
++#define TIMEOUT 10
+ 
+ /* Make sure we don't test the optimized inline functions if we want to
+    test the real implementation.  */
+diff -Naur vanilla/sysdeps/powerpc/powerpc32/e500mc/strchr.S patched/sysdeps/powerpc/powerpc32/e500mc/strchr.S
+--- vanilla/sysdeps/powerpc/powerpc32/e500mc/strchr.S	1969-12-31 18:00:00.000000000 -0600
++++ patched/sysdeps/powerpc/powerpc32/e500mc/strchr.S	2015-03-12 06:05:35.086952070 -0500
+@@ -0,0 +1,307 @@
++/* Optimized strchr implementation for 32-bit e500mc PowerPC target.
++   Based on generic 32-bit PowerPC strchr implementation.
++   Copyright (C) 1997-2015 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <http://www.gnu.org/licenses/>.  */
++
++#include <sysdep.h>
++
++/* See strlen.s for comments on how this works.  */
++
++/* char * [r3] strchr (const char *s [r3] , int c [r4])  */
++
++ENTRY (strchr)
++
++#define rTMP1	r0
++#define rRTN	r3	/* outgoing result.  */
++#define rSTR	r8	/* current word pointer.  */
++#define rCHR	r4	/* byte we are looking for, spread over the
++			   whole word.  */
++#define rWORD	r5	/* the current word.  */
++#define rCLZB	rCHR	/* leading zero byte count.  */
++#define rFEFE	r6	/* constant 0xfefefeff (-0x01010101).  */
++#define r7F7F	r7	/* constant 0x7f7f7f7f.  */
++#define rTMP2	r9
++#define rIGN	r10	/* the number of bits we should ignore in the
++			   first word.  */
++#define rMASK	r11	/* mask with the bits to ignore set to rTMP1.  */
++#define rTMP3	r12
++
++	andi.	rTMP2, rRTN, 3
++	clrrwi	rSTR, rRTN, 2
++	rlwimi	rCHR, rCHR, 8, 16, 23
++	rlwimi	rCHR, rCHR, 16, 0, 15
++	lis	rFEFE, -0x101
++	lis	r7F7F, 0x7f7f
++	addi	rFEFE, rFEFE, -0x101
++	addi	r7F7F, r7F7F, 0x7f7f
++	beq	L(srcalign)
++	lwz	rWORD, 0(rSTR)
++	li	rMASK, -1
++	rlwinm	rIGN, rRTN, 3, 27, 28
++	srw	rMASK, rMASK, rIGN
++	orc	rWORD, rWORD, rMASK
++	add	rTMP1, rFEFE, rWORD
++	xor	rTMP3, rCHR, rWORD
++	nor	rTMP2, r7F7F, rWORD
++	orc	rTMP3, rTMP3, rMASK
++	and.	rTMP1, rTMP1, rTMP2
++	add	rTMP1, rFEFE, rTMP3
++	bne	L(missed)
++	b	L(loop)
++L(srcalign):
++	/* Test the first (partial?) word.  */
++	lwz	rWORD, 0(rSTR)
++	add	rTMP1, rFEFE, rWORD
++	xor	rTMP3, rCHR, rWORD
++	nor	rTMP2, r7F7F, rWORD
++	and.	rTMP1, rTMP1, rTMP2
++	add	rTMP1, rFEFE, rTMP3
++	bne	L(missed)
++	/* The loop.  */
++L(loop):
++	lwzu	rWORD, 4(rSTR)
++	nor	rTMP2, r7F7F, rTMP3
++	and.	rTMP1, rTMP1, rTMP2
++	bne	L(foundit)
++	add	rTMP1, rFEFE, rWORD
++	/* Test for 0.  */
++	nor	rTMP2, r7F7F, rWORD
++	xor	rTMP3, rCHR, rWORD
++	and.	rTMP1, rTMP1, rTMP2
++	add	rTMP1, rFEFE, rTMP3
++	bne	L(missed)
++	/* Start test for the bytes we're looking for.  */
++	nor	rTMP2, r7F7F, rTMP3
++	lwzu	rWORD, 4(rSTR)
++	and.	rTMP1, rTMP1, rTMP2
++	bne	L(foundit)
++	add	rIGN, rFEFE, rWORD
++	/* Test for 0.  */
++	nor	rTMP2, r7F7F, rWORD
++	xor	rTMP3, rCHR, rWORD
++	and.	rTMP1, rIGN, rTMP2
++	add	rTMP1, rFEFE, rTMP3
++	bne	L(missed)
++	/* Start test for the bytes we're looking for.  */
++	lwzu	rWORD, 4(rSTR)
++	nor	rTMP2, r7F7F, rTMP3
++	and.	rTMP1, rTMP1, rTMP2
++	bne	L(foundit)
++	add	rTMP1, rFEFE, rWORD
++	/* Test for 0.  */
++	nor	rTMP2, r7F7F, rWORD
++	xor	rTMP3, rCHR, rWORD
++	and.	rTMP1, rTMP1, rTMP2
++	add	rTMP1, rFEFE, rTMP3
++	bne	L(missed)
++	/* Start test for the bytes we're looking for.  */
++	nor	rTMP2, r7F7F, rTMP3
++	lwzu	rWORD, 4(rSTR)
++	and.	rTMP1, rTMP1, rTMP2
++	bne	L(foundit)
++	add	rIGN, rFEFE, rWORD
++	/* Test for 0.  */
++	nor	rTMP2, r7F7F, rWORD
++	xor	rTMP3, rCHR, rWORD
++	and.	rTMP1, rIGN, rTMP2
++	add	rTMP1, rFEFE, rTMP3
++	bne	L(missed)
++	/* Start test for the bytes we're looking for.  */
++	lwzu	rWORD, 4(rSTR)
++	nor	rTMP2, r7F7F, rTMP3
++	and.	rTMP1, rTMP1, rTMP2
++	bne	L(foundit)
++	add	rTMP1, rFEFE, rWORD
++	/* Test for 0.  */
++	nor	rTMP2, r7F7F, rWORD
++	xor	rTMP3, rCHR, rWORD
++	and.	rTMP1, rTMP1, rTMP2
++	add	rTMP1, rFEFE, rTMP3
++	bne	L(missed)
++	/* Start test for the bytes we're looking for.  */
++	nor	rTMP2, r7F7F, rTMP3
++	lwzu	rWORD, 4(rSTR)
++	and.	rTMP1, rTMP1, rTMP2
++	bne	L(foundit)
++	add	rIGN, rFEFE, rWORD
++	/* Test for 0.  */
++	nor	rTMP2, r7F7F, rWORD
++	xor	rTMP3, rCHR, rWORD
++	and.	rTMP1, rIGN, rTMP2
++	add	rTMP1, rFEFE, rTMP3
++	bne	L(missed)
++	/* Start test for the bytes we're looking for.  */
++	lwzu	rWORD, 4(rSTR)
++	nor	rTMP2, r7F7F, rTMP3
++	and.	rTMP1, rTMP1, rTMP2
++	bne	L(foundit)
++	add	rTMP1, rFEFE, rWORD
++	/* Test for 0.  */
++	nor	rTMP2, r7F7F, rWORD
++	xor	rTMP3, rCHR, rWORD
++	and.	rTMP1, rTMP1, rTMP2
++	add	rTMP1, rFEFE, rTMP3
++	bne	L(missed)
++	/* Start test for the bytes we're looking for.  */
++	nor	rTMP2, r7F7F, rTMP3
++	lwzu	rWORD, 4(rSTR)
++	and.	rTMP1, rTMP1, rTMP2
++	bne	L(foundit)
++	add	rIGN, rFEFE, rWORD
++	/* Test for 0.  */
++	nor	rTMP2, r7F7F, rWORD
++	xor	rTMP3, rCHR, rWORD
++	and.	rTMP1, rIGN, rTMP2
++	add	rTMP1, rFEFE, rTMP3
++	bne	L(missed)
++	/* Start test for the bytes we're looking for.  */
++	lwzu	rWORD, 4(rSTR)
++	nor	rTMP2, r7F7F, rTMP3
++	and.	rTMP1, rTMP1, rTMP2
++	bne	L(foundit)
++	add	rTMP1, rFEFE, rWORD
++	/* Test for 0.  */
++	nor	rTMP2, r7F7F, rWORD
++	xor	rTMP3, rCHR, rWORD
++	and.	rTMP1, rTMP1, rTMP2
++	add	rTMP1, rFEFE, rTMP3
++	bne	L(missed)
++	/* Start test for the bytes we're looking for.  */
++	nor	rTMP2, r7F7F, rTMP3
++	lwzu	rWORD, 4(rSTR)
++	and.	rTMP1, rTMP1, rTMP2
++	bne	L(foundit)
++	add	rIGN, rFEFE, rWORD
++	/* Test for 0.  */
++	nor	rTMP2, r7F7F, rWORD
++	xor	rTMP3, rCHR, rWORD
++	and.	rTMP1, rIGN, rTMP2
++	add	rTMP1, rFEFE, rTMP3
++	bne	L(missed)
++	/* Start test for the bytes we're looking for.  */
++	lwzu	rWORD, 4(rSTR)
++	nor	rTMP2, r7F7F, rTMP3
++	and.	rTMP1, rTMP1, rTMP2
++	bne	L(foundit)
++	add	rTMP1, rFEFE, rWORD
++	/* Test for 0.  */
++	nor	rTMP2, r7F7F, rWORD
++	xor	rTMP3, rCHR, rWORD
++	and.	rTMP1, rTMP1, rTMP2
++	add	rTMP1, rFEFE, rTMP3
++	bne	L(missed)
++	/* Start test for the bytes we're looking for.  */
++	nor	rTMP2, r7F7F, rTMP3
++	lwzu	rWORD, 4(rSTR)
++	and.	rTMP1, rTMP1, rTMP2
++	bne	L(foundit)
++	add	rIGN, rFEFE, rWORD
++	/* Test for 0.  */
++	nor	rTMP2, r7F7F, rWORD
++	xor	rTMP3, rCHR, rWORD
++	and.	rTMP1, rIGN, rTMP2
++	add	rTMP1, rFEFE, rTMP3
++	bne	L(missed)
++	/* Start test for the bytes we're looking for.  */
++	lwzu	rWORD, 4(rSTR)
++	nor	rTMP2, r7F7F, rTMP3
++	and.	rTMP1, rTMP1, rTMP2
++	bne	L(foundit)
++	add	rTMP1, rFEFE, rWORD
++	/* Test for 0.  */
++	nor	rTMP2, r7F7F, rWORD
++	xor	rTMP3, rCHR, rWORD
++	and.	rTMP1, rTMP1, rTMP2
++	add	rTMP1, rFEFE, rTMP3
++	bne	L(missed)
++	/* Start test for the bytes we're looking for.  */
++	nor	rTMP2, r7F7F, rTMP3
++	lwzu	rWORD, 4(rSTR)
++	and.	rTMP1, rTMP1, rTMP2
++	bne	L(foundit)
++	add	rIGN, rFEFE, rWORD
++	/* Test for 0.  */
++	nor	rTMP2, r7F7F, rWORD
++	xor	rTMP3, rCHR, rWORD
++	and.	rTMP1, rIGN, rTMP2
++	add	rTMP1, rFEFE, rTMP3
++	bne	L(missed)
++	/* Start test for the bytes we're looking for.  */
++	lwzu	rWORD, 4(rSTR)
++	nor	rTMP2, r7F7F, rTMP3
++	and.	rTMP1, rTMP1, rTMP2
++	bne	L(foundit)
++	add	rTMP1, rFEFE, rWORD
++	/* Test for 0.  */
++	nor	rTMP2, r7F7F, rWORD
++	xor	rTMP3, rCHR, rWORD
++	and.	rTMP1, rTMP1, rTMP2
++	add	rTMP1, rFEFE, rTMP3
++	bne	L(missed)
++	/* Start test for the bytes we're looking for.  */
++	nor	rTMP2, r7F7F, rTMP3
++	lwzu	rWORD, 4(rSTR)
++	and.	rTMP1, rTMP1, rTMP2
++	bne	L(foundit)
++	add	rIGN, rFEFE, rWORD
++	/* Test for 0.  */
++	nor	rTMP2, r7F7F, rWORD
++	xor	rTMP3, rCHR, rWORD
++	and.	rTMP1, rIGN, rTMP2
++	add	rTMP1, rFEFE, rTMP3
++	beq	L(loop)
++	/* There is a zero byte in the word, but may also be a matching
++	   byte (either before or after the zero byte).  In fact, we may be
++	   looking for a zero byte, in which case we return a match.  We
++	   guess that this hasn't happened, though.  */
++L(missed):
++	nor	rTMP2, r7F7F, rTMP3
++	and.	rTMP1, rTMP1, rTMP2
++	li	rRTN, 0
++	beqlr
++	/* It did happen.  Decide which one was first...
++	   I'm not sure if this is actually faster than a sequence of rotates,
++	   compares, and branches (we use it anyway because it's shorter).  */
++	and	rFEFE, r7F7F, rWORD
++	or	rMASK, r7F7F, rWORD
++	and	rTMP1, r7F7F, rTMP3
++	or	rIGN, r7F7F, rTMP3
++	add	rFEFE, rFEFE, r7F7F
++	add	rTMP1, rTMP1, r7F7F
++	nor	rWORD, rMASK, rFEFE
++	nor	rTMP2, rIGN, rTMP1
++	cmplw	rWORD, rTMP2
++	cntlzw	rCLZB, rTMP2
++	bgtlr
++	srwi	rCLZB, rCLZB, 3
++	add	rRTN, rSTR, rCLZB
++	blr
++L(foundit):
++	and	rTMP1, r7F7F, rTMP3
++	or	rIGN, r7F7F, rTMP3
++	add	rTMP1, rTMP1, r7F7F
++	nor	rTMP2, rIGN, rTMP1
++	cntlzw	rCLZB, rTMP2
++	subi	rSTR, rSTR, 4
++	srwi	rCLZB, rCLZB, 3
++	add	rRTN, rSTR, rCLZB
++	blr
++
++END (strchr)
++
++weak_alias (strchr, index)
++libc_hidden_builtin_def (strchr)
+diff -Naur vanilla/sysdeps/powerpc/powerpc32/e5500/strchr.S patched/sysdeps/powerpc/powerpc32/e5500/strchr.S
+--- vanilla/sysdeps/powerpc/powerpc32/e5500/strchr.S	1969-12-31 18:00:00.000000000 -0600
++++ patched/sysdeps/powerpc/powerpc32/e5500/strchr.S	2015-03-12 06:06:26.507951923 -0500
+@@ -0,0 +1,313 @@
++/* Optimized strchr implementation for 32-bit e5500 PowerPC target.
++   Based on POWER7 strchr implementation.
++
++   Copyright (C) 2010-2015 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <http://www.gnu.org/licenses/>.  */
++
++#include <sysdep.h>
++
++/* See strlen.s for comments on how this works.  */
++
++/* char * [r3] strchr (const char *s [r3] , int c [r4])  */
++
++ENTRY (strchr)
++
++#define rTMP1	r0
++#define rRTN	r3	/* outgoing result.  */
++#define rSTR	r8	/* current word pointer.  */
++#define rCHR	r4	/* byte we are looking for, spread over the
++			   whole word.  */
++#define rTMP2	r5
++#define rMASK	r6	/* calculate padding bits.  */
++#define rTMP3	r7
++#define rWORD	r12	/* the current word.  */
++#define rWORD2	r9	/* following word.  */
++#define rTMP4	r10
++#define rTMP5	r11
++
++	dcbt	0, rRTN
++	andi.	rTMP3, rRTN, 7		/* check for double word boundary.  */
++	cmpwi	cr7, rCHR, 0
++	li	rTMP1, 0
++	/* Replicate byte to double word.  */
++	rlwimi	rCHR, rCHR, 8, 16, 23
++	rlwimi	rCHR, rCHR, 16, 0, 15
++	beq	L(dwalign)
++	subfic	rTMP3, rTMP3, 8
++	cmplwi	cr6, rTMP3, 4
++	clrrwi	rSTR, rRTN, 2		/* Align the address to the word
++					   boundary.  */
++	beq	cr6, L(word2)
++	blt	cr6, L(LTword2)
++	lwz	rWORD, 0(rSTR)		/* Load word from memory.  */
++	rlwinm	rMASK, rRTN, 3, 27, 28	/* Calculate padding.  */
++	/* Now rCHR has a word of c bytes and rTMP1 has
++	   a word of null bytes.  */
++	beq	cr7, L(null_match)
++	cmpb	rTMP4, rWORD, rCHR	/* Compare each byte with c byte.  */
++	cmpb	rTMP5, rWORD, rTMP1	/* Compare each byte
++					   against null byte.  */
++	/* Move the words left and right to discard the bits that are not
++	   part of the string and to bring them back as zeros.  */
++	slw	rTMP4, rTMP4, rMASK
++	slw	rTMP5, rTMP5, rMASK
++	srw	rTMP4, rTMP4, rMASK
++	srw	rTMP5, rTMP5, rMASK
++	or	rTMP2, rTMP4, rTMP5	/* OR results to speed things up.  */
++	cmpwi	cr7, rTMP2, 0		/* If rTMP2 == 0, no c or null bytes
++					   have been found.  */
++	bne	cr7, L(done)
++	/* Handle WORD2 of pair.  */
++	lwzu	rWORD, 4(rSTR)
++	cmpb	rTMP4, rWORD, rCHR
++	cmpb	rTMP5, rWORD, rTMP1
++	or	rTMP2, rTMP4, rTMP5
++	cmpwi	cr7, rTMP2, 0
++	bne	cr7, L(done)
++	b	L(loop)			/* We branch here (rather than falling
++					   through) to skip the nops due to
++					   heavy alignment of loop below.  */
++L(LTword2):
++	lwz	rWORD, 0(rSTR)		/* Load word from memory.  */
++	rlwinm	rMASK, rRTN, 3, 27, 28	/* Calculate padding.  */
++	/* Now rCHR has a word of c bytes and rTMP1 has
++	   a word of null bytes.  */
++	beq	cr7, L(null_LTword2)
++	cmpb	rTMP4, rWORD, rCHR	/* Compare each byte with c byte.  */
++	cmpb	rTMP5, rWORD, rTMP1	/* Compare each byte
++					   against null byte.  */
++	/* Move the words left and right to discard the bits that are not
++	   part of the string and to bring them back as zeros.  */
++	slw	rTMP4, rTMP4, rMASK
++	slw	rTMP5, rTMP5, rMASK
++	srw	rTMP4, rTMP4, rMASK
++	srw	rTMP5, rTMP5, rMASK
++	or	rTMP2, rTMP4, rTMP5	/* OR results to speed things up.  */
++	cmpwi	cr7, rTMP2, 0		/* If rTMP2 == 0, no c or null bytes
++					   have been found.  */
++	bne	cr7, L(done)
++	lwz	rWORD, 4(rSTR)
++	lwzu	rWORD2, 8(rSTR)
++	cmpb	rTMP4, rWORD, rCHR
++	cmpb	rTMP5, rWORD, rTMP1
++	cmpb	rMASK, rWORD2, rCHR
++	cmpb	rTMP3, rWORD2, rTMP1
++	or	rWORD, rTMP4, rTMP5
++	or	rWORD2, rMASK, rTMP3
++	or	rTMP2, rWORD, rWORD2
++	cmpwi	cr7, rTMP2, 0
++	beq	cr7, L(loop)
++	/* OK, one (or both) of the words contains a c/null byte.  Check
++	   the first word and decrement the address in case the first
++	   word really contains a c/null byte.  */
++	cmpwi	cr6, rWORD, 0
++	addi	rSTR, rSTR, -4
++	bne	cr6, L(done)
++	/* The c/null byte must be in the second word.  Adjust the address
++	   again and move the result of cmpb to rTMP4 so we can calculate the
++	   pointer.  */
++	mr	rTMP4, rMASK
++	mr	rTMP5, rTMP3
++	addi	rSTR, rSTR, 4
++	bne	cr7, L(done)
++L(word2):
++	lwz	rWORD, 0(rSTR)
++	beq	cr7, L(null_word2)
++	cmpb	rTMP4, rWORD, rCHR
++	cmpb	rTMP5, rWORD, rTMP1
++	or	rTMP2, rTMP4, rTMP5
++	cmpwi	cr7, rTMP2, 0
++	bne	cr7, L(done)
++	b	L(loop)
++L(dwalign):
++	/* Load two words, compare and merge in a single register for speed.
++	   This is an attempt to speed up the null-checking process for
++	   bigger strings.  */
++	mr	rSTR, rRTN
++	lwz	rWORD, 0(rSTR)
++	lwzu	rWORD2, 4(rSTR)
++	beq	cr7, L(dwalignnull)
++	cmpb	rTMP4, rWORD, rCHR
++	cmpb	rTMP5, rWORD, rTMP1
++	cmpb	rMASK, rWORD2, rCHR
++	cmpb	rTMP3, rWORD2, rTMP1
++	or	rWORD, rTMP4, rTMP5
++	or	rWORD2, rMASK, rTMP3
++	or	rTMP2, rWORD, rWORD2
++	cmpwi	cr7, rTMP2, 0
++	beq	cr7, L(loop)
++	/* OK, one (or both) of the words contains a c/null byte.  Check
++	   the first word and decrement the address in case the first word
++	   really contains a c/null byte.  */
++	cmpwi	cr6, rWORD, 0
++	addi	rSTR, rSTR, -4
++	bne	cr6, L(done)
++	/* The c/null byte must be in the second word.  Adjust the address
++	   again and move the result of cmpb to rTMP4 so we can calculate the
++	   pointer.  */
++	mr	rTMP4, rMASK
++	mr	rTMP5, rTMP3
++	addi	rSTR, rSTR, 4
++	/* rTMP2 has the output of the cmpb instruction, that is, it contains
++	   0xff in the same position as the c/null byte in the original
++	   word from the string.  Use that to calculate the pointer.  */
++	b	L(done)
++L(loop):
++	/* Load two words, compare and merge in a single register for speed.
++	   This is an attempt to speed up the null-checking process for
++	   bigger strings.  */
++	lwz	rWORD, 4(rSTR)
++	lwzu	rWORD2, 8(rSTR)
++	cmpb	rTMP4, rWORD, rCHR
++	cmpb	rTMP5, rWORD, rTMP1
++	cmpb	rMASK, rWORD2, rCHR
++	cmpb	rTMP3, rWORD2, rTMP1
++	or	rWORD, rTMP4, rTMP5
++	or	rWORD2, rMASK, rTMP3
++	or	rTMP2, rWORD, rWORD2
++	cmpwi	cr7, rTMP2, 0
++	beq	cr7, L(loop)
++	/* OK, one (or both) of the words contains a c/null byte.  Check
++	   the first word and decrement the address in case the first word
++	   really contains a c/null byte.  */
++	cmpwi	cr6, rWORD, 0
++	addi	rSTR, rSTR, -4
++	bne	cr6, L(done)
++	/* The c/null byte must be in the second word.  Adjust the address
++	   again and move the result of cmpb to rTMP4 so we can calculate the
++	   pointer.  */
++	mr	rTMP4, rMASK
++	mr	rTMP5, rTMP3
++	addi	rSTR, rSTR, 4
++	/* rTMP2 has the output of the cmpb instruction, that is, it contains
++	   0xff in the same position as the c/null byte in the original word
++	   from the string.  Use that to calculate the pointer.  */
++L(done):
++	cntlzw	rCHR, rTMP4		/* Count leading zeroes until
++					   the c matches.  */
++	cntlzw	rTMP1, rTMP5		/* Count leading zeroes until
++					   the null matches.  */
++	cmplw	cr7, rCHR, rTMP1
++	bgt	cr7, L(no_match)
++	srwi	rTMP1, rCHR, 3		/* Convert leading zeroes to bytes.  */
++	add	rRTN, rSTR, rTMP1	/* Return addr of the matching c byte
++					   or null in case c was not found.  */
++	blr
++L(no_match):
++	li	rRTN, 0
++	blr
++	/* We are here because strchr was called with a null byte.  */
++L(null_match):
++	/* rTMP1 has a word of null bytes.  */
++	cmpb	rTMP2, rWORD, rTMP1	/* Compare each byte against null
++					   bytes.  */
++	/* Move the words left and right to discard the bits that are
++	   not part of the string and to bring them back as zeros.  */
++	slw	rTMP2, rTMP2, rMASK
++	srw	rTMP2, rTMP2, rMASK
++	cmpwi	cr7, rTMP2, 0		/* If rTMP4 == 0, no c or null bytes
++					   have been found.  */
++	bne	cr7, L(done_null)
++	/* Handle WORD2 of pair.  */
++	lwzu	rWORD, 4(rSTR)
++	cmpb	rTMP2, rWORD, rTMP1
++	cmpwi	cr7, rTMP2, 0
++	bne	cr7, L(done_null)
++	b	L(loop_null)		/* We branch here (rather than falling
++					   through) to skip the nops due to
++					   heavy alignment of loop below.  */
++L(null_LTword2):
++	/* rTMP1 has a word of null bytes.  */
++	cmpb	rTMP2, rWORD, rTMP1	/* Compare each byte against null
++					   bytes.  */
++	/* Move the words left and right to discard the bits that are
++	   not part of the string and to bring them back as zeros.  */
++	slw	rTMP2, rTMP2, rMASK
++	srw	rTMP2, rTMP2, rMASK
++	cmpwi	cr7, rTMP2, 0		/* If rTMP4 == 0, no c or null bytes
++					   have been found.  */
++	bne	cr7, L(done_null)
++	b	L(loop_null)
++L(null_word2):
++	/* Handle WORD2 of pair.  */
++	cmpb	rTMP2, rWORD, rTMP1
++	cmpwi	cr7, rTMP2, 0
++	bne	cr7, L(done_null)
++	b	L(loop_null)		/* We branch here (rather than falling
++					   through) to skip the nops due to
++					   heavy alignment of loop below.  */
++L(dwalignnull):
++	/* Load two words, compare and merge in a single register for speed.
++	   This is an attempt to speed up the null-checking process for
++	   bigger strings.  */
++	cmpb	rTMP2, rWORD, rTMP1
++	cmpb	rTMP4, rWORD2, rTMP1
++	or	rMASK, rTMP2, rTMP4
++	cmpwi	cr7, rMASK, 0
++	beq	cr7, L(loop_null)
++	/* OK, one (or both) of the words contains a null byte.  Check the
++	   first word and decrement the address in case the first word really
++	   contains a null byte.  */
++	cmpwi	cr6, rTMP2, 0
++	addi	rSTR, rSTR, -4
++	bne	cr6, L(done_null)
++	/* The null byte must be in the second word.  Adjust the address
++	   again and move the result of cmpb to rTMP4 so we can calculate the
++	   pointer.  */
++	mr	rTMP2, rTMP4
++	addi	rSTR, rSTR, 4
++	/* rTMP2 has the output of the cmpb instruction, that is, it contains
++	   0xff in the same position as the null byte in the original
++	   word from the string.  Use that to calculate the pointer.  */
++	b	L(done_null)
++L(loop_null):
++	/* Load two words, compare and merge in a single register for speed.
++	   This is an attempt to speed up the null-checking process for
++	   bigger strings.  */
++	lwz	rWORD, 4(rSTR)
++	lwzu	rTMP5, 8(rSTR)
++	cmpb	rTMP2, rWORD, rTMP1
++	cmpb	rTMP4, rTMP5, rTMP1
++	or	rMASK, rTMP2, rTMP4
++	cmpwi	cr7, rMASK, 0
++	beq	cr7, L(loop_null)
++	/* OK, one (or both) of the words contains a null byte.  Check the
++	   first word and decrement the address in case the first word really
++	   contains a null byte.  */
++	cmpwi	cr6, rTMP2, 0
++	addi	rSTR, rSTR, -4
++	bne	cr6, L(done_null)
++	/* The null byte must be in the second word.  Adjust the address
++	   again and move the result of cmpb to rTMP4 so we can calculate the
++	   pointer.  */
++	mr	rTMP2, rTMP4
++	addi	rSTR, rSTR, 4
++	/* rTMP2 has the output of the cmpb instruction, that is, it contains
++	   0xff in the same position as the null byte in the original word
++	   from the string.  Use that to calculate the pointer.  */
++L(done_null):
++	cntlzw	rTMP1, rTMP2		/* Count leading zeros before the
++					   match.  */
++	srwi	rTMP1, rTMP1, 3		/* Convert leading zeros to bytes.  */
++	add	rRTN, rSTR, rTMP1	/* Return address of the matching
++					   null byte.  */
++	blr
++
++END (strchr)
++
++weak_alias (strchr, index)
++libc_hidden_builtin_def (strchr)

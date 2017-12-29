@@ -1,0 +1,407 @@
+# Problem Statement:
+  Implement target specific optimized strlen for e500mc,
+  64-bit e5500
+
+# Owned by:
+  Ajay [based on existing 'asm' implementation of glibc]
+
+# Actions:
+  * For e500mc and e5500 [64-bit] targets,glibc implementation was reading
+    two words at a time,I have unrolled the loop to read four words at a time.
+
+  * Reordered the instruction to get the better performance.
+
+  * Rev2:
+    a) e500mc and e5500 64-bit: Fixed "segmentation fault" issues for strlen
+       with eglibc v2.15 test suite.
+    b) added e5500 32-bit strlen optimized library.
+    c) e5500 (32 & 64-bit) optimized strlen referenced from eglibc v2.19
+       power7 implementation
+
+diff -Naur vanilla/sysdeps/powerpc/powerpc32/e500mc/strlen.S patched/sysdeps/powerpc/powerpc32/e500mc/strlen.S
+--- vanilla/sysdeps/powerpc/powerpc32/e500mc/strlen.S	1969-12-31 18:00:00.000000000 -0600
++++ patched/sysdeps/powerpc/powerpc32/e500mc/strlen.S	2015-03-12 07:37:15.310952010 -0500
+@@ -0,0 +1,168 @@
++/* Optimized strlen implementation for 32-bit e500mc PowerPC target.
++   Based on generic 32-bit PowerPC strlen implementation.
++   Copyright (C) 1997-2015 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <http://www.gnu.org/licenses/>.  */
++
++#include <sysdep.h>
++
++/* The algorithm here uses the following techniques:
++
++   1) Given a word 'x', we can test to see if it contains any 0 bytes
++      by subtracting 0x01010101, and seeing if any of the high bits of each
++      byte changed from 0 to 1.  This works because the least significant
++      0 byte must have had no incoming carry (otherwise it's not the least
++      significant), so it is 0x00 - 0x01 == 0xff.  For all other
++      byte values, either they have the high bit set initially, or when
++      1 is subtracted you get a value in the range 0x00-0x7f, none of which
++      have their high bit set.  The expression here is
++      (x + 0xfefefeff) & ~(x | 0x7f7f7f7f), which gives 0x00000000 when
++      there were no 0x00 bytes in the word.  You get 0x80 in bytes that
++      match, but possibly false 0x80 matches in the next more significant
++      byte to a true match due to carries.  For little-endian this is
++      of no consequence since the least significant match is the one
++      we're interested in, but big-endian needs method 2 to find which
++      byte matches.
++
++   2) Given a word 'x', we can test to see _which_ byte was zero by
++      calculating ~(((x & 0x7f7f7f7f) + 0x7f7f7f7f) | x | 0x7f7f7f7f).
++      This produces 0x80 in each byte that was zero, and 0x00 in all
++      the other bytes.  The '| 0x7f7f7f7f' clears the low 7 bits in each
++      byte, and the '| x' part ensures that bytes with the high bit set
++      produce 0x00.  The addition will carry into the high bit of each byte
++      iff that byte had one of its low 7 bits set.  We can then just see
++      which was the most significant bit set and divide by 8 to find how
++      many to add to the index.
++      This is from the book 'The PowerPC Compiler Writer's Guide',
++      by Steve Hoxey, Faraydon Karim, Bill Hay and Hank Warren.
++
++   We deal with strings not aligned to a word boundary by taking the
++   first word and ensuring that bytes not part of the string
++   are treated as nonzero.  To allow for memory latency, we unroll the
++   loop a few times, being careful to ensure that we do not read ahead
++   across cache line boundaries.
++
++   Questions to answer:
++   1) How long are strings passed to strlen? If they're often really long,
++   we should probably use cache management instructions and/or unroll the
++   loop more.  If they're often quite short, it might be better to use
++   fact (2) in the inner loop than have to recalculate it.
++   2) How popular are bytes with the high bit set? If they are very rare,
++   on some processors it might be useful to use the simpler expression
++   ~((x - 0x01010101) | 0x7f7f7f7f) (that is, on processors with only one
++   ALU), but this fails when any character has its high bit set.  */
++
++/* Some notes on register usage: Under the SVR4 ABI, we can use registers
++   0 and 3 through 12 (so long as we don't call any procedures) without
++   saving them.  We can also use registers 14 through 31 if we save them.
++   We can't use r1 (it's the stack pointer), r2 nor r13 because the user
++   program may expect them to hold their usual value if we get sent
++   a signal.  Integer parameters are passed in r3 through r10.
++   We can use condition registers cr0, cr1, cr5, cr6, and cr7 without saving
++   them, the others we must save.  */
++
++/* int [r3] strlen (char *s [r3])  */
++
++ENTRY (strlen)
++
++#define rTMP1	r0
++#define rRTN	r3	/* incoming STR arg, outgoing result.  */
++#define rSTR	r4	/* current string position.  */
++#define rPADN	r5	/* number of padding bits we prepend to the
++			   string to make it start at a word boundary.  */
++#define rTMP3	r5
++#define rFEFE	r6	/* constant 0xfefefeff (-0x01010101).  */
++#define r7F7F	r7	/* constant 0x7f7f7f7f.  */
++#define rWORD1	r8	/* current string word.  */
++#define rWORD2	r9	/* next string word.  */
++#define rMASK	r9	/* mask for first string word.  */
++#define rTMP2	r10
++
++	clrrwi	rSTR, rRTN, 2
++	lis	r7F7F, 0x7f7f
++	rlwinm	rPADN, rRTN, 3, 27, 28
++	lwz	rWORD1, 0(rSTR)
++	li	rMASK, -1
++	addi	r7F7F, r7F7F, 0x7f7f
++	/* That's the setup done, now do the first pair of words.
++	   We make an exception and use method (2) on the first two words, to
++	   reduce overhead.  */
++	srw	rMASK, rMASK, rPADN
++	and	rTMP1, r7F7F, rWORD1
++	or	rTMP2, r7F7F, rWORD1
++	add	rTMP1, rTMP1, r7F7F
++	nor	rTMP1, rTMP2, rTMP1
++	and.	rWORD1, rTMP1, rMASK
++	mtcrf	0x01, rRTN
++	bne	L(done0)
++	lis	rFEFE, -0x101
++	addi	rFEFE, rFEFE, -0x101
++	/* Are we now aligned to a double word boundary?  */
++	bt	29, L(loop)
++	/* Handle second word of pair.  */
++	lwzu	rWORD1, 4(rSTR)
++	and	rTMP1, r7F7F, rWORD1
++	or	rTMP2, r7F7F, rWORD1
++	add	rTMP1, rTMP1, r7F7F
++	nor.	rWORD1, rTMP2, rTMP1
++	bne	L(done0)
++	/* The loop.  */
++L(loop):
++	lwz	rWORD1, 4(rSTR)
++	lwzu	rWORD2, 8(rSTR)
++	add	rTMP1, rFEFE, rWORD1
++	nor	rTMP2, r7F7F, rWORD1
++	and.	rTMP1, rTMP1, rTMP2
++	add	rTMP1, rFEFE, rWORD2
++	bne	L(done1)
++	nor	rTMP2, r7F7F, rWORD2
++	and.	rTMP1, rTMP1, rTMP2
++	bne	L(address)
++	lwz	rWORD1, 4(rSTR)
++	lwzu	rWORD2, 8(rSTR)
++	add	rTMP1, rFEFE, rWORD1
++	nor	rTMP2, r7F7F, rWORD1
++	and.	rTMP1, rTMP1, rTMP2
++	add	rTMP1, rFEFE, rWORD2
++	bne	L(done1)
++	nor	rTMP2, r7F7F, rWORD2
++	and.	rTMP1, rTMP1, rTMP2
++	beq	L(loop)
++	and	rTMP1, r7F7F, rWORD2
++	add	rTMP1, rTMP1, r7F7F
++	andc	rWORD1, rTMP2, rTMP1
++	b	L(done0)
++L(address):
++	mr	rWORD1, rWORD2
++	addi	rSTR, rSTR, 4
++L(done1):
++	and	rTMP1, r7F7F, rWORD1
++	subi	rSTR, rSTR, 4
++	add	rTMP1, rTMP1, r7F7F
++	andc	rWORD1, rTMP2, rTMP1
++	/* When we get to here, rSTR points to the first word in the string
++	   that contains a zero byte, and the most significant set bit in
++	   rWORD1 is in that byte.  */
++L(done0):
++	cntlzw	rTMP3, rWORD1
++	subf	rTMP1, rRTN, rSTR
++	srwi	rTMP3, rTMP3, 3
++	add	rRTN, rTMP1, rTMP3
++	/* GKM FIXME: check high bound.  */
++	blr
++
++END (strlen)
++libc_hidden_builtin_def (strlen)
+diff -Naur vanilla/sysdeps/powerpc/powerpc32/e5500/strlen.S patched/sysdeps/powerpc/powerpc32/e5500/strlen.S
+--- vanilla/sysdeps/powerpc/powerpc32/e5500/strlen.S	1969-12-31 18:00:00.000000000 -0600
++++ patched/sysdeps/powerpc/powerpc32/e5500/strlen.S	2015-03-12 07:40:07.346952026 -0500
+@@ -0,0 +1,123 @@
++/* Optimized strlen implementation for 32-bit e5500 PowerPC target.
++   Based on POWER7 strlen implementation.
++   Copyright (C) 2010-2015 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <http://www.gnu.org/licenses/>.  */
++
++#include <sysdep.h>
++
++/* int [r3] strlen (char *s [r3])  */
++
++ENTRY (strlen)
++
++	clrrwi	r4, r3, 2	/* Align the address to word boundary.  */
++	rlwinm	r6, r3, 3, 27, 28	/* Calculate padding.  */
++	li	r0, 0		/* Word with null chars to use with cmpb.  */
++	li	r5, -1		/* MASK = 0xffffffffffffffff.  */
++	lwz	r12, 0(r4)	/* Load word from memory.  */
++	srw	r5, r5, r6	/* MASK = MASK >> padding.  */
++	orc	r9, r12, r5	/* Mask bits that are
++				   not part of the string.  */
++	cmpb	r10, r9, r0	/* Check for null bytes in WORD1.  */
++	cmpwi	cr7, r10, 0	/* If r10 == 0, no null's have been found.  */
++	bne	cr7, L(done)
++	/* Are we now aligned to a four word boundary?  If so, skip to the
++	   main loop.  Otherwise, go through the alignment code.  */
++	mtcrf	0x01, r3
++	bt	28, L(if_source_aligned_by_8_or_12)
++	bt	29, L(if_source_aligned_by_4)
++	/* Handle WORD2,WORD3,WORD4 as source is aligned by 0.  */
++	lwzu	r12, 4(r4)
++	cmpb	r10, r12, r0
++	cmpwi	cr7, r10, 0
++	bne	cr7, L(done)
++	lwzu	r12, 4(r4)
++	cmpb	r10, r12, r0
++	cmpwi	cr7, r10, 0
++	bne	cr7, L(done)
++	lwzu	r12, 4(r4)
++	cmpb	r10, r12, r0
++	cmpwi	cr7, r10, 0
++	bne	cr7, L(done)
++	b	L(loop)		/* We branch here (rather than falling through)
++				   to skip the nops due to heavy alignment
++				   of the loop below.  */
++L(if_source_aligned_by_8_or_12):
++	bt	29, L(loop)	/* if source address is aligned by 12 then only
++				   one word needs to be handled to make source
++				   address as 16 byte align which we have
++				   already handled in the begining, so jump
++				   directly to main loop.  */
++	lwzu	r12, 4(r4)	/* else source is aligned by 8.  */
++	cmpb	r10, r12, r0
++	cmpwi	cr7, r10, 0
++	bne	cr7, L(done)
++L(loop):
++	lwz	r8, 4(r4)
++	lwzu	r9, 8(r4)
++	lwz	r11, 4(r4)
++	lwzu	r12, 8(r4)
++	cmpb	r10, r8, r0
++	cmpwi	cr7, r10, 0
++	bne	cr7, L(done1)
++	cmpb	r10, r9, r0
++	cmpwi	cr7, r10, 0
++	bne	cr7, L(done2)
++	cmpb	r10, r11, r0
++	cmpwi	cr7, r10, 0
++	bne	cr7, L(done3)
++	cmpb	r10, r12, r0
++	cmpwi	cr7, r10, 0
++	beq	cr7, L(loop)
++	/* r10 has the output of the cmpb instruction, that is, it contains
++	   0xff in the same position as the null byte in the original word
++	   from the string.  Use that to calculate the length.  */
++	cntlzw	r0, r10
++	subf	r5, r3, r4
++	srwi	r0, r0, 3
++	add	r3, r5, r0
++	blr
++L(done1):
++	addi	r4, r4, -12	/* Adjust the address.  */
++L(done):
++	cntlzw	r0, r10		/* Count leading zeroes before the match.  */
++	subf	r5, r3, r4
++	srwi	r0, r0, 3	/* Convert leading zeroes to bytes.  */
++	add	r3, r5, r0	/* Compute final length.  */
++	blr
++L(done2):
++	addi	r4, r4, -8	/* Adjust the address.  */
++	b	L(done)
++L(done3):
++	addi	r4, r4, -4	/* Adjust the address.  */
++	b	L(done)
++	/* if source address is aligned by 4 then total three words need to
++	   be handled to make source address as 16 byte align in which we
++	   have already handled one word in the begining, so now handle next
++	   two words then jump to main loop.  */
++L(if_source_aligned_by_4):
++	lwzu	r12, 4(r4)
++	cmpb	r10, r12, r0
++	cmpwi	cr7, r10, 0
++	bne	cr7, L(done)
++	lwzu	r12, 4(r4)
++	cmpb	r10, r12, r0
++	cmpwi	cr7, r10, 0
++	bne	cr7, L(done)
++	b	L(loop)
++
++END (strlen)
++libc_hidden_builtin_def (strlen)
+diff -Naur vanilla/sysdeps/powerpc/powerpc64/e5500/strlen.S patched/sysdeps/powerpc/powerpc64/e5500/strlen.S
+--- vanilla/sysdeps/powerpc/powerpc64/e5500/strlen.S	1969-12-31 18:00:00.000000000 -0600
++++ patched/sysdeps/powerpc/powerpc64/e5500/strlen.S	2015-03-12 07:39:06.118952040 -0500
+@@ -0,0 +1,84 @@
++/* Optimized strlen implementation for 64-bit e5500 PowerPC target.
++   Based on POWER7 strlen implementation.
++   Copyright (C) 2010-2015 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <http://www.gnu.org/licenses/>.  */
++
++#include <sysdep.h>
++
++/* int [r3] strlen (char *s [r3])  */
++
++ENTRY (strlen)
++	CALL_MCOUNT 1
++
++	dcbt	0, r3
++	clrrdi	r4, r3, 3	/* Align address to double word boundary.  */
++	rlwinm	r6, r3, 3, 26, 28	/* Calculate padding.  */
++	li	r0, 0		/* Doubleword with null chars to use
++				   with cmpb.  */
++	li	r5, -1		/* MASK = 0xffffffffffffffff.  */
++	ld	r12, 0(r4)	/* Load doubleword from memory.  */
++	srd	r5, r5, r6	/* MASK = MASK >> padding.  */
++	orc	r9, r12, r5	/* Mask bits that are not part of string.  */
++	cmpb	r10, r9, r0	/* Check for null bytes in DWORD1.  */
++	cmpdi	cr7, r10, 0	/* If r10 == 0, no null's have been found.  */
++	bne	cr7, L(done)
++	mtcrf	0x01, r4
++	/* Are we now aligned to a quad word boundary?  If so, skip to the
++	   main loop.  Otherwise, go through the alignment code.  */
++	bt	28, L(loop)
++/* Handle DWORD2 of pair.  */
++	ldu	r12, 8(r4)
++	cmpb	r10, r12, r0
++	cmpdi	cr7, r10, 0
++	bne	cr7, L(done)
++	b	L(loop)		/* We branch here (rather than falling through)
++				   to skip the nops due to heavy alignment of
++				   the loop below.  */
++L(loop):
++	/* Load two doublewords, compare and merge in a single register for
++	   speed.  This is an attempt to speed up the null-checking process
++	   for bigger strings.  */
++	ld	r12, 8(r4)
++	ldu	r11, 16(r4)
++	cmpb	r10, r12, r0
++	cmpb	r9, r11, r0
++	or	r8, r9, r10	/* Merge everything in one doubleword.  */
++	cmpdi	cr7, r8, 0
++	beq	cr7, L(loop)
++	/* OK, one (or both) of the doublewords contains a null byte.  Check
++	   the first doubleword and decrement the address in case the first
++	   doubleword really contains a null byte.  */
++	cmpdi	cr6, r10, 0
++	addi	r4, r4, -8
++	bne	cr6, L(done)
++	/* The null byte must be in the second doubleword.  Adjust the address
++	   again and move the result of cmpb to r10 so we can calculate the
++	   length.  */
++	mr	r10, r9
++	addi	r4, r4, 8
++	/* r10 has the output of the cmpb instruction, that is, it contains
++	   0xff in the same position as the null byte in the original
++	   doubleword from the string.  Use that to calculate the length.  */
++L(done):
++	cntlzd	r0, r10		/* Count leading zeroes before the match.  */
++	subf	r5, r3, r4
++	srdi	r0, r0, 3	/* Convert leading zeroes to bytes.  */
++	add	r3, r5, r0	/* Compute final length.  */
++	blr
++
++END (strlen)
++libc_hidden_builtin_def (strlen)

@@ -1,0 +1,61 @@
+glibc.readv_proto
+
+Unfortunate choice of variable names. Causes syntax errors on Altivec
+enabled targets.
+
+diff -Naur glibc-2.20/sysdeps/unix/sysv/linux/readv.c glibc-2.20-patch/sysdeps/unix/sysv/linux/readv.c
+--- glibc-2.20/sysdeps/unix/sysv/linux/readv.c	2014-09-07 03:09:09.000000000 -0500
++++ glibc-2.20-patch/sysdeps/unix/sysv/linux/readv.c	2015-02-12 10:56:11.773738962 -0600
+@@ -27,20 +27,20 @@
+ /* Consider moving to syscalls.list.  */
+ 
+ ssize_t
+-__libc_readv (fd, vector, count)
++__libc_readv (fd, vec_tor, count)
+      int fd;
+-     const struct iovec *vector;
++     const struct iovec *vec_tor;
+      int count;
+ {
+   ssize_t result;
+ 
+   if (SINGLE_THREAD_P)
+-    result = INLINE_SYSCALL (readv, 3, fd, vector, count);
++    result = INLINE_SYSCALL (readv, 3, fd, vec_tor, count);
+   else
+     {
+       int oldtype = LIBC_CANCEL_ASYNC ();
+ 
+-      result = INLINE_SYSCALL (readv, 3, fd, vector, count);
++      result = INLINE_SYSCALL (readv, 3, fd, vec_tor, count);
+ 
+       LIBC_CANCEL_RESET (oldtype);
+     }
+diff -Naur glibc-2.20/sysdeps/unix/sysv/linux/writev.c glibc-2.20-patch/sysdeps/unix/sysv/linux/writev.c
+--- glibc-2.20/sysdeps/unix/sysv/linux/writev.c	2014-09-07 03:09:09.000000000 -0500
++++ glibc-2.20-patch/sysdeps/unix/sysv/linux/writev.c	2015-02-12 10:56:11.774738974 -0600
+@@ -28,20 +28,20 @@
+ /* Consider moving to syscalls.list.  */
+ 
+ ssize_t
+-__libc_writev (fd, vector, count)
++__libc_writev (fd, vec_tor, count)
+      int fd;
+-     const struct iovec *vector;
++     const struct iovec *vec_tor;
+      int count;
+ {
+   ssize_t result;
+ 
+   if (SINGLE_THREAD_P)
+-    result = INLINE_SYSCALL (writev, 3, fd, vector, count);
++    result = INLINE_SYSCALL (writev, 3, fd, vec_tor, count);
+   else
+     {
+       int oldtype = LIBC_CANCEL_ASYNC ();
+ 
+-      result = INLINE_SYSCALL (writev, 3, fd, vector, count);
++      result = INLINE_SYSCALL (writev, 3, fd, vec_tor, count);
+ 
+       LIBC_CANCEL_RESET (oldtype);
+     }

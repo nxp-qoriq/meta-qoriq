@@ -1,0 +1,47 @@
+# Problem Statement:
+  Modify Glibc so that gnu profiling is works with Glibc
+# Reported by:
+  James Yang 
+# Owned by:
+  Srinivas
+# Action:
+  * Modify Glibc such that it can be built with profiling and gprof data is generated correctly for Glibc functions
+  * Added profiling fixes provided in 'powerpc-profiling-fix.diff' file to the latest sources and checked flat-profiling
+    data generated for Glibc functions.
+
+diff -ruN libc-orig/elf/dl-runtime.c libc/elf/dl-runtime.c
+--- libc-orig/elf/dl-runtime.c	2014-06-11 02:51:20.000000000 -0500
++++ libc/elf/dl-runtime.c	2014-07-25 00:36:20.743371998 -0500
+@@ -148,7 +148,6 @@
+   return elf_machine_fixup_plt (l, result, reloc, rel_addr, value);
+ }
+ 
+-#ifndef PROF
+ DL_FIXUP_VALUE_TYPE
+ __attribute ((noinline)) ARCH_FIXUP_ATTRIBUTE
+ _dl_profile_fixup (
+@@ -433,7 +432,6 @@
+   return value;
+ }
+ 
+-#endif /* PROF */
+ 
+ 
+ #include <stdio.h>
+diff -ruN libc-orig/sysdeps/powerpc/powerpc32/dl-trampoline.S libc/sysdeps/powerpc/powerpc32/dl-trampoline.S
+--- libc-orig/sysdeps/powerpc/powerpc32/dl-trampoline.S	2014-06-11 02:44:56.000000000 -0500
++++ libc/sysdeps/powerpc/powerpc32/dl-trampoline.S	2014-07-25 00:36:20.942372001 -0500
+@@ -70,7 +70,6 @@
+ 	cfi_endproc
+ 	.size	 _dl_runtime_resolve,.-_dl_runtime_resolve
+ 
+-#ifndef PROF
+ 	.align 2
+ 	.globl _dl_prof_resolve
+ 	.type _dl_prof_resolve,@function
+@@ -186,4 +185,4 @@
+ 	bctr
+ 	cfi_endproc
+ 	.size	 _dl_prof_resolve,.-_dl_prof_resolve
+-#endif
++

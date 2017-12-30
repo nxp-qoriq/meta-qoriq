@@ -16,6 +16,12 @@ EXTRA_IMAGEDEPENDS_append_ls2088a = " rcw-bin mc-utils"
 EXTRA_IMAGEDEPENDS_remove_ls1012ardb = " rcw"
 EXTRA_IMAGEDEPENDS_append_ls1012ardb = " rcw-bin ppa-optee"
 
+EXTRA_IMAGEDEPENDS_remove_ls1012ardb-32b = " rcw"
+EXTRA_IMAGEDEPENDS_append_ls1012ardb-32b = " rcw-bin"
+
+EXTRA_IMAGEDEPENDS_remove_ls1012afrdm = " rcw"
+EXTRA_IMAGEDEPENDS_append_ls1012afrdm = " rcw-bin"
+
 EXTRA_IMAGEDEPENDS_remove_ls1012afrdm = " rcw"
 EXTRA_IMAGEDEPENDS_append_ls1012afrdm = " rcw-bin"
 

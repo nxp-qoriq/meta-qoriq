@@ -22,8 +22,8 @@ EXTRA_IMAGEDEPENDS_append_ls1012ardb-32b = " rcw-bin"
 EXTRA_IMAGEDEPENDS_remove_ls1012afrdm = " rcw"
 EXTRA_IMAGEDEPENDS_append_ls1012afrdm = " rcw-bin"
 
-EXTRA_IMAGEDEPENDS_remove_ls1012afrdm = " rcw"
-EXTRA_IMAGEDEPENDS_append_ls1012afrdm = " rcw-bin"
+EXTRA_IMAGEDEPENDS_remove_ls1012afrdm-32b = " rcw"
+EXTRA_IMAGEDEPENDS_append_ls1012afrdm-32b = " rcw-bin"
 
 EXTRA_IMAGEDEPENDS_append_ls1043ardb = " ppa-optee"
 EXTRA_IMAGEDEPENDS_append_ls1046ardb = " ppa-optee"

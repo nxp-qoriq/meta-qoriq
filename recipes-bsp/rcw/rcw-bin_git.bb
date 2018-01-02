@@ -14,13 +14,13 @@ M="${@d.getVar('MACHINE', True).replace('-64b','').replace('-32b','').replace('-
 
 do_install () {
     install -d ${D}/boot/rcw
-    cp -a ${S}/${M} ${D}/boot/rcw/
+    cp -rf ${S}/${M}* ${D}/boot/rcw/
     chown -R root:root ${D}
 }
 
 do_deploy () {
     install -d ${DEPLOYDIR}/rcw
-    cp -a ${S}/${M} ${DEPLOYDIR}/rcw/
+    cp -rf ${S}/${M}* ${DEPLOYDIR}/rcw/
 }
 addtask deploy before do_build after do_install
 

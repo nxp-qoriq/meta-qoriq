@@ -28,6 +28,7 @@ EXTRA_IMAGEDEPENDS_append_ls1012afrdm-32b = " rcw-bin"
 EXTRA_IMAGEDEPENDS_append_ls1043ardb = " ppa-optee"
 EXTRA_IMAGEDEPENDS_append_ls1046ardb = " ppa-optee"
 
+EXTRA_IMAGEDEPENDS_append_p2020rdb = " vsc7385-firmware"
 
 SUMMARY = "Small image to be used for evaluating the Freescale socs"
 DESCRIPTION = "Small image which includes some helpful tools and \

@@ -9,7 +9,6 @@ inherit deploy
 FILESEXTRAPATHS_prepend := "${THISDIR}/ppa:"
 
 SRC_URI = "git://github.com/qoriq-open-source/ppa-generic.git;nobranch=1 \
-    file://0001-fix-path-error.patch \
 "
 SRCREV = "e5641434f00d75634a285341d810df4261daf5de"
 
@@ -38,13 +37,13 @@ PPA_NAME[vardepsexclude] = "DATETIME"
 
 do_install() {
     install -d ${D}/boot/
-    install ${S}/${PPA_PATH}/build/obj/ppa.itb ${D}/boot/${PPA_NAME}.itb
+    install ${S}/ppa/soc-${PPA_PATH}/build/obj/ppa.itb ${D}/boot/${PPA_NAME}.itb
     ln -sfT ${PPA_NAME}.itb ${D}/boot/${PN}.itb
 }
 
 do_deploy(){
     install -d ${DEPLOYDIR}
-    install ${S}/${PPA_PATH}/build/obj/ppa.itb ${DEPLOYDIR}/${PPA_NAME}.itb
+    install ${S}/ppa/soc-${PPA_PATH}/build/obj/ppa.itb ${DEPLOYDIR}/${PPA_NAME}.itb
     ln -sfT ${PPA_NAME}.itb ${DEPLOYDIR}/${PN}.itb
 }
 addtask deploy before do_build after do_install

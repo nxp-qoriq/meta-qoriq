@@ -1,6 +1,6 @@
 SUMMARY = "Reset Configuration Word"
 DESCRIPTION = "Reset Configuration Word - hardware boot-time parameters for the QorIQ targets"
-LICENSE = "BSD"
+LICENSE = "NXP-Binary-EULA"
 LIC_FILES_CHKSUM = "file://NXP-Binary-EULA;md5=ba5ff3a3faf52a38970d0a536ef42df5"
 
 inherit deploy siteinfo

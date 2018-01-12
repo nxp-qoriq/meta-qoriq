@@ -24,7 +24,6 @@ RDEPENDS_${PN} = " \
     inetutils-ping \
     inetutils-ping6 \
     inetutils-rsh \
-    inetutils-syslogd \
     inetutils-telnet \
     inetutils-traceroute \
     ipsec-tools \

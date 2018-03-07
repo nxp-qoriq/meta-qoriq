@@ -45,13 +45,11 @@ IPC_PKGS = " \
 DPAA_PKGS = " \
     eth-config \
     fmc \
-    hypervisor-partman \
 "
 DPAA_PKGS_ls102xa = ""
 DPAA_PKGS_fsl-lsch3 = ""
 DPAA_PKGS_ls1043ardb-be ="eth-config fmc"
 DPAA_PKGS_ls1043aqds-be ="eth-config fmc" 
-DPAA_PKGS_remove_fsl-lsch2 = "hypervisor-partman"
 
 PMETOOLS ?= "pme-tools"
 

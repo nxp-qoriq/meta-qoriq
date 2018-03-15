@@ -1,1 +1,2 @@
-SRCREV = "5c67e9cfc1eaab19187720c857841be6c8046c40"
+SRC_URI = "git://bitbucket.sw.nxp.com/scm/dash/ovs-dpdk.git;protocol=https;nobranch=1"
+SRCREV = "907f652db3419aa3d9c0af7574dd13e332b71dc5"

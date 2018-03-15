@@ -45,6 +45,7 @@ RDEPENDS_${PN} = "\
 RDEPENDS_${PN}_append_ls1043ardb = " \
     ceetm \
     dpdk \
+    pktgen-dpdk \
     optee-os \
     optee-client \
     optee-test \
@@ -52,6 +53,7 @@ RDEPENDS_${PN}_append_ls1043ardb = " \
 RDEPENDS_${PN}_append_ls1046ardb = " \
     ceetm \
     dpdk \
+    pktgen-dpdk \
     optee-os \
     optee-client \
     optee-test \

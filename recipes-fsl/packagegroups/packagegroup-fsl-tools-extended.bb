@@ -47,9 +47,9 @@ RDEPENDS_${PN}_append_ls1043ardb = " \
     ceetm \
     dpdk \
     pktgen-dpdk \
-    optee-os \
-    optee-client \
-    optee-test \
+    optee-os-qoriq \
+    optee-client-qoriq \
+    optee-test-qoriq \
     secure_obj \
     libpkcs11 \
 "
@@ -57,9 +57,9 @@ RDEPENDS_${PN}_append_ls1046ardb = " \
     ceetm \
     dpdk \
     pktgen-dpdk \
-    optee-os \
-    optee-client \
-    optee-test \
+    optee-os-qoriq \
+    optee-client-qoriq \
+    optee-test-qoriq \
     secure_obj \
     libpkcs11 \
 "

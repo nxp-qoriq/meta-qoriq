@@ -64,9 +64,9 @@ RDEPENDS_${PN}_append_ls1046ardb = " \
     libpkcs11 \
 "
 RDEPENDS_${PN}_append_ls1012ardb = " \
-    optee-os \
-    optee-client \
-    optee-test \
+    optee-os-qoriq \
+    optee-client-qoriq \
+    optee-test-qoriq \
 "
 
 RDEPENDS_${PN}_append_ls1088a = " \

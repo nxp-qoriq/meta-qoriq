@@ -49,6 +49,8 @@ RDEPENDS_${PN}_append_ls1043ardb = " \
     optee-os \
     optee-client \
     optee-test \
+    secure_obj \
+    libpkcs11 \
 "
 RDEPENDS_${PN}_append_ls1046ardb = " \
     ceetm \
@@ -57,6 +59,8 @@ RDEPENDS_${PN}_append_ls1046ardb = " \
     optee-os \
     optee-client \
     optee-test \
+    secure_obj \
+    libpkcs11 \
 "
 RDEPENDS_${PN}_append_ls1012ardb = " \
     optee-os \

@@ -12,7 +12,7 @@ inherit module
 SRC_URI = "git://bitbucket.sw.nxp.com/scm/dash/dpdk.git;nobranch=1 \
     file://add-RTE_KERNELDIR_OUT-to-split-kernel-bu.patch \
 "
-SRCREV = "cad0a33649f2a5d9ba15b5a6e165880d02045b2c"
+SRCREV = "11d461d88390eb77bbf695eeddaad8e6f6cc25ce"
 
 S = "${WORKDIR}/git"
 

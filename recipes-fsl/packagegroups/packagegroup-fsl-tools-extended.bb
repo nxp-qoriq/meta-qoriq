@@ -20,6 +20,7 @@ RDEPENDS_${PN} = "\
     bc \
     chkconfig \
     cronie \
+    crconf \
     db \
     debianutils \
     lsof \

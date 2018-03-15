@@ -7,26 +7,14 @@ CORE_IMAGE_EXTRA_INSTALL_append_qoriq = " udev-rules-qoriq"
 
 IMAGE_FSTYPES = "tar.gz ext2.gz ext2.gz.u-boot jffs2 ubi"
 
-EXTRA_IMAGEDEPENDS_remove_ls1088a = " rcw dpl-examples"
-EXTRA_IMAGEDEPENDS_append_ls1088a = " rcw-bin mc-utils"
-
-EXTRA_IMAGEDEPENDS_remove_ls2088a = " rcw dpl-examples"
-EXTRA_IMAGEDEPENDS_append_ls2088a = " rcw-bin mc-utils"
 
 EXTRA_IMAGEDEPENDS_remove_ls1012ardb = " rcw"
 EXTRA_IMAGEDEPENDS_append_ls1012ardb = " rcw-bin ppa-optee"
 
-EXTRA_IMAGEDEPENDS_remove_ls1012ardb-32b = " rcw"
-EXTRA_IMAGEDEPENDS_append_ls1012ardb-32b = " rcw-bin"
 
 EXTRA_IMAGEDEPENDS_remove_ls1012afrdm = " rcw"
 EXTRA_IMAGEDEPENDS_append_ls1012afrdm = " rcw-bin"
 
-EXTRA_IMAGEDEPENDS_remove_ls1012afrdm-32b = " rcw"
-EXTRA_IMAGEDEPENDS_append_ls1012afrdm-32b = " rcw-bin"
-
-EXTRA_IMAGEDEPENDS_append_ls1043ardb = " ppa-optee"
-EXTRA_IMAGEDEPENDS_append_ls1046ardb = " ppa-optee"
 
 EXTRA_IMAGEDEPENDS_append_p2020rdb = " vsc7385-firmware"
 

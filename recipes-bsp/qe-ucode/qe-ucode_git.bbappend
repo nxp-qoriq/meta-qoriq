@@ -1,4 +1,4 @@
-SRC_URI = "git://github.com/nxp/qoriq-qe-ucode.git;protocol=https;nobranch=1"
+SRC_URI = "git://bitbucket.sw.nxp.com/scm/dash/qoriq-qe-ucode.git;protocol=https;nobranch=1"
 SRCREV= "57401f6dff6507055558eaa6838116baa8a2fd46"
 
 LICENSE = "NXP-Binary-EULA"

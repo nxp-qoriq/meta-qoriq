@@ -12,7 +12,7 @@ LDFLAGS += "${TOOLCHAIN_OPTIONS}"
 
 SRC_URI = "git://bitbucket.sw.nxp.com/scm/dndev/secure_obj.git;protocol=http \
 "
-SRCREV = "0f75291d113b212d28147bbfe6deea14654c63e3"
+SRCREV = "74befe01bda41f1c27b197ef2ab66e475e9a81b3"
 
 WRAP_TARGET_PREFIX ?= "${TARGET_PREFIX}"
 export SECURE_STORAGE_PATH = "${S}/secure_storage_ta/ta/"

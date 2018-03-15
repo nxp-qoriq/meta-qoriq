@@ -9,7 +9,7 @@ SRC_URI = "git://git.code.sf.net/p/crconf/code \
 
 EXTRA_OEMAKE = "'CC=${CC}' 'HOSTCC=${CC}'"
 
-SRCREV = "8bd996400d087028ba56b724abc1f5b378eaa77"
+SRCREV = "8bd996400d087028ba56b724abc1f5b378eaa77f"
 
 PV .= "+git${SRCPV}"
 

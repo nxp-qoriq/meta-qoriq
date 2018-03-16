@@ -3,9 +3,7 @@ SECTION = "base"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://Makefile;beginline=1;endline=5;md5=0f77fc44eb5911007ae4ac9f6736e111"
 
-SRC_URI = "git://git.code.sf.net/p/crconf/code \
-    file://0001-Modify-the-Makefile-for-cross-compile.patch \
-"
+SRC_URI = "git://git.code.sf.net/p/crconf/code"
 
 EXTRA_OEMAKE = "'CC=${CC}' 'HOSTCC=${CC}'"
 

@@ -4,7 +4,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=8120b89a783571da3cb492c35ac6b1f9"
 
 DEPENDS += "libpcap dpdk"
 
-SRC_URI = "git://dpdk.org/git/apps/pktgen-dpdk;protocol=http"
+SRC_URI = "git://dpdk.org/git/apps/pktgen-dpdk;protocol=http;nobranch=1"
 SRCREV = "ffbe7becf8dd75fd7d46b97b10374531878cb9c5"
 
 S = "${WORKDIR}/git"

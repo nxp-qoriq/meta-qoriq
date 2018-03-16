@@ -59,7 +59,6 @@ RDEPENDS_${PN}_append_qoriq = "\
 "
 
 RDEPENDS_${PN}_append_e500v2 = " \
-    cantest \
     fsl-pme \
     libppc \
     testfloat \

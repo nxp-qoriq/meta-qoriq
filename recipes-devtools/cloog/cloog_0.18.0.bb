@@ -4,7 +4,7 @@ DEPENDS = "gmp isl"
 
 LIC_FILES_CHKSUM = "file://LICENSE;md5=11398e4927d7ca5001fd4c768e147d83"
 
-SRC_URI = "ftp://gcc.gnu.org/pub/gcc/infrastructure/cloog-${PV}.tar.gz \
+SRC_URI = "https://gcc.gnu.org/pub/gcc/infrastructure/cloog-${PV}.tar.gz \
            file://fix-automake1.13+-error.patch \
            file://fix-libcloog-isl-include-directory.patch "
 

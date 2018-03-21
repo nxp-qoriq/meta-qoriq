@@ -1,4 +1,4 @@
-LICENSE = "Freescale-Binary-EULA"
+LICENSE = "NXP-Binary-EULA"
 LIC_FILES_CHKSUM = "file://NXP-EULA;md5=d969f2c93b3905d4b628787ce5f8df4b"
 
 SRC_URI = "git://github.com/nxp/qoriq-firmware-cortina.git;protocol=https;nobranch=1"

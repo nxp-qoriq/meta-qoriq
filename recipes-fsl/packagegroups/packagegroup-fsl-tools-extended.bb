@@ -72,12 +72,10 @@ RDEPENDS_${PN}_append_ls1012ardb = " \
 RDEPENDS_${PN}_append_ls1088a = " \
     aiopsl \
     dpdk \
-    odp \
 "
 RDEPENDS_${PN}_append_ls2088a = " \
     aiopsl \
     dpdk \
-    odp \
 "
 
 RDEPENDS_${PN}_imx = " \

@@ -1,3 +1,3 @@
 SRC_URI = "git://bitbucket.sw.nxp.com/scm/dash/ppa-generic.git;nobranch=1 \
 "
-SRCREV = "e5641434f00d75634a285341d810df4261daf5de"
+SRCREV = "f00e7ef29a0e14d9ab0ce31606e768c52e35609d "

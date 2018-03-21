@@ -82,14 +82,12 @@ RDEPENDS_${PN}_append_ls1046ardb = " \
 RDEPENDS_${PN}_append_ls1088a = " \
     devmem2 \
     gpp-aioptool \
-    ofp \
     fio \
     restool \
 "
 RDEPENDS_${PN}_append_ls2088a = " \
     devmem2 \
     gpp-aioptool \
-    ofp \
     fio \
     restool \
 "

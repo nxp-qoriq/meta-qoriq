@@ -10,7 +10,7 @@ inherit pythonnative
 
 LDFLAGS += "${TOOLCHAIN_OPTIONS}"
 
-SRC_URI = "git://bitbucket.sw.nxp.com/scm/dndev/secure_obj.git;protocol=http \
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/secure_obj;nobranch=1 \
 "
 SRCREV = "74befe01bda41f1c27b197ef2ab66e475e9a81b3"
 

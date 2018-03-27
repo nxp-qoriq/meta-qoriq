@@ -2,8 +2,8 @@ DESCRIPTION = "PKCS library"
 LICENSE = "GPLv2 & BSD"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=803852533e29eb1d6d5e55ad3078b625"
 
-SRC_URI = "git://bitbucket.sw.nxp.com/scm/dndev/libpkcs11.git;protocol=http"
-SRCREV = "a06dd4e22cd9f073da62d29bfd9b7217436abdc2"
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/libpkcs11;nobranch=1"
+SRCREV = "dd1bc90b0f2171d4dddd9d7d0fc5a2acfb067ab8"
 
 DEPENDS = "openssl secure-obj"
 

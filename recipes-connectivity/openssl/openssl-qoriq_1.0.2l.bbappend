@@ -37,3 +37,5 @@ SRC_URI += "file://find.pl;subdir=git/util \
 do_install_append () {
     cp --dereference -R crypto  ${D}${includedir}
 }
+
+PARALLEL_MAKE = ""

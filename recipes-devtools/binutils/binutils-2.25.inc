@@ -14,21 +14,8 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/binutils-fsl:"
 
 SRC_URI = "\
      ${GNU_MIRROR}/binutils/binutils-${PV}.tar.bz2 \
-     file://binutils-uclibc-100-uclibc-conf.patch \
-     file://binutils-uclibc-300-001_ld_makefile_patch.patch \
-     file://binutils-uclibc-300-006_better_file_error.patch \
-     file://binutils-uclibc-300-012_check_ldrunpath_length.patch \
-     file://binutils-uclibc-gas-needs-libm.patch \
-     file://libtool-2.4-update.patch \
-     file://libiberty_path_fix.patch \
-     file://binutils-poison.patch \
-     file://libtool-rpath-fix.patch \
-     file://binutils-armv5e.patch \
-     file://mips64-default-ld-emulation.patch \
-     file://binutils-xlp-support.patch \
-     file://bin.aeabi.patch \
-     file://bin.fix_e5500_e6500_dcbt.patch \
-     "
+     file://binutils-2.25.patch \
+"
 SRC_URI[md5sum] = "d9f3303f802a5b6b0bb73a335ab89d66"
 SRC_URI[sha256sum] = "22defc65cfa3ef2a3395faaea75d6331c6e62ea5dfacfed3e2ec17b08c882923"
 

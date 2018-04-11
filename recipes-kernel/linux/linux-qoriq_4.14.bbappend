@@ -1,3 +1,5 @@
+inherit  siteinfo
+
 do_merge_delta_config() {
     # create .config with make config
     oe_runmake  -C ${S} O=${B} ${KERNEL_DEFCONFIG}

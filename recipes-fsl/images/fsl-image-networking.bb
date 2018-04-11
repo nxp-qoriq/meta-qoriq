@@ -13,6 +13,8 @@ EXTRA_IMAGEDEPENDS_append_ls1046ardb = " ppa-fuse"
 EXTRA_IMAGEDEPENDS_append_p1020rdb = " vsc7385-firmware"
 EXTRA_IMAGEDEPENDS_append_p2020rdb = " vsc7385-firmware"
 
+EXTRA_IMAGEDEPENDS_append_t2080 = " ls2-phy"
+EXTRA_IMAGEDEPENDS_append_t4240 = " ls2-phy"
 
 SUMMARY = "Small image to be used for evaluating the Freescale socs"
 DESCRIPTION = "Small image which includes some helpful tools and \

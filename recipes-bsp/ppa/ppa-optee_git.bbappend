@@ -1,4 +1,0 @@
-PPA_PATH_ls1043a = "ls1043"
-PPA_PATH_ls1012a = "ls1012"
-
-COMPATIBLE_MACHINE = "(ls1043a|ls1046a|ls1012a)"

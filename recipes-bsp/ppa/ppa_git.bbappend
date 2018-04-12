@@ -1,1 +1,0 @@
-COMPATIBLE_MACHINE = "(ls1043a|ls1046a|ls2088a|ls1012a|ls1088a)"

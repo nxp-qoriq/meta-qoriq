@@ -13,6 +13,21 @@ EXTRA_IMAGEDEPENDS_append_ls1046ardb = " ppa-fuse"
 EXTRA_IMAGEDEPENDS_append_p1020rdb = " vsc7385-firmware"
 EXTRA_IMAGEDEPENDS_append_p2020rdb = " vsc7385-firmware"
 
+EXTRA_IMAGEDEPENDS_remove_ls2088ardb = " rcw-bin"
+EXTRA_IMAGEDEPENDS_append_ls2088ardb = " rcw"
+
+EXTRA_IMAGEDEPENDS_remove_ls1088ardb = " rcw-bin"
+EXTRA_IMAGEDEPENDS_append_ls1088ardb = " rcw"
+
+EXTRA_IMAGEDEPENDS_remove_ls1012ardb-32b = " rcw-bin"
+EXTRA_IMAGEDEPENDS_append_ls1012ardb-32b = " rcw"
+
+EXTRA_IMAGEDEPENDS_remove_ls1012afrdm-32b = " rcw-bin"
+EXTRA_IMAGEDEPENDS_append_ls1012afrdm-32b = " rcw"
+
+EXTRA_IMAGEDEPENDS_remove_ls1012afrdm = " rcw-bin"
+EXTRA_IMAGEDEPENDS_append_ls1012afrdm = " rcw"
+
 EXTRA_IMAGEDEPENDS_append_t2080 = " ls2-phy"
 EXTRA_IMAGEDEPENDS_append_t4240 = " ls2-phy"
 

@@ -36,6 +36,11 @@ RDEPENDS_${PN} = " \
     u-boot-mkimage \
 "
 
+RDEPENDS_${PN}_remove_qoriq-ppc = " \
+    git \
+    git-perltools \
+"
+
 RDEPENDS_${PN}_append_qoriq-arm = " \
     valgrind \
 "

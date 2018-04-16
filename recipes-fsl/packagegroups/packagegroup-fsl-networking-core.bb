@@ -31,6 +31,7 @@ RDEPENDS_${PN} = " \
     net-tools \
     tcpdump \
     watchdog \
+    vlan \
 "
 
 RDEPENDS_${PN}-server = " \

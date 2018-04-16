@@ -37,7 +37,6 @@ RDEPENDS_${PN} = "\
     unzip \
     usbutils \
     which \
-    vlan \
     xz  \
     zip \
     ${X11_TOOLS} \

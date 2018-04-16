@@ -36,7 +36,6 @@ RDEPENDS_${PN} = "\
     texinfo \
     unzip \
     usbutils \
-    watchdog \
     which \
     vlan \
     xz  \

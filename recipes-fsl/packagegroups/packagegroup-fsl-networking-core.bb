@@ -30,6 +30,7 @@ RDEPENDS_${PN} = " \
     ipsec-demo \
     net-tools \
     tcpdump \
+    watchdog \
 "
 
 RDEPENDS_${PN}-server = " \

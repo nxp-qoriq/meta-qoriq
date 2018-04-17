@@ -31,6 +31,7 @@ RDEPENDS_${PN} = " \
     elfutils \
     file \
     psmisc \
+    ptpd \
     sysfsutils \
     sysklogd \
     sysstat \

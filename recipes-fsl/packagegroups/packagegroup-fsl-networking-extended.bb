@@ -20,7 +20,6 @@ RDEPENDS_${PN} = " \
     ntpdate \
     ppp \
     ppp-dialin \
-    ptpd \
     resolvconf \
     rp-pppoe \
     samba \

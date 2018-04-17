@@ -18,6 +18,13 @@ RDEPENDS_${PN} = "${@bb.utils.contains('DISTRO_FEATURES', 'x11', \
     '', d)} \
 " 
 
+RDEPENDS_${PN}_remove_qoriq-ppc = "${@bb.utils.contains('DISTRO_FEATURES', 'x11', \
+    'libvirt \
+    libvirt-libvirtd \
+    libvirt-virsh', \
+    '', d)} \
+"
+
 DOCKER_PKGS = " \
     docker \
     docker-registry \

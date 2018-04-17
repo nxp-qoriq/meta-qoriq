@@ -32,6 +32,7 @@ EGLIBCPATCHES = "\
            file://eglibc-ppc8xx-cache-line-workaround.patch \
            file://eglibc-sh4-fpscr_values.patch \
            file://eglibc-use-option-groups.patch \
+           file://archive-path.patch \
           "
 
 SRCREV_glibc = "b8079dd0d360648e4e8de48656c5c38972621072"

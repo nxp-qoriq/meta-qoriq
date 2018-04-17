@@ -4,6 +4,8 @@ require recipes-core/glibc/glibc.inc
 
 DEPENDS += "gperf-native kconfig-frontends-native"
 
+CRYPTPROVIDES_class-nativesdk = "virtual/crypt"
+
 PV = "2.20"
 
 SRCREV = "b8079dd0d360648e4e8de48656c5c38972621072"

@@ -67,11 +67,11 @@ RDEPENDS_${PN}_append_ls1012ardb = " \
     optee-test-qoriq \
 "
 
-RDEPENDS_${PN}_append_ls1088ardb = " \
+RDEPENDS_${PN}_append_ls1088a = " \
     aiopsl \
     dpdk \
 "
-RDEPENDS_${PN}_append_ls2088ardb = " \
+RDEPENDS_${PN}_append_ls2088a = " \
     aiopsl \
     dpdk \
 "

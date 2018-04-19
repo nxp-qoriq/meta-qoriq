@@ -14,6 +14,7 @@ RDEPENDS_${PN} = "${@bb.utils.contains('DISTRO_FEATURES', 'x11', \
     'libvirt \
     libvirt-libvirtd \
     libvirt-virsh \
+    lxc \
     qemu', \
     '', d)} \
 " 
@@ -22,6 +23,7 @@ RDEPENDS_${PN}_remove_qoriq-ppc = "${@bb.utils.contains('DISTRO_FEATURES', 'x11'
     'libvirt \
     libvirt-libvirtd \
     libvirt-virsh', \
+    lxc \
     '', d)} \
 "
 

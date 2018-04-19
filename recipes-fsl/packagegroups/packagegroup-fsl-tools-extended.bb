@@ -31,6 +31,7 @@ RDEPENDS_${PN} = "\
     perf \
     rng-tools \
     rt-tests \
+    stress \
     sqlite3 \
     strongswan \
     texinfo \

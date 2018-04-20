@@ -72,11 +72,11 @@ DPAA_PKGS_ls1046a-32b ="eth-config fmc"
 DPAA_PKGS_ls1012a = "ppfe-firmware"
 
 RDEPENDS_${PN}_append_qoriq = " pciutils cryptodev-linux cryptodev-module cryptodev-tests ifenslave"
-RDEPENDS_${PN}_append_ls1043ardb = " \
+RDEPENDS_${PN}_append_ls1043a = " \
     restool \
     fio \
 "
-RDEPENDS_${PN}_append_ls1046ardb = " \
+RDEPENDS_${PN}_append_ls1046a = " \
     fio \
     restool \
 "

@@ -14,7 +14,6 @@ SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/qemu;nobr
            file://run-ptest \
            file://memfd.patch \
            "
-UPSTREAM_CHECK_REGEX = "qemu-(?P<pver>\d+\..*)\.tar"
 
 SRCREV = "6c297a7ddd355d499ddd31353a763d57a092f851"
 
@@ -23,7 +22,20 @@ S = "${WORKDIR}/git"
 COMPATIBLE_HOST_mipsarchn32 = "null"
 COMPATIBLE_HOST_mipsarchn64 = "null"
 
-EXTRA_OECONF  = "--target-list=aarch64-softmmu --enable-fdt --enable-kvm --with-system-pixman --disable-werror"
+PROVIDES = "qemu"
+
+python() {
+    pkgs = d.getVar('PACKAGES', True).split()
+    for p in pkgs:
+        if 'qemu-qoriq' in p:
+            d.appendVar("RPROVIDES_%s" % p, p.replace('qemu-qoriq', 'qemu'))
+            d.appendVar("RCONFLICTS_%s" % p, p.replace('qemu-qoriq', 'qemu'))
+            d.appendVar("RREPLACES_%s" % p, p.replace('qemu-qoriq', 'qemu'))
+}
+
+EXTRA_OECONF_qoriq-arm64 = "--prefix=${prefix} --target-list=aarch64-softmmu --enable-fdt --enable-kvm --with-system-pixman --disable-werror"
+
+EXTRA_OECONF_qoriq-arm = "--prefix=${prefix} --target-list=arm-softmmu --enable-fdt --enable-kvm --with-system-pixman --disable-werror"
 
 DISABLE_STATIC = ""
 
@@ -48,7 +60,7 @@ do_install_ptest() {
 }
 
 INSANE_SKIP_${PN} += "already-stripped"
-FILES_${PN} += "/usr/local/bin/* /usr/local/share/*  /usr/local/libexec/* /usr/local/var/* /usr/share/*"
+FILES_${PN} += "/usr/share/qemu/* /usr/var/*"
 
 # FIXME: Avoid WARNING due missing patch for native/nativesdk
 BBCLASSEXTEND = ""

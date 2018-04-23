@@ -4,7 +4,7 @@ require recipes-core/glibc/glibc.inc
 
 DEPENDS += "gperf-native kconfig-frontends-native"
 
-CRYPTPROVIDES_class-nativesdk = "virtual/crypt"
+CRYPTPROVIDES_class-nativesdk_qoriq-ppc = "virtual/crypt"
 
 PV = "2.20"
 

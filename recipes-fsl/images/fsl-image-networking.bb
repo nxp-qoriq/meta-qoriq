@@ -31,7 +31,7 @@ EXTRA_IMAGEDEPENDS_append_ls1012afrdm = " rcw"
 EXTRA_IMAGEDEPENDS_append_t2080rdb = " ls2-phy"
 EXTRA_IMAGEDEPENDS_append_t4240rdb = " ls2-phy"
 EXTRA_IMAGEDEPENDS_append_t2080rdb-64b = " ls2-phy"
-EXTRA_IMAGEDEPENDS_append_t4240rdb-64b = " ls2-phy
+EXTRA_IMAGEDEPENDS_append_t4240rdb-64b = " ls2-phy"
 
 SUMMARY = "Small image to be used for evaluating the Freescale socs"
 DESCRIPTION = "Small image which includes some helpful tools and \

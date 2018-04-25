@@ -16,4 +16,5 @@ do_compile() {
     cd ${S}
 }
 
+PARALLEL_MAKE = ""
 COMPATIBLE_MACHINE = "(ls1046a)"

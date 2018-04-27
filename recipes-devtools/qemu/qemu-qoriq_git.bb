@@ -33,9 +33,15 @@ python() {
             d.appendVar("RREPLACES_%s" % p, p.replace('qemu-qoriq', 'qemu'))
 }
 
+PPC_OECONF = '--enable-fdt --enable-kvm --with-system-pixman --disable-werror'
 EXTRA_OECONF_qoriq-arm64 = "--prefix=${prefix} --target-list=aarch64-softmmu --enable-fdt --enable-kvm --with-system-pixman --disable-werror"
-
 EXTRA_OECONF_qoriq-arm = "--prefix=${prefix} --target-list=arm-softmmu --enable-fdt --enable-kvm --with-system-pixman --disable-werror"
+EXTRA_OECONF_e5500-64b = "--prefix=${prefix} --target-list=ppc64-softmmu ${PPC_OECONF}"
+EXTRA_OECONF_e6500-64b = "--prefix=${prefix} --target-list=ppc64-softmmu ${PPC_OECONF}"
+EXTRA_OECONF_e6500 = "--prefix=${prefix} --target-list=ppc64-softmmu ${PPC_OECONF}"
+EXTRA_OECONF_e5500 = "--prefix=${prefix} --target-list=ppc64-softmmu ${PPC_OECONF}"
+EXTRA_OECONF_e500v2 = "--prefix=${prefix} --target-list=ppc-softmmu ${PPC_OECONF}"
+EXTRA_OECONF_e500mc = "--prefix=${prefix} --target-list=ppc-softmmu ${PPC_OECONF}"
 
 DISABLE_STATIC = ""
 

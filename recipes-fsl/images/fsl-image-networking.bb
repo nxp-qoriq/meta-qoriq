@@ -10,6 +10,8 @@ IMAGE_FSTYPES = "tar.gz ext2.gz ext2.gz.u-boot jffs2 ubi"
 
 EXTRA_IMAGEDEPENDS_append_ls1046ardb = " ppa-fuse"
 
+EXTRA_IMAGEDEPENDS_remove_ls1046ardb-be = " qe-ucode"
+
 EXTRA_IMAGEDEPENDS_append_p1020rdb = " vsc7385-firmware"
 EXTRA_IMAGEDEPENDS_append_p2020rdb = " vsc7385-firmware"
 

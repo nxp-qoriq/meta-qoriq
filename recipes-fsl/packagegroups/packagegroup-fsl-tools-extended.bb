@@ -93,7 +93,7 @@ SOC_TOOLS_TEST_mx7 = "imx-test"
 # extra packages for QorIQ targets
 EXTRA_TOOLS ?= ""
 EXTRA_TOOLS_p1022ds = " packagegroup-fsl-graphics-minimal"
-EXTRA_TOOLS_t4240 = " web-sysmon cairo-dev"
+EXTRA_TOOLS_t4240 = " cairo-dev"
 
 RDEPENDS_${PN}_append_qoriq = "\
     kernel-image \

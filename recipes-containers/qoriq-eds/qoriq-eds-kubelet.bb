@@ -15,13 +15,6 @@ DEPENDS += "rsync-native \
            "
 ALLOW_EMPTY_${PN} = "1"
 
-# Note: we are explicitly *not* adding docker to the rdepends, since we allow
-#       backends like cri-o to be used.
-RDEPENDS_${PN} += "kubeadm \
-                   kubectl \
-                   kubelet \
-                   cni"
-
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://src/import/LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"
 
@@ -89,10 +82,6 @@ SYSTEMD_PACKAGES = "${@bb.utils.contains('DISTRO_FEATURES','systemd','kubelet','
 SYSTEMD_SERVICE_kubelet = "${@bb.utils.contains('DISTRO_FEATURES','systemd','kubelet.service','',d)}"
 SYSTEMD_AUTO_ENABLE_kubelet = "enable"
 
-FILES_kubeadm = "${bindir}/kubeadm ${systemd_unitdir}/system/kubelet.service.d/*"
-FILES_kubectl = "${bindir}/kubectl"
-FILES_kube-proxy = "${bindir}/kube-proxy"
-FILES_kubelet = "${bindir}/kubelet ${systemd_unitdir}/system/kubelet.service ${sysconfdir}/kubernetes/manifests/"
 
 INHIBIT_PACKAGE_STRIP = "1"
 INSANE_SKIP_${PN} += "ldflags already-stripped"

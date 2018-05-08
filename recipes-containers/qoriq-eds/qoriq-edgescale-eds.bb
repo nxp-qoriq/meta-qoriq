@@ -4,6 +4,7 @@ LICENSE = "NXP-EULA"
 LIC_FILES_CHKSUM = "file://src/import/EULA.txt;md5=d969f2c93b3905d4b628787ce5f8df4b"
 
 SRC_URI = "git://github.com/NXP/qoriq-edgescale-eds.git;nobranch=1 \
+    file://0001-Makefile-fix-build-error.patch \
 "
 SRCREV = "f613aac6d8f5ef32cd0ce5c3a710d951a6635336"
 

@@ -50,6 +50,7 @@ RDEPENDS_${PN}_append_ls1043ardb = " \
     optee-client-qoriq \
     optee-test-qoriq \
     secure-obj \
+    secure-obj-module \
     libpkcs11 \
 "
 RDEPENDS_${PN}_append_ls1046ardb = " \
@@ -60,6 +61,7 @@ RDEPENDS_${PN}_append_ls1046ardb = " \
     optee-client-qoriq \
     optee-test-qoriq \
     secure-obj \
+    secure-obj-module \
     libpkcs11 \
 "
 RDEPENDS_${PN}_append_ls1012ardb = " \

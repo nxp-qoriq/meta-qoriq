@@ -44,7 +44,6 @@ RDEPENDS_${PN} = "\
 "
 RDEPENDS_${PN}_append_ls1043ardb = " \
     ceetm \
-    dpdk \
     pktgen-dpdk \
     optee-os-qoriq \
     optee-client-qoriq \
@@ -55,7 +54,6 @@ RDEPENDS_${PN}_append_ls1043ardb = " \
 "
 RDEPENDS_${PN}_append_ls1046ardb = " \
     ceetm \
-    dpdk \
     pktgen-dpdk \
     optee-os-qoriq \
     optee-client-qoriq \
@@ -72,11 +70,9 @@ RDEPENDS_${PN}_append_ls1012ardb = " \
 
 RDEPENDS_${PN}_append_ls1088a = " \
     aiopsl \
-    dpdk \
 "
 RDEPENDS_${PN}_append_ls2088a = " \
     aiopsl \
-    dpdk \
 "
 
 RDEPENDS_${PN}_imx = " \

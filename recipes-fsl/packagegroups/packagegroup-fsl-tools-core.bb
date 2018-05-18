@@ -76,9 +76,15 @@ RDEPENDS_${PN}_append_ls1043a = " \
     restool \
     fio \
 "
+RDEPENDS_${PN}_append_ls1043ardb = " \
+    dpdk \
+"
 RDEPENDS_${PN}_append_ls1046a = " \
     fio \
     restool \
+"
+RDEPENDS_${PN}_append_ls1046ardb= " \
+    dpdk \
 "
 RDEPENDS_${PN}_append_ls1088a = " \
     devmem2 \
@@ -86,9 +92,15 @@ RDEPENDS_${PN}_append_ls1088a = " \
     fio \
     restool \
 "
+RDEPENDS_${PN}_append_ls1088ardb= " \
+    dpdk \
+"
 RDEPENDS_${PN}_append_ls2088a = " \
     devmem2 \
     gpp-aioptool \
     fio \
     restool \
+"
+RDEPENDS_${PN}_append_ls2088ardb= " \
+    dpdk \
 "

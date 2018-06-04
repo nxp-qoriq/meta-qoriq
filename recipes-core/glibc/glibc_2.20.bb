@@ -1,10 +1,8 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/glibc-fsl:"
 
-require recipes-core/glibc/glibc.inc
+require glibc.inc
 
 DEPENDS += "gperf-native kconfig-frontends-native"
-
-CRYPTPROVIDES_class-nativesdk = "virtual/crypt"
 
 PV = "2.20"
 

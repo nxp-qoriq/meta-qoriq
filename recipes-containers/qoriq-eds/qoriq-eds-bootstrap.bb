@@ -10,6 +10,7 @@ SRCREV = "72abfd9b61cc8a6d10e4808a87ff4ce1e2b99020"
 
 ARCH_qoriq-arm = "arm"
 ARCH_qoriq-arm64 = "arm64"
+ARCH_mx8 = "arm64"
 
 S = "${WORKDIR}/git"
 

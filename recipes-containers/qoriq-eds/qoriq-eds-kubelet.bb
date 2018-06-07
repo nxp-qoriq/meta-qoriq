@@ -86,5 +86,7 @@ SYSTEMD_AUTO_ENABLE_kubelet = "enable"
 INHIBIT_PACKAGE_STRIP = "1"
 INSANE_SKIP_${PN} += "ldflags already-stripped"
 
+FILES_${PN} += " ${systemd_unitdir}/system/kubelet.service ${systemd_unitdir}/system/kubelet.service.d"
+
 deltask compile_ptest_base
 BBCLASSEXTEND = "nativesdk"

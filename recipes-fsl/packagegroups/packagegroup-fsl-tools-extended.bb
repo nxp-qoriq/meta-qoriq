@@ -37,6 +37,7 @@ RDEPENDS_${PN} = "\
     texinfo \
     unzip \
     usbutils \
+    util-linux-lscpu \
     which \
     xz  \
     zip \

@@ -117,7 +117,6 @@ EXTRA_OECONF = "--enable-kernel=${OLDEST_KERNEL} \
                 --enable-add-ons \
                 --with-headers=${STAGING_INCDIR} \
                 --without-selinux \
-                --enable-obsolete-rpc \
                 --with-kconfig=${STAGING_BINDIR_NATIVE} \
                 --disable-nscd \
                 ${GLIBC_EXTRA_OECONF}"
@@ -149,21 +148,11 @@ do_configure () {
         CPPFLAGS="" oe_runconf
 }
 
-rpcsvc = "bootparam_prot.x nlm_prot.x rstat.x \
-	  yppasswd.x klm_prot.x rex.x sm_inter.x mount.x \
-	  rusers.x spray.x nfs_prot.x rquota.x key_prot.x"
 
 do_compile () {
 	# -Wl,-rpath-link <staging>/lib in LDFLAGS can cause breakage if another glibc is in staging
 	unset LDFLAGS
 	base_do_compile
-	(
-		cd ${S}/sunrpc/rpcsvc
-		for r in ${rpcsvc}; do
-			h=`echo $r|sed -e's,\.x$,.h,'`
-			rpcgen -h $r -o $h || bbwarn "unable to generate header for $r"
-		done
-	)
 	echo "Adjust ldd script"
 	if [ -n "${RTLDLIST}" ]
 	then
@@ -178,6 +167,7 @@ do_compile () {
 
 do_install_append () {
         rm -rf ${D}/usr/include/gnu/lib-names.h
+        rm -rf ${D}/usr/include/rpcsvc/yppasswd.h
 }
 require glibc-package.inc
 

@@ -80,7 +80,7 @@ do_configure_prepend() {
 	sed -e "s#@BASH@#/bin/sh#" -i ${S}/elf/ldd.bash.in
 }
 
-GLIBC_ADDONS ?= "nptl,libidn"
+#GLIBC_ADDONS ?= "nptl,libidn"
 
 # Enable backtrace from abort()
 do_configure_append_arm () {

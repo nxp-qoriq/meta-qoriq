@@ -39,6 +39,7 @@ RDEPENDS_${PN} = " \
 RDEPENDS_${PN}_remove_qoriq-ppc = " \
     git \
     git-perltools \
+    mdadm \
 "
 
 RDEPENDS_${PN}_append_qoriq-arm = " \

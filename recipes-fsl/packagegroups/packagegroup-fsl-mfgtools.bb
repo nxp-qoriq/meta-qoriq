@@ -19,7 +19,6 @@ RDEPENDS_${PN} = " \
     mtd-utils-ubifs \
     mtd-utils-jffs2 \
     e2fsprogs-mke2fs \
-    mdadm \
     hdparm \
 "
 

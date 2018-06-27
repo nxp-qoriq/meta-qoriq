@@ -180,6 +180,7 @@ do_compile () {
 do_install_append () {
         rm -rf ${D}/usr/include/gnu/lib-names.h
         rm -rf ${D}/usr/include/rpcsvc/yppasswd.h
+        rm -rf ${D}/usr/include/rpcsvc/rquota.h
 }
 require glibc-package.inc
 

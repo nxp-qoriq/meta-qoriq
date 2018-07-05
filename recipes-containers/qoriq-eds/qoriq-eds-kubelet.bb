@@ -5,82 +5,41 @@ applications across multiple hosts, providing basic mechanisms for deployment, \
 maintenance, and scaling of applications. \
 "
 
-SRC_URI = "git://github.com/kubernetes/kubernetes.git;nobranch=1;name=kubernetes \
-      file://build-kube-toolchain-to-run-on-host.patch \
+SRC_URI = "git://github.com/NXP/qoriq-eds-kubelet.git;nobranch=1 \
 "
-SRCREV = "d3ada0119e776222f11ec7945e6d860061339aad"
+SRCREV = "ef648562d2ea395e47ff35b4b7139e7f6f409a38"
+
+S = "${WORKDIR}/git"
 
 DEPENDS += "rsync-native \
             coreutils-native \
+            openssl \
+            qoriq-edgescale-eds \
            "
 ALLOW_EMPTY_${PN} = "1"
 
 LICENSE = "Apache-2.0"
-LIC_FILES_CHKSUM = "file://src/import/LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"
+LIC_FILES_CHKSUM = "file://EULA.txt;md5=ac5425aaed72fb427ef1113a88542f89"
 
 GO_IMPORT = "import"
 
-inherit systemd
-inherit go
-inherit goarch
-
+export CROSS_COMPILE = "aarch64-fsl-linux-"
+export OPENSSL_PATH = "${RECIPE_SYSROOT}/usr"
+export GO_OPENSSL_PATH = "${RECIPE_SYSROOT}/usr/include/cert-agent/pkg/openssl"
 do_compile() {
-        sed -i "s:export CC=.*-gcc$:export CC=${HOST_PREFIX}gcc:g" ${S}/src/import/hack/lib/golang.sh
-	export GOARCH="${TARGET_GOARCH}"
-	export GOROOT="${STAGING_LIBDIR_NATIVE}/${TARGET_SYS}/go"
-	export GOPATH="${S}/src/import:${S}/src/import/vendor"
-
-	# Pass the needed cflags/ldflags so that cgo
-	# can find the needed headers files and libraries
-	export CGO_ENABLED="1"
-	export CFLAGS=""
-	export LDFLAGS=""
-	export CGO_CFLAGS="${BUILDSDK_CFLAGS} --sysroot=${STAGING_DIR_TARGET}"
-	export CGO_LDFLAGS="${BUILDSDK_LDFLAGS} --sysroot=${STAGING_DIR_TARGET}"
-
-	# link fixups for compilation
-	rm -f ${S}/src/import/vendor/src
-	ln -sf ./ ${S}/src/import/vendor/src
-
-	export GOPATH="${S}/src/import/.gopath:${S}/src/import/vendor:${STAGING_DIR_TARGET}/${prefix}/local/go"
-	export GOROOT="${STAGING_DIR_NATIVE}/${nonarch_libdir}/${HOST_SYS}/go"
-
-	# Pass the needed cflags/ldflags so that cgo
-	# can find the needed headers files and libraries
-	export CGO_ENABLED="1"
-	export CGO_CFLAGS="${CFLAGS} --sysroot=${STAGING_DIR_TARGET}"
-	export CGO_LDFLAGS="${LDFLAGS} --sysroot=${STAGING_DIR_TARGET}"
-
-	cd ${S}/src/import
-        export KUBE_BUILD_PLATFORMS="${HOST_GOOS}/${BUILD_GOARCH}"
-	export GOARCH="${BUILD_GOARCH}"
-	make generated_files
-	export KUBE_BUILD_PLATFORMS="${HOST_GOOS}/${TARGET_GOARCH}"
-	export GOARCH="${TARGET_GOARCH}"
-	# to limit what is built, use 'WHAT', i.e. make WHAT=cmd/kubelet
-	make WHAT="/cmd/libs/go2idl/deepcopy-gen"
-        make WHAT=cmd/kubelet
+    export CGO_CFLAGS="${CFLAGS} --sysroot=${STAGING_DIR_TARGET}"
+    export CGO_LDFLAGS="${LDFLAGS} --sysroot=${STAGING_DIR_TARGET}"
+    oe_runmake ARCH=arm64
 }
 
 do_install() {
     install -d ${D}${bindir}
-    install -d ${D}${systemd_unitdir}/system/
-    install -d ${D}${systemd_unitdir}/system/kubelet.service.d/
+    install -d ${D}/etc
 
-    install -d ${D}${sysconfdir}/kubernetes/manifests/
-
-    #install -m 755 -D ${S}/src/import/_output/bin/kube* ${D}/${bindir}
-    if ls ${S}/src/import/_output/local/bin/*/${TARGET_GOARCH}/kube* > /dev/null 2>&1 ; then
-        install -m 755 -D ${S}/src/import/_output/local/bin/*/${TARGET_GOARCH}/kube* ${D}/${bindir}
-    elif ls ${S}/src/import/_output/bin/kube* > /dev/null 2>&1 ; then
-        install -m 755 -D ${S}/src/import/_output/bin/kube* ${D}/${bindir}
-    fi
-    install -m 0644 ${S}/src/import/build/debs/kubelet.service  ${D}${systemd_unitdir}/system/
+    cp -r  ${S}/images/* ${D}${bindir}
+    cp -r  ${S}/etc/kubernetes ${D}/etc
+    cp -r  ${S}/scripts/*  ${D}${bindir}
 }
-
-SYSTEMD_PACKAGES = "${@bb.utils.contains('DISTRO_FEATURES','systemd','kubelet','',d)}"
-SYSTEMD_SERVICE_kubelet = "${@bb.utils.contains('DISTRO_FEATURES','systemd','kubelet.service','',d)}"
-SYSTEMD_AUTO_ENABLE_kubelet = "enable"
 
 
 INHIBIT_PACKAGE_STRIP = "1"

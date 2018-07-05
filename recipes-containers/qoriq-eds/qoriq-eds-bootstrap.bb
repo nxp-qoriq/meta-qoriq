@@ -3,9 +3,7 @@ HOMEPAGE = "https://github.com/nxp/qoriq-eds-bootstrap.git"
 LICENSE = "NXP-Binary-EULA"
 LIC_FILES_CHKSUM = "file://NXP-Binary-EULA.txt;md5=685768ff8092cc783d95e3480cb9bdb1"
 
-SRC_URI = "git://github.com/NXP/qoriq-eds-bootstrap.git;nobranch=1 \
-    file://0001-fix-install-error.patch \
-"
+SRC_URI = "git://github.com/NXP/qoriq-eds-bootstrap.git;nobranch=1"
 SRCREV = "72abfd9b61cc8a6d10e4808a87ff4ce1e2b99020"
 
 ARCH_qoriq-arm = "arm"
@@ -17,9 +15,10 @@ S = "${WORKDIR}/git"
 do_compile[noexec] = "1"
 
 do_install () {
-    install -d ${D}/usr/bin
-    cp -r  ${S}/${ARCH}/* ${D}/usr/bin
+    install -d ${D}/usr/local/bin
+    cp -r  ${S}/${ARCH}/* ${D}/usr/local/bin
     chown -R root:root ${D}
 }
 
 INSANE_SKIP_${PN} += "already-stripped"
+FILES_${PN} += "/usr/local/bin/*"

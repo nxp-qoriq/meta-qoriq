@@ -1,0 +1,15 @@
+#!/bin/bash
+
+testserver="https://www.yoctoproject.org"
+
+echo "Setting time from $testserver"
+
+while true
+do
+    ping -c 60 $(ip route show | grep default | awk '{print $3}') > /dev/null 2>&1 &
+    t="$(curl -k --connect-timeout 10 -s --head $testserver | grep ^Date:)"
+    if [[ $? -eq 0 ]];then
+        date -s "$(echo $t | sed 's/Date: //g')"
+        break
+    fi
+done

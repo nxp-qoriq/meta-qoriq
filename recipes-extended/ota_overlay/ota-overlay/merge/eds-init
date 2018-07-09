@@ -1,0 +1,42 @@
+#!/bin/sh
+#
+# eds-init        Starts eds-init.
+#
+
+start() {
+	printf "Starting eds-init: "
+	start-stop-daemon --start --startas /usr/bin/tee-supplicant --name tee-supplicant -m --pidfile /var/run/tee-supplicant.pid -b
+	/usr/sbin/dhcpcd
+	/usr/bin/network-check
+	/usr/bin/time-calibration
+	/usr/bin/cert-agent
+	start-stop-daemon --stop --name udevd --quiet
+	/usr/bin/ota-update
+	echo "OK"
+}
+stop() {
+	printf "Stopping eds-init: "
+	killall dhcpcd
+	echo "OK"
+}
+restart() {
+	stop
+	start
+}
+
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  restart|reload)
+	restart
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart}"
+	exit 1
+esac
+exit $?
+

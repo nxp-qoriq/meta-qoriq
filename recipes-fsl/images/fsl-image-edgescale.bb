@@ -10,7 +10,7 @@ IMAGE_INSTALL_append = " \
     start-stop-daemon \
     dhcpcd \
     ota-overlay \
-    qoriq-edgescale-eds \
+    edgescale-eds \
     bash \
     coreutils \
     curl \

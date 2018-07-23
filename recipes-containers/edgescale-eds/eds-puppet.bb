@@ -19,3 +19,8 @@ do_install() {
     install -m 655 ${S}/puppet.conf ${D}${sysconfdir}/puppetlabs/puppet/
     install -m 655 ${S}/openssl-sobj.cnf ${D}${sysconfdir}/ssl/
 }
+
+do_install_append_mx8() {
+    # Remove sudo command
+    sed -i 's/sudo//' ${D}${bindir}/puppet.sh
+}

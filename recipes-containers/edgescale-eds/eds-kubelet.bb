@@ -14,7 +14,7 @@ S = "${WORKDIR}/git"
 DEPENDS += "rsync-native \
             coreutils-native \
             openssl \
-            qoriq-edgescale-eds \
+            edgescale-eds \
            "
 ALLOW_EMPTY_${PN} = "1"
 
@@ -23,13 +23,19 @@ LIC_FILES_CHKSUM = "file://EULA.txt;md5=ac5425aaed72fb427ef1113a88542f89"
 
 GO_IMPORT = "import"
 
+ARCH_qoriq-arm = "arm"
+ARCH_qoriq-arm64 = "arm64"
+ARCH_mx6= "arm"
+ARCH_mx7 = "arm"
+ARCH_mx8 = "arm64"
+
 export CROSS_COMPILE = "aarch64-fsl-linux-"
 export OPENSSL_PATH = "${RECIPE_SYSROOT}/usr"
 export GO_OPENSSL_PATH = "${RECIPE_SYSROOT}/usr/include/cert-agent/pkg/openssl"
 do_compile() {
     export CGO_CFLAGS="${CFLAGS} --sysroot=${STAGING_DIR_TARGET}"
     export CGO_LDFLAGS="${LDFLAGS} --sysroot=${STAGING_DIR_TARGET}"
-    oe_runmake ARCH=arm64
+    oe_runmake ARCH="${ARCH}"
 }
 
 do_install() {

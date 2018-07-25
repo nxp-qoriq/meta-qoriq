@@ -73,10 +73,6 @@ do_install() {
         cp -r ${S}/src/import/mq-agent/mq-agent ${D}/${bindir}
         cp -r ${S}/src/import/cert-agent/cert-agent ${D}/${bindir}
         cp -r ${S}/src/import/cert-agent/pkg ${D}/${includedir}/cert-agent/
-
-        # add ${bindir}/local/bin
-        install -d ${D}/${exec_prefix}/local
-        ln -s /usr/bin ${D}/${exec_prefix}/local/bin
 }
 
 FILES_${PN} += "${includedir}/*"

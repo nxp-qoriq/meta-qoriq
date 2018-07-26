@@ -4,7 +4,7 @@ LICENSE = "NXP-EULA"
 LIC_FILES_CHKSUM = "file://src/import/EULA.txt;md5=ac5425aaed72fb427ef1113a88542f89"
 
 SRC_URI = "git://github.com/NXP/qoriq-edgescale-eds.git;nobranch=1 \
-    file://0001-Makefile-fix-build-error.patch \
+    file://0001-Add-Insecure-mode-for-common-platform.patch \
 "
 SRCREV = "90d4441324f60bfb1b66b2584f42fd613191d477"
 
@@ -14,10 +14,8 @@ DEPENDS = "\
            est-client-go \
            openssl \
            optee-client-qoriq \
-           secure-obj \
           "
 RDEPENDS_${PN} += " \
-          secure-obj \
           optee-client-qoriq \
           eds-bootstrap \
 "
@@ -32,7 +30,11 @@ inherit go
 WRAP_TARGET_PREFIX ?= "${TARGET_PREFIX}"
 EXTRA_OEMAKE="BUILDTAGS=''"
 ARCH_qoriq-arm = "arm"
-ARCH_qoriq-arm64 = "arm64"
+ARCH_aarch64 = "arm64"
+ARCH_mx7 = "arm"
+TAGS_aarch64 = ""
+TAGS_mx7 = "-mfpu=vfp -mfloat-abi=hard" 
+export ARCH
 export CROSS_COMPILE="${WRAP_TARGET_PREFIX}"
 export OPENSSL_PATH="${RECIPE_SYSROOT}/usr"
 export SECURE_OBJ_PATH="${RECIPE_SYSROOT}/usr"
@@ -56,7 +58,7 @@ do_compile() {
 	export CGO_ENABLED="1"
 	export CFLAGS=""
 	export LDFLAGS=""
-	export CGO_CFLAGS="${BUILDSDK_CFLAGS} --sysroot=${STAGING_DIR_TARGET}"
+        export CGO_CFLAGS="${BUILDSDK_CFLAGS} --sysroot=${STAGING_DIR_TARGET} ${TAGS}"
 	export CGO_LDFLAGS="${BUILDSDK_LDFLAGS} --sysroot=${STAGING_DIR_TARGET}"
 	cd ${S}/src/import
       
@@ -73,6 +75,7 @@ do_install() {
         cp -r ${S}/src/import/mq-agent/mq-agent ${D}/${bindir}
         cp -r ${S}/src/import/cert-agent/cert-agent ${D}/${bindir}
         cp -r ${S}/src/import/cert-agent/pkg ${D}/${includedir}/cert-agent/
+
 }
 
 FILES_${PN} += "${includedir}/*"

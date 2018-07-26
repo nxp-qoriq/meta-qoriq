@@ -6,6 +6,7 @@ maintenance, and scaling of applications. \
 "
 
 SRC_URI = "git://github.com/NXP/qoriq-eds-kubelet.git;nobranch=1 \
+    file://0001-Makefile-remove-openssl.patch \
 "
 SRCREV = "ef648562d2ea395e47ff35b4b7139e7f6f409a38"
 
@@ -25,15 +26,17 @@ GO_IMPORT = "import"
 
 ARCH_qoriq-arm = "arm"
 ARCH_qoriq-arm64 = "arm64"
-ARCH_mx6= "arm"
 ARCH_mx7 = "arm"
 ARCH_mx8 = "arm64"
 
-export CROSS_COMPILE = "aarch64-fsl-linux-"
+TAGS_aarch64 = ""
+TAGS_mx7 = "-mfpu=vfp -mfloat-abi=hard"
+
+export CROSS_COMPILE = "${TARGET_PREFIX}"
 export OPENSSL_PATH = "${RECIPE_SYSROOT}/usr"
 export GO_OPENSSL_PATH = "${RECIPE_SYSROOT}/usr/include/cert-agent/pkg/openssl"
 do_compile() {
-    export CGO_CFLAGS="${CFLAGS} --sysroot=${STAGING_DIR_TARGET}"
+    export CGO_CFLAGS="${CFLAGS} --sysroot=${STAGING_DIR_TARGET} ${TAGS}"
     export CGO_LDFLAGS="${LDFLAGS} --sysroot=${STAGING_DIR_TARGET}"
     oe_runmake ARCH="${ARCH}"
 }

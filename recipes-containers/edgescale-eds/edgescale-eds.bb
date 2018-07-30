@@ -13,10 +13,8 @@ DEPENDS = "\
            mqtt \
            est-client-go \
            openssl \
-           optee-client-qoriq \
           "
 RDEPENDS_${PN} += " \
-          optee-client-qoriq \
           eds-bootstrap \
 "
 

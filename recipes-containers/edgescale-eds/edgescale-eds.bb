@@ -18,6 +18,12 @@ RDEPENDS_${PN} += " \
           eds-bootstrap \
 "
 
+DEPENDS_append_qoriq-arm64 = "optee-client-qoriq secure-obj"
+DEPENDS_append_qoriq-arm = "optee-client-qoriq secure-obj"
+
+RDEPENDS_${PN}_append_qoriq-arm64 = "optee-client-qoriq secure-obj"
+RDEPENDS_${PN}_append_qoriq-arm = "optee-client-qoriq secure-obj"
+
 GO_IMPORT = "import"
 
 inherit goarch
@@ -33,6 +39,7 @@ ARCH_mx7 = "arm"
 TAGS_aarch64 = ""
 TAGS_mx7 = "-mfpu=vfp -mfloat-abi=hard" 
 export ARCH
+export GOBUILDTAGS = "default"
 export CROSS_COMPILE="${WRAP_TARGET_PREFIX}"
 export OPENSSL_PATH="${RECIPE_SYSROOT}/usr"
 export SECURE_OBJ_PATH="${RECIPE_SYSROOT}/usr"

@@ -85,3 +85,4 @@ do_install() {
 
 FILES_${PN} += "${includedir}/*"
 INSANE_SKIP_${PN} += "already-stripped dev-deps"
+deltask compile_ptest_base

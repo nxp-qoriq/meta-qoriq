@@ -72,6 +72,7 @@ do_compile() {
 
 do_install() {
 	install -d ${D}/${bindir}
+        install -d ${D}/${sysconfdir}
         install -d ${D}/${includedir}/cert-agent
         cp -r ${S}/src/import/startup/env.sh ${D}/${bindir}
         cp -r ${S}/src/import/startup/startup.sh ${D}/${bindir}
@@ -80,7 +81,7 @@ do_install() {
         cp -r ${S}/src/import/mq-agent/mq-agent ${D}/${bindir}
         cp -r ${S}/src/import/cert-agent/cert-agent ${D}/${bindir}
         cp -r ${S}/src/import/cert-agent/pkg ${D}/${includedir}/cert-agent/
-
+        cp -r ${S}/src/import/etc/edgescale-version ${D}/${sysconfdir}
 }
 
 FILES_${PN} += "${includedir}/*"

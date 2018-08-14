@@ -1,0 +1,532 @@
+From 0865139f2ec258e5ea2594ed7d7060faea4575d5 Mon Sep 17 00:00:00 2001
+From: BJ DevOps Team <bjdevops@NXP1.onmicrosoft.com>
+Date: Wed, 1 Aug 2018 20:44:26 +0800
+Subject: [PATCH] Add OTA support
+
+Signed-off-by: BJ DevOps Team <bjdevops@NXP1.onmicrosoft.com>
+---
+ board/freescale/ls1012ardb/ls1012ardb.c | 64 +++++++++++++++++++++++++++++++++
+ board/freescale/ls1043ardb/ls1043ardb.c | 62 ++++++++++++++++++++++++++++++++
+ board/freescale/ls1046ardb/ls1046ardb.c | 61 +++++++++++++++++++++++++++++++
+ board/freescale/ls1088a/ls1088a.c       | 61 +++++++++++++++++++++++++++++++
+ board/freescale/ls2080ardb/ls2080ardb.c | 60 +++++++++++++++++++++++++++++++
+ configs/ls1012aqds_qspi_defconfig       |  1 +
+ configs/ls1012ardb_qspi_defconfig       |  1 +
+ configs/ls1043ardb_defconfig            |  1 +
+ configs/ls1043ardb_sdcard_defconfig     |  1 +
+ configs/ls1046ardb_qspi_defconfig       |  1 +
+ configs/ls1088ardb_qspi_defconfig       |  1 +
+ configs/ls2080ardb_defconfig            |  1 +
+ include/configs/ls1012ardb.h            |  1 +
+ include/configs/ls1043ardb.h            |  2 ++
+ include/configs/ls1046ardb.h            |  2 ++
+ include/configs/ls1088ardb.h            |  2 ++
+ include/configs/ls2080ardb.h            |  2 ++
+ 17 files changed, 324 insertions(+)
+
+diff --git a/board/freescale/ls1012ardb/ls1012ardb.c b/board/freescale/ls1012ardb/ls1012ardb.c
+index ed5a8e6..b44e0c8 100644
+--- a/board/freescale/ls1012ardb/ls1012ardb.c
++++ b/board/freescale/ls1012ardb/ls1012ardb.c
+@@ -150,6 +150,70 @@ int board_init(void)
+ 	return 0;
+ }
+ 
++struct OTA_parameter
++{
++       char status;
++       char str[0x200 - 1];
++};
++
++int ota_sdboot_check(void)
++{
++       struct mmc *mmc;
++       uint blk_start, blk_cnt;
++       unsigned long offset, size;
++       struct OTA_parameter data;
++       int dev = 0;
++       char platform[10];
++
++       offset  = 0x3F00000;
++       size    = 0x200;
++       mmc = find_mmc_device(dev);
++       if(mmc == NULL)
++               return 0;
++       if (mmc_init(mmc))
++               return 0;
++       struct blk_desc *desc = mmc_get_blk_desc(mmc);
++       blk_start   = ALIGN(offset, mmc->read_bl_len) / mmc->read_bl_len;
++       blk_cnt     = ALIGN(size, mmc->read_bl_len) / mmc->read_bl_len;
++       blk_dread(desc, blk_start, blk_cnt, (uchar *)&data);
++
++       if( strstr(data.str, "ls1012a") == NULL ){
++               printf("sd card is not authenticated\n");
++               return 0;
++       }
++
++       printf("status=%c\n",data.status);
++       switch(data.status)
++       {
++               case '0':
++                       break;
++               case '1':
++                       data.status = '2';
++                       blk_dwrite(desc, blk_start, blk_cnt, (uchar *)&data);
++                       break;
++               case '2':
++                       data.status = '3';
++                       blk_dwrite(desc, blk_start, blk_cnt, (uchar *)&data);
++                       return 0;
++                       break;
++               default:
++                       return 0;
++                       break;
++       }
++       return 1;
++}
++
++int last_stage_init(void)
++{
++       if(ota_sdboot_check())
++               env_set("bootcmd","run sdboot");
++       /* enable watchdog and set timeout to 34s */
++       //writew( 0x3420, WDOG1_BASE_ADDR);
++       return 0;
++}
++
++
++
+ #ifdef CONFIG_TARGET_LS1012ARDB
+ int esdhc_status_fixup(void *blob, const char *compat)
+ {
+diff --git a/board/freescale/ls1043ardb/ls1043ardb.c b/board/freescale/ls1043ardb/ls1043ardb.c
+index 9dc1cbc..a2d29b3 100644
+--- a/board/freescale/ls1043ardb/ls1043ardb.c
++++ b/board/freescale/ls1043ardb/ls1043ardb.c
+@@ -116,6 +116,68 @@ int board_init(void)
+ 	return 0;
+ }
+ 
++
++struct OTA_parameter
++{
++       char status;
++       char str[0x200 - 1];
++};
++
++int ota_sdboot_check(void)
++{
++       struct mmc *mmc;
++       uint blk_start, blk_cnt;
++       unsigned long offset, size;
++       struct OTA_parameter data;
++       int dev = 0;
++       char platform[10];
++
++       offset  = 0x3F00000;
++       size    = 0x200;
++       mmc = find_mmc_device(dev);
++       if(mmc == NULL)
++               return 0;
++       if (mmc_init(mmc))
++               return 0;
++       struct blk_desc *desc = mmc_get_blk_desc(mmc);
++       blk_start   = ALIGN(offset, mmc->read_bl_len) / mmc->read_bl_len;
++       blk_cnt     = ALIGN(size, mmc->read_bl_len) / mmc->read_bl_len;
++       blk_dread(desc, blk_start, blk_cnt, (uchar *)&data);
++
++       if( strstr(data.str, "ls1043a") == NULL ){
++               printf("sd card is not authenticated\n");
++               return 0;
++       }
++
++       printf("status=%c\n",data.status);
++       switch(data.status)
++       {
++               case '0':
++                       break;
++               case '1':
++                       data.status = '2';
++                       blk_dwrite(desc, blk_start, blk_cnt, (uchar *)&data);
++                       break;
++               case '2':
++                       data.status = '3';
++                       blk_dwrite(desc, blk_start, blk_cnt, (uchar *)&data);
++                       return 0;
++                       break;
++               default:
++                       return 0;
++                       break;
++       }
++       return 1;
++}
++
++int last_stage_init(void)
++{
++       if(ota_sdboot_check())
++               env_set("bootcmd","cpld reset sd");
++    return 0;
++}
++
++
+ int config_board_mux(void)
+ {
+ 	struct ccsr_scfg *scfg = (struct ccsr_scfg *)CONFIG_SYS_FSL_SCFG_ADDR;
+diff --git a/board/freescale/ls1046ardb/ls1046ardb.c b/board/freescale/ls1046ardb/ls1046ardb.c
+index 33f1afd..3861d2a 100644
+--- a/board/freescale/ls1046ardb/ls1046ardb.c
++++ b/board/freescale/ls1046ardb/ls1046ardb.c
+@@ -97,6 +97,67 @@ int board_init(void)
+ 	return 0;
+ }
+ 
++struct OTA_parameter
++{
++       char status;
++       char str[0x200 - 1];
++};
++
++int ota_sdboot_check(void)
++{
++       struct mmc *mmc;
++       uint blk_start, blk_cnt;
++       unsigned long offset, size;
++       struct OTA_parameter data;
++       int dev = 0;
++       char platform[10];
++
++       offset  = 0x3F00000;
++       size    = 0x200;
++       mmc = find_mmc_device(dev);
++       if(mmc == NULL)
++               return 0;
++       if (mmc_init(mmc))
++               return 0;
++       struct blk_desc *desc = mmc_get_blk_desc(mmc);
++       blk_start   = ALIGN(offset, mmc->read_bl_len) / mmc->read_bl_len;
++       blk_cnt     = ALIGN(size, mmc->read_bl_len) / mmc->read_bl_len;
++       blk_dread(desc, blk_start, blk_cnt, (uchar *)&data);
++
++       if( strstr(data.str, "ls1046a") == NULL ){
++               printf("sd card is not authenticated\n");
++               return 0;
++       }
++
++       printf("status=%c\n",data.status);
++       switch(data.status)
++       {
++               case '0':
++                       break;
++               case '1':
++                       data.status = '2';
++                       blk_dwrite(desc, blk_start, blk_cnt, (uchar *)&data);
++                       break;
++               case '2':
++                       data.status = '3';
++                       blk_dwrite(desc, blk_start, blk_cnt, (uchar *)&data);
++                       return 0;
++                       break;
++               default:
++                       return 0;
++                       break;
++       }
++       return 1;
++}
++
++int last_stage_init(void)
++{
++       if(ota_sdboot_check())
++               env_set("bootcmd","cpld reset sd");
++    return 0;
++}
++
++
+ int board_setup_core_volt(u32 vdd)
+ {
+ 	bool en_0v9;
+diff --git a/board/freescale/ls1088a/ls1088a.c b/board/freescale/ls1088a/ls1088a.c
+index 88c07d1..73d3a61 100644
+--- a/board/freescale/ls1088a/ls1088a.c
++++ b/board/freescale/ls1088a/ls1088a.c
+@@ -13,6 +13,7 @@
+ #include <fsl_sec.h>
+ #include <asm/io.h>
+ #include <fdt_support.h>
++#include <mmc.h>
+ #include <libfdt.h>
+ #include <fsl-mc/fsl_mc.h>
+ #include <environment.h>
+@@ -386,6 +387,66 @@ int set_serdes_volt(int svdd)
+ 	return 1;
+ }
+ #else
++struct OTA_parameter
++{
++       char status;
++       char str[0x200 - 1];
++};
++
++int ota_sdboot_check(void)
++{
++       struct mmc *mmc;
++       uint blk_start, blk_cnt;
++       unsigned long offset, size;
++       struct OTA_parameter data;
++       int dev = 0;
++       char platform[10];
++
++       offset  = 0x3F00000;
++       size    = 0x200;
++       mmc = find_mmc_device(dev);
++       if(mmc == NULL)
++               return 0;
++       if (mmc_init(mmc))
++               return 0;
++       struct blk_desc *desc = mmc_get_blk_desc(mmc);
++       blk_start   = ALIGN(offset, mmc->read_bl_len) / mmc->read_bl_len;
++       blk_cnt     = ALIGN(size, mmc->read_bl_len) / mmc->read_bl_len;
++       blk_dread(desc, blk_start, blk_cnt, (uchar *)&data);
++
++       if( strstr(data.str, "ls1088a") == NULL ){
++               printf("sd card is not authenticated\n");
++               return 0;
++       }
++
++       printf("status=%c\n",data.status);
++       switch(data.status)
++       {
++               case '0':
++                       break;
++               case '1':
++                       data.status = '2';
++                       blk_dwrite(desc, blk_start, blk_cnt, (uchar *)&data);
++                       break;
++               case '2':
++                       data.status = '3';
++                       blk_dwrite(desc, blk_start, blk_cnt, (uchar *)&data);
++                       return 0;
++                       break;
++               default:
++                       return 0;
++                       break;
++       }
++       return 1;
++}
++
++int last_stage_init(void)
++{
++    if(ota_sdboot_check())
++        env_set("bootcmd","qixis_reset sd");
++    return 0;
++}
++
+ int get_serdes_volt(void)
+ {
+ 	return 0;
+diff --git a/board/freescale/ls2080ardb/ls2080ardb.c b/board/freescale/ls2080ardb/ls2080ardb.c
+index 97af550..01d1f9c 100644
+--- a/board/freescale/ls2080ardb/ls2080ardb.c
++++ b/board/freescale/ls2080ardb/ls2080ardb.c
+@@ -14,6 +14,7 @@
+ #include <hwconfig.h>
+ #include <fdt_support.h>
+ #include <libfdt.h>
++#include <mmc.h>
+ #include <fsl-mc/fsl_mc.h>
+ #include <environment.h>
+ #include <efi_loader.h>
+@@ -237,6 +238,65 @@ int board_init(void)
+ 	return 0;
+ }
+ 
++struct OTA_parameter
++{
++       char status;
++       char str[0x200 - 1];
++};
++
++int ota_sdboot_check(void)
++{
++       struct mmc *mmc;
++       uint blk_start, blk_cnt;
++       unsigned long offset, size;
++       struct OTA_parameter data;
++       int dev = 0;
++       char platform[10];
++
++       offset  = 0x3F00000;
++       size    = 0x200;
++       mmc = find_mmc_device(dev);
++       if(mmc == NULL)
++               return 0;
++       if (mmc_init(mmc))
++               return 0;
++       struct blk_desc *desc = mmc_get_blk_desc(mmc);
++       blk_start   = ALIGN(offset, mmc->read_bl_len) / mmc->read_bl_len;
++       blk_cnt     = ALIGN(size, mmc->read_bl_len) / mmc->read_bl_len;
++       blk_dread(desc, blk_start, blk_cnt, (uchar *)&data);
++
++       if( strstr(data.str, "ls2088a") == NULL ){
++               printf("sd card is not authenticated\n");
++               return 0;
++       }
++
++       printf("status=%c\n",data.status);
++       switch(data.status)
++       {
++               case '0':
++                       break;
++               case '1':
++                       data.status = '2';
++                       blk_dwrite(desc, blk_start, blk_cnt, (uchar *)&data);
++                       break;
++               case '2':
++                       data.status = '3';
++                       blk_dwrite(desc, blk_start, blk_cnt, (uchar *)&data);
++                       return 0;
++                       break;
++               default:
++                       return 0;
++                       break;
++       }
++       return 1;
++}
++
++int last_stage_init(void)
++{
++       if(ota_sdboot_check())
++               env_set("bootcmd","run sdboot");
++       return 0;
++}
+ int board_early_init_f(void)
+ {
+ #ifdef CONFIG_SYS_I2C_EARLY_INIT
+diff --git a/configs/ls1012aqds_qspi_defconfig b/configs/ls1012aqds_qspi_defconfig
+index ce74144..e529d02 100644
+--- a/configs/ls1012aqds_qspi_defconfig
++++ b/configs/ls1012aqds_qspi_defconfig
+@@ -54,3 +54,4 @@ CONFIG_DM_USB=y
+ CONFIG_USB_XHCI_HCD=y
+ CONFIG_USB_XHCI_DWC3=y
+ CONFIG_USB_STORAGE=y
++CONFIG_LAST_STAGE_INIT=y
+diff --git a/configs/ls1012ardb_qspi_defconfig b/configs/ls1012ardb_qspi_defconfig
+index 0965695..81ef82e 100644
+--- a/configs/ls1012ardb_qspi_defconfig
++++ b/configs/ls1012ardb_qspi_defconfig
+@@ -52,3 +52,4 @@ CONFIG_USB_XHCI_HCD=y
+ CONFIG_USB_XHCI_DWC3=y
+ CONFIG_USB_STORAGE=y
+ CONFIG_DISTRO_DEFAULTS=y
++CONFIG_LAST_STAGE_INIT=y
+diff --git a/configs/ls1043ardb_defconfig b/configs/ls1043ardb_defconfig
+index 9452416..6ed4b15 100644
+--- a/configs/ls1043ardb_defconfig
++++ b/configs/ls1043ardb_defconfig
+@@ -38,3 +38,4 @@ CONFIG_DM_USB=y
+ CONFIG_USB_XHCI_HCD=y
+ CONFIG_USB_XHCI_DWC3=y
+ CONFIG_USB_STORAGE=y
++CONFIG_LAST_STAGE_INIT=y
+diff --git a/configs/ls1043ardb_sdcard_defconfig b/configs/ls1043ardb_sdcard_defconfig
+index 3dd3b0b..80078e9 100644
+--- a/configs/ls1043ardb_sdcard_defconfig
++++ b/configs/ls1043ardb_sdcard_defconfig
+@@ -53,3 +53,4 @@ CONFIG_DM_USB=y
+ CONFIG_USB_XHCI_HCD=y
+ CONFIG_USB_XHCI_DWC3=y
+ CONFIG_USB_STORAGE=y
++CONFIG_LAST_STAGE_INIT=y
+diff --git a/configs/ls1046ardb_qspi_defconfig b/configs/ls1046ardb_qspi_defconfig
+index 23ac374..7129694 100644
+--- a/configs/ls1046ardb_qspi_defconfig
++++ b/configs/ls1046ardb_qspi_defconfig
+@@ -40,3 +40,4 @@ CONFIG_DM_USB=y
+ CONFIG_USB_XHCI_HCD=y
+ CONFIG_USB_XHCI_DWC3=y
+ CONFIG_USB_STORAGE=y
++CONFIG_LAST_STAGE_INIT=y
+diff --git a/configs/ls1088ardb_qspi_defconfig b/configs/ls1088ardb_qspi_defconfig
+index 1f9451d..b0912c6 100644
+--- a/configs/ls1088ardb_qspi_defconfig
++++ b/configs/ls1088ardb_qspi_defconfig
+@@ -48,3 +48,4 @@ CONFIG_USB_DWC3=y
+ CONFIG_USB_STORAGE=y
+ CONFIG_USB_GADGET=y
+ CONFIG_EFI_LOADER_BOUNCE_BUFFER=y
++CONFIG_LAST_STAGE_INIT=y
+diff --git a/configs/ls2080ardb_defconfig b/configs/ls2080ardb_defconfig
+index 0fd3fee..feaa62f 100644
+--- a/configs/ls2080ardb_defconfig
++++ b/configs/ls2080ardb_defconfig
+@@ -46,3 +46,4 @@ CONFIG_USB_XHCI_HCD=y
+ CONFIG_USB_XHCI_DWC3=y
+ CONFIG_USB_STORAGE=y
+ CONFIG_EFI_LOADER_BOUNCE_BUFFER=y
++CONFIG_LAST_STAGE_INIT=y
+diff --git a/include/configs/ls1012ardb.h b/include/configs/ls1012ardb.h
+index efcfa3d..c461cad 100644
+--- a/include/configs/ls1012ardb.h
++++ b/include/configs/ls1012ardb.h
+@@ -128,5 +128,6 @@
+ 			   "env exists secureboot && esbc_halt;"
+ 
+ #include <asm/fsl_secure_boot.h>
++#define CONFIG_LAST_STAGE_INIT
+ 
+ #endif /* __LS1012ARDB_H__ */
+diff --git a/include/configs/ls1043ardb.h b/include/configs/ls1043ardb.h
+index b4b4d5e..4547aba 100644
+--- a/include/configs/ls1043ardb.h
++++ b/include/configs/ls1043ardb.h
+@@ -300,6 +300,8 @@
+ #define CONFIG_SCSI_DEV_LIST {SCSI_VEND_ID, SCSI_DEV_ID}
+ #endif
+ 
++#define CONFIG_LAST_STAGE_INIT
++
+ #include <asm/fsl_secure_boot.h>
+ 
+ #endif /* __LS1043ARDB_H__ */
+diff --git a/include/configs/ls1046ardb.h b/include/configs/ls1046ardb.h
+index 2755f1c..5045f71 100644
+--- a/include/configs/ls1046ardb.h
++++ b/include/configs/ls1046ardb.h
+@@ -222,6 +222,8 @@
+ #endif
+ #endif
+ 
++#define CONFIG_LAST_STAGE_INIT
++
+ #include <asm/fsl_secure_boot.h>
+ 
+ #endif /* __LS1046ARDB_H__ */
+diff --git a/include/configs/ls1088ardb.h b/include/configs/ls1088ardb.h
+index 4a3b569..72d9785 100644
+--- a/include/configs/ls1088ardb.h
++++ b/include/configs/ls1088ardb.h
+@@ -471,6 +471,8 @@
+ #include <config_distro_bootcmd.h>
+ #endif
+ 
++#define CONFIG_LAST_STAGE_INIT
++
+ #include <asm/fsl_secure_boot.h>
+ 
+ #endif /* __LS1088A_RDB_H */
+diff --git a/include/configs/ls2080ardb.h b/include/configs/ls2080ardb.h
+index 36c212d..1de5fff 100644
+--- a/include/configs/ls2080ardb.h
++++ b/include/configs/ls2080ardb.h
+@@ -498,6 +498,8 @@ unsigned long get_board_sys_clk(void);
+ #define CONFIG_PHY_AQUANTIA
+ #endif
+ 
++#define CONFIG_LAST_STAGE_INIT
++
+ #include <asm/fsl_secure_boot.h>
+ 
+ #endif /* __LS2_RDB_H */
+-- 
+1.8.3.1
+

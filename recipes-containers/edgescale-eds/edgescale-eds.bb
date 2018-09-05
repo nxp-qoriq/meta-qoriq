@@ -3,10 +3,12 @@ HOMEPAGE = "https://github.com/NXP/qoriq-edgescale-eds.git"
 LICENSE = "NXP-EULA"
 LIC_FILES_CHKSUM = "file://src/import/EULA.txt;md5=ac5425aaed72fb427ef1113a88542f89"
 
-SRC_URI = "git://github.com/NXP/qoriq-edgescale-eds.git;nobranch=1 \
-    file://0001-Add-Insecure-mode-for-common-platform.patch \
-"
-SRCREV = "90d4441324f60bfb1b66b2584f42fd613191d477"
+#SRC_URI = "git://github.com/NXP/qoriq-edgescale-eds.git;nobranch=1 \
+#    file://0001-Add-Insecure-mode-for-common-platform.patch \
+#"
+SRC_URI = "git://bitbucket.sw.nxp.com/scm/dcca/qoriq-edgescale-eds.git;protocol=https;nobranch=1"
+
+SRCREV = "85eeac6e4cb964091ecc189bbdf01c9438366fc1"
 
 DEPENDS = "\
            go-logrus  \

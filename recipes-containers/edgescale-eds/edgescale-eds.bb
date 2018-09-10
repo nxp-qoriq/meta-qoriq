@@ -21,10 +21,8 @@ RDEPENDS_${PN} += " \
 "
 
 DEPENDS_append_qoriq-arm64 = "optee-client-qoriq secure-obj"
-DEPENDS_append_qoriq-arm = "optee-client-qoriq"
 
 RDEPENDS_${PN}_append_qoriq-arm64 = "optee-client-qoriq secure-obj"
-RDEPENDS_${PN}_append_qoriq-arm = "optee-client-qoriq"
 
 GO_IMPORT = "import"
 

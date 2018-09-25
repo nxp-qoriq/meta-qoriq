@@ -1,4 +1,4 @@
-SRC_URI = "git://bitbucket.sw.nxp.com/scm/dash/mc-utils;protocol=https;nobranch=1"
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/mc-utils;protocol=https;nobranch=1"
 
-SRCREV = "fefdb7ee4459c6e04a512aa7fd8175ae5d0f70f9"
+SRCREV = "30c63101b15def4620f509641b97641c25fe19fe"
 

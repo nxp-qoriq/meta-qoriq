@@ -1,3 +1,3 @@
-SRC_URI = "git://bitbucket.sw.nxp.com/scm/sdk/cst.git;protocol=https;nobranch=1"
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/cst;protocol=https;nobranch=1"
 
-SRCREV = "e9ccaa91abab5d8b10541bfa8cb467c8e71be484"
+SRCREV = "3285e1d23a6abe3db6b3673e79acdeed4e19ea95"

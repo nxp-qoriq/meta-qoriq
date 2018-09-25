@@ -1,4 +1,4 @@
-SRC_URI = "git://bitbucket.sw.nxp.com/scm/dash/fmlib.git;protocol=https;nobranch=1 \
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/fmlib;protocol=https;nobranch=1 \
 "
 
 SRCREV = "82d89adae917397324c5d74108305f6c9bae8d00"

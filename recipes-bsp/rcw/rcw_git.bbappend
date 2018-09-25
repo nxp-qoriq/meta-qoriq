@@ -1,3 +1,3 @@
-SRC_URI = "git://bitbucket.sw.nxp.com/scm/dash/dash-rcw.git;protocol=https;nobranch=1"
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/rcw;protocol=https;nobranch=1"
 
-SRCREV = "6915c63ab033ec7f1e9ff609c251178151ffb6bf"
+SRCREV = "04ec3bbc210fd0d7762c26c0e72182eca5e26deb"

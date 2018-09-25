@@ -1,4 +1,4 @@
-SRC_URI = "git://bitbucket.sw.nxp.com/scm/dpaa2/restool.git;protocol=https;nobranch=1 \
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/restool;protocol=https;nobranch=1 \
     file://0001-restool-fix-build-error-with-gcc7.patch \
 "
 

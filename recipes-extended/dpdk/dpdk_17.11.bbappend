@@ -1,4 +1,4 @@
-SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/dpdk;protocol=https;nobranch=1i \
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/dpdk;protocol=https;nobranch=1 \
     file://add-RTE_KERNELDIR_OUT-to-split-kernel-bu.patch \
     file://0001-fix-gcc-8-build-error.patch \
 "

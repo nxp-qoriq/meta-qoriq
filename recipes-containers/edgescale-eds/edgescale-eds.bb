@@ -3,9 +3,6 @@ HOMEPAGE = "https://github.com/NXP/qoriq-edgescale-eds.git"
 LICENSE = "NXP-EULA"
 LIC_FILES_CHKSUM = "file://src/import/EULA.txt;md5=ac5425aaed72fb427ef1113a88542f89"
 
-#SRC_URI = "git://github.com/NXP/qoriq-edgescale-eds.git;nobranch=1 \
-#    file://0001-Add-Insecure-mode-for-common-platform.patch \
-#"
 SRC_URI = "git://github.com/NXP/qoriq-edgescale-eds.git;protocol=https;nobranch=1"
 
 SRCREV = "7702aaeede6669f019cb77802d25ff831c5ff84d"
@@ -44,7 +41,7 @@ export CROSS_COMPILE="${WRAP_TARGET_PREFIX}"
 export OPENSSL_PATH="${RECIPE_SYSROOT}/usr"
 export SECURE_OBJ_PATH="${RECIPE_SYSROOT}/usr"
 export OPTEE_CLIENT_EXPORT="${RECIPE_SYSROOT}/usr/"
-
+export GOVERSION = "1.9.7"
 
 do_compile() {
 	export GOARCH="${TARGET_GOARCH}"

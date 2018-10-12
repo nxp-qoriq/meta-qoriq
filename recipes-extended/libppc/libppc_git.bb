@@ -17,6 +17,8 @@ do_configure_prepend () {
 
 EXTRA_OEMAKE = 'COMPILE="${CC}" CC_M_FLAG=""'
 
+CFLAGS += "-Wno-redundant-decls"
+
 ARCH_LIBPPC = ""
 ARCH_LIBPPC_e5500-64b = "e500mc64"
 ARCH_LIBPPC_e5500 = "e5500"

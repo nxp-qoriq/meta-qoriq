@@ -11,6 +11,7 @@ inherit packagegroup
 PACKAGES = "${PN} ${PN}-server"
 
 RDEPENDS_${PN} = " \
+    attr \
     bridge-utils \
     ethtool \
     iproute2 \

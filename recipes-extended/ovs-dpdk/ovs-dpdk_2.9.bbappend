@@ -1,3 +1,7 @@
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
+
+SRC_URI += " file://0001-automake-remove-static-key-word.patch"
+
 do_configure() {
         export SYSROOT_DPDK=${PKG_CONFIG_SYSROOT_DIR}
         ${S}/boot.sh

@@ -1,0 +1,26 @@
+From 52ab270c9ff1e3b0d5ce2fd59a268afd6e9cc0c8 Mon Sep 17 00:00:00 2001
+From: BJ DevOps Team <bjdevops@NXP1.onmicrosoft.com>
+Date: Tue, 16 Oct 2018 16:53:18 +0800
+Subject: [PATCH] add aarch64 be support
+
+---
+ build/moz.configure/init.configure | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/build/moz.configure/init.configure b/build/moz.configure/init.configure
+index 56e6730..139b5fa 100644
+--- a/build/moz.configure/init.configure
++++ b/build/moz.configure/init.configure
+@@ -359,6 +359,9 @@ def split_triplet(triplet):
+     elif cpu in ('mips64', 'mips64el'):
+         canonical_cpu = 'mips64'
+         endianness = 'little' if 'el' in cpu else 'big'
++    elif cpu in ('aarch64_be'):
++        canonical_cpu = 'aarch64'
++        endianness = 'big' 
+     elif cpu.startswith('aarch64'):
+         canonical_cpu = 'aarch64'
+         endianness = 'little'
+-- 
+2.7.4
+

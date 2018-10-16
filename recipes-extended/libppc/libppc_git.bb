@@ -2,7 +2,9 @@ DESCRIPTION = "optimized memcpy implementation"
 LICENSE = "BSD | GPLv2+"
 LIC_FILES_CHKSUM = "file://Makefile;endline=21;md5=45d81c6e015ed7c8917e766ff1fd4499"
 
-SRC_URI = "git://git.freescale.com/ppc/sdk/libppc.git;branch=sdk-v2.0.x"
+SRC_URI = "git://git.freescale.com/ppc/sdk/libppc.git;branch=sdk-v2.0.x \
+    file://0001-Makefile-add-Wno-redundant-decls.patch \
+"
 SRCREV = "fd5d8798663f7a55ff249c5d0a41cf80a02534a2"
 
 S = "${WORKDIR}/git/fsl_opt_lib"
@@ -16,8 +18,6 @@ do_configure_prepend () {
 }
 
 EXTRA_OEMAKE = 'COMPILE="${CC}" CC_M_FLAG=""'
-
-CFLAGS += "-Wno-redundant-decls"
 
 ARCH_LIBPPC = ""
 ARCH_LIBPPC_e5500-64b = "e500mc64"

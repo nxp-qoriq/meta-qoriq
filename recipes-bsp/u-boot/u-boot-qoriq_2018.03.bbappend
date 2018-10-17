@@ -1,5 +1,7 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
+DEPENDS += "bc-native"
+
 python () {
     if d.getVar("TCMODE", True) == "external-fsl":
         return

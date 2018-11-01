@@ -1,0 +1,25 @@
+From d2fec31b57bfcd250f2a94b3f23200f8bc7c841f Mon Sep 17 00:00:00 2001
+From: BJ DevOps Team <bjdevops@NXP1.onmicrosoft.com>
+Date: Thu, 1 Nov 2018 16:22:45 +0800
+Subject: [PATCH] Makefile: fix gcc8 build powerpc for 4.9
+
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index e2e67f9..8f37a42 100644
+--- a/Makefile
++++ b/Makefile
+@@ -396,7 +396,7 @@ KBUILD_AFLAGS   := -D__ASSEMBLY__
+ KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
+ 		   -fno-strict-aliasing -fno-common \
+                    -Wno-packed-not-aligned -Wno-tautological-compare \
+-		   -Werror-implicit-function-declaration \
++		   -Werror-implicit-function-declaration -Wno-stringop-truncation -Wno-misleading-indentation \
+ 		   -Wno-format-security \
+ 		   -std=gnu89
+ KBUILD_CPPFLAGS := -D__KERNEL__
+-- 
+1.8.3.1
+

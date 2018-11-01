@@ -12,6 +12,12 @@ EXTRA_IMAGEDEPENDS_append_t4240rdb = " ls2-phy"
 EXTRA_IMAGEDEPENDS_append_t2080rdb-64b = " ls2-phy"
 EXTRA_IMAGEDEPENDS_append_t4240rdb-64b = " ls2-phy"
 
+
+EXTRA_IMAGEDEPENDS_remove_ls1012ardb = " ppa-optee"
+EXTRA_IMAGEDEPENDS_remove_ls1043ardb = " ppa-optee"
+EXTRA_IMAGEDEPENDS_remove_ls1046ardb = " ppa-optee"
+
+
 SUMMARY = "Small image to be used for evaluating the Freescale socs"
 DESCRIPTION = "Small image which includes some helpful tools and \
 Freescale-specific packages. It is much more embedded-oriented \

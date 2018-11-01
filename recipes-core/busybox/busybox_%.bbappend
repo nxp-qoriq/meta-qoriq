@@ -13,7 +13,5 @@ do_install_append_qoriq () {
     rm -f ${D}${sysconfdir}/init.d/rcS
     rm -f ${D}${sysconfdir}/init.d/rcK
     rm -f ${D}${sysconfdir}/inittab
-    rm -f ${D}${base_sbindir}/runlevel
-    rmdir --ignore-fail-on-non-empty ${D}${base_sbindir}
 }
 

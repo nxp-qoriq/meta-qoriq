@@ -59,10 +59,10 @@ RDEPENDS_${PN}_append_qoriq = "\
     ${DPAA_PKGS} \
 "
 
-RDEPENDS_${PN}_append_e500v2 = " \
-    libppc \
-    testfloat \
-"
+#RDEPENDS_${PN}_append_e500v2 = " \
+#    libppc \
+#    testfloat \
+#"
 
 RDEPENDS_${PN}_append_qoriq = " gptfdisk"
 RDEPENDS_${PN}_append_ls1012a = " hostapd"

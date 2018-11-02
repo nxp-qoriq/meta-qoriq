@@ -37,6 +37,7 @@ ARCH_mx6 = "arm"
 TAGS_aarch64 = ""
 TAGS_mx7 = "-mfpu=vfp -mfloat-abi=hard"
 TAGS_mx6 = "-mfpu=vfp -mfloat-abi=hard"
+TAGS_qoriq-arm = "-mfpu=vfp -mfloat-abi=hard"
 export ARCH
 export GOBUILDTAGS = "default"
 export CROSS_COMPILE="${WRAP_TARGET_PREFIX}"

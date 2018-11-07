@@ -23,6 +23,8 @@ IMAGE_INSTALL_append = " \
     packagegroup-fsl-devtools \
     packagegroup-fsl-benchmark-extended \
     packagegroup-fsl-tools-extended \
+    openssl-bin \
+    openssl-engines \
 "
 
 IMAGE_FSTYPES_qoriq = "tar.gz"

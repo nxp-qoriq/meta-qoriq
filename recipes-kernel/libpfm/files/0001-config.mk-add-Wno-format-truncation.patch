@@ -1,0 +1,25 @@
+From f877cb586346efd063c14e4bc077d85be28bbe63 Mon Sep 17 00:00:00 2001
+From: BJ DevOps Team <bjdevops@NXP1.onmicrosoft.com>
+Date: Wed, 7 Nov 2018 11:55:39 +0800
+Subject: [PATCH] config.mk : add -Wno-format-truncation
+
+---
+ config.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/config.mk b/config.mk
+index ca05a49..81d144e 100644
+--- a/config.mk
++++ b/config.mk
+@@ -202,7 +202,7 @@ PFMLIBDIR=$(TOPDIR)/lib
+ # -Wextra: to enable extra compiler sanity checks (e.g., signed vs. unsigned)
+ # -Wno-unused-parameter: to avoid warnings on unused foo(void *this) parameter
+ #
+-DBG?=-g -Wall -Werror -Wextra -Wno-unused-parameter
++DBG?=-g -Wall -Werror -Wextra -Wno-unused-parameter -Wno-format-truncation
+ 
+ ifeq ($(SYS),Darwin)
+ # older gcc-4.2 does not like -Wextra and some of our initialization code
+-- 
+1.8.3.1
+

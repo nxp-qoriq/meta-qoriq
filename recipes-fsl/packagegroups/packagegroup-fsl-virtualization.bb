@@ -36,4 +36,5 @@ RDEPENDS_${PN}_append_ls1043ardb = " ovs-dpdk ${DOCKER_PKGS}"
 RDEPENDS_${PN}_append_ls1046ardb = " ovs-dpdk ${DOCKER_PKGS}"
 RDEPENDS_${PN}_append_ls1088ardb = " ovs-dpdk ${DOCKER_PKGS}"
 RDEPENDS_${PN}_append_ls2088ardb = " ovs-dpdk ${DOCKER_PKGS}"
+RDEPENDS_${PN}_append_ls1088ardb_pb = " ovs-dpdk ${DOCKER_PKGS}"
 

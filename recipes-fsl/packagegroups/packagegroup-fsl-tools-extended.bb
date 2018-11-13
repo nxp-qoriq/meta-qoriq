@@ -74,6 +74,9 @@ RDEPENDS_${PN}_append_ls1088a = " \
 RDEPENDS_${PN}_append_ls2088a = " \
     aiopsl \
 "
+RDEPENDS_${PN}_append_ls2088ardb = " \
+    dce \
+"
 
 RDEPENDS_${PN}_imx = " \
     imx-kobs \

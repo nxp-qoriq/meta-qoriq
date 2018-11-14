@@ -1,7 +1,7 @@
 DESCRIPTION = "Decompression Compression Engine Userspace Utils"
 SECTION = "dpaa2"
 LICENSE = "BSD-3-Clause"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=3bb80dec5c1b94d99a1422cbfd96192c"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=338308e2a663929309c9929ab9495bb5"
 
 SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/dce;nobranch=1 \
       git://source.codeaurora.org/external/qoriq/qoriq-components/qbman_userspace;nobranch=1;name=qbman;destsuffix=git/lib/qbman_userspace \

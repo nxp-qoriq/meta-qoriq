@@ -42,9 +42,6 @@ RDEPENDS_${PN}_remove_qoriq-ppc = " \
     mdadm \
 "
 
-RDEPENDS_${PN}_append_qoriq-arm = " \
-    valgrind \
-"
 RDEPENDS_${PN}_append = " \
      expect \
      gmp-dev \

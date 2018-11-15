@@ -110,10 +110,6 @@ RDEPENDS_${PN}_append_qoriq = "\
     ${EXTRA_TOOLS} \
 "
 
-RDEPENDS_${PN}_append_qoriq-arm = "\
-    ${@multilib_pkg_extend(d, "valgrind")} \
-"
-
 RDEPENDS_${PN}_append_qoriq-ppc = "\
     hyperrelay \
     ${@multilib_pkg_extend(d, "valgrind")} \

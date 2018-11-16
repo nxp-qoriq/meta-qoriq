@@ -44,11 +44,11 @@ export CROSS_COMPILE="${WRAP_TARGET_PREFIX}"
 export OPENSSL_PATH="${RECIPE_SYSROOT}/usr"
 export SECURE_OBJ_PATH="${RECIPE_SYSROOT}/usr"
 export OPTEE_CLIENT_EXPORT="${RECIPE_SYSROOT}/usr/"
-export GOVERSION = "1.9.7"
+export GOVERSION = "1.11.1"
 
 do_compile() {
 	export GOARCH="${TARGET_GOARCH}"
-	export GOROOT="${STAGING_LIBDIR_NATIVE}/${TARGET_SYS}/go"
+	export GOROOT="${STAGING_LIBDIR_NATIVE}/usr/bin"
 	# Setup vendor directory so that it can be used in GOPATH.
 	#
 	# Go looks in a src directory under any directory in GOPATH but riddler

@@ -24,6 +24,7 @@ IMAGE_INSTALL_append = " \
     packagegroup-core-ssh-openssh \
     tar \
     inetutils-ping \
+    openssl-qoriq-bin \
 "
 
 IMAGE_INSTALL_append_ls1012a = " \

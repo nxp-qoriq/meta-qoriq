@@ -51,6 +51,7 @@ RDEPENDS_${PN}_append_ls1043ardb = " \
     secure-obj \
     secure-obj-module \
     libpkcs11 \
+    vpp-core \
 "
 RDEPENDS_${PN}_append_ls1046ardb = " \
     ceetm \
@@ -61,6 +62,7 @@ RDEPENDS_${PN}_append_ls1046ardb = " \
     secure-obj \
     secure-obj-module \
     libpkcs11 \
+    vpp-core \
 "
 RDEPENDS_${PN}_append_ls1012ardb = " \
     optee-os-qoriq \
@@ -76,6 +78,7 @@ RDEPENDS_${PN}_append_ls2088a = " \
 "
 RDEPENDS_${PN}_append_ls2088ardb = " \
     dce \
+    vpp-core \
 "
 
 RDEPENDS_${PN}_imx = " \

@@ -95,6 +95,10 @@ RDEPENDS_${PN}_append_ls1088a = " \
 RDEPENDS_${PN}_append_ls1088ardb= " \
     dpdk \
 "
+RDEPENDS_${PN}_append_ls1088ardb-pb= " \
+    dpdk \
+"
+
 RDEPENDS_${PN}_append_ls2088a = " \
     devmem2 \
     gpp-aioptool \

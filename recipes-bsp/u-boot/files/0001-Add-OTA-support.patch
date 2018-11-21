@@ -1,28 +1,31 @@
-From 75fab0349ae3fdc01965f26bf6e4872e245a8382 Mon Sep 17 00:00:00 2001
-From: Chunrong Guo <chunrong.guo@nxp.com>
-Date: Sun, 30 Sep 2018 14:26:55 +0800
+From 9ee124f33a492c501e48a080c3cb6c516a2d8fb6 Mon Sep 17 00:00:00 2001
+From: BJ DevOps Team <bjdevops@NXP1.onmicrosoft.com>
+Date: Tue, 6 Nov 2018 17:37:50 +0800
 Subject: [PATCH] Add OTA support
 
 Signed-off-by: BJ DevOps Team <bjdevops@NXP1.onmicrosoft.com>
 ---
  board/freescale/ls1012ardb/ls1012ardb.c | 63 +++++++++++++++++++++++++++++++++
+ board/freescale/ls1021atwr/ls1021atwr.c | 62 ++++++++++++++++++++++++++++++++
  board/freescale/ls1043ardb/ls1043ardb.c | 60 +++++++++++++++++++++++++++++++
  board/freescale/ls1046ardb/ls1046ardb.c | 61 +++++++++++++++++++++++++++++++
  board/freescale/ls1088a/ls1088a.c       | 61 +++++++++++++++++++++++++++++++
  board/freescale/ls2080ardb/ls2080ardb.c | 62 ++++++++++++++++++++++++++++++++
  configs/ls1012aqds_qspi_defconfig       |  1 +
  configs/ls1012ardb_qspi_defconfig       |  1 +
+ configs/ls1021atwr_nor_defconfig        |  1 +
  configs/ls1043ardb_defconfig            |  1 +
  configs/ls1043ardb_sdcard_defconfig     |  1 +
  configs/ls1046ardb_qspi_defconfig       |  1 +
  configs/ls1088ardb_qspi_defconfig       |  1 +
  configs/ls2080ardb_defconfig            |  1 +
  include/configs/ls1012ardb.h            |  1 +
+ include/configs/ls1021atwr.h            |  1 +
  include/configs/ls1043ardb.h            |  2 ++
  include/configs/ls1046ardb.h            |  1 +
  include/configs/ls1088ardb.h            |  1 +
  include/configs/ls2080ardb.h            |  1 +
- 17 files changed, 320 insertions(+)
+ 20 files changed, 384 insertions(+)
 
 diff --git a/board/freescale/ls1012ardb/ls1012ardb.c b/board/freescale/ls1012ardb/ls1012ardb.c
 index 4d4f6fb..775e6e1 100644
@@ -97,6 +100,79 @@ index 4d4f6fb..775e6e1 100644
 +
  #ifdef CONFIG_TARGET_LS1012ARDB
  int esdhc_status_fixup(void *blob, const char *compat)
+ {
+diff --git a/board/freescale/ls1021atwr/ls1021atwr.c b/board/freescale/ls1021atwr/ls1021atwr.c
+index 622a500..6a0a553 100644
+--- a/board/freescale/ls1021atwr/ls1021atwr.c
++++ b/board/freescale/ls1021atwr/ls1021atwr.c
+@@ -91,6 +91,68 @@ struct cpld_data {
+ 	u8 rev2;		/* Reserved */
+ };
+ 
++struct OTA_parameter
++{
++       char status;
++       char str[0x200 - 1];
++};
++
++int ota_sdboot_check(void)
++{
++       struct mmc *mmc;
++       uint blk_start, blk_cnt;
++       unsigned long offset, size;
++       struct OTA_parameter data;
++       int dev = 0;
++       char platform[10];
++
++       offset  = 0x3F00000;
++       size    = 0x200;
++       mmc = find_mmc_device(dev);
++       if(mmc == NULL)
++               return 0;
++       if (mmc_init(mmc))
++               return 0;
++       struct blk_desc *desc = mmc_get_blk_desc(mmc);
++       blk_start   = ALIGN(offset, mmc->read_bl_len) / mmc->read_bl_len;
++       blk_cnt     = ALIGN(size, mmc->read_bl_len) / mmc->read_bl_len;
++       blk_dread(desc, blk_start, blk_cnt, (uchar *)&data);
++
++       if( strstr(data.str, "ls1021a") == NULL ){
++               printf("sd card is not authenticated\n");
++               return 0;
++       }
++
++       printf("status=%c\n",data.status);
++       switch(data.status)
++       {
++               case '0':
++                       break;
++               case '1':
++                       data.status = '2';
++                       blk_dwrite(desc, blk_start, blk_cnt, (uchar *)&data);
++                       break;
++               case '2':
++                       data.status = '3';
++                       blk_dwrite(desc, blk_start, blk_cnt, (uchar *)&data);
++                       return 0;
++                       break;
++               default:
++                       return 0;
++                       break;
++       }
++       return 1;
++}
++
++int last_stage_init(void)
++{
++       if(ota_sdboot_check())
++               env_set("bootcmd","run sdboot");
++       /* enable watchdog and set timeout to 60s */
++       //writew( 0x3478, WDOG1_BASE_ADDR);
++       return 0;
++}
++
+ #if !defined(CONFIG_QSPI_BOOT) && !defined(CONFIG_SD_BOOT_QSPI)
+ static void cpld_show(void)
  {
 diff --git a/board/freescale/ls1043ardb/ls1043ardb.c b/board/freescale/ls1043ardb/ls1043ardb.c
 index 9dc1cbc..6842e95 100644
@@ -418,6 +494,15 @@ index 1f62953..fc77490 100644
  CONFIG_USB_XHCI_DWC3=y
  CONFIG_USB_STORAGE=y
 +CONFIG_LAST_STAGE_INIT=y
+diff --git a/configs/ls1021atwr_nor_defconfig b/configs/ls1021atwr_nor_defconfig
+index 2a2c291..5f53e0d 100644
+--- a/configs/ls1021atwr_nor_defconfig
++++ b/configs/ls1021atwr_nor_defconfig
+@@ -46,3 +46,4 @@ CONFIG_USB_STORAGE=y
+ CONFIG_VIDEO_FSL_DCU_FB=y
+ CONFIG_VIDEO=y
+ # CONFIG_VIDEO_SW_CURSOR is not set
++CONFIG_LAST_STAGE_INIT=y
 diff --git a/configs/ls1043ardb_defconfig b/configs/ls1043ardb_defconfig
 index 6f5204c..ce0cd61 100644
 --- a/configs/ls1043ardb_defconfig
@@ -474,6 +559,17 @@ index 442c95e..5af46eb 100644
 +#define CONFIG_LAST_STAGE_INIT
  
  #endif /* __LS1012ARDB_H__ */
+diff --git a/include/configs/ls1021atwr.h b/include/configs/ls1021atwr.h
+index 548e0c5..8e2beed 100644
+--- a/include/configs/ls1021atwr.h
++++ b/include/configs/ls1021atwr.h
+@@ -512,5 +512,6 @@
+ 
+ #include <asm/fsl_secure_boot.h>
+ #define CONFIG_SYS_BOOTM_LEN	(64 << 20) /* Increase max gunzip size */
++#define CONFIG_LAST_STAGE_INIT
+ 
+ #endif
 diff --git a/include/configs/ls1043ardb.h b/include/configs/ls1043ardb.h
 index 06e2450..b02d8f4 100644
 --- a/include/configs/ls1043ardb.h
@@ -524,5 +620,5 @@ index c8bb2ef..5089a58 100644
  
  #endif /* __LS2_RDB_H */
 -- 
-2.7.4
+1.8.3.1
 

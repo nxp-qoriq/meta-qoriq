@@ -28,7 +28,6 @@ RDEPENDS_${PN} = "\
     oprofile \
     parted \
     perf \
-    rng-tools \
     rt-tests \
     stress \
     sqlite3 \

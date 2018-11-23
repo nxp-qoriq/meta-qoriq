@@ -1,0 +1,1 @@
+COMPATIBLE_MACHINE = "(qoriq-arm64)"

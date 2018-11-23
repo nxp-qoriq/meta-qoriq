@@ -27,7 +27,7 @@ IMAGE_INSTALL_append = " \
     openssl-engines \
 "
 
-IMAGE_FSTYPES_qoriq = "tar.gz"
+IMAGE_FSTYPES_qoriq = "tar.gz ext2.gz.u-boot"
 
 inherit fsl-utils
 ROOTFS_POSTPROCESS_COMMAND += "rootfs_copy_core_image;"

@@ -80,6 +80,13 @@ RDEPENDS_${PN}_append_ls2088ardb = " \
     dce \
     vpp-core \
     ceetm \
+    pktgen-dpdk \
+    optee-os-qoriq \
+    optee-client-qoriq \
+    optee-test-qoriq \
+    secure-obj \
+    secure-obj-module \
+    libpkcs11 \
 "
 
 RDEPENDS_${PN}_imx = " \

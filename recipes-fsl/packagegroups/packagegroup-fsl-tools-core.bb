@@ -67,6 +67,9 @@ RDEPENDS_${PN}_append_qoriq = "\
 RDEPENDS_${PN}_append_qoriq = " gptfdisk"
 RDEPENDS_${PN}_append_ls1012a = " hostapd"
 
+RDEPENDS_${PN}_remove_p2020rdb = " fmc"
+RDEPENDS_${PN}_remove_p1020rdb = " fmc"
+
 DPAA_PKGS_ls1043a-32b ="eth-config fmc"
 DPAA_PKGS_ls1046a-32b ="eth-config fmc"
 DPAA_PKGS_ls1012a = "ppfe-firmware"

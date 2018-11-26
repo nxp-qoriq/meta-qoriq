@@ -96,6 +96,14 @@ RDEPENDS_${PN}_append_ls1088ardb = " \
     secure-obj-module \
     libpkcs11 \
 "
+RDEPENDS_${PN}_append_ls1088ardb-pb = " \
+    optee-os-qoriq \
+    optee-client-qoriq \
+    optee-test-qoriq \
+    secure-obj \
+    secure-obj-module \
+    libpkcs11 \
+"
 
 RDEPENDS_${PN}_imx = " \
     imx-kobs \

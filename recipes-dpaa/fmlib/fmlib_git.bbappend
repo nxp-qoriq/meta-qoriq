@@ -1,0 +1,1 @@
+FMLIB_TARGET_t1024rdb = "libfm-${TARGET_ARCH_FMLIB}-fmv3l"

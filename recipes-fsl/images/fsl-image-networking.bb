@@ -13,9 +13,7 @@ EXTRA_IMAGEDEPENDS_append_t2080rdb-64b = " ls2-phy"
 EXTRA_IMAGEDEPENDS_append_t4240rdb-64b = " ls2-phy"
 
 
-EXTRA_IMAGEDEPENDS_remove_ls1012ardb = " ppa-optee"
-EXTRA_IMAGEDEPENDS_remove_ls1043ardb = " ppa-optee"
-EXTRA_IMAGEDEPENDS_remove_ls1046ardb = " ppa-optee"
+EXTRA_IMAGEDEPENDS_remove_ls2088ardb = " ppa-optee"
 
 
 SUMMARY = "Small image to be used for evaluating the Freescale socs"

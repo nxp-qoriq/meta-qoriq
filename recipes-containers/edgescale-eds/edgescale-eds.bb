@@ -12,6 +12,7 @@ DEPENDS = "\
            mqtt \
            est-client-go \
            openssl \
+           go-native \
           "
 RDEPENDS_${PN} += " \
           eds-bootstrap \
@@ -48,7 +49,7 @@ export GOVERSION = "1.11.1"
 
 do_compile() {
 	export GOARCH="${TARGET_GOARCH}"
-	export GOROOT="${STAGING_LIBDIR_NATIVE}/usr/bin"
+	export GOROOT="${STAGING_LIBDIR_NATIVE}/${TARGET_SYS}/go"
 	# Setup vendor directory so that it can be used in GOPATH.
 	#
 	# Go looks in a src directory under any directory in GOPATH but riddler

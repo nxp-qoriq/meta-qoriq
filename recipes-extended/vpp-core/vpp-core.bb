@@ -59,25 +59,25 @@ do_install_append() {
 }
 
 pkg_postinst_ontarget_${PN} () {
-echo vm.nr_hugepages=1024 >> /etc/sysctl.conf
+# echo vm.nr_hugepages=1024 >> /etc/sysctl.conf
 
 # Must be greater than or equal to (2 * vm.nr_hugepages).
-echo  vm.max_map_count=3096 >> /etc/sysctl.conf
+# echo  vm.max_map_count=3096 >> /etc/sysctl.conf
 
 # All groups allowed to access hugepages
-echo vm.hugetlb_shm_group=0 >> /etc/sysctl.conf
+# echo vm.hugetlb_shm_group=0 >> /etc/sysctl.conf
 
 # Shared Memory Max must be greator or equal to the total size of hugepages.
 # For 2MB pages, TotalHugepageSize = vm.nr_hugepages * 2 * 1024 * 1024
 # If the existing kernel.shmmax setting  (cat /sys/proc/kernel/shmmax)
 # is greater than the calculated TotalHugepageSize then set this parameter
 # to current shmmax value.
-echo kernel.shmmax=2147483648 >> /etc/sysctl.conf
+# echo kernel.shmmax=2147483648 >> /etc/sysctl.conf
 	
 # And add to rc.local
-echo mkdir -p /var/log/vpp >> /etc/rc.local
-echo "/usr/bin/vpp -c /etc/vpp/startup.conf" >> /etc/rc.local
-chmod 755 /etc/rc.local
+#echo mkdir -p /var/log/vpp >> /etc/rc.local
+#echo "/usr/bin/vpp -c /etc/vpp/startup.conf" >> /etc/rc.local
+#chmod 755 /etc/rc.local
 }
 
 BBCLASSEXTEND = "native nativesdk"

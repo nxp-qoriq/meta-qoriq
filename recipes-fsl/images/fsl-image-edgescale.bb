@@ -18,6 +18,7 @@ IMAGE_INSTALL_append = " \
     util-linux-fdisk \
     util-linux-lsblk \
     dosfstools \
+    e2fsprogs \
     e2fsprogs-e2fsck \
     e2fsprogs-mke2fs \
     file \

@@ -98,6 +98,11 @@ RDEPENDS_${PN}_append_ls1088a = " \
 RDEPENDS_${PN}_append_ls1088ardb= " \
     dpdk \
 "
+
+RDEPENDS_${PN}_append_ls1088ardb-pb= " \
+    dpdk \
+    pktgen-dpdk \
+"
 RDEPENDS_${PN}_append_ls1088ardb-pb= " \
     dpdk \
 "

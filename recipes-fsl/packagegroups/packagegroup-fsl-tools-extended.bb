@@ -68,7 +68,6 @@ RDEPENDS_${PN}_append_ls1012ardb = " \
     optee-os-qoriq \
     optee-client-qoriq \
     optee-test-qoriq \
-    dpdk \
 "
 
 RDEPENDS_${PN}_append_ls1088a = " \
@@ -104,6 +103,7 @@ RDEPENDS_${PN}_append_ls1088ardb-pb = " \
     secure-obj \
     secure-obj-module \
     libpkcs11 \
+    pktgen-dpdk \
 "
 
 RDEPENDS_${PN}_imx = " \

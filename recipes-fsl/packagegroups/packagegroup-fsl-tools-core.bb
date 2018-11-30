@@ -50,7 +50,6 @@ DPAA_PKGS = " \
 DPAA_PKGS_ls102xa = ""
 DPAA_PKGS_fsl-lsch3 = ""
 DPAA_PKGS_ls1043ardb-be ="eth-config fmc"
-DPAA_PKGS_ls1043aqds-be ="eth-config fmc" 
 
 PMETOOLS ?= "pme-tools"
 
@@ -98,15 +97,13 @@ RDEPENDS_${PN}_append_ls1088a = " \
 RDEPENDS_${PN}_append_ls1088ardb= " \
     dpdk \
 "
-
-RDEPENDS_${PN}_append_ls1088ardb-pb= " \
-    dpdk \
-    pktgen-dpdk \
-"
-RDEPENDS_${PN}_append_ls1088ardb-pb= " \
+RDEPENDS_${PN}_append_ls1012ardb= " \
     dpdk \
 "
 
+RDEPENDS_${PN}_append_ls1088ardb-pb= " \
+    dpdk \
+"
 RDEPENDS_${PN}_append_ls2088a = " \
     devmem2 \
     gpp-aioptool \

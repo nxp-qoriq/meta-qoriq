@@ -68,6 +68,7 @@ RDEPENDS_${PN}_append_ls1012ardb = " \
     optee-os-qoriq \
     optee-client-qoriq \
     optee-test-qoriq \
+    dpdk \
 "
 
 RDEPENDS_${PN}_append_ls1088a = " \

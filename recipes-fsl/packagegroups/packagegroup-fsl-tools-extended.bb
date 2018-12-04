@@ -28,6 +28,7 @@ RDEPENDS_${PN} = "\
     oprofile \
     parted \
     perf \
+    rng-tools \
     haveged \
     rt-tests \
     stress \

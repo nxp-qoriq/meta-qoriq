@@ -97,7 +97,7 @@ usage() {
     echo -e "\n    Supported machines:
     `find ${ROOTDIR}/sources/meta-{fsl,freescale,qoriq-demos}*/conf/machine \
         -name *.conf 2>/dev/null \
-        |egrep "/(mpc|b4|bsc|c29|p1|p2|p3|p4|p5|t1|t2|t4|ls).*conf$" |sort \
+        |egrep "/(mpc|b4|bsc|c29|p1|p2|p3|p4|p5|t1|t2|t4|ls|lx).*conf$" |sort \
         |xargs echo |sed -e 's,[^ ]*/,,g;s,.conf,,g'`
 "
 

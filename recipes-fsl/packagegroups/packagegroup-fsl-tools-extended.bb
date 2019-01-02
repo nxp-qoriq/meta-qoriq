@@ -43,71 +43,12 @@ RDEPENDS_${PN} = "\
     zip \
     ${X11_TOOLS} \
 "
-RDEPENDS_${PN}_append_ls1043ardb = " \
-    ceetm \
-    pktgen-dpdk \
-    optee-os-qoriq \
-    optee-client-qoriq \
-    optee-test-qoriq \
-    secure-obj \
-    secure-obj-module \
-    libpkcs11 \
-    vpp-core \
-    vpp-core-plugin-acl \
-"
-RDEPENDS_${PN}_append_ls1046ardb = " \
-    ceetm \
-    pktgen-dpdk \
-    optee-os-qoriq \
-    optee-client-qoriq \
-    optee-test-qoriq \
-    secure-obj \
-    secure-obj-module \
-    libpkcs11 \
-    vpp-core \
-    vpp-core-plugin-acl \
-"
-RDEPENDS_${PN}_append_ls1012ardb = " \
-    optee-os-qoriq \
-    optee-client-qoriq \
-    optee-test-qoriq \
-"
 
 RDEPENDS_${PN}_append_ls1088a = " \
     aiopsl \
 "
 RDEPENDS_${PN}_append_ls2088a = " \
     aiopsl \
-"
-RDEPENDS_${PN}_append_ls2088ardb = " \
-    dce \
-    vpp-core \
-    vpp-core-plugin-acl \
-    ceetm \
-    pktgen-dpdk \
-    optee-os-qoriq \
-    optee-client-qoriq \
-    optee-test-qoriq \
-    secure-obj \
-    secure-obj-module \
-    libpkcs11 \
-"
-RDEPENDS_${PN}_append_ls1088ardb = " \
-    optee-os-qoriq \
-    optee-client-qoriq \
-    optee-test-qoriq \
-    secure-obj \
-    secure-obj-module \
-    libpkcs11 \
-"
-RDEPENDS_${PN}_append_ls1088ardb-pb = " \
-    optee-os-qoriq \
-    optee-client-qoriq \
-    optee-test-qoriq \
-    secure-obj \
-    secure-obj-module \
-    libpkcs11 \
-    pktgen-dpdk \
 "
 
 RDEPENDS_${PN}_imx = " \
@@ -142,6 +83,19 @@ RDEPENDS_${PN}_append_qoriq = "\
     ${EXTRA_TOOLS} \
 "
 
+RDEPENDS_${PN}_append_qoriq-arm64 = "\ 
+    dce \
+    ceetm \
+    libpkcs11 \
+    optee-os-qoriq \
+    optee-client-qoriq \
+    optee-test-qoriq \
+    pktgen-dpdk \
+    secure-obj \
+    spc \
+    vpp-core \
+    vpp-core-plugin-acl \
+"
 RDEPENDS_${PN}_append_qoriq-ppc = "\
     hyperrelay \
     ${@multilib_pkg_extend(d, "valgrind")} \

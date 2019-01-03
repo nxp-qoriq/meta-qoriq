@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://src/import/EULA.txt;md5=ac5425aaed72fb427ef1113a88542
 
 SRC_URI = "git://github.com/NXP/qoriq-edgescale-eds.git;protocol=https;nobranch=1"
 
-SRCREV = "7702aaeede6669f019cb77802d25ff831c5ff84d"
+SRCREV = "76d5b4a225be110bcaba3a8a0272c5c24fdac5e3"
 
 DEPENDS = "\
            go-logrus  \
@@ -75,11 +75,6 @@ do_install() {
 	install -d ${D}/${bindir}
         install -d ${D}/${sysconfdir}
         install -d ${D}/${includedir}/cert-agent
-        cp -r ${S}/src/import/startup/env.sh ${D}/${bindir}
-        cp -r ${S}/src/import/startup/startup.sh ${D}/${bindir}
-        cp -r ${S}/src/import/startup/ota-updateSet ${D}/${bindir}
-        cp -r ${S}/src/import/startup/ota-statuscheck ${D}/${bindir}
-        cp -r ${S}/src/import/mq-agent/mq-agent ${D}/${bindir}
         cp -r ${S}/src/import/cert-agent/cert-agent ${D}/${bindir}
         cp -r ${S}/src/import/cert-agent/pkg ${D}/${includedir}/cert-agent/
         cp -r ${S}/src/import/etc/edgescale-version ${D}/${sysconfdir}

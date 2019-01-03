@@ -1,37 +1,35 @@
-From 9ee124f33a492c501e48a080c3cb6c516a2d8fb6 Mon Sep 17 00:00:00 2001
-From: BJ DevOps Team <bjdevops@NXP1.onmicrosoft.com>
-Date: Tue, 6 Nov 2018 17:37:50 +0800
+From 32892da7233b8c6605426bb962fdf7be53adee56 Mon Sep 17 00:00:00 2001
+From: Zongchun Yu <zongchun.yu@nxp.com>
+Date: Thu, 27 Dec 2018 11:18:40 +0800
 Subject: [PATCH] Add OTA support
 
-Signed-off-by: BJ DevOps Team <bjdevops@NXP1.onmicrosoft.com>
+Signed-off-by: Zongchun Yu <zongchun.yu@nxp.com>
 ---
- board/freescale/ls1012ardb/ls1012ardb.c | 63 +++++++++++++++++++++++++++++++++
- board/freescale/ls1021atwr/ls1021atwr.c | 62 ++++++++++++++++++++++++++++++++
- board/freescale/ls1043ardb/ls1043ardb.c | 60 +++++++++++++++++++++++++++++++
- board/freescale/ls1046ardb/ls1046ardb.c | 61 +++++++++++++++++++++++++++++++
- board/freescale/ls1088a/ls1088a.c       | 61 +++++++++++++++++++++++++++++++
- board/freescale/ls2080ardb/ls2080ardb.c | 62 ++++++++++++++++++++++++++++++++
- configs/ls1012aqds_qspi_defconfig       |  1 +
- configs/ls1012ardb_qspi_defconfig       |  1 +
+ board/freescale/ls1012ardb/ls1012ardb.c | 63 +++++++++++++++++++++++++
+ board/freescale/ls1021atwr/ls1021atwr.c | 62 ++++++++++++++++++++++++
+ board/freescale/ls1043ardb/ls1043ardb.c | 59 +++++++++++++++++++++++
+ board/freescale/ls1046ardb/ls1046ardb.c | 61 ++++++++++++++++++++++++
+ board/freescale/ls1088a/ls1088a.c       | 61 ++++++++++++++++++++++++
+ board/freescale/ls2080ardb/ls2080ardb.c | 62 ++++++++++++++++++++++++
+ configs/ls1012ardb_tfa_defconfig        |  1 +
  configs/ls1021atwr_nor_defconfig        |  1 +
- configs/ls1043ardb_defconfig            |  1 +
- configs/ls1043ardb_sdcard_defconfig     |  1 +
- configs/ls1046ardb_qspi_defconfig       |  1 +
- configs/ls1088ardb_qspi_defconfig       |  1 +
- configs/ls2080ardb_defconfig            |  1 +
+ configs/ls1043ardb_tfa_defconfig        |  1 +
+ configs/ls1046ardb_tfa_defconfig        |  1 +
+ configs/ls1088ardb_tfa_defconfig        |  1 +
+ configs/ls2088ardb_tfa_defconfig        |  1 +
  include/configs/ls1012ardb.h            |  1 +
  include/configs/ls1021atwr.h            |  1 +
- include/configs/ls1043ardb.h            |  2 ++
+ include/configs/ls1043ardb.h            |  2 +
  include/configs/ls1046ardb.h            |  1 +
  include/configs/ls1088ardb.h            |  1 +
  include/configs/ls2080ardb.h            |  1 +
- 20 files changed, 384 insertions(+)
+ 18 files changed, 381 insertions(+)
 
 diff --git a/board/freescale/ls1012ardb/ls1012ardb.c b/board/freescale/ls1012ardb/ls1012ardb.c
-index 4d4f6fb..775e6e1 100644
+index f648a9040b..2c91dcbace 100644
 --- a/board/freescale/ls1012ardb/ls1012ardb.c
 +++ b/board/freescale/ls1012ardb/ls1012ardb.c
-@@ -153,6 +153,69 @@ int board_init(void)
+@@ -166,6 +166,69 @@ int board_init(void)
  	return 0;
  }
  
@@ -102,10 +100,10 @@ index 4d4f6fb..775e6e1 100644
  int esdhc_status_fixup(void *blob, const char *compat)
  {
 diff --git a/board/freescale/ls1021atwr/ls1021atwr.c b/board/freescale/ls1021atwr/ls1021atwr.c
-index 622a500..6a0a553 100644
+index beb82cebb6..6295cc6215 100644
 --- a/board/freescale/ls1021atwr/ls1021atwr.c
 +++ b/board/freescale/ls1021atwr/ls1021atwr.c
-@@ -91,6 +91,68 @@ struct cpld_data {
+@@ -89,6 +89,68 @@ struct cpld_data {
  	u8 rev2;		/* Reserved */
  };
  
@@ -175,10 +173,10 @@ index 622a500..6a0a553 100644
  static void cpld_show(void)
  {
 diff --git a/board/freescale/ls1043ardb/ls1043ardb.c b/board/freescale/ls1043ardb/ls1043ardb.c
-index 9dc1cbc..6842e95 100644
+index c1d208542b..5c9aa60f83 100644
 --- a/board/freescale/ls1043ardb/ls1043ardb.c
 +++ b/board/freescale/ls1043ardb/ls1043ardb.c
-@@ -116,6 +116,66 @@ int board_init(void)
+@@ -226,6 +226,65 @@ int board_init(void)
  	return 0;
  }
  
@@ -241,12 +239,11 @@ index 9dc1cbc..6842e95 100644
 +    return 0;
 +}
 +
-+
  int config_board_mux(void)
  {
  	struct ccsr_scfg *scfg = (struct ccsr_scfg *)CONFIG_SYS_FSL_SCFG_ADDR;
 diff --git a/board/freescale/ls1046ardb/ls1046ardb.c b/board/freescale/ls1046ardb/ls1046ardb.c
-index 33f1afd..3861d2a 100644
+index 0a73fe859d..4a1a0b25d5 100644
 --- a/board/freescale/ls1046ardb/ls1046ardb.c
 +++ b/board/freescale/ls1046ardb/ls1046ardb.c
 @@ -97,6 +97,67 @@ int board_init(void)
@@ -318,10 +315,10 @@ index 33f1afd..3861d2a 100644
  {
  	bool en_0v9;
 diff --git a/board/freescale/ls1088a/ls1088a.c b/board/freescale/ls1088a/ls1088a.c
-index e099048..cf447c1 100644
+index 80559af490..b051099a27 100644
 --- a/board/freescale/ls1088a/ls1088a.c
 +++ b/board/freescale/ls1088a/ls1088a.c
-@@ -13,6 +13,7 @@
+@@ -12,6 +12,7 @@
  #include <fsl_sec.h>
  #include <asm/io.h>
  #include <fdt_support.h>
@@ -329,7 +326,7 @@ index e099048..cf447c1 100644
  #include <linux/libfdt.h>
  #include <fsl-mc/fsl_mc.h>
  #include <environment.h>
-@@ -412,6 +413,66 @@ int set_serdes_volt(int svdd)
+@@ -543,6 +544,66 @@ int set_serdes_volt(int svdd)
  	return 1;
  }
  #else
@@ -397,10 +394,10 @@ index e099048..cf447c1 100644
  {
  	return 0;
 diff --git a/board/freescale/ls2080ardb/ls2080ardb.c b/board/freescale/ls2080ardb/ls2080ardb.c
-index cd5e9e4..3613a60 100644
+index af8186e4a8..79fb071ec2 100644
 --- a/board/freescale/ls2080ardb/ls2080ardb.c
 +++ b/board/freescale/ls2080ardb/ls2080ardb.c
-@@ -13,6 +13,7 @@
+@@ -12,6 +12,7 @@
  #include <asm/io.h>
  #include <hwconfig.h>
  #include <fdt_support.h>
@@ -408,7 +405,7 @@ index cd5e9e4..3613a60 100644
  #include <linux/libfdt.h>
  #include <fsl-mc/fsl_mc.h>
  #include <environment.h>
-@@ -237,6 +238,67 @@ int board_init(void)
+@@ -236,6 +237,67 @@ int board_init(void)
  	return 0;
  }
  
@@ -476,94 +473,76 @@ index cd5e9e4..3613a60 100644
  int board_early_init_f(void)
  {
  #ifdef CONFIG_SYS_I2C_EARLY_INIT
-diff --git a/configs/ls1012aqds_qspi_defconfig b/configs/ls1012aqds_qspi_defconfig
-index 25470cb..9007347 100644
---- a/configs/ls1012aqds_qspi_defconfig
-+++ b/configs/ls1012aqds_qspi_defconfig
-@@ -53,3 +53,4 @@ CONFIG_DM_USB=y
- CONFIG_USB_XHCI_HCD=y
- CONFIG_USB_XHCI_DWC3=y
- CONFIG_USB_STORAGE=y
-+CONFIG_LAST_STAGE_INIT=y
-diff --git a/configs/ls1012ardb_qspi_defconfig b/configs/ls1012ardb_qspi_defconfig
-index 1f62953..fc77490 100644
---- a/configs/ls1012ardb_qspi_defconfig
-+++ b/configs/ls1012ardb_qspi_defconfig
-@@ -48,3 +48,4 @@ CONFIG_DM_USB=y
- CONFIG_USB_XHCI_HCD=y
- CONFIG_USB_XHCI_DWC3=y
- CONFIG_USB_STORAGE=y
+diff --git a/configs/ls1012ardb_tfa_defconfig b/configs/ls1012ardb_tfa_defconfig
+index 7e83be1544..5da1add4e2 100644
+--- a/configs/ls1012ardb_tfa_defconfig
++++ b/configs/ls1012ardb_tfa_defconfig
+@@ -57,3 +57,4 @@ CONFIG_DM_SCSI=y
+ CONFIG_SATA_CEVA=y
+ CONFIG_SCSI_AHCI=y
+ CONFIG_SCSI=y
 +CONFIG_LAST_STAGE_INIT=y
 diff --git a/configs/ls1021atwr_nor_defconfig b/configs/ls1021atwr_nor_defconfig
-index 2a2c291..5f53e0d 100644
+index 2ffc50ccc0..855b25d234 100644
 --- a/configs/ls1021atwr_nor_defconfig
 +++ b/configs/ls1021atwr_nor_defconfig
-@@ -46,3 +46,4 @@ CONFIG_USB_STORAGE=y
- CONFIG_VIDEO_FSL_DCU_FB=y
- CONFIG_VIDEO=y
- # CONFIG_VIDEO_SW_CURSOR is not set
+@@ -56,3 +56,4 @@ CONFIG_SATA_CEVA=y
+ CONFIG_SCSI_AHCI=y
+ CONFIG_SCSI=y
+ CONFIG_AHCI=y
 +CONFIG_LAST_STAGE_INIT=y
-diff --git a/configs/ls1043ardb_defconfig b/configs/ls1043ardb_defconfig
-index 6f5204c..ce0cd61 100644
---- a/configs/ls1043ardb_defconfig
-+++ b/configs/ls1043ardb_defconfig
-@@ -39,3 +39,4 @@ CONFIG_DM_USB=y
- CONFIG_USB_XHCI_HCD=y
+diff --git a/configs/ls1043ardb_tfa_defconfig b/configs/ls1043ardb_tfa_defconfig
+index 10a01690c1..161dcc17a6 100644
+--- a/configs/ls1043ardb_tfa_defconfig
++++ b/configs/ls1043ardb_tfa_defconfig
+@@ -49,3 +49,4 @@ CONFIG_USB_XHCI_HCD=y
  CONFIG_USB_XHCI_DWC3=y
  CONFIG_USB_STORAGE=y
+ CONFIG_DM_MMC=y
 +CONFIG_LAST_STAGE_INIT=y
-diff --git a/configs/ls1043ardb_sdcard_defconfig b/configs/ls1043ardb_sdcard_defconfig
-index a4c54a1..5a03267 100644
---- a/configs/ls1043ardb_sdcard_defconfig
-+++ b/configs/ls1043ardb_sdcard_defconfig
-@@ -54,3 +54,4 @@ CONFIG_DM_USB=y
- CONFIG_USB_XHCI_HCD=y
- CONFIG_USB_XHCI_DWC3=y
- CONFIG_USB_STORAGE=y
+diff --git a/configs/ls1046ardb_tfa_defconfig b/configs/ls1046ardb_tfa_defconfig
+index 1867443237..b1b205d97e 100644
+--- a/configs/ls1046ardb_tfa_defconfig
++++ b/configs/ls1046ardb_tfa_defconfig
+@@ -54,3 +54,4 @@ CONFIG_SATA_CEVA=y
+ CONFIG_SCSI_AHCI=y
+ CONFIG_SCSI=y
+ CONFIG_AHCI=y
 +CONFIG_LAST_STAGE_INIT=y
-diff --git a/configs/ls1046ardb_qspi_defconfig b/configs/ls1046ardb_qspi_defconfig
-index 97bd8e4..b5a49dd 100644
---- a/configs/ls1046ardb_qspi_defconfig
-+++ b/configs/ls1046ardb_qspi_defconfig
-@@ -41,3 +41,4 @@ CONFIG_DM_USB=y
- CONFIG_USB_XHCI_HCD=y
- CONFIG_USB_XHCI_DWC3=y
- CONFIG_USB_STORAGE=y
+diff --git a/configs/ls1088ardb_tfa_defconfig b/configs/ls1088ardb_tfa_defconfig
+index dc367cb269..be8f3913ef 100644
+--- a/configs/ls1088ardb_tfa_defconfig
++++ b/configs/ls1088ardb_tfa_defconfig
+@@ -63,3 +63,4 @@ CONFIG_DM_SCSI=y
+ CONFIG_SATA_CEVA=y
+ CONFIG_SCSI=y
+ CONFIG_AHCI=y
 +CONFIG_LAST_STAGE_INIT=y
-diff --git a/configs/ls1088ardb_qspi_defconfig b/configs/ls1088ardb_qspi_defconfig
-index d56f1db..1090410 100644
---- a/configs/ls1088ardb_qspi_defconfig
-+++ b/configs/ls1088ardb_qspi_defconfig
-@@ -47,3 +47,4 @@ CONFIG_USB_DWC3=y
- CONFIG_USB_STORAGE=y
- CONFIG_USB_GADGET=y
- CONFIG_EFI_LOADER_BOUNCE_BUFFER=y
-+CONFIG_LAST_STAGE_INIT=y
-diff --git a/configs/ls2080ardb_defconfig b/configs/ls2080ardb_defconfig
-index de3ce13..5f1399c 100644
---- a/configs/ls2080ardb_defconfig
-+++ b/configs/ls2080ardb_defconfig
-@@ -48,3 +48,4 @@ CONFIG_USB_XHCI_HCD=y
- CONFIG_USB_XHCI_DWC3=y
- CONFIG_USB_STORAGE=y
- CONFIG_EFI_LOADER_BOUNCE_BUFFER=y
+diff --git a/configs/ls2088ardb_tfa_defconfig b/configs/ls2088ardb_tfa_defconfig
+index 4b1c03903e..e4f19b7271 100644
+--- a/configs/ls2088ardb_tfa_defconfig
++++ b/configs/ls2088ardb_tfa_defconfig
+@@ -72,3 +72,4 @@ CONFIG_SATA_CEVA=y
+ CONFIG_SCSI_AHCI=y
+ CONFIG_SCSI=y
+ CONFIG_AHCI=y
 +CONFIG_LAST_STAGE_INIT=y
 diff --git a/include/configs/ls1012ardb.h b/include/configs/ls1012ardb.h
-index 442c95e..5af46eb 100644
+index f6640fa499..fd12d64e74 100644
 --- a/include/configs/ls1012ardb.h
 +++ b/include/configs/ls1012ardb.h
-@@ -121,5 +121,6 @@
- 			   "env exists secureboot && esbc_halt;"
+@@ -123,5 +123,6 @@
+ #endif
  
  #include <asm/fsl_secure_boot.h>
 +#define CONFIG_LAST_STAGE_INIT
  
  #endif /* __LS1012ARDB_H__ */
 diff --git a/include/configs/ls1021atwr.h b/include/configs/ls1021atwr.h
-index 548e0c5..8e2beed 100644
+index 70af3ebb8f..0d48548f14 100644
 --- a/include/configs/ls1021atwr.h
 +++ b/include/configs/ls1021atwr.h
-@@ -512,5 +512,6 @@
+@@ -505,5 +505,6 @@
  
  #include <asm/fsl_secure_boot.h>
  #define CONFIG_SYS_BOOTM_LEN	(64 << 20) /* Increase max gunzip size */
@@ -571,10 +550,10 @@ index 548e0c5..8e2beed 100644
  
  #endif
 diff --git a/include/configs/ls1043ardb.h b/include/configs/ls1043ardb.h
-index 06e2450..b02d8f4 100644
+index fe73e8b219..dcf570f069 100644
 --- a/include/configs/ls1043ardb.h
 +++ b/include/configs/ls1043ardb.h
-@@ -292,6 +292,8 @@
+@@ -311,6 +311,8 @@
  #define CONFIG_SCSI_DEV_LIST {SCSI_VEND_ID, SCSI_DEV_ID}
  #endif
  
@@ -584,10 +563,10 @@ index 06e2450..b02d8f4 100644
  
  #endif /* __LS1043ARDB_H__ */
 diff --git a/include/configs/ls1046ardb.h b/include/configs/ls1046ardb.h
-index d63badf..1636fba 100644
+index cc1f5f5f55..330185190b 100644
 --- a/include/configs/ls1046ardb.h
 +++ b/include/configs/ls1046ardb.h
-@@ -216,6 +216,7 @@
+@@ -232,6 +232,7 @@
  #endif
  #endif
  
@@ -596,10 +575,10 @@ index d63badf..1636fba 100644
  
  #endif /* __LS1046ARDB_H__ */
 diff --git a/include/configs/ls1088ardb.h b/include/configs/ls1088ardb.h
-index 5752696..a806e44 100644
+index b5a9f68dda..cd2eea7d91 100644
 --- a/include/configs/ls1088ardb.h
 +++ b/include/configs/ls1088ardb.h
-@@ -468,6 +468,7 @@
+@@ -588,6 +588,7 @@
  #include <config_distro_bootcmd.h>
  #endif
  
@@ -608,10 +587,10 @@ index 5752696..a806e44 100644
  
  #endif /* __LS1088A_RDB_H */
 diff --git a/include/configs/ls2080ardb.h b/include/configs/ls2080ardb.h
-index c8bb2ef..5089a58 100644
+index 8f1c738b3f..a0e634bf58 100644
 --- a/include/configs/ls2080ardb.h
 +++ b/include/configs/ls2080ardb.h
-@@ -492,6 +492,7 @@ unsigned long get_board_sys_clk(void);
+@@ -616,6 +616,7 @@ unsigned long get_board_sys_clk(void);
  #define CONFIG_PHY_AQUANTIA
  #endif
  
@@ -620,5 +599,5 @@ index c8bb2ef..5089a58 100644
  
  #endif /* __LS2_RDB_H */
 -- 
-1.8.3.1
+2.17.1
 

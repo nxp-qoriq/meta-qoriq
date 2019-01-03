@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. /data/config.env
+
 dd if=/dev/mmcblk0 of=/tmp/ota-info bs=512 skip=129024 count=1
 updateStatus=`cat /tmp/ota-info | awk '{print $1}'`
 oldimageVersion=`cat /tmp/ota-info | awk '{print $3}'`
@@ -28,15 +30,20 @@ echo "updateStatus="$updateStatus
 echo "oldimageVersion="$oldimageVersion
 echo "bootimageVersion="$bootimageVersion
 get_imageURL(){
-	api_result=`curl "https://api.edgescale.org/v1/devices/softwares?device_id=$deviceid&solution=$solutionname&version=$imageVersion"`
+	api_result=`curl "$ES_API_URI/devices/softwares?device_id=$deviceid&solution=$solutionname&version=$imageVersion"`
 	imageURL=`echo $api_result | grep url | sed 's/\"//g' | sed 's/.*url:\(.*$\)/\1/' | awk -F "[,}]" '{print $1}' | sed 's/^[ \t]*//g'`
+	have_installer=`echo $api_result | grep have_installer | sed 's/\"//g' | sed 's/.*have_installer:\(.*$\)/\1/' | awk -F "[,}]" '{print $1}' | sed 's/^[ \t]*//g'`
+	is_signed=`echo $api_result | grep is_signed | sed 's/\"//g' | sed 's/.*is_signed:\(.*$\)/\1/' | awk -F "[,}]" '{print $1}' | sed 's/^[ \t]*//g'`
+	public_key=`echo $api_result | grep public_key | sed 's/\"//g' | sed 's/.*public_key:\(.*$\)/\1/' | awk -F "[,}]" '{print $1}' | sed 's/^[ \t]*//g'`
 }
 
 get_newimageVersion(){
-	api_result=`curl "https://api.edgescale.org/v1/devices/softwares?device_id=$deviceid&version=$bootimageVersion"`
+	api_result=`curl "$ES_API_URI/devices/softwares?device_id=$deviceid&version=$bootimageVersion"`
 	imageURL=`echo $api_result | grep url | sed 's/\"//g' | sed 's/.*url:\(.*$\)/\1/' | awk -F "[,}]" '{print $1}' | sed 's/^[ \t]*//g'`
 	newimageVersion=`echo $api_result | grep version | sed 's/\"//g' | sed 's/.*version:\(.*$\)/\1/' | awk -F "[,}]" '{print $1}' | sed 's/^[ \t]*//g'`
 	solutionname=`echo $api_result | grep solution | sed 's/\"//g' | sed 's/.*solution:\(.*$\)/\1/' | awk -F "[,}]" '{print $1}' | sed 's/^[ \t]*//g'`
+	is_signed=`echo $api_result | grep is_signed | sed 's/\"//g' | sed 's/.*is_signed:\(.*$\)/\1/' | awk -F "[,}]" '{print $1}' | sed 's/^[ \t]*//g'`
+	public_key=`echo $api_result | grep public_key | sed 's/\"//g' | sed 's/.*public_key:\(.*$\)/\1/' | awk -F "[,}]" '{print $1}' | sed 's/^[ \t]*//g'`
 	if [ "$imageURL"x == x ];then
 		echo "request version of image failed from server"
 		exit 1
@@ -45,58 +52,67 @@ get_newimageVersion(){
 
 feedback_status(){
 	if [ $nofeedback -eq 0 ];then
-		curl -X POST -H "Content-Type: application/json" https://api.edgescale.org/v1/devices/tasks/status -d '{"device":"'$deviceid'", "mid":'$mid', "status":"'"$1"'"}'
-	fi
-}
-
-secure_verify(){
-	api_result=`curl -X GET "https://api.edgescale.org/v1/devices/softwares?device_id=$deviceid"`
-	public_key=`echo $api_result | grep public_key | sed 's/\"//g' | sed 's/.*public_key:\(.*$\)/\1/' | awk -F "[,}]" '{print $1}' | sed 's/^[ \t]*//g'`
-	result=`echo $public_key > /tmp/rsa.base`
-	result=`cat /tmp/rsa.base | base64 -d > /tmp/rsa.pub`
-	# Using public key verify OEM images(firmware, bootpartition and rootfs)
-	result=`openssl dgst -md5 -verify /tmp/rsa.pub -signature ./sign/$firmware_file.sign $firmware_file`
-	firmware_status=`echo $result | awk '{print $2}'`
-	result=`openssl dgst -md5 -verify /tmp/rsa.pub -signature ./sign/$boot_file.sign $boot_file`
-	boot_status=`echo $result | awk '{print $2}'`
-	result=`openssl dgst -md5 -verify /tmp/rsa.pub -signature ./sign/$rootfs_file.sign $rootfs_file`
-	rootfs_status=`echo $result | awk '{print $2}'`
-	verify_status="OK"
-	if [ "Failure"x = "$firmware_status"x ]; then
-		verify_status="Failure"
-	elif [ "Failure"x = "$boot_status"x ]; then
-		verify_status="Failure"
-	elif [ "Failure"x = "$rootfs_status"x ]; then
-		verify_status="Failure"
-	fi
-
-	if [ "OK"x = "$verify_status"x ]; then
-		echo "The solution image: "$result
-		echo "Atfer will Deploying image."
-	else
-		echo "The solution image: "$result "Please Checking this image!"
-		echo "The system will restart after 6 seconds."
-		sleep 6
-		reboot -f
+		curl -X POST -H "Content-Type: application/json" $ES_API_URI/devices/tasks/status -d '{"device":"'$deviceid'", "mid":'$mid', "status":"'"$1"'"}'
 	fi
 }
 
 security_check(){
-	api_result=`curl -X GET "https://api.edgescale.org/v1/devices/softwares?device_id=$deviceid"`
-	is_signed=`echo $api_result | grep is_signed | sed 's/\"//g' | sed 's/.*is_signed:\(.*$\)/\1/' | awk -F "[,}]" '{print $1}' | sed 's/^[ \t]*//g'`
 	if [ "false"x = "$is_signed"x ]; then
-		echo "This solution image was not found OEM signature"
+		echo "OEM signature not found in this solution"
 	else
-		secure_verify
+		result=`echo $public_key > /tmp/rsa.base`
+		result=`cat /tmp/rsa.base | base64 -d > /tmp/rsa.pub`
+		# Using public key verify OEM images(firmware, bootpartition and rootfs)
+		result=`openssl dgst -md5 -verify /tmp/rsa.pub -signature ./sign/$firmware_file.sign $firmware_file`
+		firmware_status=`echo $result | awk '{print $2}'`
+		result=`openssl dgst -md5 -verify /tmp/rsa.pub -signature ./sign/$boot_file.sign $boot_file`
+		boot_status=`echo $result | awk '{print $2}'`
+		result=`openssl dgst -md5 -verify /tmp/rsa.pub -signature ./sign/$rootfs_file.sign $rootfs_file`
+		rootfs_status=`echo $result | awk '{print $2}'`
+		verify_status="OK"
+		if [ "Failure"x = "$firmware_status"x ]; then
+			verify_status="Failure"
+		elif [ "Failure"x = "$boot_status"x ]; then
+			verify_status="Failure"
+		elif [ "Failure"x = "$rootfs_status"x ]; then
+			verify_status="Failure"
+		fi
+
+		if [ "OK"x = "$verify_status"x ]; then
+			echo "The solution image: "$result
+			echo "Atfer will Deploying image."
+		else
+			echo "The solution image: "$result "Please Checking this image!"
+			echo "The system will restart after 6 seconds."
+			sleep 6
+			reboot -f
+		fi
 	fi
 }
 
 setup_ima_evm(){
-        if [ ! -f "/usr/bin/sec_imaevm" ]; then
-            echo "No found the integrity tool"
-        else
+        if [ -f "/usr/bin/sec_imaevm" ]; then
             /usr/bin/sec_imaevm
         fi
+}
+
+download_images(){
+	count=1
+	while [ $count -le 5 ]
+	do
+		wget -O /run/media/mmcblk0p3/updateImages/full_images.tgz -c $imageURL
+		if [ $? != 0 ];then
+			((count++))
+			echo "retrying $count times"
+			sleep 5
+		else
+			break
+		fi
+	done
+
+	if [ $count -gt 5 ];then
+		reboot
+	fi
 }
 
 install_images(){
@@ -107,7 +123,7 @@ install_images(){
 	fi
 	mkdir /run/media/mmcblk0p3/updateImages
 	cd /run/media/mmcblk0p3/updateImages
-	wget -O full_images.tgz  $imageURL
+	download_images
 	tar -xf full_images.tgz
 	if [ ! -f "install.sh" ];then
 		firmware_file=`ls *firmware*.img`
@@ -129,14 +145,11 @@ install_images(){
 		feedback_status "Deploying image into SD card"
 		flex-installer --firmware=$firmware_file --startblock=8 --device=/dev/mmcblk0
 		flex-installer -i install --bootpart=$boot_file --rootfs=$rootfs_file --machine=$boardname --device=sd
-               setup_ima_evm
+		setup_ima_evm
 	else
-		chmod 777 ./install.sh
+		chmod +x ./install.sh
 		./install.sh
-		if [[ $? -eq 0 ]];then
-			echo "installer successed"
-		else
-			echo "installer failed"
+		if [ $? != 0 ];then
 			reboot
 		fi
 	fi
@@ -146,6 +159,32 @@ install_images(){
 	do
 		umount /dev/mmcblk0p$i
 	done
+}
+
+update_images(){
+	download_path=/run/media/mmcblk0p3/updateImages
+	if [ "true"x = "$have_installer"x ];then
+		for i in {2..3}
+		do
+			mkdir -p /run/media/mmcblk0p$i
+			mount /dev/mmcblk0p$i  /run/media/mmcblk0p$i
+		done
+		mkdir -p ${download_path}
+		download_images
+		tar -xf ${download_path}/full_images.tgz -C ${download_path}
+		chmod +x ${download_path}/install.sh
+		${download_path}/install.sh
+		if [ $? != 0 ];then
+			reboot
+		fi
+		rm -rf ${download_path}/*
+		for i in {2..3}
+		do
+			umount  /run/media/mmcblk0p$i
+		done
+	else
+		install_images
+	fi
 }
 
 if [ "$updateStatus"x == 3x -a $oldimageVersion != 0 ];then
@@ -163,7 +202,7 @@ elif [ "$updateStatus"x == 8x ];then
 	imageVersion=$newimageVersion
 	get_imageURL
 	updateStatus=1
-	install_images
+	update_images
 	echo "$updateStatus $platform $oldimageVersion $imageVersion $solutionname $mid" > /tmp/ota-info
 	dd if=/tmp/ota-info of=/dev/mmcblk0 bs=512 seek=129024 count=1 conv=sync
 else

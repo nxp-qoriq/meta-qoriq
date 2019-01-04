@@ -6,6 +6,8 @@ NXP-specific packages."
 
 LICENSE = "MIT"
 
+IMA_EVM = "${@bb.utils.contains('DISTRO_FEATURES', 'ima-evm', 'ima-evm', '', d)}"
+
 IMAGE_INSTALL_append = " \
     start-stop-daemon \
     dhcpcd \
@@ -25,7 +27,10 @@ IMAGE_INSTALL_append = " \
     packagegroup-core-ssh-openssh \
     tar \
     inetutils-ping \
+    keyutils \
     openssl-qoriq-bin \
+    rng-tools \
+    ${IMA_EVM} \
 "
 
 IMAGE_INSTALL_append_ls1012a = " \
@@ -40,4 +45,6 @@ inherit remove-files create-symbolic-links
 ROOTFS_POSTPROCESS_COMMAND_append_ls1012a = "rootfs_delete_files;"
 ROOTFS_POSTPROCESS_COMMAND_append_ls1043a = "rootfs_delete_files;"
 ROOTFS_POSTPROCESS_COMMAND_append_ls1046a = "rootfs_delete_files;"
+ROOTFS_POSTPROCESS_COMMAND_append_ls1088a = "rootfs_delete_files;"
+ROOTFS_POSTPROCESS_COMMAND_append_ls2088a = "rootfs_delete_files;"
 ROOTFS_POSTPROCESS_COMMAND_append_ls102xa = " rootfs_create_symbolic_link;"

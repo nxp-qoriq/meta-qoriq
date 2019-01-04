@@ -5,30 +5,21 @@ LIC_FILES_CHKSUM = "file://license.rst;md5=e927e02bca647e14efd87e9e914b2443"
 
 inherit deploy
 
-DEPENDS += "u-boot-mkimage-native u-boot openssl openssl-native mbedtls rcw cst-native"
+DEPENDS += "u-boot-mkimage-native u-boot openssl openssl-native mbedtls rcw cst-native uefi"
 DEPENDS_append_qoriq-arm64 += "optee-os-qoriq"
-DEPENDS_append_ls1043a += "uefi"
-DEPENDS_append_ls1046a += "uefi"
-DEPENDS_append_ls2088a += "uefi"
-DEPENDS_append_lx2160a += "uefi"
+do_compile[depends] += "u-boot:do_deploy rcw:do_deploy uefi:do_deploy"
 
 S = "${WORKDIR}/git"
 
 SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/atf;nobranch=1"
-
 SRCREV = "4971f394cf32e33e3a9ca23a4faa49d606af31c5"
 
 SRC_URI += "file://0001-fix-fiptool-build-error.patch \
     file://0001-Makefile-add-CC-gcc.patch \
 "
-
-ATF_BASE_NAME ?= "${PN}-${PKGE}-${PKGV}-${PKGR}-${DATETIME}"
-ATF_BASE_NAME[vardepsexclude] = "DATETIME"
-
 COMPATIBLE_MACHINE = "(qoriq)"
 PLATFORM = "${MACHINE}"
 PLATFORM_ls1088ardb-pb = "ls1088ardb"
-
 # requires CROSS_COMPILE set by hand as there is no configure script
 export CROSS_COMPILE="${TARGET_PREFIX}"
 export ARCH="arm64"
@@ -37,7 +28,6 @@ CFLAGS[unexport] = "1"
 LDFLAGS[unexport] = "1"
 AS[unexport] = "1"
 LD[unexport] = "1"
-
 
 # set secure option
 # fuseopt ?= "FUSE_PROV=1  FUSE_FILE=$(CONFIG_SEC_FUSE_FILE)"
@@ -57,7 +47,6 @@ do_compile() {
     export LIBPATH="${RECIPE_SYSROOT_NATIVE}"
     install -d ${S}/include/tools_share/openssl
     cp -r ${RECIPE_SYSROOT}/usr/include/openssl/*   ${S}/include/tools_share/openssl
-
     ${RECIPE_SYSROOT_NATIVE}/usr/bin/cst/gen_keys 1024
     if [ "${SECURE}" = "y" ]; then
         secureopt="TRUSTED_BOARD_BOOT=1 $ddrphyopt CST_DIR=${RECIPE_SYSROOT_NATIVE}/usr/bin/cst"
@@ -106,7 +95,6 @@ do_compile() {
                     oe_runmake V=1 -C ${S} all fip pbl PLAT=${PLATFORM} BOOT_MODE=${d} RCW=${DEPLOY_DIR_IMAGE}/rcw/${PLATFORM}/${rcwimg} BL33=${DEPLOY_DIR_IMAGE}/uefi/${PLATFORM}/${uefiboot} ${bl32opt} ${spdopt} ${secureopt} ${fuseopt}
                     cp -r ${S}/build/${PLATFORM}/release/fip.bin ${S}/fip_uefi.bin
                 fi
-
                 oe_runmake V=1 -C ${S} realclean
                 oe_runmake V=1 -C ${S} all fip pbl PLAT=${PLATFORM} BOOT_MODE=${d} RCW=${DEPLOY_DIR_IMAGE}/rcw/${PLATFORM}/${rcwimg} BL33=${bl33} ${bl32opt} ${spdopt} ${secureopt} ${fuseopt}
                 cp -r ${S}/build/${PLATFORM}/release/bl2_${d}*.pbl ${S}

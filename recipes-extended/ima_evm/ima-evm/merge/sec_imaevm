@@ -1,0 +1,57 @@
+#!/bin/bash
+
+ima_fix_mode='evm=fix'
+is_ima_fix=`cat /proc/cmdline | awk '{print $9}'`
+
+# Enable security file system
+enable_security_sysfs(){
+        mount -n -t securityfs securityfs /sys/kernel/security
+}
+
+setup_keys(){
+	if [ "$ima_fix_mode"x = "$is_ima_fix"x ]; then
+            echo "Creating keys"
+            keyctl add secure kmk-master "new 32" @u > /dev/null
+            result_kmk_key=`keyctl search @u secure kmk-master`
+            keyctl pipe $result_kmk_key > /run/media/mmcblk0p3/etc/secure_key.blob
+            keyctl add encrypted evm-key "new secure:kmk-master 32" @u > /dev/null
+            result_evm_key=`keyctl search @u encrypted evm-key`
+            keyctl pipe $result_evm_key > /run/media/mmcblk0p3/etc/encrypted_key.blob
+
+            chmod 1400 /run/media/mmcblk0p3/etc/secure_key.blob
+            chmod 1400 /run/media/mmcblk0p3/etc/encrypted_key.blob
+            chattr =i /run/media/mmcblk0p3/etc/secure_key.blob
+            chattr =i /run/media/mmcblk0p3/etc/encrypted_key.blob
+        else
+            echo "Loading blobs"
+            if [ ! -f "/run/media/mmcblk0p3/etc/secure_key.blob"]; then
+                echo "No such file named the secure_key.blob"
+            else
+                kmk_master_key=`cat /run/media/mmcblk0p3/etc/secure_key.blob`
+                keyctl add secure kmk-master "load $kmk_master_key" @u > /dev/null
+            fi
+
+            if [ ! -f "/run/media/mmcblk0p3/etc/encrypted_key.blob"]; then
+                echo "No such file named the encrypted_key.blob"
+            else
+                evm_key=`cat /run/media/mmcblk0p3/etc/encrypted_key.blob`
+                keyctl add encrypted evm-key "load $evm_key" @u > /dev/null
+            fi
+        fi
+}
+
+enable_evm(){
+# Enable EVM and Gererating EVM hashs and signatures
+# The signatured action be completed in the kernel
+        echo "1" > /sys/kernel/security/evm
+
+	if [ "$ima_fix_mode"x = "$is_ima_fix"x ]; then
+            echo "Labelling files in fix mode. This will take few minutes. Reboot once done"
+            find /run/media/mmcblk0p3/ -type f -exec head -c 1 '{}' > /dev/null \;
+            echo "Attributes labeled."
+        fi
+}
+
+enable_security_sysfs
+setup_keys
+enable_evm

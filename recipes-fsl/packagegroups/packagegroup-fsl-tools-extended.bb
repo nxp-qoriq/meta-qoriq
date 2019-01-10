@@ -82,19 +82,29 @@ RDEPENDS_${PN}_append_qoriq = "\
     ${@multilib_pkg_extend(d, "libgcc-dev")} \
     ${EXTRA_TOOLS} \
 "
-
-RDEPENDS_${PN}_append_qoriq-arm64 = "\ 
+LSDK_TOOLS = "\
     dce \
     ceetm \
-    libpkcs11 \
-    optee-os-qoriq \
-    optee-client-qoriq \
-    optee-test-qoriq \
     pktgen-dpdk \
-    secure-obj \
     spc \
     vpp-core \
     vpp-core-plugin-acl \
+"
+SECURE_TOOLS = "\
+    optee-os-qoriq \
+    optee-client-qoriq \
+    optee-test-qoriq \
+    libpkcs11 \
+    secure-obj \
+"
+SECURE_TOOLS_ls1043ardb-be = ""
+SECURE_TOOLS_ls1046ardb-be = ""
+SECURE_TOOLS_ls1088ardb-be = ""
+SECURE_TOOLS_ls2088ardb-be = ""
+
+RDEPENDS_${PN}_append_qoriq-arm64 = "\ 
+    ${LSDK_TOOLS} \
+    ${SECURE_TOOLS} \
 "
 RDEPENDS_${PN}_append_qoriq-ppc = "\
     hyperrelay \

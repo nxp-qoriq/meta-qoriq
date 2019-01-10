@@ -1,25 +1,25 @@
-From 163a2a8e469c80b9069076f9c9f941c2cdae2219 Mon Sep 17 00:00:00 2001
+From ce7d006f7d962c9e1777392a98eed2f3984365c5 Mon Sep 17 00:00:00 2001
 From: Chunrong Guo <chunrong.guo@nxp.com>
-Date: Fri, 12 Oct 2018 11:32:46 +0800
+Date: Wed, 9 Jan 2019 10:11:49 +0100
 Subject: [PATCH] support aarch64_be
 
-Signed-off-by: BJ DevOps Team <bjdevops@NXP1.onmicrosoft.com>
+Signed-off-by: C.r. Guo <nxa13725@lsv07005.swis.us-cdc01.nxp.com>
 ---
  mesonbuild/environment.py | 1 +
  1 file changed, 1 insertion(+)
 
 diff --git a/mesonbuild/environment.py b/mesonbuild/environment.py
-index 5cc2275..4d7aae7 100644
+index b4fc0dc..014ecab 100644
 --- a/mesonbuild/environment.py
 +++ b/mesonbuild/environment.py
-@@ -77,6 +77,7 @@ build_filename = 'meson.build'
+@@ -74,6 +74,7 @@ build_filename = 'meson.build'
  known_cpu_families = (
      'allarch',
      'aarch64',
 +    'aarch64_be',
+     'arc',
      'arm',
      'e2k',
-     'ia64',
 -- 
-1.8.3.1
+2.7.4
 

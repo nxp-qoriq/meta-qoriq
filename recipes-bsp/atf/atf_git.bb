@@ -31,16 +31,19 @@ LD[unexport] = "1"
 
 # set secure option
 # fuseopt ?= "FUSE_PROV=1  FUSE_FILE=$(CONFIG_SEC_FUSE_FILE)"
-# SECURE ?= "y"
-# OPTEE  ?= "y"
 
 BOOTTYPE ?= "nor nand qspi flexspi_nor sd emmc"
-SECURE ?= ""
-OPTEE  ?= "" 
+BUILD_SECURE = "${@bb.utils.contains('COMBINED_FEATURES', 'secure', 'true', 'false', d)}"
+BUILD_OPTEE = "${@bb.utils.contains('COMBINED_FEATURES', 'optee', 'true', 'false', d)}"
 
 uboot_boot_sec ?= "${DEPLOY_DIR_IMAGE}/u-boot.bin-tfa-secure-boot"
 uboot_boot ?= "${DEPLOY_DIR_IMAGE}/u-boot.bin-tfa"
-
+rcw ?= ""
+rcw_ls1012afrwy = "_default"
+rcw_ls1012ardb = "_default"
+rcwsec ?= ""
+rcwsec_ls1012afrwy = "_sben"
+rcwsec_ls1012ardb = "_sben"
 do_configure[noexec] = "1"
 
 do_compile() {
@@ -48,15 +51,17 @@ do_compile() {
     install -d ${S}/include/tools_share/openssl
     cp -r ${RECIPE_SYSROOT}/usr/include/openssl/*   ${S}/include/tools_share/openssl
     ${RECIPE_SYSROOT_NATIVE}/usr/bin/cst/gen_keys 1024
-    if [ "${SECURE}" = "y" ]; then
+    if [ "${BUILD_SECURE}" = "true" ]; then
         secureopt="TRUSTED_BOARD_BOOT=1 $ddrphyopt CST_DIR=${RECIPE_SYSROOT_NATIVE}/usr/bin/cst"
         secext="_sec"
         bl33="${uboot_boot_sec}"
+        rcwsec="${rcwsec}"
     else
         bl33="${uboot_boot}"
+        rcwsec="${rcw}"
     fi       
 
-    if [ "${OPTEE}" = "y" ]; then
+    if [ "${BUILD_OPTEE}" = "true" ]; then
         bl32="${DEPLOY_DIR_IMAGE}/optee/tee_${MACHINE}.bin" 
         bl32opt="BL32=${bl32}"
         spdopt="SPD=opteed" 
@@ -65,25 +70,25 @@ do_compile() {
     for d in ${BOOTTYPE}; do
         case $d in
         nor)
-            rcwimg="${RCWNOR}"
+            rcwimg="${RCWNOR}${rcwsec}.bin"
             uefiboot="${UEFI_NORBOOT}"
             ;;
         nand)
-            rcwimg="${RCWNAND}"
+            rcwimg="${RCWNAND}${rcwsec}.bin"
             ;;
         qspi)
-            rcwimg="${RCWQSPI}"
+            rcwimg="${RCWQSPI}${rcwsec}.bin"
             ;;
         sd)
-            rcwimg="${RCWSD}"
+            rcwimg="${RCWSD}${rcwsec}.bin"
             ;;
         flexspi_nor)
-            rcwimg="${RCWXSPI}"
+            rcwimg="${RCWXSPI}${rcwsec}.bin"
             uefiboot="${UEFI_XSPIBOOT}"
             ;;        
         esac
             
-	if [ -n "${rcwimg}" ]; then
+	if [ -f "${DEPLOY_DIR_IMAGE}/rcw/${PLATFORM}/${rcwimg}" ]; then
                 if [ ${MACHINE} = ls1012afrwy ]; then
                     oe_runmake V=1 -C ${S} realclean
                     oe_runmake V=1 -C ${S} all fip pbl PLAT=ls1012afrwy_512mb BOOT_MODE=${d} RCW=${DEPLOY_DIR_IMAGE}/rcw/${PLATFORM}/${rcwimg} BL33=${bl33} ${bl32opt} ${spdopt} ${secureopt} ${fuseopt}
@@ -106,13 +111,16 @@ do_compile() {
 
 do_install() {
     install -d ${D}/boot/atf
+    if [ "${BUILD_SECURE}" = "y" ]; then
+        secext="_sec"
+    fi
     if [ -f "${S}/fip_uefi.bin" ]; then
         cp -r ${S}/fip_uefi.bin ${D}/boot/atf/fip_uefi.bin
     fi
     cp -r ${S}/build/${PLATFORM}/release/fip.bin ${D}/boot/atf/fip.bin
     for d in ${BOOTTYPE}; do
-        if [ -e  ${S}/bl2_${d}.pbl ]; then
-            cp -r ${S}/bl2_${d}.pbl ${D}/boot/atf/bl2_${d}.pbl
+        if [ -e  ${S}/bl2_${d}${secext}.pbl ]; then
+            cp -r ${S}/bl2_${d}${secext}.pbl ${D}/boot/atf/bl2_${d}${secext}.pbl
         fi
     done
     if [ ${MACHINE} = ls1012afrwy ]; then
@@ -124,13 +132,17 @@ do_install() {
 
 do_deploy() {
     install -d ${DEPLOYDIR}/atf
+    if [ "${BUILD_SECURE}" = "y" ]; then
+        secext="_sec"
+    fi
+
     if [ -e ${D}/boot/atf/fip_uefi.bin ]; then
         cp -r ${D}/boot/atf/fip_uefi.bin ${DEPLOYDIR}/atf/fip_uefi.bin
     fi
     cp -r ${D}/boot/atf/fip.bin ${DEPLOYDIR}/atf/fip_uboot${secext}.bin
     for d in ${BOOTTYPE}; do
-        if [ -e ${D}/boot/atf/bl2_${d}.pbl ]; then
-            cp -r ${D}/boot/atf/bl2_${d}.pbl ${DEPLOYDIR}/atf/
+        if [ -e ${D}/boot/atf/bl2_${d}${secext}.pbl ]; then
+            cp -r ${D}/boot/atf/bl2_${d}${secext}.pbl ${DEPLOYDIR}/atf/bl2_${d}${secext}.pbl
         fi
     done
     if [ ${MACHINE} = ls1012afrwy ]; then

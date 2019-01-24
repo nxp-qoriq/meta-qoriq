@@ -41,7 +41,7 @@ IMAGE_INSTALL_append_ls1012a = " \
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 IMAGE_FSTYPES = "tar.gz ext2.gz ext2.gz.u-boot"
 
-inherit remove-files create-symbolic-links
+inherit remove-files
 ROOTFS_POSTPROCESS_COMMAND_append_ls1012a = "rootfs_delete_files;"
 ROOTFS_POSTPROCESS_COMMAND_append_ls1043a = "rootfs_delete_files;"
 ROOTFS_POSTPROCESS_COMMAND_append_ls1046a = "rootfs_delete_files;"

@@ -10,7 +10,7 @@ inherit packagegroup
 
 PACKAGES = "${PN}-core ${PN}-extended"
 
-FSL_NEON = "${@bb.utils.contains('TUNE_FEATURES', 'neon', 'cpuburn-neon', '', d)}"
+FSL_NEON = "${@bb.utils.contains('TUNE_FEATURES', 'neon', 'cpuburn-arm', '', d)}"
 
 RDEPENDS_${PN}-core = "\
     iozone3 \

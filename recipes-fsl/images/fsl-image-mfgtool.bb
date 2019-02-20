@@ -13,9 +13,11 @@ IMAGE_INSTALL_append = " \
     packagegroup-core-ssh-dropbear \
     packagegroup-fsl-mfgtools \
     udev-extraconf \
+    file \
     parted \
     lmsensors-sensors \
     restool \
     fmc \
+    sudo 
 "
 export IMAGE_BASENAME = "fsl-image-mfgtool"

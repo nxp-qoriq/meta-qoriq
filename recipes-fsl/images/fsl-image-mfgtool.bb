@@ -18,6 +18,6 @@ IMAGE_INSTALL_append = " \
     lmsensors-sensors \
     restool \
     fmc \
-    sudo 
+    sudo \ 
 "
 export IMAGE_BASENAME = "fsl-image-mfgtool"

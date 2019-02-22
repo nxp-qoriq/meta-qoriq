@@ -1,0 +1,1 @@
+COMPATIBLE_MACHINE_ls1021atwr = "(ls1021atwr)"

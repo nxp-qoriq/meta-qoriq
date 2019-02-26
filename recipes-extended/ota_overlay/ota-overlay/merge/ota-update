@@ -142,7 +142,7 @@ install_images(){
 			reboot
 		fi
 		security_check
-		feedback_status "Deploying image into SD card"
+		feedback_status "ota-install"
 		flex-installer --firmware=$firmware_file --startblock=8 --device=/dev/mmcblk0
 		flex-installer -i install --bootpart=$boot_file --rootfs=$rootfs_file --machine=$boardname --device=sd
 		setup_ima_evm
@@ -198,7 +198,7 @@ if [ "$updateStatus"x == 3x -a $oldimageVersion != 0 ];then
 	dd if=/tmp/ota-info of=/dev/mmcblk0 bs=512 seek=129024 count=1 conv=sync
 elif [ "$updateStatus"x == 8x ];then
 	echo "Now need update the image to version=$newimageVersion"
-	feedback_status "Entered into reserved system, downloading image"
+	feedback_status "ota-fetch"
 	imageVersion=$newimageVersion
 	get_imageURL
 	updateStatus=1
@@ -221,5 +221,5 @@ else
 		dd if=/tmp/ota-info of=/dev/mmcblk0 bs=512 seek=129024 count=1 conv=sync
 	fi
 fi
-	feedback_status "Deployed SD card successfully, rebooting device"
+	feedback_status "ota-reboot"
 reboot -f

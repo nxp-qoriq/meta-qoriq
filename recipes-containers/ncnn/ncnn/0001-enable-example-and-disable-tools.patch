@@ -1,0 +1,29 @@
+From b448d5e904dbdd01feaf44903bd9bde4294a934b Mon Sep 17 00:00:00 2001
+From: Chunrong Guo <chunrong.guo@nxp.com>
+Date: Fri, 1 Mar 2019 06:35:08 +0100
+Subject: [PATCH] enable example and disable tools
+
+Signed-off-by: C.r. Guo <nxa13725@lsv07004.swis.us-cdc01.nxp.com>
+---
+ CMakeLists.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c430db5..46dd227 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -88,9 +88,9 @@ endif()
+ 
+ ##############################################
+ 
+-# add_subdirectory(examples)
++add_subdirectory(examples)
+ add_subdirectory(benchmark)
+ add_subdirectory(src)
+ if(NOT ANDROID AND NOT IOS)
+-add_subdirectory(tools)
++#add_subdirectory(tools)
+ endif()
+-- 
+2.7.4
+

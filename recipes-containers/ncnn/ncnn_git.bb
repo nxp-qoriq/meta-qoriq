@@ -18,7 +18,9 @@ inherit cmake
 do_install_append() {
     mkdir -p ${D}/${bindir}/ncnn/
     mkdir -p ${D}/${bindir}/ncnn/examples/
+    mkdir -p ${D}/${bindir}/ncnn/benchmark/
     cp ${WORKDIR}/build/benchmark/benchncnn ${D}/${bindir}/ncnn/
+    cp ${S}/benchmark/*.param ${D}/${bindir}/ncnn/benchmark/
     cp ${WORKDIR}/build/examples/s* ${D}/${bindir}/ncnn/examples/
     cp ${WORKDIR}/build/examples/mobilen*  ${D}/${bindir}/ncnn/examples
     cp ${WORKDIR}/build/examples/yolov*  ${D}/${bindir}/ncnn/examples

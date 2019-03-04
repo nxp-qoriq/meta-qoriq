@@ -43,7 +43,7 @@ do_deploy () {
     cd ${RECIPE_SYSROOT_NATIVE}/usr/bin/cst
     cp ${S}/create_secure_boot_image.sh ./
     cp ${S}/${MACHINE}.manifest ./
-    ./gen_keys 1024
+    cp ${DEPLOY_DIR_IMAGE}/atf/srk.* ./
     for d in ${BOOT_TYPE}; do
         ./create_secure_boot_image.sh -m ${MACHINE} -t ${d} -d . -s ${DEPLOY_DIR_IMAGE} -e ${ENCAP} -ima ${IMA_EVM}
     done

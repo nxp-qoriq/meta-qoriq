@@ -97,6 +97,7 @@ setup_ima_evm(){
 }
 
 download_images(){
+	mkdir -p /run/media/mmcblk0p3/updateImages
 	count=1
 	while [ $count -le 5 ]
 	do
@@ -115,15 +116,16 @@ download_images(){
 	fi
 }
 
-install_images(){
+sd_card_format(){
 	flex-installer -i pf -d sd
 	if [ ! -d "/run/media/mmcblk0p3" ];then
 		echo "partition of SD card is not right"
 		exit 1
 	fi
-	mkdir /run/media/mmcblk0p3/updateImages
+}
+
+install_images(){
 	cd /run/media/mmcblk0p3/updateImages
-	download_images
 	tar -xf full_images.tgz
 	if [ ! -f "install.sh" ];then
 		firmware_file=`ls *firmware*.img`
@@ -163,14 +165,13 @@ install_images(){
 
 update_images(){
 	download_path=/run/media/mmcblk0p3/updateImages
+	for i in {1..3}
+	do
+		mkdir -p /run/media/mmcblk0p$i
+		mount /dev/mmcblk0p$i  /run/media/mmcblk0p$i
+	done
 	if [ "true"x = "$have_installer"x ];then
-		for i in {2..3}
-		do
-			mkdir -p /run/media/mmcblk0p$i
-			mount /dev/mmcblk0p$i  /run/media/mmcblk0p$i
-		done
 		mkdir -p ${download_path}
-		download_images
 		tar -xf ${download_path}/full_images.tgz -C ${download_path}
 		chmod +x ${download_path}/install.sh
 		${download_path}/install.sh
@@ -178,7 +179,7 @@ update_images(){
 			reboot
 		fi
 		rm -rf ${download_path}/*
-		for i in {2..3}
+		for i in {1..3}
 		do
 			umount  /run/media/mmcblk0p$i
 		done
@@ -193,6 +194,8 @@ if [ "$updateStatus"x == 3x -a $oldimageVersion != 0 ];then
 	imageVersion=$oldimageVersion
 	get_imageURL
 	updateStatus=1
+	sd_card_format
+	download_images
 	install_images
 	echo "$updateStatus $platform $oldimageVersion $imageVersion $solutionname $mid" > /tmp/ota-info
 	dd if=/tmp/ota-info of=/dev/mmcblk0 bs=512 seek=129024 count=1 conv=sync
@@ -212,6 +215,8 @@ else
 	if [ $newimageVersion \> $oldimageVersion ];then
 		imageVersion=$newimageVersion
 		updateStatus=1
+		sd_card_format
+		download_images
 		install_images
 		echo "$updateStatus $platform $oldimageVersion $imageVersion $solutionname $mid" > /tmp/ota-info
 		dd if=/tmp/ota-info of=/dev/mmcblk0 bs=512 seek=129024 count=1 conv=sync

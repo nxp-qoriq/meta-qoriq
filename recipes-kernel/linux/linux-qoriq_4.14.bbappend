@@ -1,6 +1,9 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
-SRC_URI += " file://0001-Makefile-add-Wno-misleading-indentation-and-Wno-stri.patch \
+SRC_URI = "git://bitbucket.sw.nxp.com/dash/dash-lts.git;protocol=ssh;nobranch=1"
+SRCREV = "274a415697d6064ea4685f2503858aeeed207f0e"
+
+SRC_URI += " file://0001-Makfefile-add-cflags.patch \
 "
 SRC_URI_append = " file://ima-evm.config"
 

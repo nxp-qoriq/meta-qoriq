@@ -1,10 +1,10 @@
 SUMMARY = "EDGESCALE-EDS is a set of software agents running on device side which connects to cloud"
 HOMEPAGE = "https://github.com/NXP/qoriq-edgescale-eds.git"
 LICENSE = "NXP-EULA"
-LIC_FILES_CHKSUM = "file://src/github.com/NXP/qoriq-edgescale-eds/EULA.txt;md5=ac5425aaed72fb427ef1113a88542f89"
+LIC_FILES_CHKSUM = "file://src/${GO_IMPORT}/EULA.txt;md5=ac5425aaed72fb427ef1113a88542f89"
 
 SRC_URI = "\
-        git://${GO_IMPORT}.git;protocol=https;nobranch=1 \
+        git://${GO_IMPORT}.git;protocol=ssh;nobranch=1 \
         git://github.com/golang/sys;nobranch=1;destsuffix=git/src/golang.org/x/sys;name=sys \
         git://github.com/golang/crypto;nobranch=1;destsuffix=git/src/golang.org/x/crypto;name=crypto \
         git://github.com/golang/net;nobranch=1;destsuffix=git/src/golang.org/x/net;name=net \
@@ -14,7 +14,7 @@ SRC_URI = "\
         git://github.com/fullsailor/pkcs7.git;nobranch=1;destsuffix=git/src/github.com/fullsailor/pkcs7;name=pkcs7 \
         git://github.com/edgeiot/est-client-go;nobranch=1;destsuffix=git/src/github.com/edgeiot/est-client-go;name=est-client-go \
         "
-SRCREV = "76d5b4a225be110bcaba3a8a0272c5c24fdac5e3"
+SRCREV = "34a18339eb97a3b3b5ce1c2fb349720607ff0843"
 SRCREV_sys = "cb59ee3660675d463e86971646692ea3e470021c"
 SRCREV_crypto = "ff983b9c42bc9fbf91556e191cc8efb585c16908"
 SRCREV_net = "927f97764cc334a6575f4b7a1584a147864d5723"
@@ -35,7 +35,8 @@ DEPENDS_append_qoriq-arm64 = "optee-client-qoriq secure-obj"
 
 RDEPENDS_${PN}_append_qoriq-arm64 = "optee-client-qoriq secure-obj"
 
-GO_IMPORT = "github.com/NXP/qoriq-edgescale-eds"
+#GO_IMPORT = "github.com/NXP/qoriq-edgescale-eds"
+GO_IMPORT = "bitbucket.sw.nxp.com/dcca/qoriq-edgescale-eds"
 
 S = "${WORKDIR}/git"
 inherit go

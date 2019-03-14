@@ -3,8 +3,9 @@ HOMEPAGE = "https://github.com/nxp/qoriq-eds-bootstrap.git"
 LICENSE = "NXP-Binary-EULA"
 LIC_FILES_CHKSUM = "file://NXP-Binary-EULA.txt;md5=685768ff8092cc783d95e3480cb9bdb1"
 
-SRC_URI = "git://github.com/NXP/qoriq-eds-bootstrap.git;nobranch=1"
-SRCREV = "72abfd9b61cc8a6d10e4808a87ff4ce1e2b99020"
+#SRC_URI = "git://github.com/NXP/qoriq-eds-bootstrap.git;nobranch=1"
+SRC_URI = "git://bitbucket.sw.nxp.com/dcca/qoriq-eds-bootstrap.git;protocol=ssh;nobranch=1"
+SRCREV = "385ec26acec4e1dc891c1d0e63ed577485a85f46"
 
 ARCH_qoriq-arm = "arm"
 ARCH_qoriq-arm64 = "arm64"
@@ -17,10 +18,10 @@ S = "${WORKDIR}/git"
 do_compile[noexec] = "1"
 
 do_install () {
-    install -d ${D}/usr/local/edgescale/bin
-    cp -r  ${S}/${ARCH}/* ${D}/usr/local/edgescale/bin
+    install -d ${D}/usr/local/bin
+    cp -r  ${S}/${ARCH}/* ${D}/usr/local/bin
     chown -R root:root ${D}
 }
 
 INSANE_SKIP_${PN} += "already-stripped"
-FILES_${PN} += "/usr/local/edgescale/bin/*"
+FILES_${PN} += "/usr/local/bin/*"

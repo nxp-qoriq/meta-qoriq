@@ -5,10 +5,14 @@ applications across multiple hosts, providing basic mechanisms for deployment, \
 maintenance, and scaling of applications. \
 "
 
-SRC_URI = "git://github.com/NXP/qoriq-eds-kubelet.git;nobranch=1 \
+#SRC_URI = "git://github.com/NXP/qoriq-eds-kubelet.git;nobranch=1 \
+#    git://github.com/kubernetes/kubernetes.git;branch=master;destsuffix=git/src/import/kubernetes;name=kubernetes \
+#"
+
+SRC_URI = "git://bitbucket.sw.nxp.com/dcca/qoriq-eds-kubelet.git;protocol=ssh;nobranch=1 \
     git://github.com/kubernetes/kubernetes.git;branch=master;destsuffix=git/src/import/kubernetes;name=kubernetes \
 "
-SRCREV = "c1613364ce66d579ed415b673065489230c98e22"
+SRCREV = "cf5175b3186e1308cc29a6295fb7bd012b614a22"
 SRCREV_kubernetes = "ad403f8e2054d0dcd322e287af17cc3d69b38bf3"
 
 S = "${WORKDIR}/git"

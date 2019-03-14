@@ -10,7 +10,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=bbea815ee2795b2f4230826c0c6b8814"
 #    file://0001-fix-gcc8-build-error.patch \
 #"
 SRC_URI = "git://bitbucket.sw.nxp.com/dash/dash-lts.git;protocol=ssh;nobranch=1"
-SRCREV = "e20085a4409dc1f335ddef0d6b975f4fe68090d3"
+SRCREV = "11184ab08d5d43f07b0323fc1437a89623859fdd"
 
 SRC_URI += " file://0001-Makfefile-add-cflags.patch \
 "

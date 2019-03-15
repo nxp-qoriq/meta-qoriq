@@ -12,16 +12,18 @@ SRC_URI = "\
         git://github.com/sigma/systemstat;nobranch=1;destsuffix=git/src/github.com/sigma/systemstat;name=systemstat \
         git://github.com/eclipse/paho.mqtt.golang;nobranch=1;destsuffix=git/src/github.com/eclipse/paho.mqtt.golang;name=mqtt \
         git://github.com/fullsailor/pkcs7.git;nobranch=1;destsuffix=git/src/github.com/fullsailor/pkcs7;name=pkcs7 \
+        git://github.com/shirou/gopsutil.git;nobranch=1;destsuffix=git/src/github.com/shirou/gopsutil;name=disk \
         git://github.com/edgeiot/est-client-go;nobranch=1;destsuffix=git/src/github.com/edgeiot/est-client-go;name=est-client-go \
         "
 SRCREV = "34a18339eb97a3b3b5ce1c2fb349720607ff0843"
 SRCREV_sys = "cb59ee3660675d463e86971646692ea3e470021c"
 SRCREV_crypto = "ff983b9c42bc9fbf91556e191cc8efb585c16908"
 SRCREV_net = "927f97764cc334a6575f4b7a1584a147864d5723"
-SRCREV_logrus = "d26492970760ca5d33129d2d799e34be5c4782eb"
+SRCREV_logrus = "dae0fa8d5b0c810a8ab733fbd5510c7cae84eca4"
 SRCREV_systemstat = "0eeff89b0690611fc32e21f0cd2e4434abf8fe53"
 SRCREV_mqtt = "379fd9f99ba5b1f02c9fffb5e5952416ef9301dc"
 SRCREV_pkcs7 = "8306686428a5fe132eac8cb7c4848af725098bd4"
+SRCREV_disk = "eead265362a2c459593fc24d74aef92858d67835"
 SRCREV_est-client-go = "a9d72263246dfcac6e90971c8ce51c2ef99295a6"
 
 DEPENDS = "\
@@ -62,19 +64,24 @@ do_compile() {
         rm -rf ${S}/import/vendor/cert-agent
         mkdir -p ${S}/import/vendor/
         cp -rf ${S}/src/${GO_IMPORT}/cert-agent ${S}/import/vendor/
+        cp -rf ${S}/src/${GO_IMPORT}/mq-agent  ${S}/import/vendor/
         cd ${S}/import/vendor/cert-agent
         ${GO} build --ldflags="-w -s" --tags "${GOBUILDTAGS}"
+        cd ${S}/import/vendor/mq-agent
+        ${GO} build --ldflags="-w -s" --tags "${GOBUILDTAGS}" 
 }
 
 do_install() {
 	install -d ${D}/${bindir}
         install -d ${D}/${sysconfdir}
         install -d ${D}/${includedir}/cert-agent
+        install -d ${D}/usr/local/edgescale/bin
         cp -r ${S}/import/vendor/cert-agent/cert-agent ${D}/${bindir}
+        cp -r ${S}/import/vendor/mq-agent/mq-agent ${D}/usr/local/edgescale/bin
         cp -r ${S}/import/vendor/cert-agent/pkg ${D}/${includedir}/cert-agent/
         cp -r ${S}/src/${GO_IMPORT}/etc/edgescale-version ${D}/${sysconfdir}
 }
 
-FILES_${PN} += "${includedir}/*"
+FILES_${PN} += "${includedir}/* /usr/local/*"
 INSANE_SKIP_${PN} += "already-stripped dev-deps"
 deltask compile_ptest_base

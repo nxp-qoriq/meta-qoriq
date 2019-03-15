@@ -190,7 +190,7 @@ update_images(){
 
 if [ "$updateStatus"x == 3x -a $oldimageVersion != 0 ];then
 	echo "Now need rollback the image version=$oldimageVersion"
-	feedback_status "OTA update failed,rollback"
+	feedback_status "ota-rollback"
 	imageVersion=$oldimageVersion
 	get_imageURL
 	updateStatus=1
@@ -201,9 +201,7 @@ if [ "$updateStatus"x == 3x -a $oldimageVersion != 0 ];then
 	dd if=/tmp/ota-info of=/dev/mmcblk0 bs=512 seek=129024 count=1 conv=sync
 elif [ "$updateStatus"x == 8x ];then
 	echo "Now need update the image to version=$newimageVersion"
-	feedback_status "ota-fetch"
 	imageVersion=$newimageVersion
-	get_imageURL
 	updateStatus=1
 	update_images
 	echo "$updateStatus $platform $oldimageVersion $imageVersion $solutionname $mid" > /tmp/ota-info

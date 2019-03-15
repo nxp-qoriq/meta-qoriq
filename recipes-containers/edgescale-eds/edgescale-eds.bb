@@ -63,7 +63,7 @@ do_compile() {
         mkdir -p ${S}/import/vendor/
         cp -rf ${S}/src/${GO_IMPORT}/cert-agent ${S}/import/vendor/
         cd ${S}/import/vendor/cert-agent
-        go build --ldflags="-w -s" --tags "${GOBUILDTAGS}"
+        ${GO} build --ldflags="-w -s" --tags "${GOBUILDTAGS}"
 }
 
 do_install() {

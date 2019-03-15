@@ -52,7 +52,7 @@ do_compile() {
     cp -rf ${S}/src/import/kubernetes/pkg  ${S}/src/import/kubernetes/vendor/k8s.io/kubernetes/
     cp -rf ${S}/src/import/kubernetes/third_party  ${S}/src/import/kubernetes/vendor/k8s.io/kubernetes/
     cd ${S}/src/import/kubernetes/
-    go build --ldflags="-w -s" cmd/kubelet/kubelet.go 
+    ${GO} build --ldflags="-w -s" cmd/kubelet/kubelet.go 
 }
 
 do_install() {

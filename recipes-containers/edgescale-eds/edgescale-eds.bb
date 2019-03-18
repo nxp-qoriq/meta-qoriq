@@ -78,9 +78,15 @@ do_install() {
         install -d ${D}/usr/local/edgescale/bin
         install -d ${D}/usr/local/edgescale/conf
         cp -r ${S}/import/vendor/cert-agent/cert-agent ${D}/${bindir}
-        cp -r ${S}/import/vendor/mq-agent/mq-agent ${D}/usr/local/edgescale/bin
         cp -r ${S}/import/vendor/cert-agent/pkg ${D}/${includedir}/cert-agent/
         cp -r ${S}/src/${GO_IMPORT}/etc/edgescale-version ${D}/usr/local/edgescale/conf
+}
+
+do_install_append_imx () {
+    cp -r ${S}/import/vendor/mq-agent/mq-agent ${D}/usr/local/edgescale/bin
+    cp -r ${S}/src/${GO_IMPORT}/startup/*.sh ${D}/usr/local/edgescale/bin
+    cp -r ${S}/src/${GO_IMPORT}/startup/ota-* ${D}/usr/local/edgescale/bin
+    
 }
 
 FILES_${PN} += "${includedir}/* /usr/local/*"

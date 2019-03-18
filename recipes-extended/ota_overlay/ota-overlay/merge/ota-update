@@ -12,7 +12,7 @@ mid=`cat /tmp/ota-info | awk '{print $6}'`
 deviceid=`hostname`
 platform=$(echo $deviceid | awk -F . '{print $4}')
 boardname=$platform"rdb"
-bootimageVersion=`cat /etc/edgescale-version | awk -F '-' '{print $2}'`
+bootimageVersion=`cat /usr/local/edgescale/conf/edgescale-version | awk -F '-' '{print $2}'`
 
 nofeedback=0
 

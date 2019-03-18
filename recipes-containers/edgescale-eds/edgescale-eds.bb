@@ -80,7 +80,6 @@ do_install() {
         cp -r ${S}/import/vendor/cert-agent/cert-agent ${D}/${bindir}
         cp -r ${S}/import/vendor/mq-agent/mq-agent ${D}/usr/local/edgescale/bin
         cp -r ${S}/import/vendor/cert-agent/pkg ${D}/${includedir}/cert-agent/
-        cp -r ${S}/src/${GO_IMPORT}/etc/edgescale-version ${D}/${sysconfdir}
         cp -r ${S}/src/${GO_IMPORT}/etc/edgescale-version ${D}/usr/local/edgescale/conf
 }
 

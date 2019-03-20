@@ -8,13 +8,13 @@ oldimageVersion=`cat /tmp/ota-info | awk '{print $3}'`
 sdplatform=`cat /tmp/ota-info | awk '{print $2}'`
 newimageVersion=`cat /tmp/ota-info | awk '{print $4}'`
 solutionname=`cat /tmp/ota-info | awk '{print $5}'`
-mid=`cat /tmp/ota-info | awk '{print $6}'`
-deviceid=`hostname`
+solutionid=`cat /tmp/ota-info | awk '{print $6}'`
+autoOta=`cat /tmp/ota-info | awk '{print $7}'`
+mid=`cat /tmp/ota-info | awk '{print $8}'`
+deviceid=$ES_DEVICEID
 platform=$(echo $deviceid | awk -F . '{print $4}')
 boardname=$platform"rdb"
 bootimageVersion=`cat /usr/local/edgescale/conf/edgescale-version | awk -F '-' '{print $2}'`
-
-nofeedback=0
 
 if [ "$platform"x == x ];then
 	echo "there is no platform information"
@@ -32,6 +32,7 @@ echo "bootimageVersion="$bootimageVersion
 get_imageURL(){
 	api_result=`curl "$ES_API_URI/devices/softwares?device_id=$deviceid&solution=$solutionname&version=$imageVersion"`
 	imageURL=`echo $api_result | grep url | sed 's/\"//g' | sed 's/.*url:\(.*$\)/\1/' | awk -F "[,}]" '{print $1}' | sed 's/^[ \t]*//g'`
+	solutionid=`echo $api_result | grep sol_id | sed 's/\"//g' | sed 's/.*sol_id:\(.*$\)/\1/' | awk -F "[,}]" '{print $1}' | sed 's/^[ \t]*//g'`
 	have_installer=`echo $api_result | grep have_installer | sed 's/\"//g' | sed 's/.*have_installer:\(.*$\)/\1/' | awk -F "[,}]" '{print $1}' | sed 's/^[ \t]*//g'`
 	is_signed=`echo $api_result | grep is_signed | sed 's/\"//g' | sed 's/.*is_signed:\(.*$\)/\1/' | awk -F "[,}]" '{print $1}' | sed 's/^[ \t]*//g'`
 	public_key=`echo $api_result | grep public_key | sed 's/\"//g' | sed 's/.*public_key:\(.*$\)/\1/' | awk -F "[,}]" '{print $1}' | sed 's/^[ \t]*//g'`
@@ -42,6 +43,7 @@ get_newimageVersion(){
 	imageURL=`echo $api_result | grep url | sed 's/\"//g' | sed 's/.*url:\(.*$\)/\1/' | awk -F "[,}]" '{print $1}' | sed 's/^[ \t]*//g'`
 	newimageVersion=`echo $api_result | grep version | sed 's/\"//g' | sed 's/.*version:\(.*$\)/\1/' | awk -F "[,}]" '{print $1}' | sed 's/^[ \t]*//g'`
 	solutionname=`echo $api_result | grep solution | sed 's/\"//g' | sed 's/.*solution:\(.*$\)/\1/' | awk -F "[,}]" '{print $1}' | sed 's/^[ \t]*//g'`
+	solutionid=`echo $api_result | grep sol_id | sed 's/\"//g' | sed 's/.*sol_id:\(.*$\)/\1/' | awk -F "[,}]" '{print $1}' | sed 's/^[ \t]*//g'`
 	is_signed=`echo $api_result | grep is_signed | sed 's/\"//g' | sed 's/.*is_signed:\(.*$\)/\1/' | awk -F "[,}]" '{print $1}' | sed 's/^[ \t]*//g'`
 	public_key=`echo $api_result | grep public_key | sed 's/\"//g' | sed 's/.*public_key:\(.*$\)/\1/' | awk -F "[,}]" '{print $1}' | sed 's/^[ \t]*//g'`
 	if [ "$imageURL"x == x ];then
@@ -51,7 +53,7 @@ get_newimageVersion(){
 }
 
 feedback_status(){
-	if [ $nofeedback -eq 0 ];then
+	if [ $autoOta -eq 0 ];then
 		curl -X POST -H "Content-Type: application/json" $ES_API_URI/devices/tasks/status -d '{"device":"'$deviceid'", "mid":'$mid', "status":"'"$1"'"}'
 	fi
 }
@@ -197,18 +199,18 @@ if [ "$updateStatus"x == 3x -a $oldimageVersion != 0 ];then
 	sd_card_format
 	download_images
 	install_images
-	echo "$updateStatus $platform $oldimageVersion $imageVersion $solutionname $mid" > /tmp/ota-info
+	echo "$updateStatus $platform $oldimageVersion $imageVersion $solutionname $solutionid $autoOta $mid" > /tmp/ota-info
 	dd if=/tmp/ota-info of=/dev/mmcblk0 bs=512 seek=129024 count=1 conv=sync
 elif [ "$updateStatus"x == 8x ];then
 	echo "Now need update the image to version=$newimageVersion"
 	imageVersion=$newimageVersion
 	updateStatus=1
 	update_images
-	echo "$updateStatus $platform $oldimageVersion $imageVersion $solutionname $mid" > /tmp/ota-info
+	echo "$updateStatus $platform $oldimageVersion $imageVersion $solutionname $solutionid $autoOta $mid" > /tmp/ota-info
 	dd if=/tmp/ota-info of=/dev/mmcblk0 bs=512 seek=129024 count=1 conv=sync
 else
 	echo "now will check the newest image and update it."
-	nofeedback=1
+	autoOta=1
 	get_newimageVersion
 	if [ $newimageVersion \> $oldimageVersion ];then
 		imageVersion=$newimageVersion
@@ -216,11 +218,11 @@ else
 		sd_card_format
 		download_images
 		install_images
-		echo "$updateStatus $platform $oldimageVersion $imageVersion $solutionname $mid" > /tmp/ota-info
+		echo "$updateStatus $platform $oldimageVersion $imageVersion $solutionname $solutionid $autoOta $mid" > /tmp/ota-info
 		dd if=/tmp/ota-info of=/dev/mmcblk0 bs=512 seek=129024 count=1 conv=sync
 	else
 		updateStatus=1
-		echo "$updateStatus $platform $oldimageVersion $oldimageVersion $solutionname $mid" > /tmp/ota-info
+		echo "$updateStatus $platform $oldimageVersion $oldimageVersion $solutionname $solutionid $autoOta $mid" > /tmp/ota-info
 		dd if=/tmp/ota-info of=/dev/mmcblk0 bs=512 seek=129024 count=1 conv=sync
 	fi
 fi

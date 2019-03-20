@@ -13,9 +13,10 @@ SRC_URI = "\
         git://github.com/eclipse/paho.mqtt.golang;nobranch=1;destsuffix=git/src/github.com/eclipse/paho.mqtt.golang;name=mqtt \
         git://github.com/fullsailor/pkcs7.git;nobranch=1;destsuffix=git/src/github.com/fullsailor/pkcs7;name=pkcs7 \
         git://github.com/shirou/gopsutil.git;nobranch=1;destsuffix=git/src/github.com/shirou/gopsutil;name=disk \
+        git://github.com/go-yaml/yaml.git;nobranch=1;destsuffix=git/src/gopkg.in/yaml.v2;name=yaml \
         git://github.com/edgeiot/est-client-go;nobranch=1;destsuffix=git/src/github.com/edgeiot/est-client-go;name=est-client-go \
         "
-SRCREV = "34a18339eb97a3b3b5ce1c2fb349720607ff0843"
+SRCREV = "709508a66fcf12ed22fa6ea5922f61351d28ca65"
 SRCREV_sys = "cb59ee3660675d463e86971646692ea3e470021c"
 SRCREV_crypto = "ff983b9c42bc9fbf91556e191cc8efb585c16908"
 SRCREV_net = "927f97764cc334a6575f4b7a1584a147864d5723"
@@ -24,6 +25,7 @@ SRCREV_systemstat = "0eeff89b0690611fc32e21f0cd2e4434abf8fe53"
 SRCREV_mqtt = "379fd9f99ba5b1f02c9fffb5e5952416ef9301dc"
 SRCREV_pkcs7 = "8306686428a5fe132eac8cb7c4848af725098bd4"
 SRCREV_disk = "eead265362a2c459593fc24d74aef92858d67835"
+SRCREV_yaml = "51d6538a90f86fe93ac480b35f37b2be17fef232"
 SRCREV_est-client-go = "a9d72263246dfcac6e90971c8ce51c2ef99295a6"
 
 DEPENDS = "\
@@ -82,7 +84,7 @@ do_install() {
         cp -r ${S}/src/${GO_IMPORT}/etc/edgescale-version ${D}/usr/local/edgescale/conf
 }
 
-do_install_append_imx () {
+do_install_append_imx() {
     cp -r ${S}/import/vendor/mq-agent/mq-agent ${D}/usr/local/edgescale/bin
     cp -r ${S}/src/${GO_IMPORT}/startup/*.sh ${D}/usr/local/edgescale/bin
     cp -r ${S}/src/${GO_IMPORT}/startup/ota-* ${D}/usr/local/edgescale/bin

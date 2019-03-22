@@ -5,6 +5,8 @@ LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-2.0;md5=801f80980d171dd6425610833a22dbe6"
 
 SRC_URI = "file://create_secure_boot_image.sh \
+    file://memorylayout.cfg \
+    file://flash_images.sh \
     file://ls2088ardb.manifest \
     file://ls1088ardb.manifest \
     file://ls1088ardb-pb.manifest \
@@ -18,14 +20,18 @@ SRC_URI = "file://create_secure_boot_image.sh \
 
 inherit deploy
 
+#set ROOTFS_IMAGE = "fsl-image-mfgtool" 
+#set KERNEL_ITS = "kernel-all.its" in local.config
+ITB_IMAGE = "fsl-image-kernelitb"
 DEPENDS = "u-boot-mkimage-native cst-native atf"
-do_deploy[depends] += "virtual/kernel:do_deploy"
+do_deploy[depends] += "virtual/kernel:do_deploy ${ITB_IMAGE}:do_build"
+
 BOOT_TYPE ??= ""
 BOOT_TYPE_ls1043ardb ?= "nor sd"
 BOOT_TYPE_ls1046ardb ?= "qspi sd"
 BOOT_TYPE_ls1088a ?= "qspi sd"
 BOOT_TYPE_ls2088ardb ?= "qspi nor"
-BOOT_TYPE_lx2160ardb ?= "xspi"
+BOOT_TYPE_lx2160ardb ?= "xspi sd"
 BOOT_TYPE_ls1012ardb ?= "qspi"
 BOOT_TYPE_ls1012afrwy ?= "qspi"
 
@@ -41,12 +47,14 @@ do_compile[noexec] = "1"
 
 do_deploy () {
     cd ${RECIPE_SYSROOT_NATIVE}/usr/bin/cst
-    cp ${S}/create_secure_boot_image.sh ./
+    cp ${S}/*.sh ./
     cp ${S}/${MACHINE}.manifest ./
+    cp ${S}/memorylayout.cfg ./
     cp ${DEPLOY_DIR_IMAGE}/atf/srk.* ./
     for d in ${BOOT_TYPE}; do
         ./create_secure_boot_image.sh -m ${MACHINE} -t ${d} -d . -s ${DEPLOY_DIR_IMAGE} -e ${ENCAP} -ima ${IMA_EVM}
     done
+    cp ${RECIPE_SYSROOT_NATIVE}/usr/bin/cst/${MACHINE}_boot.scr ${DEPLOY_DIR_IMAGE}
 }
 
 addtask deploy before do_build after do_compile

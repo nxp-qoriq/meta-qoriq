@@ -11,25 +11,25 @@ rcw_nand_sec=build/firmware/rcw/ls1043ardb/RR_FQPP_1455/rcw_1600_nandboot_sben.b
 uefi_norboot=build/firmware/uefi/ls1043ardb/LS1043ARDB_EFI_NORBOOT.fd
 uefi_env=build/firmware/uefi/ls1043ardb/LS1043ARDBNV_EFI_NORBOOT.fd
 atf_bl2_nor=build/firmware/atf/ls1043ardb/bl2_nor.pbl
-atf_bl2_nor_sec=build/firmware/atf/ls1043ardb/bl2_nor_sec.pbl
-atf_bl2_sd=build/firmware/atf/ls1043ardb/bl2_sd.pbl
-atf_bl2_sd_sec=build/firmware/atf/ls1043ardb/bl2_sd_sec.pbl
-atf_bl2_nand=build/firmware/atf/ls1043ardb/bl2_nand.pbl
-atf_bl2_nand_sec=build/firmware/atf/ls1043ardb/bl2_nand_sec.pbl
-atf_fip_uboot=build/firmware/atf/ls1043ardb/fip_uboot.bin
-atf_fip_uboot_sec=build/firmware/atf/ls1043ardb/fip_uboot_sec.bin
+atf_bl2_nor_sec=atf/bl2_nor_sec.pbl
+atf_bl2_sd=atf/bl2_sd.pbl
+atf_bl2_sd_sec=atf/bl2_sd_sec.pbl
+atf_bl2_nand=atf/bl2_nand.pbl
+atf_bl2_nand_sec=atf/bl2_nand_sec.pbl
+atf_fip_uboot=atf/fip_uboot.bin
+atf_fip_uboot_sec=atf/fip_uboot_sec.bin
 atf_fip_uefi=build/firmware/atf/ls1043ardb/fip_uefi.bin
-secureboot_headers_nor=build/firmware/secboot_hdrs/ls1043ardb/secboot_hdrs_norboot.bin
-secureboot_headers_sd=build/firmware/secboot_hdrs/ls1043ardb/secboot_hdrs_sdboot.bin
-fman_ucode=build/firmware/qoriq-fm-ucode/fsl_fman_ucode_ls1043_r1.1_106_4_18.bin
-qe_firmware=build/firmware/qoriq-qe-ucode/iram_Type_A_LS1021a_r1.0.bin
+secureboot_headers_nor=secboot_hdrs/secboot_hdrs_norboot.bin
+secureboot_headers_sd=secboot_hdrs/secboot_hdrs_sdboot.bin
+fman_ucode=fsl_fman_ucode_ls1043_r1.1_106_4_18.bin
+qe_firmware=boot/iram_Type_A_LS1021a_r1.0.bin
 phy_firmware=build/firmware/qoriq-firmware-cortina/cs4315-cs4340-PHY-ucode.txt
 
 
 # [linux, dtb, rfs]
 kernel_img=Image
 device_tree=fsl-ls1043a-rdb-sdk.dtb
-kernel_itb=fitImage-fsl-image-networking-ls1043ardb-ls1043ardb
+kernel_itb=kernel-fsl-ls1043a-rdb-sdk.itb
 
 # [distro autoboot script]
 uboot_scr=ls1043ardb_boot.scr

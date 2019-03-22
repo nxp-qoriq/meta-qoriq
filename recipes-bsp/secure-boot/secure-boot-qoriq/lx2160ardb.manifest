@@ -7,16 +7,16 @@ rcw_sd=build/firmware/rcw/lx2160ardb/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_2900_1
 uefi_xspiboot=build/firmware/uefi/lx2160ardb/LX2160ARDB_EFI_NORBOOT.fd
 uefi_env=build/firmware/uefi/lx2160ardb/LX2160ARDBNV_EFI_NORBOOT.fd
 atf_bl2_xspi=build/firmware/atf/lx2160ardb/bl2_flexspi_nor.pbl
-atf_bl2_xspi_sec=build/firmware/atf/lx2160ardb/bl2_flexspi_nor_sec.pbl
-atf_bl2_sd=build/firmware/atf/lx2160ardb/bl2_sd.pbl
-atf_bl2_sd_sec=build/firmware/atf/lx2160ardb/bl2_sd_sec.pbl
-atf_fip_uboot=build/firmware/atf/lx2160ardb/fip_uboot.bin
-atf_fip_uboot_sec=build/firmware/atf/lx2160ardb/fip_uboot_sec.bin
+atf_bl2_xspi_sec=atf/bl2_flexspi_nor_sec.pbl
+atf_bl2_sd=atf/bl2_sd.pbl
+atf_bl2_sd_sec=atf/bl2_sd_sec.pbl
+atf_fip_uboot=atf/fip_uboot.bin
+atf_fip_uboot_sec=atf/fip_uboot_sec.bin
 atf_fip_uefi=build/firmware/atf/lx2160ardb/fip_uefi.bin
-secureboot_headers_xspi=build/firmware/secboot_hdrs/lx2160ardb/secboot_hdrs_xspiboot.bin
-ddr_phy_fw=build/firmware/ddr-phy-binary/fip_ddr_all.bin
-ddr_phy_fw_sec=build/firmware/atf/lx2160ardb/fip_ddr_sec.bin
-phy_firmware=build/firmware/qoriq-firmware-inphi/in112525-phy-ucode.txt
+secureboot_headers_xspi=/secboot_hdrs/secboot_hdrs_xspiboot.bin
+ddr_phy_fw=/ddr-phy-binary/fip_ddr_all.bin
+ddr_phy_fw_sec=atf/fip_ddr_sec.bin
+phy_firmware=qoriq-firmware-inphi/in112525-phy-ucode.txt
 dpaa2_mc_fw=mc_app/mc.itb
 dpaa2_mc_dpc=mc-utils/dpc-warn.dtb
 dpaa2_mc_dpl=mc-utils/dpl-eth.19.dtb
@@ -24,7 +24,7 @@ dpaa2_mc_dpl=mc-utils/dpl-eth.19.dtb
 # [linux, dtb, rfs]
 kernel_img=Image
 device_tree=fsl-lx2160a-rdb.dtb
-kernel_itb=fitImage-fsl-image-networking-lx2160ardb-lx2160ardb
+kernel_itb=
 
 # [distro autoboot script]
 uboot_scr=lx2160ardb_boot.scr

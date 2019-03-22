@@ -12,25 +12,25 @@ uboot_spl=build/firmware/u-boot/ls1046ardb/uboot_ls1046ardb_sdcard_spl.bin
 uboot_dtb=build/firmware/u-boot/ls1046ardb/uboot_ls1046ardb_sdcard_dtb.bin
 uefi_qspiboot=build/firmware/uefi/ls1046ardb/LS1046ARDB_EFI_QSPIBOOT.fd
 uefi_env=build/firmware/uefi/ls1046ardb/LS1046ARDBNV_EFI_QSPIBOOT.fd
-atf_bl2_qspi=build/firmware/atf/ls1046ardb/bl2_qspi.pbl
-atf_bl2_qspi_sec=build/firmware/atf/ls1046ardb/bl2_qspi_sec.pbl
-atf_bl2_sd=build/firmware/atf/ls1046ardb/bl2_sd.pbl
-atf_bl2_sd_sec=build/firmware/atf/ls1046ardb/bl2_sd_sec.pbl
-atf_bl2_emmc=build/firmware/atf/ls1046ardb/bl2_emmc.pbl
-atf_fip_uboot=build/firmware/atf/ls1046ardb/fip_uboot.bin
-atf_fip_uboot_sec=build/firmware/atf/ls1046ardb/fip_uboot_sec.bin
+atf_bl2_qspi=atf/bl2_qspi.pbl
+atf_bl2_qspi_sec=atf/bl2_qspi_sec.pbl
+atf_bl2_sd=atf/bl2_sd.pbl
+atf_bl2_sd_sec=atf/bl2_sd_sec.pbl
+atf_bl2_emmc=atf/bl2_emmc.pbl
+atf_fip_uboot=atf/fip_uboot.bin
+atf_fip_uboot_sec=atf/fip_uboot_sec.bin
 atf_fip_uefi=build/firmware/atf/ls1046ardb/fip_uefi.bin
-secureboot_headers_qspi=build/firmware/secboot_hdrs/ls1046ardb/secboot_hdrs_qspiboot.bin
-secureboot_headers_sd=build/firmware/secboot_hdrs/ls1046ardb/secboot_hdrs_sdboot.bin
-fman_ucode=build/firmware/qoriq-fm-ucode/fsl_fman_ucode_ls1046_r1.0_106_4_18.bin
-qe_firmware=build/firmware/qoriq-qe-ucode/iram_Type_A_LS1021a_r1.0.bin
+secureboot_headers_qspi=secboot_hdrs/secboot_hdrs_qspiboot.bin
+secureboot_headers_sd=secboot_hdrs/secboot_hdrs_sdboot.bin
+fman_ucode=fsl_fman_ucode_ls1046_r1.0_106_4_18.bin
+qe_firmware=boot/iram_Type_A_LS1021a_r1.0.bin
 phy_firmware=build/firmware/qoriq-firmware-cortina/cs4315-cs4340-PHY-ucode.txt
 
 
 # [linux, dtb, rfs]
 kernel_img=Image
 device_tree=fsl-ls1046a-rdb-sdk.dtb
-kernel_itb=fitImage-fsl-image-networking-ls1046ardb-ls1046ardb
+kernel_itb=kernel-fsl-ls1046a-rdb-sdk.itb
 
 # [distro autoboot script]
 uboot_scr=ls1046ardb_boot.scr

@@ -1,6 +1,6 @@
-From f2145757700558a097da712d35187b0f43ec0617 Mon Sep 17 00:00:00 2001
+From 25b5b478ab2b92c18f579203cdbff70eb14f85dc Mon Sep 17 00:00:00 2001
 From: Zongchun Yu <zongchun.yu@nxp.com>
-Date: Wed, 13 May 2019 11:18:40 +0800
+Date: Mon, 18 May 2019 11:18:40 +0800
 Subject: [PATCH] Add OTA support
 
 Signed-off-by: mengkun.chen <mengkun.chen@nxp.com>
@@ -24,9 +24,9 @@ Signed-off-by: mengkun.chen <mengkun.chen@nxp.com>
  include/configs/ls1043ardb.h            |  2 ++
  include/configs/ls1046ardb.h            |  1 +
  include/configs/ls1088ardb.h            |  1 +
- include/configs/ls2080ardb.h            |  1 +
+ include/configs/ls2080ardb.h            | 41 ++++++++++-----------
  include/configs/lx2160ardb.h            |  1 +
- 21 files changed, 443 insertions(+)
+ 21 files changed, 463 insertions(+), 20 deletions(-)
 
 diff --git a/board/freescale/ls1012ardb/ls1012ardb.c b/board/freescale/ls1012ardb/ls1012ardb.c
 index f648a90..2c91dcb 100644
@@ -477,7 +477,7 @@ index af8186e..79fb071 100644
  {
  #ifdef CONFIG_SYS_I2C_EARLY_INIT
 diff --git a/board/freescale/lx2160a/lx2160a.c b/board/freescale/lx2160a/lx2160a.c
-index ad72eed..788d417 100644
+index ad72eed..d7e4d75 100644
 --- a/board/freescale/lx2160a/lx2160a.c
 +++ b/board/freescale/lx2160a/lx2160a.c
 @@ -14,6 +14,7 @@
@@ -677,13 +677,95 @@ index 335135e..14cd06b 100644
  
  #endif /* __LS1088A_RDB_H */
 diff --git a/include/configs/ls2080ardb.h b/include/configs/ls2080ardb.h
-index 9b049c5..fb3b4c8 100644
+index 9b049c5..7cced73 100644
 --- a/include/configs/ls2080ardb.h
 +++ b/include/configs/ls2080ardb.h
-@@ -617,6 +617,7 @@ unsigned long get_board_sys_clk(void);
+@@ -418,6 +418,10 @@ unsigned long get_board_sys_clk(void);
+ 	"mmcinfo; mmc read $load_addr "		\
+ 	"$kernel_addr_sd $kernel_size_sd && "	\
+ 	"bootm $load_addr#$board\0"             \
++	"sd_boot=echo Trying load from SD ..;" \
++	"fsl_mc apply dpl 0x580D00000; "        \
++	"run bootcmd_mmc0; "                    \
++	"reset\0"				\
+ 	QSPI_MC_INIT_CMD				\
+ 	BOOTENV					\
+ 	"boot_scripts=ls2088ardb_boot.scr\0"	\
+@@ -453,11 +457,9 @@ unsigned long get_board_sys_clk(void);
+ 		"$kernelheader_size && esbc_validate ${kernelheader_addr_r}; "\
+ 		" bootm $load_addr#$board\0"			\
+ 	"nor_bootcmd=echo Trying load from nor..;"		\
+-		"cp.b $kernel_addr $load_addr "			\
+-		"$kernel_size ; env exists secureboot && "	\
+-		"cp.b $kernelheader_addr $kernelheader_addr_r "	\
+-		"$kernelheader_size && esbc_validate ${kernelheader_addr_r}; "\
+-		"bootm $load_addr#$board\0"
++		"fsl_mc apply dpl 0x580D00000 && "              \
++		"cp.b 0x581000000 0xa0000000 "                  \
++		"0x2800000 && bootm 0xa0000000\0"
+ #else
+ #define CONFIG_EXTRA_ENV_SETTINGS		\
+ 	"hwconfig=fsl_ddr:bank_intlv=auto\0"	\
+@@ -487,6 +489,10 @@ unsigned long get_board_sys_clk(void);
+ 	"mmcinfo; mmc read $load_addr "		\
+ 	"$kernel_addr_sd $kernel_size_sd && "	\
+ 	"bootm $load_addr#$board\0"             \
++	"sd_boot=echo Trying load from SD ..;" \
++	"fsl_mc apply dpl 0x580D00000; "        \
++	"run bootcmd_mmc0; "                    \
++	"reset\0"				\
+ 	MC_INIT_CMD				\
+ 	BOOTENV					\
+ 	"boot_scripts=ls2088ardb_boot.scr\0"	\
+@@ -523,11 +529,9 @@ unsigned long get_board_sys_clk(void);
+ 		"$kernelheader_size && esbc_validate ${kernelheader_addr_r}; "\
+ 		" bootm $load_addr#$board\0"			\
+ 	"nor_bootcmd=echo Trying load from nor..;"		\
+-		"cp.b $kernel_addr $load_addr "			\
+-		"$kernel_size ; env exists secureboot && "	\
+-		"cp.b $kernelheader_addr $kernelheader_addr_r "	\
+-		"$kernelheader_size && esbc_validate ${kernelheader_addr_r}; "\
+-		"bootm $load_addr#$board\0"
++		"fsl_mc apply dpl 0x580D00000 && "              \
++		"cp.b 0x581000000 0xa0000000 "                  \
++		"0x2800000 && bootm 0xa0000000\0"
+ #endif
+ 
+ #ifdef CONFIG_TFABOOT
+@@ -552,11 +556,7 @@ unsigned long get_board_sys_clk(void);
+ 
+ /* Try to boot an on-NOR kernel first, then do normal distro boot */
+ #define IFC_NOR_BOOTCOMMAND						\
+-			"env exists mcinitcmd && env exists secureboot "\
+-			"&& esbc_validate 0x580780000; env exists mcinitcmd "\
+-			"&& fsl_mc lazyapply dpl 0x580d00000;"		\
+-			"run distro_bootcmd;run nor_bootcmd; "		\
+-			"env exists secureboot && esbc_halt;"
++			"run nor_bootcmd "
+ #else
+ #undef CONFIG_BOOTCOMMAND
+ #ifdef CONFIG_QSPI_BOOT
+@@ -582,11 +582,7 @@ unsigned long get_board_sys_clk(void);
+ #else
+ /* Try to boot an on-NOR kernel first, then do normal distro boot */
+ #define CONFIG_BOOTCOMMAND						\
+-			"env exists mcinitcmd && env exists secureboot "\
+-			"&& esbc_validate 0x580780000; env exists mcinitcmd "\
+-			"&& fsl_mc lazyapply dpl 0x580d00000;"		\
+-			"run distro_bootcmd;run nor_bootcmd; "		\
+-			"env exists secureboot && esbc_halt;"
++			"run nor_bootcmd "
+ #endif
+ #endif
+ 
+@@ -617,6 +613,11 @@ unsigned long get_board_sys_clk(void);
  #define CONFIG_PHY_AQUANTIA
  #endif
  
++#ifndef CONFIG_BOOTCOMMAND
++#define CONFIG_BOOTCOMMAND "run nor_bootcmd"
++#endif
++
 +#define CONFIG_LAST_STAGE_INIT
  #include <asm/fsl_secure_boot.h>
  

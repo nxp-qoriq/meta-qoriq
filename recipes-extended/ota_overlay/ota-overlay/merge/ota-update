@@ -204,6 +204,7 @@ if [ "$updateStatus"x == 3x -a $oldimageVersion != 0 ];then
 elif [ "$updateStatus"x == 8x ];then
 	echo "Now need update the image to version=$newimageVersion"
 	imageVersion=$newimageVersion
+	get_imageURL
 	updateStatus=1
 	update_images
 	echo "$updateStatus $platform $oldimageVersion $imageVersion $solutionname $solutionid $autoOta $mid" > /tmp/ota-info

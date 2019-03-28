@@ -1,5 +1,11 @@
-SRC_URI = "git://bitbucket.sw.nxp.com/gitam/dpdk.git;protocol=ssh;nobranch=1 \
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
+
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/dpdk;nobranch=1 \
         file://add-RTE_KERNELDIR_OUT-to-split-kernel-bu.patch \
-        file://0001-fix-gcc-8-build-error.patch \
+        file://0001-add-Wno-cast-function-type.patch \
 "
-SRCREV = "f61f686b6d5bddb36e7bcd3f2a13d85d7ad86d9e"
+SRCREV = "c0fe1b99b562a4015423e8ff748bfb0f55a68c05"
+
+FILES_${PN}-staticdev += "/usr/share/dpdk/cmdif/lib/*.a /usr/share/examples/cmdif/lib/arm64-dpaa-linuxapp-gcc/*.a \
+    /usr/share/examples/cmdif/lib/arm64-dpaa-linuxapp-gcc/lib/*.a \
+"

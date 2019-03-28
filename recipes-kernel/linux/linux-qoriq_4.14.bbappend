@@ -1,10 +1,10 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
-SRC_URI = "git://bitbucket.sw.nxp.com/dash/dash-lts.git;protocol=ssh;nobranch=1"
-SRCREV = "274a415697d6064ea4685f2503858aeeed207f0e"
-
-SRC_URI += " file://0001-Makfefile-add-cflags.patch \
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/linux;nobranch=1 \
+    file://0001-Makfefile-add-cflags.patch \
 "
+SRCREV = "5a51f09be016f4ed0944e3b6bb67a399a337d368"
+
 SRC_URI_append = " file://ima-evm.config"
 
 DELTA_KERNEL_DEFCONFIG = "${@bb.utils.contains('DISTRO_FEATURES', 'ima-evm', 'ima-evm.config', '', d)}"

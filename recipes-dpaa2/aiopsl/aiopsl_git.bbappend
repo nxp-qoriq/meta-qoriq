@@ -1,2 +1,1 @@
-SRC_URI = "git://bitbucket.sw.nxp.com/dpaa2/aiopsl.git;protocol=ssh;nobranch=1"
-SRCREV = "26212e6ce46e5e602b2ce5af053c956adee4597c"
+SRCREV = "87d83d8e99770325cc7ad9e10965c9959e7cb828"

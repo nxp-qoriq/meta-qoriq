@@ -1,7 +1,6 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
-SRC_URI = "git://bitbucket.sw.nxp.com/dash/dash-uboot.git;protocol=ssh;nobranch=1"
-SRCREV = "e46941dd4e67bf1227dd6711f91537bf2029cbfe"
+SRCREV = "80b2d2bc4cab0a8363c9b7eba8064b1795f12670"
 
 SRC_URI_append_qoriq-arm64 = " file://0001-Add-OTA-support.patch \
 "

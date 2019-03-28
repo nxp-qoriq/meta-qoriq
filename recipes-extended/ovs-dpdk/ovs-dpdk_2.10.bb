@@ -1,16 +1,14 @@
 DESCRIPTION = "OVS DPDK"
 LICENSE = "BSD"
-LIC_FILES_CHKSUM = "file://COPYING;md5=17b2c9d4c70853a09c0e143137754b35"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=1ce5d23a6429dff345518758f13aaeab"
 
 DEPENDS = "dpdk python-six-native coreutils-native"
 RDEPENDS_${PN} = "bash libcrypto libssl python"
 
 inherit pythonnative
 
-#SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/ovs-dpdk;nobranch=1 \
-#    file://0001-automake-remove-static-key-word.patch \
-#"
-SRC_URI = "git://bitbucket.sw.nxp.com/dash/dash-rcw.git;protocol=ssh;nobranch=1"
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/ovs-dpdk;nobranch=1 \
+"
 SRCREV = "4d82df36993ca502d33afa305fbd2a41a950106d"
 
 S = "${WORKDIR}/git"

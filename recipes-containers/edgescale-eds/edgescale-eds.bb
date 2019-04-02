@@ -3,6 +3,8 @@ HOMEPAGE = "https://github.com/NXP/qoriq-edgescale-eds.git"
 LICENSE = "NXP-EULA"
 LIC_FILES_CHKSUM = "file://src/${GO_IMPORT}/EULA.txt;md5=ac5425aaed72fb427ef1113a88542f89"
 
+ARM_qoriq-arm64 = "arm64"
+ARM_qoriq-arm = "arm32"
 SRC_URI = "\
         git://${GO_IMPORT}.git;protocol=ssh;nobranch=1 \
         git://github.com/golang/sys;nobranch=1;destsuffix=git/src/golang.org/x/sys;name=sys \
@@ -15,6 +17,8 @@ SRC_URI = "\
         git://github.com/shirou/gopsutil.git;nobranch=1;destsuffix=git/src/github.com/shirou/gopsutil;name=disk \
         git://github.com/go-yaml/yaml.git;nobranch=1;destsuffix=git/src/gopkg.in/yaml.v2;name=yaml \
         git://github.com/edgeiot/est-client-go;nobranch=1;destsuffix=git/src/github.com/edgeiot/est-client-go;name=est-client-go \
+        git://github.com/edgeiot/est-client-go;nobranch=1;destsuffix=git/src/github.com/edgeiot/est-client-go;name=est-client-go \
+        file://${ARM}/cert-agent \
         "
 SRCREV = "7d70a8767941aed135d609300a0594dfdc60e5ea"
 SRCREV_sys = "cb59ee3660675d463e86971646692ea3e470021c"
@@ -78,7 +82,11 @@ do_install() {
         install -d ${D}/${includedir}/cert-agent
         install -d ${D}/usr/local/edgescale/bin
         install -d ${D}/usr/local/edgescale/conf
-        cp -r ${S}/import/vendor/cert-agent/cert-agent ${D}/${bindir}
+        if [ ! -f "${WORKDIR}/${ARM}/cert-agent" ];then
+	        cp -r ${S}/import/vendor/cert-agent/cert-agent ${D}/${bindir}
+        else
+	        cp -r ${WORKDIR}/${ARM}/cert-agent ${D}/${bindir}
+        fi
         cp -r ${S}/import/vendor/cert-agent/pkg ${D}/${includedir}/cert-agent/
         cp -r ${S}/src/${GO_IMPORT}/etc/edgescale-version ${D}/usr/local/edgescale/conf
 }

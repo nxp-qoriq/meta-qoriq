@@ -8,7 +8,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=bbea815ee2795b2f4230826c0c6b8814"
 
 SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/linux;nobranch=1 \
 "
-SRCREV = "99f835513362dff23ee0c8bce668c5f3d7f3d7fb"
+SRCREV = "c0c2141106240d61e7b9d7c80284711d54f6ae91"
 
 SRC_URI += " file://0001-Makfefile-add-cflags.patch \
 "
@@ -32,7 +32,7 @@ DELTA_KERNEL_DEFCONFIG_prepend_qoriq-arm64 = "lsdk.config "
 DELTA_KERNEL_DEFCONFIG_prepend_fsl-lsch2-32b = "multi_v7_lpae.config multi_v8.config lsdk.config "
 DELTA_KERNEL_DEFCONFIG_prepend_ls102xa = "multi_v7_lpae.config lsdk.config "
 
-do_merge_delta_config[depends] += "virtual/${TARGET_PREFIX}gcc:do_populate_sysroot"
+do_merge_delta_config[depends] += "virtual/${TARGET_PREFIX}gcc:do_populate_sysroot bison-native:do_populate_sysroot"
 do_merge_delta_config[dirs] = "${B}"
 
 do_merge_delta_config() {

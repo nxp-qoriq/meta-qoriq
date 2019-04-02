@@ -1,0 +1,22 @@
+baudrate=115200
+bootargs=root=/dev/ram0 rw console=ttyS0,115200 earlycon=uart8250,mmio,0x21c0500 rootwait ima_tcb ima_appraise=fix ima_appraise_tcb evm=fix enforcing=0 ramdisk_size=0x2000000 $othbootargs
+bootcmd=sf probe 0:0; sf read 0x88000000 0xd00000 0x100000 && fsl_mc apply dpl 0x88000000 && sf read $kernel_load $kernel_start $kernel_size && bootm $kernel_load
+bootdelay=3
+ethact=DPMAC5@qsgmii
+ethprime=DPMAC5@qsgmii
+hwconfig=fsl_ddr:bank_intlv=auto
+initrd_high=0xffffffffffffffff
+ipaddr=192.168.2.231
+kernel_load=0xa0000000
+kernel_size=0x3000000
+kernel_start=0x01000000
+mcinitcmd=sf probe 0:0;sf read 0x80000000 0xA00000 0x100000;sf read 0x80100000 0xE00000 0x100000;fsl_mc start mc 0x80000000 0x80100000
+mcmemsize=0x70000000
+othbootargs=default_hugepagesz=1024m hugepagesz=1024m hugepages=6
+qix_altbank=i2c mw 0x66 0x50 20;i2c mw 66 10 20;i2c mw 66 10 21
+scsidevs=0
+serverip=192.168.2.1
+stderr=serial
+stdin=serial
+stdout=serial
+

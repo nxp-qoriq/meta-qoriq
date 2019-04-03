@@ -33,8 +33,8 @@ do_deploy () {
     rm -rf ${DEPLOY_DIR_IMAGE}/edgescale-bootstrap
     mkdir ${DEPLOY_DIR_IMAGE}/edgescale-bootstrap
     for d in ${TYPE}; do
-        ./gen_flash_image.pl -c ${MACHINE}/flashmap_${d}.cfg -e ${MACHINE}/uboot_env_${d}.txt -d ${DEPLOY_DIR_IMAGE} -o  firmware-${MACHINE}-${d}boot.bin
-        cp firmware-${MACHINE}-${d}boot.bin ${DEPLOY_DIR_IMAGE}/edgescale-bootstrap
+        ./gen_flash_image.pl -c ${MACHINE}/flashmap_${d}.cfg -e ${MACHINE}/uboot_env_${d}.txt -d ${DEPLOY_DIR_IMAGE} -o  ${MACHINE}-${d}.img
+        cp ${MACHINE}-${d}.img ${DEPLOY_DIR_IMAGE}/edgescale-bootstrap
     done
 }
 

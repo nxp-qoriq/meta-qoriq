@@ -1,4 +1,4 @@
-From 25b5b478ab2b92c18f579203cdbff70eb14f85dc Mon Sep 17 00:00:00 2001
+From 93573aaa117e727fb1b268216fbd5ec87ab2c586 Mon Sep 17 00:00:00 2001
 From: Zongchun Yu <zongchun.yu@nxp.com>
 Date: Mon, 18 May 2019 11:18:40 +0800
 Subject: [PATCH] Add OTA support
@@ -677,14 +677,14 @@ index 335135e..14cd06b 100644
  
  #endif /* __LS1088A_RDB_H */
 diff --git a/include/configs/ls2080ardb.h b/include/configs/ls2080ardb.h
-index 9b049c5..7cced73 100644
+index 9b049c5..966cc6e 100644
 --- a/include/configs/ls2080ardb.h
 +++ b/include/configs/ls2080ardb.h
 @@ -418,6 +418,10 @@ unsigned long get_board_sys_clk(void);
  	"mmcinfo; mmc read $load_addr "		\
  	"$kernel_addr_sd $kernel_size_sd && "	\
  	"bootm $load_addr#$board\0"             \
-+	"sd_boot=echo Trying load from SD ..;" \
++	"sdboot=echo Trying load from SD ..;" 	\
 +	"fsl_mc apply dpl 0x580D00000; "        \
 +	"run bootcmd_mmc0; "                    \
 +	"reset\0"				\
@@ -710,7 +710,7 @@ index 9b049c5..7cced73 100644
  	"mmcinfo; mmc read $load_addr "		\
  	"$kernel_addr_sd $kernel_size_sd && "	\
  	"bootm $load_addr#$board\0"             \
-+	"sd_boot=echo Trying load from SD ..;" \
++	"sdboot=echo Trying load from SD ..;"   \
 +	"fsl_mc apply dpl 0x580D00000; "        \
 +	"run bootcmd_mmc0; "                    \
 +	"reset\0"				\

@@ -5,6 +5,10 @@ LIC_FILES_CHKSUM = "file://src/${GO_IMPORT}/EULA.txt;md5=ac5425aaed72fb427ef1113
 
 ARM_qoriq-arm64 = "arm64"
 ARM_qoriq-arm = "arm32"
+ARM_mx6= "arm32"
+ARM_mx7 = "arm32"
+ARM_mx8 = "arm64"
+
 SRC_URI = "\
         git://${GO_IMPORT}.git;protocol=ssh;nobranch=1 \
         git://github.com/golang/sys;nobranch=1;destsuffix=git/src/golang.org/x/sys;name=sys \

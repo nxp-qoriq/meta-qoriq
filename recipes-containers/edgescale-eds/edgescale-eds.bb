@@ -81,7 +81,6 @@ do_compile() {
 }
 
 do_install() {
-	install -d ${D}/${bindir}
         install -d ${D}/${sysconfdir}
         install -d ${D}/${includedir}/cert-agent
         install -d ${D}/usr/local/edgescale/bin

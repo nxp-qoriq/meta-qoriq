@@ -41,3 +41,4 @@ do_deploy () {
 addtask deploy before do_build after do_compile
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
+COMPATIBLE_MACHINE = "(ls1012ardb|ls1021atwr|ls1043ardb|ls1046ardb|ls1088ardb-pb|ls2088ardb|lx2160ardb)"

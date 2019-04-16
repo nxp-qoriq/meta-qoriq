@@ -75,25 +75,22 @@ DPAA_PKGS_ls1012a = "ppfe-firmware"
 
 RDEPENDS_${PN}_append_qoriq = " pciutils cryptodev-linux cryptodev-module cryptodev-tests ifenslave"
 RDEPENDS_${PN}_append_ls1043a = " \
-    restool \
     fio \
 "
 RDEPENDS_${PN}_append_ls1046a = " \
     fio \
-    restool \
 "
 RDEPENDS_${PN}_append_ls1088a = " \
     devmem2 \
     gpp-aioptool \
     fio \
-    restool \
 "
 RDEPENDS_${PN}_append_ls2088a = " \
     devmem2 \
     gpp-aioptool \
     fio \
-    restool \
 "
 RDEPENDS_${PN}_append_qoriq-arm64= " \
     dpdk \
+    restool \
 "

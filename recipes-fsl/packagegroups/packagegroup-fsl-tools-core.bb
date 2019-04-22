@@ -68,6 +68,7 @@ RDEPENDS_${PN}_append_ls1012a = " hostapd"
 
 RDEPENDS_${PN}_remove_p2020rdb = " fmc"
 RDEPENDS_${PN}_remove_p1020rdb = " fmc"
+RDEPENDS_${PN}_remove_mpc8548cds = " fmc"
 
 DPAA_PKGS_ls1043a-32b ="eth-config fmc"
 DPAA_PKGS_ls1046a-32b ="eth-config fmc"

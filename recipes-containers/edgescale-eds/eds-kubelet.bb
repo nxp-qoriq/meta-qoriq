@@ -53,18 +53,19 @@ do_compile() {
 
 do_install() {
     export GOARCH="${TARGET_GOARCH}"
-    install -d ${D}${bindir}
+    install -d ${D}/usr/local/edgescale/bin
     install -d ${D}/etc
 
-    cp -r  ${S}/src/import/kubernetes/kubelet ${D}${bindir}
+    cp -r  ${S}/src/import/kubernetes/kubelet ${D}/usr/local/edgescale/bin
     cp -r  ${S}/src/import/etc/kubernetes ${D}/etc
-    cp -r  ${S}/src/import/scripts/*  ${D}${bindir}
-    sed -i s/pause-arm64/pause-${GOARCH}/g ${D}${bindir}/k8s.sh
+    cp -r  ${S}/src/import/scripts/*  ${D}/usr/local/edgescale/bin
+    sed -i s/pause-arm64/pause-${GOARCH}/g ${D}/usr/local/edgescale/bin/k8s.sh
 }
 
 
 INHIBIT_PACKAGE_STRIP = "1"
 INSANE_SKIP_${PN} += "ldflags already-stripped"
+FILES_${PN} += "/usr/local/*"
 
 deltask compile_ptest_base
 BBCLASSEXTEND = "nativesdk"

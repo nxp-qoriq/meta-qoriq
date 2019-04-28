@@ -52,6 +52,9 @@ GO_IMPORT = "github.com/NXP/qoriq-edgescale-eds"
 S = "${WORKDIR}/git"
 inherit go
 inherit goarch
+inherit update-rc.d
+
+DEPENDS_append = " update-rc.d-native"
 
 # This disables seccomp and apparmor, which are on by default in the
 # go package. 
@@ -61,6 +64,10 @@ export CROSS_COMPILE="${WRAP_TARGET_PREFIX}"
 export OPENSSL_PATH="${RECIPE_SYSROOT}/usr"
 export SECURE_OBJ_PATH="${RECIPE_SYSROOT}/usr"
 export OPTEE_CLIENT_EXPORT="${RECIPE_SYSROOT}/usr/"
+
+EDS = "${@bb.utils.contains('DISTRO_FEATURES', 'edgescale', 'true', 'false', d)}"
+
+INITSCRIPT_NAME = "edgescale"
 
 do_compile() {
         export GOARCH="${TARGET_GOARCH}"
@@ -85,6 +92,7 @@ do_install() {
         install -d ${D}/${includedir}/cert-agent
         install -d ${D}/usr/local/edgescale/bin
         install -d ${D}/usr/local/edgescale/conf
+        
         if [ ! -f "${WORKDIR}/${ARM}/cert-agent" ];then
 	        cp -r ${S}/import/vendor/cert-agent/cert-agent ${D}/usr/local/edgescale/bin
         else
@@ -94,12 +102,18 @@ do_install() {
         cp -r ${S}/src/${GO_IMPORT}/etc/edgescale-version ${D}/usr/local/edgescale/conf
 }
 
-do_install_append_imx() {
-    cp -r ${S}/import/vendor/mq-agent/mq-agent ${D}/usr/local/edgescale/bin
-    cp -r ${S}/src/${GO_IMPORT}/startup/*.sh ${D}/usr/local/edgescale/bin
-    cp -r ${S}/src/${GO_IMPORT}/startup/ota-* ${D}/usr/local/edgescale/bin
-    
+do_install_append() {
+    if [ "${EDS}" = "true" ];then 
+        cp -r ${S}/import/vendor/mq-agent/mq-agent ${D}/usr/local/edgescale/bin
+        cp -r ${S}/src/${GO_IMPORT}/startup/*.sh ${D}/usr/local/edgescale/bin
+        cp -r ${S}/src/${GO_IMPORT}/startup/ota-* ${D}/usr/local/edgescale/bin
+        install -d ${D}${sysconfdir}/init.d
+        install -d ${D}${sysconfdir}/rcS.d
+        install -m 0755  ${S}/src/${GO_IMPORT}/etc/edgescale  ${D}${sysconfdir}/init.d
+        update-rc.d -r ${D} edgescale  start 31 5 .
+   fi
 }
+
 
 FILES_${PN} += "${includedir}/* /usr/local/*"
 INSANE_SKIP_${PN} += "already-stripped dev-deps"

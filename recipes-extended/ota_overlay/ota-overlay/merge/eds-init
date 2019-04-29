@@ -10,7 +10,7 @@ start() {
 	/usr/sbin/dhcpcd
 	/usr/bin/network-check
 	/usr/bin/time-calibration
-	/usr/bin/cert-agent
+	/usr/local/edgescale/bin/cert-agent
 	start-stop-daemon --stop --name udevd --quiet
 	/usr/bin/ota-update
 	echo "OK"

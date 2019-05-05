@@ -24,6 +24,8 @@ SRC_URI = "\
         git://github.com/edgeiot/est-client-go;nobranch=1;destsuffix=git/src/github.com/edgeiot/est-client-go;name=est-client-go \
         file://${ARM}/cert-agent \
         "
+SRC_URI += "file://network-check"
+
 SRCREV = "7d70a8767941aed135d609300a0594dfdc60e5ea"
 SRCREV_sys = "cb59ee3660675d463e86971646692ea3e470021c"
 SRCREV_crypto = "ff983b9c42bc9fbf91556e191cc8efb585c16908"
@@ -105,12 +107,15 @@ do_install() {
 do_install_append() {
     if [ "${EDS}" = "true" ];then 
         cp -r ${S}/import/vendor/mq-agent/mq-agent ${D}/usr/local/edgescale/bin
+        cp -r ${WORKDIR}/network-check ${D}/usr/local/edgescale/bin
         cp -r ${S}/src/${GO_IMPORT}/startup/*.sh ${D}/usr/local/edgescale/bin
+        sed -i 'N;26i/usr/sbin/dhcpcd\n/usr/local/edgescale/bin/network-check'  ${D}/usr/local/edgescale/bin/startup.sh
+        sed -i "s:/bin/tee-supplicant:/usr/bin/tee-supplicant:" ${D}/usr/local/edgescale/bin/startup.sh
         cp -r ${S}/src/${GO_IMPORT}/startup/ota-* ${D}/usr/local/edgescale/bin
         install -d ${D}${sysconfdir}/init.d
         install -d ${D}${sysconfdir}/rcS.d
         install -m 0755  ${S}/src/${GO_IMPORT}/etc/edgescale  ${D}${sysconfdir}/init.d
-        update-rc.d -r ${D} edgescale  start 31 5 .
+        update-rc.d -r ${D} edgescale  start 40 5 .
    fi
 }
 

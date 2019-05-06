@@ -29,13 +29,15 @@ IMAGE_INSTALL_append = " \
     tar \
     inetutils-ping \
     keyutils \
+    kmod \
+    kernel-modules \
     openssl-qoriq-bin \
     rng-tools \
     ethtool \
     dhcp-client \
     curl \
     docker \
-    docker-registry \   
+    docker-registry \  
     ${IMA_EVM} \
 "
 

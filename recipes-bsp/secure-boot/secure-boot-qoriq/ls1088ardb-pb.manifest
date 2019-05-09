@@ -4,14 +4,14 @@ machine=ls1088ardb_pb
 # [firmware_images]
 rcw_qspi=build/firmware/rcw/ls1088ardb/FCSSRR_PPPP_0x1d_0x13/rcw_1600_qspi.bin
 rcw_sd=build/firmware/rcw/ls1088ardb/FCSSRR_PPPP_0x1d_0x13/rcw_1600_sd.bin
-atf_bl2_qspi=build/firmware/atf/ls1088ardb_pb/bl2_qspi.pbl
-atf_bl2_qspi_sec=build/firmware/atf/ls1088ardb_pb/bl2_qspi_sec.pbl
-atf_bl2_sd=build/firmware/atf/ls1088ardb_pb/bl2_sd.pbl
-atf_bl2_sd_sec=build/firmware/atf/ls1088ardb_pb/bl2_sd_sec.pbl
-atf_fip_uboot=build/firmware/atf/ls1088ardb_pb/fip_uboot.bin
-atf_fip_uboot_sec=build/firmware/atf/ls1088ardb_pb/fip_uboot_sec.bin
-secureboot_headers_qspi=build/firmware/secboot_hdrs/ls1088ardb/secboot_hdrs_qspiboot.bin
-secureboot_headers_sd=build/firmware/secboot_hdrs/ls1088ardb/secboot_hdrs_sdboot.bin
+atf_bl2_qspi=atf/bl2_qspi.pbl
+atf_bl2_qspi_sec=atf/bl2_qspi_sec.pbl
+atf_bl2_sd=atf/bl2_sd.pbl
+atf_bl2_sd_sec=atf/bl2_sd_sec.pbl
+atf_fip_uboot=atf/fip_uboot.bin
+atf_fip_uboot_sec=atf/fip_uboot_sec.bin
+secureboot_headers_qspi=secboot_hdrs/secboot_hdrs_qspiboot.bin
+secureboot_headers_sd=secboot_hdrs/secboot_hdrs_sdboot.bin
 phy_firmware=build/firmware/qoriq-firmware-cortina/cs4315-cs4340-PHY-ucode.txt
 dpaa2_mc_fw=mc_app/mc.itb
 dpaa2_mc_dpc=mc-utils/custom/dpc-bman-4M.0x1D-0x0D.dtb
@@ -20,10 +20,10 @@ dpaa2_mc_dpl=mc-utils/dpl-eth.0x1D_0x0D.dtb
 # [linux, dtb, rfs]
 kernel_img=Image
 device_tree=fsl-ls1088a-rdb.dtb
-kernel_itb=fitImage-fsl-image-networking-ls1088ardb-pb-ls1088ardb-pb
+kernel_itb=kernel-fsl-ls1088a-rdb.itb
 
 # [distro autoboot script]
-uboot_scr=ls1088ardb_boot.scr
+uboot_scr=ls1088ardb-pb_boot.scr
 bootscript_dec=ls1088ardb_dec_boot.scr
 bootscript_enforce=ls1088ardb_enforce_boot.scr
 

@@ -45,6 +45,9 @@ do_compile() {
         qspi)
             rcwimg="${RCWQSPI}${rcwtemp}.bin"
             uefiboot="${UEFI_QSPIBOOT}"
+            if [ "${BUILD_SECURE}" = "true" ] && [ ${MACHINE} = ls1046ardb ]; then
+                rcwimg="RR_FFSSPPPH_1133_5559/rcw_1600_qspiboot_sben.bin"
+            fi
             ;;
         sd)
             rcwimg="${RCWSD}${rcwtemp}.bin"

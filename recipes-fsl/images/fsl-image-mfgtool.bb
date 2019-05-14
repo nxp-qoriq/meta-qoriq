@@ -21,3 +21,5 @@ IMAGE_INSTALL_append = " \
     sudo \ 
 "
 export IMAGE_BASENAME = "fsl-image-mfgtool"
+LS2-PHY = "${@bb.utils.contains('DISTRO_FEATURES', 'secure', 'ls2-phy', '', d)}"
+EXTRA_IMAGEDEPENDS_append = " ${LS2-PHY}"

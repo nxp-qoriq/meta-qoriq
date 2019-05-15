@@ -54,9 +54,7 @@ GO_IMPORT = "github.com/NXP/qoriq-edgescale-eds"
 S = "${WORKDIR}/git"
 inherit go
 inherit goarch
-inherit update-rc.d
 
-DEPENDS_append = " update-rc.d-native"
 
 # This disables seccomp and apparmor, which are on by default in the
 # go package. 
@@ -68,8 +66,6 @@ export SECURE_OBJ_PATH="${RECIPE_SYSROOT}/usr"
 export OPTEE_CLIENT_EXPORT="${RECIPE_SYSROOT}/usr/"
 
 EDS = "${@bb.utils.contains('DISTRO_FEATURES', 'edgescale', 'true', 'false', d)}"
-
-INITSCRIPT_NAME = "edgescale"
 
 do_compile() {
         export GOARCH="${TARGET_GOARCH}"
@@ -112,10 +108,6 @@ do_install_append() {
         sed -i 'N;26i/usr/sbin/dhcpcd\n/usr/local/edgescale/bin/network-check'  ${D}/usr/local/edgescale/bin/startup.sh
         sed -i "s:/bin/tee-supplicant:/usr/bin/tee-supplicant:" ${D}/usr/local/edgescale/bin/startup.sh
         cp -r ${S}/src/${GO_IMPORT}/startup/ota-* ${D}/usr/local/edgescale/bin
-        install -d ${D}${sysconfdir}/init.d
-        install -d ${D}${sysconfdir}/rcS.d
-        install -m 0755  ${S}/src/${GO_IMPORT}/etc/edgescale  ${D}${sysconfdir}/init.d
-        update-rc.d -r ${D} edgescale  start 40 5 .
    fi
 }
 

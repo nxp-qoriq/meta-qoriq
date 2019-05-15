@@ -6,12 +6,15 @@ NXP-specific packages."
 
 LICENSE = "MIT"
 
+#set DISTRO_FEATURES_append = " edgescale" in local.config
+
 IMA_EVM = "${@bb.utils.contains('DISTRO_FEATURES', 'ima-evm', 'ima-evm', '', d)}"
 
 IMAGE_INSTALL_append = " \
     start-stop-daemon \
     dhcpcd \
     edgescale-eds \
+    edgescale-eds-solution \
     eds-bootstrap \
     eds-kubelet \
     bash \

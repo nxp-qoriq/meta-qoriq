@@ -23,7 +23,7 @@ secureboot_headers_nor=secboot_hdrs/secboot_hdrs_norboot.bin
 secureboot_headers_sd=secboot_hdrs/secboot_hdrs_sdboot.bin
 fman_ucode=fsl_fman_ucode_ls1043_r1.1_106_4_18.bin
 qe_firmware=boot/iram_Type_A_LS1021a_r1.0.bin
-phy_firmware=build/firmware/qoriq-firmware-cortina/cs4315-cs4340-PHY-ucode.txt
+phy_firmware=ls2-phy/cs4315-cs4340-PHY-ucode.txt
 
 
 # [linux, dtb, rfs]

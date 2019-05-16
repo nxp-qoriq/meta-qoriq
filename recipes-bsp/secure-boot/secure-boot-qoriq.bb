@@ -23,7 +23,9 @@ inherit deploy
 #set ROOTFS_IMAGE = "fsl-image-mfgtool" 
 #set KERNEL_ITS = "kernel-all.its" in local.config
 ITB_IMAGE = "fsl-image-kernelitb"
+ITB_IMAGE_ls1021atwr = "virtual/kernel"
 DEPENDS = "u-boot-mkimage-native cst-native atf"
+DEPENDS_ls1021atwr = "u-boot-mkimage-native cst-native u-boot"
 do_deploy[depends] += "virtual/kernel:do_deploy ${ITB_IMAGE}:do_build"
 
 BOOT_TYPE ??= ""
@@ -34,6 +36,7 @@ BOOT_TYPE_ls2088ardb ?= "qspi nor"
 BOOT_TYPE_lx2160ardb ?= "xspi sd"
 BOOT_TYPE_ls1012ardb ?= "qspi"
 BOOT_TYPE_ls1012afrwy ?= "qspi"
+BOOT_TYPE_ls1021atwr ?= "qspi nor sd"
 
 IMA_EVM = "${@bb.utils.contains('DISTRO_FEATURES', 'ima-evm', 'true', 'false', d)}"
 ENCAP = "${@bb.utils.contains('DISTRO_FEATURES', 'encap', 'true', 'false', d)}"

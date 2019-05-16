@@ -2,12 +2,6 @@
 machine=ls1046ardb
 
 # [firmware_images]
-rcw_qspi=build/firmware/rcw/ls1046ardb/RR_FFSSPPPH_1133_5559/rcw_1800_qspiboot.bin
-rcw_qspi_sec=build/firmware/rcw/ls1046ardb/RR_FFSSPPPH_1133_5559/rcw_1600_qspiboot_sben.bin
-rcw_sd=build/firmware/rcw/ls1046ardb/RR_FFSSPPPH_1133_5559/rcw_1800_sdboot.bin
-rcw_sd_sec=build/firmware/rcw/ls1046ardb/RR_FFSSPPPH_1133_5559/rcw_1800_sdboot_sben.bin
-rcw_emmc=build/firmware/rcw/ls1046ardb/RR_FFSSPPPH_1133_5559/rcw_1800_emmcboot.bin
-rcw_emmc_sec=build/firmware/rcw/ls1046ardb/RR_FFSSPPPH_1133_5559/rcw_1800_emmcboot_sben.bin
 uboot_spl=build/firmware/u-boot/ls1046ardb/uboot_ls1046ardb_sdcard_spl.bin
 uboot_dtb=build/firmware/u-boot/ls1046ardb/uboot_ls1046ardb_sdcard_dtb.bin
 uefi_qspiboot=build/firmware/uefi/ls1046ardb/LS1046ARDB_EFI_QSPIBOOT.fd
@@ -24,7 +18,7 @@ secureboot_headers_qspi=secboot_hdrs/secboot_hdrs_qspiboot.bin
 secureboot_headers_sd=secboot_hdrs/secboot_hdrs_sdboot.bin
 fman_ucode=fsl_fman_ucode_ls1046_r1.0_106_4_18.bin
 qe_firmware=boot/iram_Type_A_LS1021a_r1.0.bin
-phy_firmware=build/firmware/qoriq-firmware-cortina/cs4315-cs4340-PHY-ucode.txt
+phy_firmware=ls2-phy/cs4315-cs4340-PHY-ucode.txt
 
 
 # [linux, dtb, rfs]

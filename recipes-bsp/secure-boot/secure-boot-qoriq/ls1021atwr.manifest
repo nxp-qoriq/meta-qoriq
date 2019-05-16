@@ -22,7 +22,6 @@ dpaa2_mc_dpl=null
 kernel_uimg=uImage
 kernel_vmlinux=vmlinux
 device_tree=ls1021a-twr.dtb
-kernel_itb=itbImage
 
 
 # [distro autoboot script]

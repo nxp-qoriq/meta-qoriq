@@ -2,20 +2,18 @@
 machine=ls1012afrwy
 
 # [firmware_images]
-rcw_qspi=build/firmware/rcw/ls1012afrwy/N_SSNP_3305/rcw_1000_default.bin
-rcw_qspi_sec=build/firmware/rcw/ls1012afrwy/N_SSNP_3305/rcw_1000_sben.bin
-atf_bl2_qspi=build/firmware/atf/ls1012afrwy/bl2_qspi.pbl
-atf_bl2_qspi_sec=build/firmware/atf/ls1012afrwy/bl2_qspi_sec.pbl
-atf_fip_uboot=build/firmware/atf/ls1012afrwy/fip_uboot.bin
-atf_fip_uboot_sec=build/firmware/atf/ls1012afrwy/fip_uboot_sec.bin
+atf_bl2_qspi=atf/bl2_qspi.pbl
+atf_bl2_qspi_sec=atf/bl2_qspi_sec.pbl
+atf_fip_uboot=atf/fip_uboot.bin
+atf_fip_uboot_sec=atf/fip_uboot_sec.bin
 pfe_fw=engine-pfe-bin/pfe_fw_sbl.itb
 pfe_kernel=build/firmware/qoriq-engine-pfe-bin/ls1012a/slow_path/ppfe*.elf
-secureboot_headers_qspi=build/firmware/secboot_hdrs/ls1012afrwy/secboot_hdrs_qspiboot.bin
+secureboot_headers_qspi=secboot_hdrs/secboot_hdrs_qspiboot.bin
 
 # [linux, dtb, rfs]
 kernel_img=Image
 device_tree=fsl-ls1012a-frwy.dtb
-kernel_itb=fitImage-fsl-image-networking-ls1012afrwy-ls1012afrwy
+kernel_itb=kernel-fsl-ls1012a-frwy.itb
 
 # [distro autoboot script]
 uboot_scr=ls1012afrwy_boot.scr

@@ -87,3 +87,13 @@ do_compile() {
     done
 }
 
+do_install_append() {
+    if [ -f "${S}/fip_ddr_sec.bin" ]; then
+        cp -r ${S}/fip_ddr_sec.bin ${D}/boot/atf/fip_ddr_sec.bin
+    fi
+}
+do_deploy_append() {
+    if [ -f "${S}/fip_ddr_sec.bin" ]; then
+        cp -r ${D}/boot/atf/fip_ddr_sec.bin ${DEPLOYDIR}/atf/fip_ddr_sec.bin
+    fi
+}

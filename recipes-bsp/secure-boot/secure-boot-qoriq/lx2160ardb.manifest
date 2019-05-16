@@ -2,8 +2,6 @@
 machine=lx2160ardb
 
 # [firmware_images]
-rcw_xspi=build/firmware/rcw/lx2160ardb/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_2900_19_5_2.bin
-rcw_sd=build/firmware/rcw/lx2160ardb/XGGFF_PP_HHHH_RR_19_5_2/rcw_2000_700_2900_19_5_2_sd.bin
 uefi_xspiboot=build/firmware/uefi/lx2160ardb/LX2160ARDB_EFI_NORBOOT.fd
 uefi_env=build/firmware/uefi/lx2160ardb/LX2160ARDBNV_EFI_NORBOOT.fd
 atf_bl2_xspi=build/firmware/atf/lx2160ardb/bl2_flexspi_nor.pbl
@@ -16,7 +14,7 @@ atf_fip_uefi=build/firmware/atf/lx2160ardb/fip_uefi.bin
 secureboot_headers_xspi=/secboot_hdrs/secboot_hdrs_xspiboot.bin
 ddr_phy_fw=/ddr-phy-binary/fip_ddr_all.bin
 ddr_phy_fw_sec=atf/fip_ddr_sec.bin
-phy_firmware=qoriq-firmware-inphi/in112525-phy-ucode.txt
+phy_firmware=inphi/in112525-phy-ucode.txt
 dpaa2_mc_fw=mc_app/mc.itb
 dpaa2_mc_dpc=mc-utils/dpc-warn.dtb
 dpaa2_mc_dpl=mc-utils/dpl-eth.19.dtb
@@ -24,7 +22,7 @@ dpaa2_mc_dpl=mc-utils/dpl-eth.19.dtb
 # [linux, dtb, rfs]
 kernel_img=Image
 device_tree=fsl-lx2160a-rdb.dtb
-kernel_itb=
+kernel_itb=kernel-fsl-lx2160a-rdb.itb
 
 # [distro autoboot script]
 uboot_scr=lx2160ardb_boot.scr

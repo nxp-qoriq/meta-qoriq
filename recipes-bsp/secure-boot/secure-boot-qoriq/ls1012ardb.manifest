@@ -3,21 +3,19 @@ machine=ls1012ardb
 
 
 # [firmware images]
-rcw_qspi=build/firmware/rcw/ls1012ardb/R_SPNH_3508/rcw_1000_default.bin
-rcw_qspi_sec=build/firmware/rcw/ls1012ardb/R_SPNH_3508/rcw_1000_sben.bin
-atf_bl2_qspi=build/firmware/atf/ls1012ardb/bl2_qspi.pbl
-atf_bl2_qspi_sec=build/firmware/atf/ls1012ardb/bl2_qspi_sec.pbl
-atf_fip_uboot=build/firmware/atf/ls1012ardb/fip_uboot.bin
-atf_fip_uboot_sec=build/firmware/atf/ls1012ardb/fip_uboot_sec.bin
-secureboot_headers_qspi=build/firmware/secboot_hdrs/ls1012ardb/secboot_hdrs_qspiboot.bin
-pfe_fw=build/firmware/qoriq-engine-pfe-bin/ls1012a/u-boot/pfe_fw_sbl.itb
+atf_bl2_qspi=atf/bl2_qspi.pbl
+atf_bl2_qspi_sec=atf/bl2_qspi_sec.pbl
+atf_fip_uboot=atf/fip_uboot.bin
+atf_fip_uboot_sec=atf/fip_uboot_sec.bin
+secureboot_headers_qspi=secboot_hdrs/secboot_hdrs_qspiboot.bin
+pfe_fw=engine-pfe-bin/pfe_fw_sbl.itb
 pfe_kernel=build/firmware/qoriq-engine-pfe-bin/ls1012a/slow_path/ppfe*.elf
 
 
 # [linux, dtb, rfs]
 kernel_img=Image
 device_tree=fsl-ls1012a-rdb.dtb
-kernel_itb=fitImage-fsl-image-networking-ls1012ardb-ls1012ardb
+kernel_itb=kernel-fsl-ls1012a-rdb.itb
 
 # [distro autoboot script]
 uboot_scr=ls1012ardb_boot.scr

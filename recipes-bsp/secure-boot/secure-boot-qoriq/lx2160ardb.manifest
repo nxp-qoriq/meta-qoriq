@@ -70,5 +70,5 @@ uefi_grub_search="search --no-floppy --file /partuuid02 --set root"
 uefi_grub_linux="linux  /Image  console=ttyAMA0,115200 earlycon=pl011,mmio32,0x21c0000 root=PARTUUID=partuuid03 rw rootwait default_hugepagesz=2m hugepagesz=2m hugepages=1024 pci=pcie_bus_perf iommu.passthrough=1"
 
 # [secure boot scripts in cst]
-sd_script=platforms/ls1088_ls2088_sd.sh
+sd_script=platforms/lx2160_sd.sh
 xspi_script=platforms/lx2160_xspi.sh

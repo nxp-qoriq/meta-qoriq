@@ -52,6 +52,27 @@ do_deploy () {
         ln -sf ${ITB_BASENAME}.itb ${DEPLOYDIR}/${ITB_SYMLINK}.itb
     done
 }
+do_deploy_ls1021atwr () {
+    install -d ${DEPLOYDIR}
+    cp ${DEPLOY_DIR_IMAGE}/zImage .
+
+    for DTS_FILE in ${KERNEL_DEVICETREE}; do
+        DTB_FILE=`basename ${DTS_FILE}`;
+        ITB_BASENAME=kernel-`basename ${DTS_FILE} |sed -e 's,.dtb$,,'`-${ITB_SUFFIX}
+        ITB_SYMLINK=kernel-`basename ${DTS_FILE} |sed -e 's,.dtb$,,'`
+
+        cp ${WORKDIR}/${KERNEL_ITS} kernel.its
+        sed -i -e "s,freescale.dtb,${DEPLOY_DIR_IMAGE}/${DTB_FILE}," kernel.its
+        sed -i -e "s,rootfs.ext2.gz,${DEPLOY_DIR_IMAGE}/${ROOTFS_IMAGE}-${MACHINE}.ext2.gz," kernel.its
+
+        mkimage -f kernel.its ${ITB_BASENAME}.itb
+
+        install -m 644 ${ITB_BASENAME}.itb ${DEPLOYDIR}/
+        ln -sf ${ITB_BASENAME}.itb ${DEPLOYDIR}/${ITB_SYMLINK}.itb
+    done
+}
+
+
 addtask deploy before build
 
-COMPATIBLE_MACHINE = "(qoriq-arm64)"
+COMPATIBLE_MACHINE = "(qoriq)"

@@ -57,15 +57,36 @@ secure_sign_image() {
 
     cp $TOPDIR/$uboot_scr $TOPDIR/bootscript && echo "Copying bootscript"
     cp $DEPLOYDIR/$device_tree $TOPDIR/uImage.dtb && echo "Copying dtb"
-    cp $DEPLOYDIR/$kernel_itb $TOPDIR/kernel.itb && echo "Copying kernel_itb"
 
     if [ $MACHINE = ls1021atwr ]; then
-        cp $DEPLOYDIR/$kernel_uimg $TOPDIR/uImage.bin && echo "Copying kernel"
+        cp $DEPLOYDIR/$kernel_img $TOPDIR/uImage.bin && echo "Copying kernel"
+        cp $DEPLOYDIR/$kernel_itb $TOPDIR/kernel.itb && echo "Copying kernel_itb"
     else
         cp $DEPLOYDIR/$kernel_img $TOPDIR/uImage.bin && echo "Copying kernel"
+        cp $DEPLOYDIR/$kernel_itb $TOPDIR/kernel.itb && echo "Copying kernel_itb"
     fi
     rcwimg_sec=`eval echo '${'"rcw_""$BOOTTYPE"'_sec}'`
     rcwimg_nonsec=`eval echo '${'"rcw_""$BOOTTYPE"'}'`
+
+    if [ $MACHINE = ls1021atwr ]; then
+        ubootimg_sec=`eval echo '${'"uboot_""$BOOTTYPE"'boot_sec}'`
+        if [ -z "$ubootimg_sec" -o "$ubootimg_sec" = "null" ]; then
+            echo $BOOTTYPE boot on $1 for secureboot unsupported
+            exit
+        fi
+        if [ $BOOTTYPE = nor -o $BOOTTYPE = qspi ]; then
+            cp $DEPLOYDIR/$ubootimg_sec $TOPDIR/u-boot-dtb.bin
+        elif [ $BOOTTYPE = sd -o $BOOTTYPE = emmc ]; then
+            if [ "$uboot_sdboot_sec" = "null" -o -z "$uboot_sdboot_sec" ]; then
+                echo $BOOTTYPE boot on  for secureboot unsupported
+                exit
+            fi
+            cp $DEPLOYDIR/$uboot_sdboot_sec $TOPDIR/u-boot-with-spl-pbl.bin
+            cp $DEPLOYDIR/$uboot_spl $TOPDIR/u-boot-spl.bin
+            cp $DEPLOYDIR/$uboot_dtb $TOPDIR/u-boot-dtb.bin
+        fi
+    fi
+
     if [ -f $DEPLOYDIR/$pfe_fw ] ; then
         cp $DEPLOYDIR/$pfe_fw $TOPDIR/pfe.itb && echo "Copying PFE"
     fi
@@ -178,7 +199,7 @@ generate_qoriq_composite_firmware() {
     if [ -f $fwimg ]; then
         rm -f $fwimg
     fi
-    secureboot_headers=`eval echo '${'"secureboot_headers_""$2"'}'`
+    secureboot_headers=`eval echo '${'"secureboot_headers_""$BOOTTYPE"'}'`
     if [ $MACHINE = ls1021atwr ]; then
         # for machine which doesn't support ATF
         if [ $BOOTTYPE = sd -o $BOOTTYPE = emmc ]; then
@@ -186,7 +207,7 @@ generate_qoriq_composite_firmware() {
             dd if=$DEPLOYDIR/$bootloaderimg of=$fwimg bs=512 seek=$sd_rcw_bootloader_offset
         else
             # program rcw
-            if [ -z "$rcwimg" ]; then echo ${3} ${2}boot on $1 is not unsupported!; exit; fi
+            if [ -z "$rcwimg" ]; then echo ${BOOTTYPE}boot on is not unsupported!; exit; fi
             dd if=$DEPLOYDIR/$rcwimg of=$fwimg bs=1K seek=0
             # program u-boot image
             val=`expr $(echo $(($nor_bootloader_offset))) / 1024`

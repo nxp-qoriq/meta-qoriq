@@ -53,7 +53,12 @@ do_deploy () {
     cp ${S}/*.sh ./
     cp ${S}/${MACHINE}.manifest ./
     cp ${S}/memorylayout.cfg ./
-    cp ${DEPLOY_DIR_IMAGE}/atf/srk.* ./
+    if [ ${MACHINE} = ls1021atwr ];then
+        ./gen_keys 1024
+    else
+        cp ${DEPLOY_DIR_IMAGE}/atf/srk.* ./
+    fi
+
     for d in ${BOOT_TYPE}; do
         ./create_secure_boot_image.sh -m ${MACHINE} -t ${d} -d . -s ${DEPLOY_DIR_IMAGE} -e ${ENCAP} -ima ${IMA_EVM}
     done

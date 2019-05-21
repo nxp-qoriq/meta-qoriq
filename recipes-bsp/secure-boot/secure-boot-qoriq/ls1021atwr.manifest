@@ -6,23 +6,21 @@ rcw_nor=rcw/ls1021atwr/SSR_PNS_30/rcw_1200.bin
 rcw_nor_sec=rcw/ls1021atwr/SSR_PNS_30/rcw_1200_sben.bin
 rcw_qspi=rcw/ls1021atwr/SSR_PNS_30/rcw_1200_qspiboot.bin
 rcw_sd=rcw/ls1021atwr/SSR_PNS_30/rcw_1200_sdboot.bin
-uboot_spl=uboot-sdcard-secure-boot-spl.bin
-uboot_dtb=uboot-sdcard-secure-boot-dtb.bin
+uboot_spl=u-boot.bin-sdcard-ifc-secure-boot
+uboot_dtb=u-boot.bin-secure-boot
 uboot_norboot=u-boot.bin-nor
 uboot_norboot_sec=u-boot.bin-secure-boot
 uboot_qspiboot=u-boot.bin-qspi
 uboot_sdboot=u-boot.bin-sdcard-ifc
 uboot_sdboot_sec=u-boot.bin-sdcard-ifc-secure-boot
-ppa=null
-dpaa2_mc_fw=null
-dpaa2_mc_dpc=null
-dpaa2_mc_dpl=null
+secureboot_headers_nor=secboot_hdrs/secboot_hdrs_norboot.bin
+secureboot_headers_sd=secboot_hdrs/secboot_hdrs_sdboot.bin
+qe_firmware=boot/fsl_qe_ucode_1021_10_A.bin
 
 # [linux, dtb, rfs]
-kernel_uimg=uImage
-kernel_vmlinux=vmlinux
+kernel_img=uImage
 device_tree=ls1021a-twr.dtb
-
+kernel_itb=kernel-ls1021a-twr.itb
 
 # [distro autoboot script]
 uboot_scr=ls1021atwr_boot.scr

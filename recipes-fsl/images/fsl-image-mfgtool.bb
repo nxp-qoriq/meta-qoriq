@@ -25,5 +25,5 @@ LS2-PHY = "${@bb.utils.contains('DISTRO_FEATURES', 'secure', 'ls2-phy', '', d)}"
 EXTRA_IMAGEDEPENDS_append = " ${LS2-PHY}"
 
 IMAGE_INSTALL_remove_ls1021atwr = "restool"
-IMAGE_ROOTFS_EXTRA_SPACE = "4094304"
+IMAGE_ROOTFS_EXTRA_SPACE = "5048000"
 IMAGE_FSTYPES += "ext4.gz"

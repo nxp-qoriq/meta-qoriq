@@ -19,6 +19,7 @@ IMAGE_INSTALL_append = " \
     restool \
     fmc \
     sudo \ 
+    curl \
 "
 export IMAGE_BASENAME = "fsl-image-mfgtool"
 LS2-PHY = "${@bb.utils.contains('DISTRO_FEATURES', 'secure', 'ls2-phy', '', d)}"

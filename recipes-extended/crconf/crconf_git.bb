@@ -3,11 +3,11 @@ SECTION = "base"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://Makefile;beginline=1;endline=5;md5=0f77fc44eb5911007ae4ac9f6736e111"
 
-SRC_URI = "git://git.code.sf.net/p/crconf/code"
+SRC_URI = "https://github.com/Thermi/crconf.git"
 
 EXTRA_OEMAKE = "'CC=${CC}' 'HOSTCC=${CC}'"
 
-SRCREV = "8bd996400d087028ba56b724abc1f5b378eaa77f"
+SRCREV = "7b5819e7638e471d41dd2dca71f012d5a022f014"
 
 PV .= "+git${SRCPV}"
 

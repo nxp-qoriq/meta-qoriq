@@ -3,12 +3,6 @@ HOMEPAGE = "https://github.com/NXP/qoriq-edgescale-eds.git"
 LICENSE = "NXP-EULA"
 LIC_FILES_CHKSUM = "file://src/${GO_IMPORT}/EULA.txt;md5=ac5425aaed72fb427ef1113a88542f89"
 
-ARM_qoriq-arm64 = "arm64"
-ARM_qoriq-arm = "arm32"
-ARM_mx6= "arm32"
-ARM_mx7 = "arm32"
-ARM_mx8 = "arm64"
-
 SRC_URI = "\
         git://${GO_IMPORT}.git;protocol=ssh;nobranch=1 \
         git://github.com/golang/sys;nobranch=1;destsuffix=git/src/golang.org/x/sys;name=sys \
@@ -20,9 +14,8 @@ SRC_URI = "\
         git://github.com/fullsailor/pkcs7.git;nobranch=1;destsuffix=git/src/github.com/fullsailor/pkcs7;name=pkcs7 \
         git://github.com/shirou/gopsutil.git;nobranch=1;destsuffix=git/src/github.com/shirou/gopsutil;name=disk \
         git://github.com/go-yaml/yaml.git;nobranch=1;destsuffix=git/src/gopkg.in/yaml.v2;name=yaml \
+        git://github.com/joho/godotenv;nobranch=1;destsuffix=git/src/github.com/joho/godotenv;name=godotenv \
         git://github.com/edgeiot/est-client-go;nobranch=1;destsuffix=git/src/github.com/edgeiot/est-client-go;name=est-client-go \
-        git://github.com/edgeiot/est-client-go;nobranch=1;destsuffix=git/src/github.com/edgeiot/est-client-go;name=est-client-go \
-        file://${ARM}/cert-agent \
         "
 SRC_URI += "file://network-check"
 
@@ -36,6 +29,7 @@ SRCREV_mqtt = "379fd9f99ba5b1f02c9fffb5e5952416ef9301dc"
 SRCREV_pkcs7 = "8306686428a5fe132eac8cb7c4848af725098bd4"
 SRCREV_disk = "eead265362a2c459593fc24d74aef92858d67835"
 SRCREV_yaml = "51d6538a90f86fe93ac480b35f37b2be17fef232"
+SRCREV_godotenv = "5c0e6c6ab1a0a9ef0a8822cba3a05d62f7dad941"
 SRCREV_est-client-go = "a9d72263246dfcac6e90971c8ce51c2ef99295a6"
 
 DEPENDS = "\

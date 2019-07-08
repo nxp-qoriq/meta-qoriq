@@ -1,248 +1,161 @@
 #!/bin/bash
-
+#
 # Copyright 2017-2019 NXP
 #
-# SPDX-License-Identifier:      BSD-3-Clause
+# SPDX-License-Identifier: BSD-3-Clause
 #
 # Author: Shengzhou Liu <shengzhou.liu@nxp.com>
-#
-#
-# a utility to install custom Android/Ubuntu/CentOS/Debian to SD/USB/SATA
-# storage disk, run on x86 host machine or ARM arch board.
-#
-
 
 set -e
+ARCH=`uname -m`
+FIVERSION=1.7.1906
 
-FIVERSION=1.6.1903
+DEFAULT_SVR=www.nxp.com
+DISTRO_SVR_URL=http://www.nxp.com/lgfiles/sdk/lsdk1906
+
 
 usage ()
 {
 cat <<EOF
-Usage:  flex-installer [ -b <bootpartition> ] [ -r <rootfs> ] [ -f <firmware> ] [ -d <device> ]
+Usage:  flex-installer [ -i <instruction> ] [ -b <bootpartition> ] [ -r <rootfs> ] [ -f <firmware> ] [ -d <device> ] [ -m <machine> ]
 OPTION:
- -m, --machine         machine name
- -f, --firmware        firmware to be programmed into SD card
- -b, --bootpart        boot partition image to be programmed into SD/USB/SATA media
- -r, --rootfs          distro rootfs image to be programmed into SD/USB/SATA media
- -u, --userdata        distro user data image to be programmed into disk, only used for Android
- -d, --device	       device name of SD/USB/SATA disk in Linux
- -s, --start-block     start block number of SD card for programming firmware
- -i, --instruction     instruction
- -p, --parttable       partition-table type can be: "msdos", "gpt", "bsd", "loop", "mac", "msdos" by default if unspecified
- -v, --version         print version info
- -h, --help            print help info
+ -i, --instruction  Instruction to execute, valid argument as below:
+     'auto'	    Automatically partition and format the target storage drive, then download and install distro images
+     'pf'	    Only partition and format the target storage drive without installing distro images
+ -b, --bootpart	    Boot partition image to be programmed into SD/USB/SATA storage drive
+ -r, --rootfs	    The first distro rootfs image by default to be programmed into target storage drive
+ -R, --rootfs2	    The second distro rootfs image for dual distros installation
+ -d, --device	    Device name of the target SD/USB/SATA storage drive in Linux
+ -p, --partition    Specify configurable partitions of target disk, default as "-p 4P=100M:1G:6G:-1" if not specified
+ -f, --firmware	    Composite firmware to be programmed into SD card
+ -e, --efi	    Used for the case of UEFI as bootloader instead of U-BOot
+ -m, --machine	    Target machine name to specify the name of composite firmware for automatical deployment
+ -u, --url	    Specify URL of distro webserver to override the default one for automatically downloading distro
+ -v, --version	    Print version info
+ -h, --help	    Print help info
 
 Examples:
-- Scenario 1: install from x86 host machine
-  flex-installer -b bootpartition_arm64_lts_4.14.tgz -r build/rfs/rootfs_ubuntu_bionic_arm64 -f firmware_ls1046ardb_uboot_sdboot.img -d /dev/sdX
+- Automatically download remote LSDK distro and deploy it to target storage drive:
+  $ flex-installer -i auto -m ls1046ardb -d /dev/mmcblk0  (default latest LSDK distro)
+  $ flex-installer -i auto:lsdk1906 -m lx2160ardb -d /dev/sdx   (specify LSDK version)
+  You can specify one or several of '-b <bootpartition> -r <rootfs> -R <second-rootfs> -f <firmware> -u <url>' options to override the default settings
 
-- Scenario 2: install directly on ARM board
-  step 1: flex-installer -i pf -d /dev/mmcblk0 (or -d /dev/sdX, to partition and format SD/USB/SATA storage drive)
-  step 2: cd /run/media/mmcblk0p3 (or sdx3), then download bootpartition_<arch>_<version>.tgz and rootfs_ubuntu_<version>.tgz to this partition
-  step 3: flex-installer -b bootpartition_<arch>_<version>.tgz -r rootfs_ubuntu_<version>.tgz -d /dev/mmcblk0
-       or flex-installer -b bootpartition_<arch>_<version>.tgz -r rootfs_ubuntu_<version>.tgz -f firmware_ls1046ardb_uboot_sdboot.img -d /dev/mmcblk0
+- On host machine, to partition target disk and install local distro images for single distro:
+  $ flex-installer -b bootpartition_arm64_lts_4.19.tgz -r rootfs_lsdk1906_LS_arm64_main.tgz -f firmware_ls1046ardb_uboot_sdboot.img -d /dev/sdx
 
-- Scenario 3: Program composite firmware to SD card in case of separate step:
-  flex-installer -f firmware_ls1046ardb_uboot_sdboot.img -d /dev/mmcblk0 (or sdX)
+- On host machine, to install dual distros:
+  $ flex-installer -b bootpartition_arm64_lts_4.19.tgz -r rootfs_lsdk1906_LS_arm64_main.tgz -R rootfs_buildroot_LS_arm64_custom.tgz -f <firmware> -d /dev/sdx
+  (run 'setenv devpart_root 3;boot' in U-Boot to boot the second distro from partition 3)
+
+- On ARM board running the TinyDistro, first partition target disk, then download local distro images onto board and install as below:
+  $ flex-installer -i pf -d /dev/mmcblk0 (or /dev/sdx)
+  $ cd /run/media/mmcblk0p3 (or sdx3) and download distro images to this partition via wget or scp
+  $ flex-installer -b bootpartition_arm64_lts_xx.tgz -r rootfs_lsdk1906_LS_arm64_main.tgz -d /dev/mmcblk0 (or /dev/sdx)
+
+- only install composite firmware:
+  $ flex-installer -f firmware_lx2160ardb_uboot_sdboot.img -d /dev/mmcblk0 (or /dev/sdx)
+
+Note: '-e' option is needed if UEFI is used as bootloader, no need in case of U-Boot.
 
 EOF
-    exit $1
+    exit
 }
 
-if [ -z "$1" -o "$1" = "--help" ] ; then
-	usage
-	exit 1
-fi
-
-
-
-ARGS=`getopt -a -o m:f:b:r:u:d:s:i:p:hv -l machine:,firmware:,bootpart:,rootfs:,userdata:,device:,startblock:,instruction:,parttable:,help,version -- "$@"`
-[ $? -ne 0 ] && usage
-eval set -- "${ARGS}"
-while true
-do
-	case "$1" in
-	-m|--machine)
-		machine=$2
-		echo machine = $machine
-		shift
-		;;
-	-f|--firmware)
-		firmware=$2
-		shift
-		;;
-	-s|--startblock)
-		startblock=$2
-		echo startblock: $startblock
-		shift
-		;;
-	-b|--bootpart)
-		bootpart=$2
-		shift
-		;;
-	-r|--rootfs)
-		rootfs=$2
-		shift
-		;;
-        -u|--userdata)
-                userdata=$2
-                shift
-                ;;
-	-d|--device)
-		mediadevice=$2
-		shift
-		;;
-	-i|instruction)
-		instruction=$(echo $2 | cut -d: -f1)
-		distrotype=$(echo $2 | cut -d: -f2)
-		echo instruction: $instruction
-		shift
-		;;
-        -p|--parttable)
-                parttable=$2
-                shift
-                ;;
-        -v|--version)
-                echo flex-installer version: $FIVERSION
-		exit
-                ;;
-	-h|--help)
-		usage
-		;;
-	--)
-		shift
-		break
-		;;
-	esac
-shift
-done
-
-ARCH=`uname -m`
+check_disk_capacity() {
+    disksize=$[ `fdisk -ls /dev/$devname` / 1000000 ]
+    if [ $disksize -ge 15 ] ; then
+	print_n "/dev/$devname: $disksize GB"
+    else
+	print_e "The capacity of /dev/$devname $disksize GB is not enough, 32 GB or above is recommended"
+	exit
+    fi
+}
 
 search_dev() {
     devlist=`ls /dev/sd?`
-    for dev in ${devlist}
-    do
+    for dev in $devlist; do
 	sdx=`udevadm info -q all -n $dev | grep ID_BUS`
 	disksize=$[ `fdisk -ls $dev` / 1000000 ]
-	if [ $1 = "usb" ] ; then
-	    if [ ${sdx:10:4} = "usb" -a ${disksize} -ge 3 ] ; then
+	if [ $1 = usb ] ; then
+	    if [ ${sdx:10:3} = usb ]; then
 		devusb=${dev:5:3}
-		echo "USB disk: ${devusb} ${disksize} GB"
+		echo "USB disk: $devusb $disksize GB"
 		break
 	    fi
-	elif [ $1 = "sata" ] ; then
-	    if [ ${sdx:10:4} = "ata" -a ${disksize} -ge 8 ] ; then
+	elif [ $1 = sata ]; then
+	    if [ ${sdx:10:3} = ata ]; then
 		devsata=${dev:5:3}
-		echo "SATA disk: ${devsata} ${disksize} GB"
+		echo "SATA disk: $devsata $disksize GB"
 		break
 	    fi
 	fi
     done
 }
 
+
 get_device_name_in_tinydistro() {
-    if [ "$mediadevice" = "sd" ] ; then
-	if [ ! -b /dev/mmcblk0 ] ; then
-	    echo "SD/MMC device not available"
-	    exit 1
+    # for automation test with '-d sd|usb|sata' instead of '-d /dev/sdx' in tiny distro by searching the first available device on remote board
+    if [ "$mediadevice" = "sd" ]; then
+	if [ ! -b /dev/mmcblk0 ]; then
+	    echo "SD/MMC device is not available"; exit
 	else
-	disksize=$[ `fdisk -ls /dev/mmcblk0` / 1000000 ]
-	if [ ${disksize} -ge 3 ] ; then
-	    echo "SD card: ${disksize} GB"
-	else
-	    echo "the size of SD disk is too small: ${disksize}"
-	    exit 1
-	fi
-	devname=mmcblk0
+	    devname=mmcblk0
 	fi
     elif [ "$mediadevice" = "usb" ] ; then
 	search_dev usb
-	devname=${devusb}
+	devname=$devusb
 	if [ -z "$devname" ] ; then
-	    echo "USB device not available"
-	    exit 1
+	    echo "USB device is not available"; exit
 	fi
     elif [ "$mediadevice" = "sata" ] ; then
 	search_dev sata
-	devname=${devsata}
+	devname=$devsata
 	if [ -z "$devname" ] ; then
-	    echo "SATA device not available"
-	    exit 1
+	    echo "SATA device is not available"; exit
 	fi
     elif echo "$mediadevice" | grep /; then
 	devname=${mediadevice##*/}
     fi
 
-    if [[ "$devname" = mmcblk* ]] ; then
+    if [ ${devname:0:6} = mmcblk ] ; then
 	devpartname=${devname}p
     else
-	devpartname=${devname}
+	devpartname=$devname
     fi
 }
+
 
 get_device_name_on_host() {
     devname=${mediadevice##*/}
-    if [[ "$devname" = mmcblk* ]] || [[ "$devname" = loop* ]] ; then
+    if [ ${devname:0:6} = mmcblk ] || [ ${devname:0:4} = loop ]; then
 	devpartname=${devname}p
     else
-	devpartname=${devname}
+	devpartname=$devname
     fi
 }
 
-if [ "$ARCH" = "x86_64" -o "$ARCH" = "i686" ] ; then
-    if [ ! -b $mediadevice ]; then
-	echo ERROR: $mediadevice not exist on this host machine!
-	exit 1
-    else
-	echo $mediadevice found!
-    fi
-    get_device_name_on_host
-else
-    get_device_name_in_tinydistro
-fi
-
-if [ -n "$rootfs" ] && [ -d $rootfs ]; then
-    srcrfstype=dir
-elif [ -n "$rootfs" ] && [ -f $rootfs ]; then
-    if file -L $rootfs | grep 'gzip compressed' 1>/dev/null 2>&1; then
-	srcrfstype=tgz
-    elif file -L $rootfs | grep 'UUID=' 1>/dev/null 2>&1; then
-	srcrfstype=uuidimg
-    fi
-elif [ -n "$rootfs" ]; then
-    echo input file $rootfs error!
-    exit
-fi
-
-if [ -n "$bootpart" ] && [ -d $bootpart ]; then
-    srcbootparttype=dir
-elif [ -n "$bootpart" ] && [ -r $bootpart ]; then
-    if file -L $bootpart | grep 'gzip compressed' 1>/dev/null 2>&1; then
-        srcbootparttype=tgz
-    fi
-elif [ -n "$bootpart" ]; then
-    echo input file $bootpart error!
-    exit
-fi
-
-if [ -z "$mediadevice" ]; then
-    echo please specify device name
-    exit
-fi
 
 umount_device() {
-    mntnums=`cat /proc/mounts | grep ${devname} | wc -l`
-    if [ $mntnums = 1 ] ; then
-	  umount $(cat /proc/mounts | grep  ${devname} | cut -d' ' -f1) || true
-    else
-	for (( i=1; i <= $mntnums; i++ ))
-	do
-	      umount /dev/${devpartname}$i || true
-	done
-    fi
+    umount /dev/${devpartname}* 1>/dev/null 2>&1 || true
+    mntnums=`cat /proc/mounts | grep /dev/${devpartname} | wc -l`
+    mntlist=`cat /proc/mounts | grep /dev/${devpartname} | cut -d' ' -f1 | tr '\n' ' '`
+    for mntp in $mntlist; do
+	fuser -k $mntp || true
+	umount $mntp || true
+    done
 }
+
+
+mount_device() {
+    for ((i=1; i<=$pnum; i++)); do
+	if [ -n "$extendedpart" ] && [ $i = $extendedpart ]; then continue; fi
+	mkdir -p /run/media/${devpartname}$i
+	if ! mount | grep ${devpartname}$i; then
+	    mount /dev/${devpartname}$i /run/media/${devpartname}$i
+	fi
+    done
+}
+
 
 program_firmware_to_sd() {
     # $1: firmware file,  $2: startblock, $3: device
@@ -254,265 +167,556 @@ program_firmware_to_sd() {
 	echo firmware $1 not found
 	exit
     fi
-    echo programming $1 into $3, startblock=$2
-      dd if=$1 of=$3 bs=512 seek=$2
-    echo $1 has been programmed into $3!
+    dd if=$1 of=$3 bs=512 seek=$2
+    print_d "Program $1 into $3 startblock=$2"
 }
 
-partition_format_disk_linux() {
-    umount_device
-    echo "Partitioning /dev/$devname ..."
+
+get_partition_number() {
+    [ -z "$diskpartition" ] && print_e "Please specify partition settings" && exit
+
+    if ! [[ $diskpartition =~ ^[2-9]+[P=]+[0-9]+[G,M]* ]] || \
+	echo $diskpartition | tr -d '[0-9] [:,-]' | grep  -E '[^P,M,G]'; then
+	print_e "Error: the number of partitions should be >= 2 and the unit of size is G or M"
+	print_w "Correct example: '-p 5P=100M:1G:6G:8G:-1', '-1' indicates the end sector of last partition"
+	exit
+    fi
+    pnum=`echo $diskpartition | cut -d= -f1`
+    pnum=${pnum%?}
+}
+
+partition_format_disk() {
+    print_n "Partitioning /dev/$devname ..."
 
     optimal_io_size=$(cat /sys/block/$devname/queue/optimal_io_size)
     minimum_io_size=$(cat /sys/block/$devname/queue/minimum_io_size)
-    if [ "$optimal_io_size" = "0" ]; then
-	aligntype=minimal
-    else
-	aligntype=optimal
-    fi
+    [ "$optimal_io_size" = "0" ] && aligntype=minimal || aligntype=optimal
+    [ $pnum -le 3 ] && parttable=gpt || parttable=msdos
 
-      parted -a $aligntype -s /dev/$devname mklabel $parttable
-
-    # 20MB for EFI partition-1
-      parted -a $aligntype -s /dev/$devname mkpart primary 68 88MiB
-
-    # 1GB for boot partition-2
-      parted -a $aligntype -s /dev/$devname mkpart primary 88MiB 1112MiB
-
-    # left for rootfs partition-3
-      parted -a $aligntype -s /dev/$devname mkpart primary 1112MiB 8280MiB
-
-    # left for userdata partition-4
-      parted -a $aligntype -s /dev/$devname mkpart primary 8280MiB 100%
-
-    echo "Formatting partitions ..."
     umount_device
-      mkfs.vfat -n EFI /dev/${devpartname}$efipartnum
-    umount_device
-      mkfs.ext4 -F -v -b 4096 -L boot /dev/${devpartname}$bootpartnum
-    umount_device
-    umount_device
-      mkfs.ext4 -F -v -O ^huge_file -b 4096 -L rootfs /dev/${devpartname}$syspartnum
-    umount_device
-      mkfs.ext4 -F -v -b 4096 -L userdata /dev/${devpartname}$bootpartnum
+    parted -a $aligntype -s /dev/$devname mklabel $parttable
 
-    if [ ! -d /run/media/${devpartname}$efipartnum ] ; then
-	  mkdir -p /run/media/${devpartname}$efipartnum
-    fi
-    for i in $bootpartnum $syspartnum; do
-        if [ ! -d /run/media/${devpartname}$i ] ; then
-              mkdir -p /run/media/${devpartname}$i
-        fi
-        if ! mount | grep ${devpartname}$i; then
-              mount -t ext4 /dev/${devpartname}$i /run/media/${devpartname}$i
-        fi
+    for ((i=1; i<=$pnum; i++)); do
+	eval n_p$i=`echo $1 | cut -d: -f$i`
+	[ $i = 1 ] && n_p1=`echo $n_p1 | cut -d= -f2`
+	n_p=`eval echo '${n_p'"$i"'}'`
+	[ ${n_p: -1} = G ] && n_p=${n_p%?} && n_p=$[ $n_p * 1024 ]
+	[ ${n_p: -1} = M ] && n_p=${n_p%?}
+	[ ${n_p: -2} = -1 ] && eval e_p$i=100%
+	[ $i = 1 ] && s_p1=$RESERVEDRAW && e_p1=$[ $s_p1 + $n_p ] && umount_device && \
+	parted -a $aligntype -s /dev/$devname mkpart primary ${s_p1}MiB ${e_p1}MiB && continue
+
+	n=$[ i-1 ] && a_e_p=`eval echo '${e_p'"$n"'}'`
+	eval s_p$i=$[ $a_e_p + 1 ] && s_p=`eval echo '${s_p'"$i"'}'`
+	[ ${n_p: -2} = -1 ] && eval e_p$i=100% || eval e_p$i=$[ $s_p + $n_p ]
+	e_p=`eval echo '${e_p'"$i"'}'`
+
+	if [ $pnum -le 4 ]; then
+	    parttype=primary
+	elif [ $i -le 3 ]; then
+	    parttype=primary
+	elif [ $i -eq 4 ]; then
+	    parttype=extended
+	    end=100%
+	    umount_device
+	    parted -a $aligntype -s /dev/$devname mkpart $parttype ${s_p}MiB $end
+	    s_p=$[ $s_p + 1 ]
+	    parttype=logical
+	    extendedpart=4
+	else
+	   parttype=logical
+	fi
+	[ $e_p != 100% ] && end=${e_p}MiB || end=${e_p}
+	umount_device
+	parted -a $aligntype -s /dev/$devname mkpart $parttype ${s_p}MiB $end
     done
-    echo partition and format /dev/$devname:   [Done]
-}
 
-
-partition_format_disk_android() {
-    umount_device
-    echo "Partitioning /dev/$devname for Android system ..."
-
-    optimal_io_size=$(cat /sys/block/$devname/queue/optimal_io_size)
-    minimum_io_size=$(cat /sys/block/$devname/queue/minimum_io_size)
-    if [ "$optimal_io_size" = "0" ]; then
-        aligntype=minimal
-    else
-        aligntype=optimal
-    fi
-
-      parted -a $aligntype -s /dev/$devname mklabel $parttable
-
-    # partition-1: 1GB boot partition with kernel
-      parted -a $aligntype -s /dev/$devname mkpart primary 68 1092MiB
-
-    # partition-2: 2GB Android system
-      parted -a $aligntype -s /dev/$devname mkpart primary 1092MiB 3140MiB
-
-    # partition-3: 2GB cache backup
-      parted -a $aligntype -s /dev/$devname mkpart primary 3140MiB 5188MiB
-
-    # partition-4: left space for userdata
-      parted -a $aligntype -s /dev/$devname mkpart primary 5188MiB 100%
-
-    echo "Formatting partitions for Android system ..."
-    umount_device
-      mkfs.ext4 -F -v -b 4096 -L boot /dev/${devpartname}$bootpartnum
-    umount_device
-      mkfs.ext4 -F -v -b 4096 -L backup /dev/${devpartname}$backuppartnum
-    umount_device
-    umount_device
-      mkfs.ext4 -F -v -O ^huge_file -b 4096 -L userdata /dev/${devpartname}$userpartnum
-
-    for i in $bootpartnum $syspartnum $backuppartnum $userpartnum; do
-	if [ ! -d /run/media/${devpartname}$i ] ; then
-	      mkdir -p /run/media/${devpartname}$i
-	fi
-	if ! mount | grep ${devpartname}$i; then
-	      mount -t ext4 /dev/${devpartname}$i /run/media/${devpartname}$i
-	fi
-    done
-    echo Android partition and format /dev/$devname:   [Done]
-}
-
-
-flex_install_distro() {
-    # install composite firmware in case $firmware option is specified
-    if [ -n "$firmware" ]; then
-        umount_device
-	program_firmware_to_sd $firmware 8 /dev/$devname
-	if ! mount | grep ${devpartname}$bootpartnum; then
-	      mount -t ext4 /dev/${devpartname}$bootpartnum  /run/media/${devpartname}$bootpartnum
-	fi
-	if ! mount | grep ${devpartname}$syspartnum; then
-	      mount -t ext4 /dev/${devpartname}$syspartnum  /run/media/${devpartname}$syspartnum
-	fi
-	if [ -n "$userdata" ]; then
-	    if ! mount | grep ${devpartname}$userpartnum; then
-		  mount -t ext4 /dev/${devpartname}$userpartnum  /run/media/${devpartname}$userpartnum
+    print_n "Formatting partitions ..."
+    for ((i=1; i<=$pnum; i++)); do
+	if [ $i = "$bootpartnum" ]; then
+	    umount_device
+	    mkfs.ext4 -F -q -b 4096 -L boot -O ^64bit,^metadata_csum $bootdev || true
+	elif [ $i = "$efipartnum" ]; then
+	    if [ "$enable_efi" = "y" ]; then
+		# in case of UEFI as Bootloader
+		umount_device
+		mkfs.vfat -n EFI $efidev || true
+	    else
+		# for misc metadata or other uses in case of U-Boot as Bootloader
+		umount_device
+		mkfs.ext4 -F -q -b 4096 -L misc $efidev || true
+	    fi
+	else
+	    if [ $i = "$syspartnum" ]; then
+		label=system
+	    elif [ $i = "$backuppartnum" ]; then
+		label=backup
+	    elif [ $i = "$userpartnum" ]; then
+		label=userdata
+	    else
+		label=data$i
+	    fi
+	    if [ -d /run/media/${devpartname}$i/var/lib ]; then
+		print_w "/run/media/${devpartname}$i contains a ext4 file system, skip ..."
+	    else
+		umount_device
+		[ $i != "$extendedpart" ] && \
+		mkfs.ext4 -F -q -O ^huge_file,^64bit,^metadata_csum -b 4096 -L $label /dev/${devpartname}$i || true
 	    fi
 	fi
+    done
+    mount_device
+    parted -s /dev/$devname print
+    print_d "partition and format /dev/$devname"
+}
+
+flex_install_distro() {
+    # install composite firmware
+    if [ -f $firmware_n ]; then
+	umount_device
+	program_firmware_to_sd $firmware_n 8 /dev/$devname
+	mount_device
     fi
 
     # install boot partition
-    if [ -n "$bootpart" ] && [ "$srcbootparttype" = "dir" ]; then
-	echo installing bootpartition, please wait ...
-	  cp -rfp $bootpart/* /run/media/${devpartname}$bootpartnum
-	echo bootpartition installation:   [Done]
+    if [ -d $bootpart_n ] && [ $bootparttype = dir ]; then
+	echo "Installing boot partition, please wait ..."
+	cp -rfp $bootpart_n/* $bootpartition
+	print_d "boot partition installation"
     fi
-    if [ -n "$bootpart" ] && [ "$srcbootparttype" = "tgz" ]; then
-        echo "installing bootpartition, please wait ..."
-          tar xf $bootpart -C /run/media/${devpartname}$bootpartnum
-        echo bootpartition installation:   [Done]
+    if [ -f $bootpart_n ] && [ $bootparttype = tgz ]; then
+	echo "Installing boot partition, please wait ..."
+	tar xf $bootpart_n -C $bootpartition
+	print_d "boot partition installation"
     fi
 
     # install system rootfs
-    if [ -n "$rootfs" ] && [ "$srcrfstype" = "dir" ]; then
-	echo installing rootfs, please wait ...
-	  cp -rfp $rootfs/* /run/media/${devpartname}$syspartnum
-	echo rootfs partition installation:   [Done]
-    elif [ -n "$rootfs" ] && [ "$srcrfstype" = "tgz" ]; then
-	echo installing rootfs, please wait ...
-	  tar xf $rootfs -C /run/media/${devpartname}$syspartnum
-	  rm -rf /run/media/${devpartname}$syspartnum/debootstrap
-	echo rootfs partition installation:   [Done]
-    elif [ -n "$rootfs" ] && [ "$srcrfstype" = "uuidimg" ]; then
-	echo installing $rootfs, please wait ...
-	dd if=$rootfs of=/dev/mmcblk0p2 bs=4M;sync
-	echo $distrotype system rootfs installation:   [Done]
+    if [ -d $rootfs_n ] && [ $rfstype = dir ]; then
+	echo "Installing system partition, please wait ..."
+	cp -rfp $rootfs_n/* $syspart
+	print_d "rootfs partition installation"
+    elif [ -f $rootfs_n ] && [ $rfstype = tgz ]; then
+	echo "Installing system partition, please wait ..."
+	tar xf $rootfs_n -C $syspartition
+	rm -rf $syspartition/debootstrap
+	print_d "system partition installation"
+    elif [ -n $rootfs_n ] && [ $rfstype = formatted ]; then
+	echo installing $rootfs_n, please wait ...
+	dd if=$rootfs_n of=/dev/mmcblk0p2 bs=4M; sync
+	print_d "system partition installation"
     fi
 
-    # install userdata in case $userdata is specified
+    # install the second rootfs for dual OS if '-R' option is specified
+    if [ -n "$rootfs2" ] && [ -d $rootfs2_n ]; then
+	echo installing $rootfs2, please wait ...
+	cp -rfp $rootfs2_n/* $backuppart
+	print_d "Install $rootfs2"
+    elif [ -n "$rootfs2_n" ] && [ -f $rootfs2_n ] && [ $rfs2type = tgz ]; then
+	echo "Installing the second rootfs, please wait ..."
+	tar xf $rootfs2_n -C $backuppartition
+	test -d $backuppartition/debootstrap && rm -rf $backuppartition/debootstrap
+	print_d "Install $rootfs2 in $backupdev"
+    fi
+
     if [ -n "$userdata" ]; then
-        echo installing userdata, please wait ...
-          tar xf $userdata -C /run/media/${devpartname}$userpartnum
-        echo userdata partition installation:   [Done]
+	echo "Installing userdata, please wait ..."
+	tar xf $userdata -C $userpartition
+	print_d "userdata partition installation"
     fi
 
+    echo sync data, please wait ...
     sync
 
-    if [ "$distrotype" = "android" ]; then
-	echo "Android installation finished"
+    if [ $distrotype = android ]; then
+	print_d "Android installation finished"
 	exit
     fi
-
-    if [ -z "$rootfs" ]; then
+    if [ $instruction != auto ] && [ -z "$rootfs" -a -z "$rootfs2" ]; then
 	return
     fi
-    df -h
 
-    echo setting PARTUUID ...
-    uuid2=`lsblk -l --output UUID  /dev/${devpartname}$bootpartnum | grep -`
-    partuuid2=`lsblk -l --output PARTUUID  /dev/${devpartname}$bootpartnum | grep -`
-    partuuid3=`lsblk -l --output PARTUUID  /dev/${devpartname}$syspartnum | grep -`
-    echo UUID2 = $uuid2
-    echo PARTUUID2 = $partuuid2
-    echo PARTUUID3 = $partuuid3
-
-      chmod 666 /run/media/${devpartname}$syspartnum/etc/fstab
-      echo "/dev/root         /      ext4    errors=remount-ro 0  1" >> /run/media/${devpartname}${syspartnum}/etc/fstab
-      echo "UUID=$uuid2       /boot  ext4    defaults          0  2" >> /run/media/${devpartname}${syspartnum}/etc/fstab
-      chmod 644 /run/media/${devpartname}${syspartnum}/etc/fstab
-    if [ -f /run/media/${devpartname}$syspartnum/etc/apt/apt.conf ]; then
-	  rm -f /run/media/${devpartname}$syspartnum/etc/apt/apt.conf
-    fi
-    # configure grub.cfg for UEFI
-    if [ -f /run/media/${devpartname}${bootpartnum}/grub/${machine}_grub.cfg ]; then
-	  touch /run/media/${devpartname}${bootpartnum}/$partuuid2
-	grep -r -l partuuid02 /run/media/${devpartname}${bootpartnum}/grub |   xargs sed -i "s/partuuid02/$partuuid2/g"
-	grep -r -l partuuid03 /run/media/${devpartname}${bootpartnum}/grub |   xargs sed -i "s/partuuid03/$partuuid3/g"
+    if [ -n "$rootfs" ] || [ -f $rootfs_n ]; then
+	echo setting PARTUUID ...
+	uuid_boot=`lsblk -l --output UUID $bootdev | grep -`
+	uuid_backup=`lsblk -l --output UUID $backupdev | grep -`
+	[ -n "$userpartnum" ] && uuid_user=`lsblk -l --output UUID $userdev | grep -`
+	fstabfile=$syspartition/etc/fstab
+	chmod 666 $fstabfile
+	echo "/dev/root     /    ext4       errors=remount-ro 0  1" >> $fstabfile
+	echo "UUID=$uuid_boot    /boot      ext4    defaults      0  2" >> $fstabfile
+	echo "UUID=$uuid_backup    /backup      ext4    defaults      0  2" >> $fstabfile
+	[ -n "$userpartnum" ] && echo "UUID=$uuid_user    /userdata  ext4    defaults   0  2" >> $fstabfile
+	chmod 644 $fstabfile
+	test -f $syspartition/etc/apt/apt.conf && rm -f $syspartition/etc/apt/apt.conf
+	test -f $syspartition/var/lib/docker && rm -f $syspartition/var/lib/docker
+	ln -s /backup/docker  $syspartition/var/lib/docker
     fi
 
-    if [ -n "$machine" ]; then
-	# for UEFI case
+    if [ -n "$rootfs2" ] && [ -f $rootfs2_n ]; then
+	echo setting PARTUUID ...
+	uuid_boot=`lsblk -l --output UUID $bootdev | grep -`
+	uuid_backup=`lsblk -l --output UUID $backupdev | grep -`
+	fstabfile=$backuppartition/etc/fstab
+	chmod 666 $fstabfile
+	echo "/dev/root	  /	  ext4    errors=remount-ro 0  1" >> $fstabfile
+	echo "UUID=$uuid_boot    /boot      ext4    defaults      0  2" >> $fstabfile
+	chmod 644 $fstabfile
+	test -f $backuppartition/etc/apt/apt.conf && rm -f $backuppartition/etc/apt/apt.conf
+    fi
+
+    if [ "$enable_efi" = "y" ]; then
+	# configure grub.cfg for UEFI
+	if [ -f $bootpartition/grub/${machine}_grub.cfg ]; then
+	    partuuid_boot=`lsblk -l --output PARTUUID $bootdev | grep -`
+	    partuuid_sys=`lsblk -l --output PARTUUID $sysdev | grep -`
+	    touch $bootpartition/$partuuid_boot
+	    grep -r -l partuuid_boot $bootpartition/grub | xargs sed -i "s/partuuid_boot/$partuuid_boot/g"
+	    grep -r -l partuuid_sys $bootpartition/grub | xargs sed -i "s/partuuid_sys/$partuuid_sys/g"
+	fi
 	if ! mount | grep ${devpartname}$efipartnum; then
-	     mount /dev/${devpartname}$efipartnum  /run/media/${devpartname}$efipartnum
+	   mount $efidev $efipartition
 	fi
-	  mkdir -p /run/media/${devpartname}$efipartnum/EFI/BOOT
-	if [ -f /run/media/${devpartname}${bootpartnum}/grub/${machine}_grub.cfg ]; then
-	      cp /run/media/${devpartname}${bootpartnum}/grub/${machine}_grub.cfg /run/media/${devpartname}$efipartnum/EFI/BOOT/grub.cfg
+	mkdir -p $efipartition/EFI/BOOT
+	if [ -f $bootpartition/grub/${machine}_grub.cfg ]; then
+	    cp $bootpartition/grub/${machine}_grub.cfg $efipartition/EFI/BOOT/grub.cfg
 	fi
-	if [ -f /run/media/${devpartname}${bootpartnum}/grub/BOOTAA64.EFI ]; then
-	      cp /run/media/${devpartname}${bootpartnum}/grub/BOOTAA64.EFI /run/media/${devpartname}$efipartnum/EFI/BOOT/
+	if [ -f $bootpartition/grub/BOOTAA64.EFI ]; then
+	    cp $bootpartition/grub/BOOTAA64.EFI $efipartition/EFI/BOOT/
 	fi
-	if grep U-Boot /run/media/${devpartname}${syspartnum}/etc/.buildinfo 1>/dev/null 2>&1; then
-	      sed -i '3d' /run/media/${devpartname}${syspartnum}/etc/.buildinfo
+	if grep -q U-Boot $syspartition/etc/buildinfo; then
+	    sed -i '3d' $syspartition/etc/buildinfo
 	fi
     fi
 
-    if grep $uuid2 /run/media/${devpartname}${syspartnum}/etc/fstab 1>/dev/null 2>&1; then
-	echo "$distrotype installation finished successfully"
+    if grep -q $uuid_boot $fstabfile; then
+	print_n "Installation completed successfully"
     else
-	echo "$distrotype installation failed"
+	print_e "Installation failed"
     fi
 }
 
 
-if [ -z "$parttable" ]; then
-    parttable=msdos
-fi
+check_images_format() {
+    if [ -d $bootpart_n ]; then
+	bootparttype=dir
+    elif file -L $bootpart_n | grep -q 'gzip compressed'; then
+	bootparttype=tgz
+    elif file -L $bootpart_n | grep -q 'UUID='; then
+	bootparttype=formatted
+    elif [ $instruction != auto ] && [ -n "$bootpart" ] && [ ! -f $bootpart ]; then
+	print_e "Not found $bootpart"; exit
+    else
+	bootparttype=unknown
+    fi
 
-if [ "$srcrfstype" = "uuidimg" ] || [ `echo $rootfs | grep android` ]; then
-    distrotype=android
-fi
+    if [ -d $rootfs_n ]; then
+	rfstype=dir
+    elif file -L $rootfs_n | grep -q 'gzip compressed'; then
+	rfstype=tgz
+    elif file -L $rootfs_n | grep -q 'UUID='; then
+	rfstype=formatted
+    elif [ $instruction != auto ] && [ -n "$rootfs" ] && [ ! -f $rootfs ]; then
+	print_e "Not found $rootfs"; exit
+    else
+	rfstype=unknown
+    fi
 
-if [ "$distrotype" = "android" ]; then
-    bootpartnum=1
-    syspartnum=2
-    backuppartnum=3
-    userpartnum=4
-else
-    efipartnum=1
-    bootpartnum=2
-    syspartnum=3
-fi
+    if [ -d $rootfs2_n ]; then
+	rfs2type=dir
+    elif file -L $rootfs2_n | grep -q 'gzip compressed'; then
+	rfs2type=tgz
+    elif file -L $rootfs2_n | grep -q 'UUID='; then
+	rfs2type=formatted
+    elif [ $instruction != auto ] && [ -n "$rootfs2" ] && [ ! -f $rootfs2 ]; then
+	print_e "Not found $rootfs2"; exit
+    else
+	rfs2type=unknown
+    fi
+}
 
-if [ -n "$firmware" -a -z "$bootpart" -a -z "$rootfs" ]; then
-    program_firmware_to_sd $firmware 8 $mediadevice
-else
-    if [ "$ARCH" = "x86_64" -o "$ARCH" = "i686" ]; then
-	if [ "$distrotype" = "android" ]; then
-	    partition_format_disk_android
-	else
-	    partition_format_disk_linux
-	fi
-	flex_install_distro
-    elif [ $ARCH = "aarch64" -o $ARCH = "armv7l" ]; then
-	if [ "$instruction" = "pf" ]; then
-	    if [ "$distrotype" = "android" ]; then
-		partition_format_disk_android
-		cd  /run/media/${devpartname}${userpartnum}
-	    else
-		partition_format_disk_linux
-		cd  /run/media/${devpartname}${syspartnum}
-	    fi
-	elif [ "$instruction" = "install" -o -z "$instruction" ]; then
-	    flex_install_distro
-	else
-	    echo please specify -i argument.
+
+check_network_access() {
+    if ! ping $DEFAULT_SVR -c 2 1>/dev/null 2>&1; then
+	print_e "ERROR: unable to access external Internet"
+	print_e "Please check your network to ensure this machine can access external Internet"
+	print_w "Please set HTTP proxy in case it needs proxy to access external Internet"
+	exit
+    fi
+
+    if echo $url | grep -q //; then
+	remoteserver=$(echo $url | cut -d/ -f3)
+    else
+	remoteserver=$(echo $url | cut -d/ -f1)
+    fi
+    if [ $remoteserver != $DEFAULT_SVR ]; then
+	if ! ping $remoteserver -c 2 1>/dev/null 2>&1; then
+	    print_e "ERROR: unable to access $remoteserver to fetch distro image"
+	    print_e "Please check your network to ensure $remoteserver is accessable from this machine"
 	    exit
 	fi
     fi
+    if [ -n "$http_proxy" ]; then
+	echo http_proxy = $http_proxy
+    fi
+}
+
+
+check_http_request() {
+    info=`curl -s -m 10 --connect-timeout 10 -I $1` || true
+    if [ -z "$info" ]; then
+	print_e "Unable to access the requested URL $1"
+	exit
+    fi
+    code=`echo "$info" | grep HTTP | awk '{print $2}'`
+    if [ "$code" != "200" ]; then
+	print_e "The requested URL $1 returned error $code"
+	exit
+    fi
+}
+
+
+download_distro() {
+    check_http_request $bootpart_url
+    if [ "$machine" != ls2088ardb ]; then
+	echo -e "\n Downloading $firmware_url ..." && curl -R -O -f $firmware_url;
+	if [ $? != 0 ]; then
+	    print_w "Not found $firmware_url, will not install ${firmware_url##*/} for sdboot"
+	fi
+    fi && \
+    echo -e "\n Downloading $bootpart_url ..." && curl -R -O -f $bootpart_url && \
+    echo -e "\n Downloading $rootfs_url ..."   && curl -R -O -f $rootfs_url   && \
+    if [ -n "$rootfs2" ]; then
+	echo -e "\n Downloading $rootfs2_url ..." && curl -R -O -f $rootfs2_url
+    fi
+    if [ $? != 0 ]; then
+	print_e "Failed to download distro images"
+	exit
+    else
+	print_n "Downloaded distro images successfully"
+    fi
+}
+
+
+print_e() {
+    echo -e "${RED} $1 ${NC}"
+}
+
+print_n() {
+    echo -e "${green} $1 ${NC}"
+}
+
+print_w() {
+    echo -e "${YELLOW} $1 ${NC}"
+}
+
+print_d() {
+    echo -e "${GREEN} $1     [Done] ${NC}"
+}
+
+RED='\e[1;31m'
+GREEN='\e[1;32m'
+green='\e[0;32m'
+YELLOW='\e[1;33m'
+NC='\e[0m'
+
+if [ -z "$1" -o "$1" = "--help" ] ; then
+    usage; exit
+fi
+
+ARGS=`getopt -a -o m:f:b:r:R:u:p:d:s:i:hvse -l machine:,firmware:,bootpart:,rootfs:,rootfs2:,url:,partition:,device:,efi:,startblock:,instruction:,help,version,efi -- "$@"`
+[ $? -ne 0 ] && usage
+eval set -- "${ARGS}"
+while true
+do
+	case "$1" in
+	-m|--machine)
+		machine=$2
+		echo machine = $machine
+		shift;;
+	-f|--firmware)
+		firmware=$2
+		echo firmware = $firmware
+		shift;;
+	-s|--startblock)
+		startblock=$2
+		echo startblock = $startblock
+		shift;;
+	-b|--bootpart)
+		bootpart=$2
+		echo bootpart = $bootpart
+		shift;;
+	-r|--rootfs)
+		rootfs=$2
+		echo rootfs = $rootfs
+		shift;;
+	-R|--rootfs2)
+		rootfs2=$2
+		echo rootfs2 = $rootfs2
+		shift;;
+	-p|--partition)
+		diskpartition=$2
+		echo diskpartition = $diskpartition
+		shift;;
+	-u|--url)
+		url=$2
+		echo URL = $url
+		shift;;
+	-d|--device)
+		mediadevice=$2
+		shift;;
+	-i|instruction)
+		if [ ${2:0:5} = auto: ]; then
+		    distrover=$(echo $2 | cut -d: -f2)
+		    echo distroversion: $distrover
+		elif [ ${2:0:3} = pf: ]; then
+		    distrotype=$(echo $2 | cut -d: -f2)
+		fi
+		instruction=$(echo $2 | cut -d: -f1)
+		echo instruction = $2
+		shift;;
+	-e|--efi)
+		enable_efi=y
+		echo "'-e' option is enabled for UEFI instead of U-Boot";;
+	-v|--version)
+		echo flex-installer version: $FIVERSION
+		exit;;
+	-h|--help)
+		usage;;
+	--)
+		shift
+		break;;
+	esac
+shift
+done
+
+
+if [ -z "$mediadevice" ]; then
+    print_e "Please specify '-d <device>'"
+    exit
+fi
+
+if [ $ARCH = x86_64 -o $ARCH = i686 ] ; then
+    if [ ! -b $mediadevice ]; then
+	print_e "$mediadevice does not exist on this host machine"
+	exit
+    fi
+    get_device_name_on_host
+else
+    get_device_name_in_tinydistro
+fi
+
+if [ -n "$distrover" ]; then
+    distroversion=$distrover
+else
+    distroversion=lsdk${FIVERSION:4:4}
+fi
+
+if [ -z "$distrotype" ]; then distrotype=linux; fi
+if [ -z "$instruction" ]; then instruction=null; fi
+
+
+RESERVEDRAW=68
+DEFAULT_LINUX_PARTITION="4P=100M:1G:6G:-1"
+DEFAULT_ANDROID_PARTITION="4P=1G:2G:2G:-1"
+
+if [ $distrotype = android ]; then
+    bootpartnum=1; syspartnum=2; backuppartnum=3; userpartnum=4
+    [ -z "$diskpartition" ] && diskpartition=$DEFAULT_ANDROID_PARTITION
+else
+    bootpartnum=2; syspartnum=4; backuppartnum=3; efipartnum=1
+    [ -z "$diskpartition" ] && diskpartition=$DEFAULT_LINUX_PARTITION
+fi
+
+get_partition_number
+
+bootdev=/dev/${devpartname}$bootpartnum
+sysdev=/dev/${devpartname}$syspartnum
+backupdev=/dev/${devpartname}$backuppartnum
+bootpartition=/run/media/${devpartname}${bootpartnum}
+syspartition=/run/media/${devpartname}${syspartnum}
+backuppartition=/run/media/${devpartname}${backuppartnum}
+
+[ -n "$efipartnum" ] && efidev=/dev/${devpartname}$efipartnum && efipartition=/run/media/${devpartname}${efipartnum}
+[ -n "$userpartnum" ] && userdev=/dev/${devpartname}$userpartnum && userpartition=/run/media/${devpartname}${userpartnum}
+
+for i in $bootpartition $syspartition $backuppartition $efipartition $userpartition; do
+    mkdir -p $i
+done
+
+if [ "$machine" = "ls1021atwr" ]; then
+    tgtarch=arm32
+else
+    tgtarch=arm64
+fi
+
+default_linux_version=4.19
+
+if [ -n "$bootpart" ]; then
+    bootpart_n=$bootpart
+else
+    bootpart_n=bootpartition_LS_${tgtarch}_lts_${default_linux_version}.tgz
+fi
+
+if [ -n "$firmware" ]; then
+    firmware_n=$firmware
+else
+    firmware_n=firmware_${machine}_uboot_sdboot.img
+fi
+
+if [ -n "$rootfs" ]; then
+    rootfs_n=$rootfs
+else
+    rootfs_n=rootfs_${distroversion}_LS_${tgtarch}_main.tgz
+fi
+
+if [ -n "$rootfs2" ]; then
+    rootfs2_n=$rootfs2
+fi
+
+if [ -z "$url" -a -z "$distrover" ]; then
+    url=$DISTRO_SVR_URL
+elif [ -z "$url" -a -n "$distrover" ]; then
+    url=${DISTRO_SVR_URL%/*}/$distrover
+fi
+
+if [ $instruction = auto ]; then
+    rootfs_url=$url/$rootfs_n
+    rootfs2_url=$url/$rootfs2_n
+    bootpart_url=$url/$bootpart_n
+    firmware_url=$url/$firmware_n
+    if [ ! -f /usr/bin/curl ]; then
+	print_e "not found curl, please install curl package"
+	exit
+    fi
+    if [ -z "$machine" ]; then
+	print_w "Please specify '-m <machine>'"
+	exit
+    fi
+    check_network_access
+    check_disk_capacity
+    partition_format_disk $diskpartition
+    if [ $ARCH = aarch64 -o $ARCH = armv7l ]; then
+	cd $backuppartition
+    fi
+    download_distro
+    check_images_format
+    flex_install_distro
+elif [ $instruction = pf ]; then
+    check_disk_capacity
+    partition_format_disk $diskpartition
+elif [ $instruction = null ] && [ -n "$bootpart" -o -n "$rootfs" -o -n "$rootfs2" -o "$firmware" ]; then
+    if [ "$enable_efi" = "y" ] && [ -z "$machine" ]; then
+	print_e "Please specify '-m <machine>' for UEFI installation"
+	exit
+    fi
+    if [ "$ARCH" = "x86_64" -o "$ARCH" = "i686" ] || [[ `cat /etc/issue | grep 'NXP LSDK lsdk'` ]]; then
+	partition_format_disk $diskpartition
+    fi
+    check_images_format
+    flex_install_distro
+elif [ "$instruction" = "install" -o -z "$instruction" ]; then
+    check_images_format
+    flex_install_distro
+else
+    print_e "Incorrect usage, run 'flex-installer -h' to see help info"
 fi

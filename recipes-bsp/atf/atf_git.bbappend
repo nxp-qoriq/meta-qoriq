@@ -1,5 +1,9 @@
 UEFI_QSPIBOOT_ls1046ardb ?= "LS1046ARDB_EFI_QSPIBOOT.fd"
 
+DEPENDS_append_qoriq-arm64 += "${@bb.utils.contains('DISTRO_FEATURES', 'optee', 'optee-os-qoriq', '', d)}"
+DEPENDS_append_lx2160a += "ddr-phy"
+chassistype_ls1046afrwy = "ls104x_1012"
+
 do_compile() {
     export LIBPATH="${RECIPE_SYSROOT_NATIVE}"
     install -d ${S}/include/tools_share/openssl

@@ -6,6 +6,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-2.0;md5=801f80980d171dd6425
 
 TYPE ??= "nor"
 TYPE_ls1046ardb ?= "qspi"
+TYPE_ls1046afrwy ?= "qspi"
 TYPE_ls1088a ?= "qspi"
 TYPE_lx2160ardb ?= "xspi"
 TYPE_ls1012ardb ?= "qspi"

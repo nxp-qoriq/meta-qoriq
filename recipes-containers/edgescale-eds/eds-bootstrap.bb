@@ -14,6 +14,7 @@ ARCH_mx8 = "arm64"
 
 S = "${WORKDIR}/git"
 
+do_configure[noexec] = "1"
 do_compile[noexec] = "1"
 
 do_install () {

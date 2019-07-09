@@ -16,6 +16,7 @@ SRC_URI = "file://create_secure_boot_image.sh \
     file://ls1012ardb.manifest \
     file://lx2160ardb.manifest \
     file://ls1012afrwy.manifest \
+    file://ls1046afrwy.manifest \
 "
 
 inherit deploy
@@ -31,6 +32,7 @@ do_deploy[depends] += "virtual/kernel:do_deploy ${ITB_IMAGE}:do_build"
 BOOT_TYPE ??= ""
 BOOT_TYPE_ls1043ardb ?= "nor sd"
 BOOT_TYPE_ls1046ardb ?= "qspi sd"
+BOOT_TYPE_ls1046afrwy ?= "qspi sd"
 BOOT_TYPE_ls1088a ?= "qspi sd"
 BOOT_TYPE_ls2088ardb ?= "qspi nor"
 BOOT_TYPE_lx2160ardb ?= "xspi sd"

@@ -107,6 +107,5 @@ RDEPENDS_${PN}_append_qoriq-arm64 = "\
     ${SECURE_TOOLS} \
 "
 RDEPENDS_${PN}_append_qoriq-ppc = "\
-    hyperrelay \
     ${@multilib_pkg_extend(d, "valgrind")} \
 "

@@ -8,7 +8,7 @@
 
 Usage()
 {
-    echo "Usage: $0 -m MACHINE  -t BOOTTYPE -d TOPDIR -s DEPLOYDIR -e ENCAP -i IMA_EVM\
+    echo "Usage: $0 -m MACHINE  -t BOOTTYPE -d TOPDIR -s DEPLOYDIR -e ENCAP -i IMA_EVM -o SECURE\
 
         -m        machine name
         -t        boottype
@@ -16,12 +16,13 @@ Usage()
         -s        deploy dir
         -e        encap
         -i        ima-evm
+        -o   secure
 "
     exit
 }
 
 # get command options
-while getopts "m:t:d:s:e:i:" flag
+while getopts "m:t:d:s:e:i:o:" flag
 do
         case $flag in
                 m) MACHINE="$OPTARG";
@@ -41,6 +42,9 @@ do
                    ;;
                 i) IMA_EVM="$OPTARG";
                    echo "ima_evm : $IMA_EVM";
+                   ;;
+                o) SECURE="$OPTARG";
+                   echo "secure : $SECURE";
                    ;;
                 ?) Usage;
                    exit 3
@@ -191,11 +195,19 @@ generate_qoriq_composite_firmware() {
 
     . $MACHINE.manifest
     . memorylayout.cfg
-    fwimg=$DEPLOYDIR/firmware_${MACHINE}_uboot_${BOOTTYPE}boot_secure
-    rcwimg=`eval echo '${'"rcw_""$BOOTTYPE"'_sec}'`
-    bootloaderimg=`eval echo '${'"uboot"'_'"$BOOTTYPE"'boot_sec}'`
-    bl2img=`eval echo '${'"atf_bl2_""$BOOTTYPE"'_sec}'`
-    fipimg=`eval echo '${'"atf_fip_""uboot"'_sec}'`
+    if [ "$SECURE" = "true" ]; then
+      fwimg=$DEPLOYDIR/firmware_${MACHINE}_uboot_${BOOTTYPE}boot_secure
+      rcwimg=`eval echo '${'"rcw_""$BOOTTYPE"'_sec}'`
+      bootloaderimg=`eval echo '${'"uboot"'_'"$BOOTTYPE"'boot_sec}'`
+      bl2img=`eval echo '${'"atf_bl2_""$BOOTTYPE"'_sec}'`
+      fipimg=`eval echo '${'"atf_fip_""uboot"'_sec}'`
+    else
+      fwimg=$DEPLOYDIR/firmware_${MACHINE}_uboot_${BOOTTYPE}boot
+      rcwimg=`eval echo '${'"rcw_""$BOOTTYPE"'}'`
+      bootloaderimg=`eval echo '${'"uboot"'_'"$BOOTTYPE"'boot}'`
+      bl2img=`eval echo '${'"atf_bl2_""$BOOTTYPE"'}'`
+      fipimg=`eval echo '${'"atf_fip_""uboot"'}'`
+    fi
     if [ -f $fwimg ]; then
         rm -f $fwimg
     fi
@@ -230,7 +242,7 @@ generate_qoriq_composite_firmware() {
         fi
     fi
     # secure boot headers
-    if [ "$secureboot_headers" != null -a -n "$secureboot_headers" ] ; then
+    if [ "$secureboot_headers" != null -a -n "$secureboot_headers" ] && [ "$SECURE" = "true" ] ; then
         if [ $BOOTTYPE = nor -o $BOOTTYPE = qspi -o $BOOTTYPE = xspi -o $BOOTTYPE = nand ]; then
             val=`expr $(echo $(($nor_secureboot_headers_offset))) / 1024`
             dd if=$DEPLOYDIR/$secureboot_headers of=$fwimg bs=1K seek=$val
@@ -240,8 +252,12 @@ generate_qoriq_composite_firmware() {
     fi
 
     # DDR PHY firmware
-    if [ $MACHINE = lx2160ardb -o $MACHINE = lx2160aqds ]; then
-        ddrphyfw=$ddr_phy_fw_sec
+    if [ $MACHINE = lx2160ardb ]; then
+        if [ "$SECURE" = "true" ]; then
+	    ddrphyfw=$ddr_phy_fw_sec
+	else
+	    ddrphyfw=$ddr_phy_fw
+        fi
         if [ $BOOTTYPE = nor -o $BOOTTYPE = qspi -o $BOOTTYPE = xspi -o $BOOTTYPE = nand ]; then
             val=`expr $(echo $(($nor_ddr_phy_fw_offset))) / 1024`
             dd if=$DEPLOYDIR/$ddrphyfw of=$fwimg bs=1K seek=$val
@@ -251,7 +267,7 @@ generate_qoriq_composite_firmware() {
     fi
      # fuse provisioning in case CONFIG_FUSE_PROVISIONING is enabled
     if [ "$CONFIG_FUSE_PROVISIONING" = "y" ]; then
-        if [ "$SECURE" = "y" ]; then
+        if [ "$SECURE" = "ture" ]; then
             fuse_header=build/firmware/atf/$1/fuse_fip_sec.bin
         else
             fuse_header=build/firmware/atf/$1/fuse_fip.bin
@@ -278,7 +294,7 @@ generate_qoriq_composite_firmware() {
         if [ $BOOTTYPE = nor -o $BOOTTYPE = qspi -o $BOOTTYPE = xspi -o $BOOTTYPE = nand ]; then
             val=`expr $(echo $(($nor_qe_firmware_offset))) / 1024`
             dd if=$DEPLOYDIR/$qe_firmware of=$fwimg bs=1K seek=$val
-        elif [ $BOOTTYPE = sd -o  = emmc ]; then
+        elif [ $BOOTTYPE = sd -o $BOOTTYPE = emmc ]; then
             dd if=$DEPLOYDIR/$qe_firmware of=$fwimg bs=512 seek=$sd_qe_firmware_offset
         fi
     fi
@@ -356,5 +372,5 @@ generate_qoriq_composite_firmware() {
 }
 
 generate_distro_bootscr $MACHINE
-secure_sign_image $MACHINE $BOOTTYPE
+#secure_sign_image $MACHINE $BOOTTYPE
 generate_qoriq_composite_firmware $MACHINE $BOOTTYPE

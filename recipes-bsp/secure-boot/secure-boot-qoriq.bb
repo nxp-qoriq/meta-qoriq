@@ -21,8 +21,8 @@ SRC_URI = "file://create_secure_boot_image.sh \
 
 inherit deploy
 
-#set ROOTFS_IMAGE = "fsl-image-mfgtool" 
-#set KERNEL_ITS = "kernel-all.its" in local.config
+ROOTFS_IMAGE ?= "fsl-image-mfgtool" 
+KERNEL_ITS ?= "kernel-all.its" 
 ITB_IMAGE = "fsl-image-kernelitb"
 ITB_IMAGE_ls1021atwr = "virtual/kernel"
 DEPENDS = "u-boot-mkimage-native cst-native atf"
@@ -42,6 +42,7 @@ BOOT_TYPE_ls1021atwr ?= "qspi nor sd"
 
 IMA_EVM = "${@bb.utils.contains('DISTRO_FEATURES', 'ima-evm', 'true', 'false', d)}"
 ENCAP = "${@bb.utils.contains('DISTRO_FEATURES', 'encap', 'true', 'false', d)}"
+SECURE = "${@bb.utils.contains('DISTRO_FEATURES', 'secure', 'true', 'false', d)}"
 
 S = "${WORKDIR}"
 
@@ -55,14 +56,16 @@ do_deploy () {
     cp ${S}/*.sh ./
     cp ${S}/${MACHINE}.manifest ./
     cp ${S}/memorylayout.cfg ./
-    if [ ${MACHINE} = ls1021atwr ];then
-        ./gen_keys 1024
-    else
-        cp ${DEPLOY_DIR_IMAGE}/atf/srk.* ./
+    if [ ${SECURE} = "true" ]; then 
+       if [ ${MACHINE} = ls1021atwr ];then
+          ./gen_keys 1024
+       else
+          cp ${DEPLOY_DIR_IMAGE}/atf/srk.* ./
+      fi
     fi
 
     for d in ${BOOT_TYPE}; do
-        ./create_secure_boot_image.sh -m ${MACHINE} -t ${d} -d . -s ${DEPLOY_DIR_IMAGE} -e ${ENCAP} -ima ${IMA_EVM}
+        ./create_secure_boot_image.sh -m ${MACHINE} -t ${d} -d . -s ${DEPLOY_DIR_IMAGE} -e ${ENCAP} -i ${IMA_EVM} -o ${SECURE}
     done
     cp ${RECIPE_SYSROOT_NATIVE}/usr/bin/cst/${MACHINE}_boot.scr ${DEPLOY_DIR_IMAGE}
 }

@@ -86,7 +86,6 @@ do_install() {
         install -d ${D}/usr/local/edgescale/conf
         
 	cp -r ${S}/import/vendor/cert-agent/cert-agent ${D}/usr/local/edgescale/bin
-        cp -r ${S}/import/vendor/cert-agent/pkg ${D}/${includedir}/cert-agent/
         cp -r ${S}/src/${GO_IMPORT}/etc/edgescale-version ${D}/usr/local/edgescale/conf
 }
 

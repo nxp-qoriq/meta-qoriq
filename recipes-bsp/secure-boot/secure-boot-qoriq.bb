@@ -21,8 +21,8 @@ SRC_URI = "file://create_secure_boot_image.sh \
 
 inherit deploy
 
-ROOTFS_IMAGE = "fsl-image-mfgtool" 
-KERNEL_ITS = "kernel-all.its" 
+#set ROOTFS_IMAGE = "fsl-image-mfgtool" in local.conf
+#set KERNEL_ITS = "kernel-all.its" in local.conf
 ITB_IMAGE = "fsl-image-kernelitb"
 ITB_IMAGE_ls1021atwr = "virtual/kernel"
 DEPENDS = "u-boot-mkimage-native cst-native atf"

@@ -372,5 +372,5 @@ generate_qoriq_composite_firmware() {
 }
 
 generate_distro_bootscr $MACHINE
-#secure_sign_image $MACHINE $BOOTTYPE
+secure_sign_image $MACHINE $BOOTTYPE
 generate_qoriq_composite_firmware $MACHINE $BOOTTYPE

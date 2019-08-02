@@ -8,7 +8,6 @@ SRC_URI = "file://create_secure_boot_image.sh \
     file://memorylayout.cfg \
     file://flash_images.sh \
     file://ls2088ardb.manifest \
-    file://ls1088ardb.manifest \
     file://ls1088ardb-pb.manifest \
     file://ls1021atwr.manifest \
     file://ls1043ardb.manifest \

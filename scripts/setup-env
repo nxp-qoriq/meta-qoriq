@@ -183,7 +183,7 @@ LAYER_LIST=" \
     meta-virtualization \
     meta-cloud-services \
     meta-security \
-    \
+    meta-selinux \
     meta-freescale \
     meta-freescale-distro \
     meta-qoriq-demos \

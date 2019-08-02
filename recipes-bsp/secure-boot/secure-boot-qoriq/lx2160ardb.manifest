@@ -4,7 +4,7 @@ machine=lx2160ardb
 # [firmware_images]
 uefi_xspiboot=build/firmware/uefi/lx2160ardb/LX2160ARDB_EFI_NORBOOT.fd
 uefi_env=build/firmware/uefi/lx2160ardb/LX2160ARDBNV_EFI_NORBOOT.fd
-atf_bl2_xspi=build/firmware/atf/lx2160ardb/bl2_flexspi_nor.pbl
+atf_bl2_xspi=atf/bl2_flexspi_nor.pbl
 atf_bl2_xspi_sec=atf/bl2_flexspi_nor_sec.pbl
 atf_bl2_sd=atf/bl2_sd.pbl
 atf_bl2_sd_sec=atf/bl2_sd_sec.pbl

@@ -7,15 +7,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-2.0;md5=801f80980d171dd6425
 SRC_URI = "file://create_secure_boot_image.sh \
     file://memorylayout.cfg \
     file://flash_images.sh \
-    file://ls2088ardb.manifest \
-    file://ls1088ardb-pb.manifest \
-    file://ls1021atwr.manifest \
-    file://ls1043ardb.manifest \
-    file://ls1046ardb.manifest \
-    file://ls1012ardb.manifest \
-    file://lx2160ardb.manifest \
-    file://ls1012afrwy.manifest \
-    file://ls1046afrwy.manifest \
+    file://${MACHINE}.manifest \
 "
 
 inherit deploy

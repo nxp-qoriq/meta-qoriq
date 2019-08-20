@@ -31,7 +31,7 @@ RDEPENDS_${PN} = "\
     rng-tools \
     haveged \
     rt-tests \
-    stress \
+    stress-ng \
     sqlite3 \
     strongswan \
     texinfo \

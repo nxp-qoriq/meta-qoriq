@@ -53,7 +53,7 @@ inherit goarch
 # This disables seccomp and apparmor, which are on by default in the
 # go package. 
 WRAP_TARGET_PREFIX ?= "${TARGET_PREFIX}"
-export GOBUILDTAGS = "${@bb.utils.contains('DISTRO_FEATURES', 'edgescale-optee', 'secure', 'default', d)}"
+export GOBUILDTAGS = "${@bb.utils.contains('DISTRO_FEATURES', 'secure', 'secure', 'default', d)}"
 export CROSS_COMPILE="${WRAP_TARGET_PREFIX}"
 export OPENSSL_PATH="${RECIPE_SYSROOT}/usr"
 export SECURE_OBJ_PATH="${RECIPE_SYSROOT}/usr"

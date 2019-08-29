@@ -122,8 +122,11 @@ secure_sign_image() {
         . $xspi_script
     fi
 
-
-    cp $TOPDIR/secboot_hdrs_${BOOTTYPE}boot.bin $DEPLOYDIR/secboot_hdrs/
+    if [  $MACHINE  = ls1028ardb ] ; then
+        cp $TOPDIR/secboot_hdrs.bin $DEPLOYDIR/secboot_hdrs/secboot_hdrs_${BOOTTYPE}boot.bin
+    else
+        cp $TOPDIR/secboot_hdrs_${BOOTTYPE}boot.bin $DEPLOYDIR/secboot_hdrs/
+    fi
     cp $TOPDIR/hdr_dtb.out $DEPLOYDIR/secboot_hdrs/
     cp $TOPDIR/hdr_linux.out $DEPLOYDIR/secboot_hdrs/
     if [  $MACHINE  = ls1012afrwy ] ; then

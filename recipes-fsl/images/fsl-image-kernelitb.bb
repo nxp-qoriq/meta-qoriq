@@ -3,7 +3,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
 KERNEL_IMAGE ?= "${KERNEL_IMAGETYPE}"
-ROOTFS_IMAGE ?= "fsl-image-edgescale"
+ROOTFS_IMAGE ?= "fsl-image-mfgtool"
 KERNEL_ITS ?= "kernel.its"
 
 SRC_URI = "file://${KERNEL_ITS}"

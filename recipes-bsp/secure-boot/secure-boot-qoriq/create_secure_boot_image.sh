@@ -174,6 +174,8 @@ generate_distro_bootscr() {
                      rm -f $FBDIR/$bootscript_enforce.tmp
                  fi
                  echo $securevalidate_fix > $uboot_scr.tmp
+            elif [ -n "$esbootscr" ]; then
+                echo $esbootscr >> $uboot_scr.tmp
             else
                 echo $securevalidate > $uboot_scr.tmp
             fi
@@ -312,14 +314,23 @@ generate_qoriq_composite_firmware() {
         fi
     fi
     # flashing image script
-    if [ ! -f $DEPLOYDIR/flash_images.scr ] ; then
-        mkimage -T script -C none -d flash_images.sh $DEPLOYDIR/flash_images.scr
-    fi
-    if [ $BOOTTYPE = nor -o $BOOTTYPE = qspi -o $BOOTTYPE = xspi -o $BOOTTYPE = nand ]; then
-        val=`expr $(echo $(($nor_uboot_scr_offset))) / 1024`
-        dd if=$DEPLOYDIR/flash_images.scr of=$fwimg bs=1K seek=$val
-    elif [ $BOOTTYPE = sd -o $BOOTTYPE = emmc ]; then
-        dd if=$DEPLOYDIR/flash_images.scr of=$fwimg bs=512 seek=$sd_uboot_scr_offset
+    #if [ ! -f $DEPLOYDIR/flash_images.scr ] ; then
+    #    mkimage -T script -C none -d flash_images.sh $DEPLOYDIR/flash_images.scr
+    #fi
+    #if [ $BOOTTYPE = nor -o $BOOTTYPE = qspi -o $BOOTTYPE = xspi -o $BOOTTYPE = nand ]; then
+    #    val=`expr $(echo $(($nor_uboot_scr_offset))) / 1024`
+    #    dd if=$DEPLOYDIR/flash_images.scr of=$fwimg bs=1K seek=$val
+    #elif [ $BOOTTYPE = sd -o $BOOTTYPE = emmc ]; then
+    #    dd if=$DEPLOYDIR/flash_images.scr of=$fwimg bs=512 seek=$sd_uboot_scr_offset
+    #fi
+    # scr
+    if [ "$esbootscr" != "null" -a -n "$esbootscr" ] ; then
+        if [ $BOOTTYPE = nor -o $BOOTTYPE = qspi -o $BOOTTYPE = xspi -o $BOOTTYPE = nand ]; then
+            val=`expr $(echo $(($nor_uboot_scr_offset))) / 1024`
+            dd if=$DEPLOYDIR/$uboot_scr of=$fwimg bs=1K seek=$val
+        elif [ $BOOTTYPE = sd -o $BOOTTYPE = emmc ]; then
+            dd if=$DEPLOYDIR/$uboot_scr of=$fwimg bs=512 seek=$sd_uboot_scr_offset
+        fi
     fi
 
     # DPAA2-MC or PFE firmware

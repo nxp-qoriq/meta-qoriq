@@ -11,9 +11,7 @@ inherit packagegroup
 PACKAGES = "${PN}"
 
 X11_TOOLS = "${@bb.utils.contains('DISTRO_FEATURES', 'x11', \
-    ' lsb \
-    lsbinitscripts \
-    lsbtest ', '', d)} \
+    ' lsb-release ', '', d)} \
 "
 
 RDEPENDS_${PN} = "\

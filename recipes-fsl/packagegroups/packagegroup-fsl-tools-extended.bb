@@ -87,6 +87,7 @@ LSDK_TOOLS = "\
     spc \
     vpp-core \
     vpp-core-plugin-acl \
+    tsntool \
 "
 SECURE_TOOLS = "\
     optee-os-qoriq \

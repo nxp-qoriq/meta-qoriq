@@ -1,0 +1,20 @@
+[core]
+# i.MX: Disable idle timeout
+idle-time=0
+#use-g2d=1
+gbm-format=argb8888
+
+[libinput]
+#touchscreen_calibrator=true
+
+[output]
+name=DP-1
+mode=1920x1080@60
+force-on=true
+#transform=90
+
+[shell]
+size=1920x1080
+
+[screen-share]
+command=/usr/local/bin/weston --backend=drm-backend.so --shell=fullscreen-shell.so --no-clients-resize

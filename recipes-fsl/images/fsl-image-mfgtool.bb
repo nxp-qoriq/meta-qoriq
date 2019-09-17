@@ -27,4 +27,4 @@ EXTRA_IMAGEDEPENDS_append = " ${LS2-PHY}"
 
 IMAGE_INSTALL_remove_ls1021atwr = "restool"
 IMAGE_ROOTFS_EXTRA_SPACE = "262144"
-IMAGE_FSTYPES += "ext4.gz"
+IMAGE_FSTYPES += "ext4.gz cpio.gz"

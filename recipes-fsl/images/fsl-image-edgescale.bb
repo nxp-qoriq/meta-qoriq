@@ -31,6 +31,7 @@ IMAGE_INSTALL_append = " \
     keyutils \
     openssl-qoriq-bin \
     rng-tools \
+    mosquitto \
     ${IMA_EVM} \
 "
 

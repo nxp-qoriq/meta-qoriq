@@ -35,6 +35,7 @@ BOOT_TYPE_ls1028ardb ?= "xspi sd emmc"
 IMA_EVM = "${@bb.utils.contains('DISTRO_FEATURES', 'ima-evm', 'true', 'false', d)}"
 ENCAP = "${@bb.utils.contains('DISTRO_FEATURES', 'encap', 'true', 'false', d)}"
 SECURE = "${@bb.utils.contains('DISTRO_FEATURES', 'secure', 'true', 'false', d)}"
+OTA = "${@bb.utils.contains('DISTRO_FEATURES', 'ota', 'true', 'false', d)}"
 
 S = "${WORKDIR}"
 
@@ -55,6 +56,7 @@ do_deploy () {
     fi
  
     for d in ${BOOT_TYPE}; do
+        [ $d = "sd" ] && [ $OTA = "true" ] && continue
         ./create_secure_boot_image.sh -m ${MACHINE} -t ${d} -d . -s ${DEPLOY_DIR_IMAGE} -e ${ENCAP} -i ${IMA_EVM} -o ${SECURE}
     done
     cp ${RECIPE_SYSROOT_NATIVE}/usr/bin/cst/${MACHINE}_boot.scr ${DEPLOY_DIR_IMAGE}

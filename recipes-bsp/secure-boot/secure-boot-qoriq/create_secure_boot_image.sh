@@ -55,6 +55,7 @@ done
 secure_sign_image() {
     
     echo "Signing $2boot images for $1 ..."
+    . $MACHINE.manifest
     if [ "$ENCAP" = "true" ]; then
         cp $TOPDIR/$bootscript_dec $TOPDIR/bootscript_dec && echo "Copying bootscript_decap"
     fi

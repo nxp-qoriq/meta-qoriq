@@ -94,8 +94,9 @@ secure_sign_image() {
 
     if [ -f $DEPLOYDIR/$pfe_fw ] ; then
         cp $DEPLOYDIR/$pfe_fw $TOPDIR/pfe.itb && echo "Copying PFE"
+        FBDIR=$DEPLOYDIR
     fi
-     
+
     if [ -f $DEPLOYDIR/$dpaa2_mc_fw ] ; then
         cp $DEPLOYDIR/$dpaa2_mc_fw $TOPDIR/mc.itb
     fi
@@ -222,38 +223,38 @@ generate_qoriq_composite_firmware() {
         # for machine which doesn't support ATF
         if [ $BOOTTYPE = sd -o $BOOTTYPE = emmc ]; then
             # rcw and uboot/uefi in single image
-            dd if=$DEPLOYDIR/$bootloaderimg of=$fwimg bs=512 seek=$sd_rcw_bootloader_offset
+            dd if=$DEPLOYDIR/$bootloaderimg of=$fwimg bs=512 seek=$sd_rcw_bootloader_offset  && echo "dd rcw"
         else
             # program rcw
             if [ -z "$rcwimg" ]; then echo ${BOOTTYPE}boot on is not unsupported!; exit; fi
-            dd if=$DEPLOYDIR/$rcwimg of=$fwimg bs=1K seek=0
+            dd if=$DEPLOYDIR/$rcwimg of=$fwimg bs=1K seek=0  && echo "dd rcwimg"
             # program u-boot image
             val=`expr $(echo $(($nor_bootloader_offset))) / 1024`
-            dd if=$DEPLOYDIR/$bootloaderimg of=$fwimg bs=1K seek=$val
+            dd if=$DEPLOYDIR/$bootloaderimg of=$fwimg bs=1K seek=$val  && echo "dd bootloaderimg"
         fi
     else
         # ATF BL2 image
         if [ $BOOTTYPE = sd -o $BOOTTYPE = emmc ]; then
-            dd if=$DEPLOYDIR/$bl2img of=$fwimg bs=512 seek=$sd_rcw_bootloader_offset
+            dd if=$DEPLOYDIR/$bl2img of=$fwimg bs=512 seek=$sd_rcw_bootloader_offset && echo "dd bl2img1"
         else
-            dd if=$DEPLOYDIR/$bl2img of=$fwimg bs=1K seek=0
+            dd if=$DEPLOYDIR/$bl2img of=$fwimg bs=1K seek=0  && echo "dd bl2img"
         fi
 
         # ATF FIP image
         if [ $BOOTTYPE = sd -o $BOOTTYPE = emmc ]; then
-            dd if=$DEPLOYDIR/$fipimg of=$fwimg bs=512 seek=$sd_bootloader_offset
+            dd if=$DEPLOYDIR/$fipimg of=$fwimg bs=512 seek=$sd_bootloader_offset  && echo "dd fipimg1"
         else
             val=`expr $(echo $(($nor_bootloader_offset))) / 1024`
-            dd if=$DEPLOYDIR/$fipimg of=$fwimg bs=1K seek=$val
+            dd if=$DEPLOYDIR/$fipimg of=$fwimg bs=1K seek=$val && echo "dd fipimg"
         fi
     fi
     # secure boot headers
     if [ "$secureboot_headers" != null -a -n "$secureboot_headers" ] && [ "$SECURE" = "true" ] ; then
         if [ $BOOTTYPE = nor -o $BOOTTYPE = qspi -o $BOOTTYPE = xspi -o $BOOTTYPE = nand ]; then
             val=`expr $(echo $(($nor_secureboot_headers_offset))) / 1024`
-            dd if=$DEPLOYDIR/$secureboot_headers of=$fwimg bs=1K seek=$val
+            dd if=$DEPLOYDIR/$secureboot_headers of=$fwimg bs=1K seek=$val && echo "dd secureboot_headers1"
         elif [ $BOOTTYPE = sd -o $BOOTTYPE = emmc ]; then
-            dd if=$DEPLOYDIR/$secureboot_headers of=$fwimg bs=512 seek=$sd_secureboot_headers_offset
+            dd if=$DEPLOYDIR/$secureboot_headers of=$fwimg bs=512 seek=$sd_secureboot_headers_offset && echo "dd secureboot_headers"
         fi
     fi
 
@@ -266,9 +267,9 @@ generate_qoriq_composite_firmware() {
         fi
         if [ $BOOTTYPE = nor -o $BOOTTYPE = qspi -o $BOOTTYPE = xspi -o $BOOTTYPE = nand ]; then
             val=`expr $(echo $(($nor_ddr_phy_fw_offset))) / 1024`
-            dd if=$DEPLOYDIR/$ddrphyfw of=$fwimg bs=1K seek=$val
+            dd if=$DEPLOYDIR/$ddrphyfw of=$fwimg bs=1K seek=$val  && echo "dd ddrphyfw1"
         elif [ $BOOTTYPE = sd -o $BOOTTYPE = emmc ]; then
-            dd if=$DEPLOYDIR/$ddrphyfw of=$fwimg bs=512 seek=$sd_ddr_phy_fw_offset
+            dd if=$DEPLOYDIR/$ddrphyfw of=$fwimg bs=512 seek=$sd_ddr_phy_fw_offset  && echo "dd ddrphyfw"
         fi
     fi
      # fuse provisioning in case CONFIG_FUSE_PROVISIONING is enabled
@@ -290,18 +291,18 @@ generate_qoriq_composite_firmware() {
     if [ "$fman_ucode" != "null" -a -n "$fman_ucode" ]; then
         if [ $BOOTTYPE = nor -o $BOOTTYPE = qspi -o $BOOTTYPE = xspi -o $BOOTTYPE = nand ]; then
             val=`expr $(echo $(($nor_fman_ucode_offset))) / 1024`
-            dd if=$DEPLOYDIR/$fman_ucode of=$fwimg bs=1K seek=$val
+            dd if=$DEPLOYDIR/$fman_ucode of=$fwimg bs=1K seek=$val && echo "dd fman_ucode1"
         elif [ $BOOTTYPE = sd -o $BOOTTYPE = emmc ]; then
-            dd if=$DEPLOYDIR/$fman_ucode of=$fwimg bs=512 seek=$sd_fman_ucode_offset
+            dd if=$DEPLOYDIR/$fman_ucode of=$fwimg bs=512 seek=$sd_fman_ucode_offset  && echo "dd fman_ucode"
         fi
     fi
     # QE/uQE firmware
     if [ "$qe_firmware" != "null" -a -n "$qe_firmware" ] ; then
         if [ $BOOTTYPE = nor -o $BOOTTYPE = qspi -o $BOOTTYPE = xspi -o $BOOTTYPE = nand ]; then
             val=`expr $(echo $(($nor_qe_firmware_offset))) / 1024`
-            dd if=$DEPLOYDIR/$qe_firmware of=$fwimg bs=1K seek=$val
+            dd if=$DEPLOYDIR/$qe_firmware of=$fwimg bs=1K seek=$val  && echo "dd qe_firmware1"
         elif [ $BOOTTYPE = sd -o $BOOTTYPE = emmc ]; then
-            dd if=$DEPLOYDIR/$qe_firmware of=$fwimg bs=512 seek=$sd_qe_firmware_offset
+            dd if=$DEPLOYDIR/$qe_firmware of=$fwimg bs=512 seek=$sd_qe_firmware_offset  && echo "dd qe_firmware"
         fi
     fi
 
@@ -309,9 +310,9 @@ generate_qoriq_composite_firmware() {
     if [ "$phy_firmware" != "null" -a -n "$phy_firmware" ] ; then
         if [ $BOOTTYPE = nor -o $BOOTTYPE = qspi -o $BOOTTYPE = xspi -o $BOOTTYPE = nand ]; then
             val=`expr $(echo $(($nor_phy_firmware_offset))) / 1024`
-            dd if=$DEPLOYDIR/$phy_firmware of=$fwimg bs=1K seek=$val
+            dd if=$DEPLOYDIR/$phy_firmware of=$fwimg bs=1K seek=$val && echo "dd phy_firmware1"
         elif [ $BOOTTYPE = sd -o $BOOTTYPE = emmc ]; then
-            dd if=$DEPLOYDIR/$phy_firmware of=$fwimg bs=512 seek=$sd_phy_firmware_offset
+            dd if=$DEPLOYDIR/$phy_firmware of=$fwimg bs=512 seek=$sd_phy_firmware_offset  && echo "dd phy_firmware"
         fi
     fi
     # flashing image script
@@ -328,9 +329,9 @@ generate_qoriq_composite_firmware() {
     if [ "$esbootscr" != "null" -a -n "$esbootscr" ] ; then
         if [ $BOOTTYPE = nor -o $BOOTTYPE = qspi -o $BOOTTYPE = xspi -o $BOOTTYPE = nand ]; then
             val=`expr $(echo $(($nor_uboot_scr_offset))) / 1024`
-            dd if=$DEPLOYDIR/$uboot_scr of=$fwimg bs=1K seek=$val
+            dd if=$DEPLOYDIR/$uboot_scr of=$fwimg bs=1K seek=$val && echo "dd uboot_scr1"
         elif [ $BOOTTYPE = sd -o $BOOTTYPE = emmc ]; then
-            dd if=$DEPLOYDIR/$uboot_scr of=$fwimg bs=512 seek=$sd_uboot_scr_offset
+            dd if=$DEPLOYDIR/$uboot_scr of=$fwimg bs=512 seek=$sd_uboot_scr_offset  && echo "dd uboot_scr"
         fi
     fi
 
@@ -343,9 +344,9 @@ generate_qoriq_composite_firmware() {
     if [ -n "$fwbin" ]; then
         if [ $BOOTTYPE = nor -o $BOOTTYPE = qspi -o $BOOTTYPE = xspi -o $BOOTTYPE = nand ]; then
             val=`expr $(echo $(($nor_dpaa2_mc_fw_offset))) / 1024`
-            dd if=$fwbin of=$fwimg bs=1K seek=$val
+            dd if=$fwbin of=$fwimg bs=1K seek=$val   && echo "dd fwbin1"
         elif [ $BOOTTYPE = sd -o $BOOTTYPE = emmc ]; then
-            dd if=$fwbin of=$fwimg bs=512 seek=$sd_dpaa2_mc_fw_offset
+            dd if=$fwbin of=$fwimg bs=512 seek=$sd_dpaa2_mc_fw_offset  && echo "dd fwbin"
         fi
     fi
 
@@ -353,28 +354,28 @@ generate_qoriq_composite_firmware() {
     if [ "$dpaa2_mc_dpl" != "null" -a -n "$dpaa2_mc_dpl" ] ; then
         if [ $BOOTTYPE = nor -o $BOOTTYPE = qspi -o $BOOTTYPE = xspi -o $BOOTTYPE = nand ]; then
             val=`expr $(echo $(($nor_dpaa2_mc_dpl_offset))) / 1024`
-            dd if=$DEPLOYDIR/$dpaa2_mc_dpl of=$fwimg bs=1K seek=$val
+            dd if=$DEPLOYDIR/$dpaa2_mc_dpl of=$fwimg bs=1K seek=$val  && echo "dd dpaa2_mc_dpl1"
         elif [ $BOOTTYPE = sd -o $BOOTTYPE = emmc ]; then
-            dd if=$DEPLOYDIR/$dpaa2_mc_dpl of=$fwimg bs=512 seek=$sd_dpaa2_mc_dpl_offset
+            dd if=$DEPLOYDIR/$dpaa2_mc_dpl of=$fwimg bs=512 seek=$sd_dpaa2_mc_dpl_offset  && echo "dd dpaa2_mc_dpl"
         fi
     fi
     # DPAA2 DPC firmware
     if [ "$dpaa2_mc_dpc" != "null" -a -n "$dpaa2_mc_dpc" ] ; then
         if [ $BOOTTYPE = nor -o $BOOTTYPE = qspi -o $BOOTTYPE = xspi -o $BOOTTYPE = nand ]; then
             val=`expr $(echo $(($nor_dpaa2_mc_dpc_offset))) / 1024`
-            dd if=$DEPLOYDIR/$dpaa2_mc_dpc of=$fwimg bs=1K seek=$val
+            dd if=$DEPLOYDIR/$dpaa2_mc_dpc of=$fwimg bs=1K seek=$val && echo "dd dpaa2_mc_dpc1"
         elif [ $BOOTTYPE = sd -o $BOOTTYPE = emmc ]; then
-            dd if=$DEPLOYDIR/$dpaa2_mc_dpc of=$fwimg bs=512 seek=$sd_dpaa2_mc_dpc_offset
+            dd if=$DEPLOYDIR/$dpaa2_mc_dpc of=$fwimg bs=512 seek=$sd_dpaa2_mc_dpc_offset && echo "dd dpaa2_mc_dpc"
         fi
     fi
     # linux kernel image
     if [ $BOOTTYPE = nor -o $BOOTTYPE = qspi -o $BOOTTYPE = xspi -o $BOOTTYPE = nand ]; then
         val=`expr $(echo $(($nor_kernel_offset))) / 1024`
         if [ $BOOTTYPE != qspi -o $BOOTTYPE != ls1021atwr ]; then
-           dd if=$DEPLOYDIR/${kernel_itb} of=$fwimg bs=1K seek=$val
+           dd if=$DEPLOYDIR/${kernel_itb} of=$fwimg bs=1K seek=$val && echo "dd kernel_itb1"
         fi
     elif [ $BOOTTYPE = sd -o $BOOTTYPE = emmc ]; then
-        dd if=$DEPLOYDIR/${kernel_itb} of=$fwimg bs=512 seek=$sd_kernel_offset
+        dd if=$DEPLOYDIR/${kernel_itb} of=$fwimg bs=512 seek=$sd_kernel_offset && echo "dd kernel_itb"
     fi
    
     if [ $BOOTTYPE = sd -o $BOOTTYPE = emmc ]; then

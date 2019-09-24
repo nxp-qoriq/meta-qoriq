@@ -57,7 +57,7 @@ do_deploy () {
  
     for d in ${BOOT_TYPE}; do
         [ $d = "sd" ] && [ $OTA = "true" ] && continue
-        ./create_secure_boot_image.sh -m ${MACHINE} -t ${d} -d . -s ${DEPLOY_DIR_IMAGE} -e ${ENCAP} -i ${IMA_EVM} -o ${SECURE}
+        ./create_secure_boot_image.sh -m ${MACHINE} -t ${d} -d ${RECIPE_SYSROOT_NATIVE}/usr/bin/cst -s ${DEPLOY_DIR_IMAGE} -e ${ENCAP} -i ${IMA_EVM} -o ${SECURE}
     done
     cp ${RECIPE_SYSROOT_NATIVE}/usr/bin/cst/${MACHINE}_boot.scr ${DEPLOY_DIR_IMAGE}
 }

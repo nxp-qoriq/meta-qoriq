@@ -16,6 +16,7 @@ platform=$(echo $deviceid | awk -F . '{print $4}')
 boardname=$platform"rdb"
 bootimageVersion=`cat /usr/local/edgescale/conf/edgescale-version | awk -F '-' '{print $2}'`
 devpartname=mmcblk0p
+bootsource=qspi
 
 if [ "$platform"x == x ];then
 	echo "there is no platform information"
@@ -25,6 +26,23 @@ fi
 if [ "$sdplatform"x != "$platform"x ];then
 	updateStatus=1
 	oldimageVersion=0
+fi
+
+echo "$platform"
+if [ "$platform"x == "ls2088ardb"x ];then
+	bootsource=nor
+elif [ "$platform"x == "ls1043ardb"x ];then
+	bootsource=nor
+elif [ "$platform"x == "ls1028ardb"x ];then
+	bootsource=flexspi
+elif [ "$platform"x == "lx2160ardb"x ];then
+	bootsource=flexspi
+elif [ "$platform"x == "ls1012afrwy"x ];then
+	bootsource=qspi_2
+elif [ "$platform"x == "ls1012ardb"x ];then
+	bootsource=qspi_1
+else
+	bootsource=qspi
 fi
 
 echo "updateStatus="$updateStatus
@@ -216,7 +234,34 @@ install_images(){
 		fi
 		security_check
 		feedback_status "ota-install"
-		flex-installer --firmware=$firmware_file --startblock=8 --device=/dev/mmcblk0
+		if [ "$bootsource"x == "qspi"x ]; then
+			echo "qspi boot"
+			firmware_size=`ls -al $firmware_file | awk '{print $5}'`
+			mtd_debug erase /dev/mtd1 0 0x1000000
+			mtd_debug write /dev/mtd1 0 0x1000000 $firmware_file
+		elif [ "$bootsource"x == "qspi_1"x ]; then
+			echo "qspi boot 1"
+			firmware_size=`ls -al $firmware_file | awk '{print $5}'`
+			mtd_debug erase /dev/mtd0 0 0x1000000
+			mtd_debug write /dev/mtd0 0 0x1000000 $firmware_file
+		elif [ "$bootsource"x == "qspi_2"x ]; then
+			echo "qspi boot 2"
+			firmware_size=`ls -al $firmware_file | awk '{print $5}'`
+			mtd_debug erase /dev/mtd0 0 0x200000
+			mtd_debug write /dev/mtd0 0 $firmware_size $firmware_file
+		elif [ "$bootsource"x == "flexspi"x ]; then
+			echo "flexspi boot"
+			firmware_size=`ls -al $firmware_file | awk '{print $5}'`
+			mtd_debug erase /dev/mtd0 0 0x1000000
+			mtd_debug write /dev/mtd0 0 0x1000000 $firmware_file
+		elif [ "$bootsource"x == "nor"x ]; then
+			echo "nor boot"
+			firmware_size=`ls -al $firmware_file | awk '{print $5}'`
+			mtd_debug erase /dev/mtd0 0 0x1000000
+			mtd_debug write /dev/mtd0 0 0x1000000 $firmware_file
+		else
+			flex-installer --firmware=$firmware_file --startblock=8 --device=/dev/mmcblk0
+		fi
 		flex-installer -i install --bootpart=$boot_file --rootfs=$rootfs_file --machine=$boardname --device=sd
 		setup_ima_evm
 	else
@@ -226,7 +271,7 @@ install_images(){
 			reboot
 		fi
 	fi
-	ls | grep -v 'full_images_default*' | xargs rm -rf
+	ls | grep -v 'full_images_default*' | grep -v 'full_images_deploy*' | xargs rm -rf
 	cd ~/
 	umount_device
 }
@@ -277,7 +322,6 @@ elif [ "$updateStatus"x == 2x -a $oldimageVersion != 0 ];then
 elif [ "$updateStatus"x == 4x ];then
 	echo "Now need update the image to version=$newimageVersion"
 	imageVersion=$newimageVersion
-	get_imageURL
 	partition_format
 	update_images
 	updateStatus=1

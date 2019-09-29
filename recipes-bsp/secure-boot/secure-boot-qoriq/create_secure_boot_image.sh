@@ -274,7 +274,7 @@ generate_qoriq_composite_firmware() {
     fi
      # fuse provisioning in case CONFIG_FUSE_PROVISIONING is enabled
     if [ "$CONFIG_FUSE_PROVISIONING" = "y" ]; then
-        if [ "$SECURE" = "ture" ]; then
+        if [ "$SECURE" = "true" ]; then
             fuse_header=build/firmware/atf/$1/fuse_fip_sec.bin
         else
             fuse_header=build/firmware/atf/$1/fuse_fip.bin

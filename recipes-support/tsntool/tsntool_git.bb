@@ -7,8 +7,8 @@ DEPENDS = "cjson libnl readline"
 
 inherit pkgconfig
 
-SRC_URI = "git://bitbucket.sw.nxp.com/dnind/tsntool.git;protocol=ssh;nobranch=1"
-SRCREV = "cb654e4bb46387e5ed970dfff929d2b2efa1da33"
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/tsntool;protocol=https;nobranch=1"
+SRCREV = "30a0320eb4a1798ac3d6258a2e02d863e60a1582"
 
 S = "${WORKDIR}/git"
 

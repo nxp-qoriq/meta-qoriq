@@ -21,6 +21,7 @@ RDEPENDS_${PN} = "\
     db \
     debianutils \
     lsof \
+    ltp \
     man \
     man-pages \
     oprofile \

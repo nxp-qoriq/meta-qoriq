@@ -46,6 +46,7 @@ IPC_PKGS = " \
 DPAA_PKGS = " \
     eth-config \
     fmc \
+    ppfe-firmware \
 "
 DPAA_PKGS_ls102xa = ""
 
@@ -57,13 +58,10 @@ RDEPENDS_${PN}_append_qoriq = "\
 "
 
 RDEPENDS_${PN}_append_qoriq = " gptfdisk"
-RDEPENDS_${PN}_append_ls1012a = " hostapd"
 
 RDEPENDS_${PN}_remove_p2020rdb = " fmc"
 RDEPENDS_${PN}_remove_p1020rdb = " fmc"
 RDEPENDS_${PN}_remove_mpc8548cds = " fmc"
-
-DPAA_PKGS_ls1012a = "ppfe-firmware"
 
 RDEPENDS_${PN}_append_qoriq = " pciutils cryptodev-linux cryptodev-module cryptodev-tests ifenslave"
 RDEPENDS_${PN}_append_ls1043a = " \

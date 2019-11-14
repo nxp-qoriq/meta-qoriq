@@ -20,6 +20,5 @@ IMAGE_INSTALL_append = " \
     packagegroup-fsl-tools-core \
     packagegroup-fsl-benchmark-core \
     packagegroup-fsl-networking-core \
+    packagegroup-fsl-tools-audio \
 "
-IMAGE_INSTALL_append_ls1012a = " packagegroup-fsl-tools-audio"
-

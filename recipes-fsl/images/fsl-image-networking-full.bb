@@ -23,6 +23,7 @@ IMAGE_INSTALL_append = " \
     packagegroup-fsl-devtools \
     packagegroup-fsl-benchmark-extended \
     packagegroup-fsl-tools-extended \
+    packagegroup-fsl-multimedia-gstreamer1.0-core \
     openssl-bin \
     openssl-engines \
 "
@@ -32,8 +33,4 @@ IMAGE_FSTYPES_qoriq = "tar.gz ext2.gz.u-boot ext2.gz"
 inherit fsl-utils
 ROOTFS_POSTPROCESS_COMMAND += "rootfs_copy_core_image;"
 do_image_complete[depends] += "fsl-image-networking:do_image_complete"
-
-IMAGE_INSTALL_append_ls1012a = " \
-    packagegroup-fsl-multimedia-gstreamer1.0-core \
-"
 

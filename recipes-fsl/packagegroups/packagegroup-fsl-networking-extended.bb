@@ -21,7 +21,6 @@ RDEPENDS_${PN} = " \
     ppp \
     ppp-dialin \
     resolvconf \
-    rp-pppoe \
     samba \
     wget \
     xinetd \

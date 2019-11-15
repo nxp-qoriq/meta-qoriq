@@ -30,7 +30,6 @@ RDEPENDS_${PN} = "\
     parted \
     perf \
     rng-tools \
-    haveged \
     rt-tests \
     stress-ng \
     sqlite3 \

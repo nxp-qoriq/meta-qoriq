@@ -97,6 +97,7 @@ SECURE_TOOLS = "\
     optee-test-qoriq \
     libpkcs11 \
     secure-obj \
+    secure-obj-module \
 "
 SECURE_TOOLS_ls1043ardb-be = ""
 SECURE_TOOLS_ls1046ardb-be = ""

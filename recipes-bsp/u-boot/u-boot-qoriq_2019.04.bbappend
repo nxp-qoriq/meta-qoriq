@@ -1,7 +1,5 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
-
-SRC_URI = "git://bitbucket.sw.nxp.com/dash/dash-uboot.git;protocol=ssh;nobranch=1"
 SRCREV= "8e3c63fa390ec842ac39e2f648d0b3e20f9f1613"
 
 EXTRA_OEMAKE += 'PYTHON2=nativepython STAGING_INCDIR=${STAGING_INCDIR_NATIVE} STAGING_LIBDIR=${STAGING_LIBDIR_NATIVE}'

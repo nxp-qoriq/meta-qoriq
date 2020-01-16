@@ -14,7 +14,7 @@ FSL_NEON = "${@bb.utils.contains('TUNE_FEATURES', 'neon', 'cpuburn-arm', '', d)}
 
 RDEPENDS_${PN}-core = "\
     iozone3 \
-    iperf3 \
+    iperf2 \
     lmbench \
     netperf \
 "

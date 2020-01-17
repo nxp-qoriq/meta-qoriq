@@ -42,6 +42,7 @@ RDEPENDS_${PN} = "\
     which \
     xz  \
     zip \
+    kexec-tools \
     ${X11_TOOLS} \
 "
 

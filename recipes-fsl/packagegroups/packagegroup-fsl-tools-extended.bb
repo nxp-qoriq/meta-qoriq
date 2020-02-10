@@ -16,14 +16,15 @@ X11_TOOLS = "${@bb.utils.contains('DISTRO_FEATURES', 'x11', \
 
 RDEPENDS_${PN} = "\
     bc \
+    can-utils \
     chkconfig \
     crconf \
     db \
     debianutils \
-    gnutls \
-    gnutls-bin \
     lsof \
     ltp \
+    lldpd \
+    tcpreplay \
     man \
     man-pages \
     oprofile \
@@ -84,11 +85,11 @@ RDEPENDS_${PN}_append_qoriq = "\
 "
 LSDK_TOOLS = "\
     dce \
-    ceetm \
+    dpdk-examples \
+    ovs-dpdk \
     pktgen-dpdk \
+    ceetm \
     spc \
-    vpp-core \
-    ${VPP_TOOLS} \
     tsntool \
 "
 SECURE_TOOLS = "\
@@ -98,11 +99,9 @@ SECURE_TOOLS = "\
     libpkcs11 \
     secure-obj \
     secure-obj-module \
+    gnutls \
+    gnutls-bin \
 "
-SECURE_TOOLS_ls1043ardb-be = ""
-SECURE_TOOLS_ls1046ardb-be = ""
-SECURE_TOOLS_ls1088ardb-be = ""
-SECURE_TOOLS_ls2088ardb-be = ""
 
 RDEPENDS_${PN}_append_qoriq-arm64 = "\ 
     ${LSDK_TOOLS} \
@@ -111,23 +110,3 @@ RDEPENDS_${PN}_append_qoriq-arm64 = "\
 RDEPENDS_${PN}_append_qoriq-ppc = "\
     ${@multilib_pkg_extend(d, "valgrind")} \
 "
-
-
-
-VPP_TOOLS = "vpp-core-data vpp-core-plugin-igmp vpp-core-plugin-gtpu vpp-core-plugin-gbp \
-                vpp-core-plugin-lb vpp-core-plugin-avf vpp-core-plugin-cdp vpp-core-plugin-map vpp-core-plugin-srv6as \
-                vpp-core-plugin-l2e vpp-core-plugin-acl vpp-core-plugin-flowprobe vpp-core-plugin-abf \
-                vpp-core-plugin-pppoe vpp-core-plugin-lacp vpp-core-plugin-ioam vpp-core-plugin-memif \
-                vpp-core-plugin-stn vpp-core-plugin-srv6ad vpp-core-plugin-mactime vpp-core-plugin-unittest \
-                vpp-core-plugin-nat vpp-core-plugin-srv6am vpp-core-plugin-lb_test \
-                vpp-core-plugin-avf_test vpp-core-plugin-mactime_test \
-                vpp-core-plugin-lacp_test vpp-core-plugin-stn_test vpp-core-plugin-memif_test \
-                vpp-core-plugin-nat_test vpp-core-plugin-acl_test  \
-                vpp-core-plugin-flowprobe_test  vpp-core-plugin-pppoe_test vpp-core-plugin-gtpu_test \
-                vpp-core-plugin-cdp_test vpp-core-plugin-dpdk vpp-core-plugin-dpdk_test vpp-core-plugin-vmxnet3_test \
-                vpp-core-plugin-vmxnet3 vpp-core-plugin-svs vpp-core-plugin-nsh_test \
-                vpp-core-plugin-ioam_test vpp-core-plugin-nsim_test vpp-core-plugin-nsim vpp-core-plugin-perfmon \
-                vpp-core-plugin-nsh \
-                vpp-core-plugin-tlsopenssl vpp-core-plugin-ixge vpp-core-plugin-ila vpp-core-plugin-data \
-                "
-

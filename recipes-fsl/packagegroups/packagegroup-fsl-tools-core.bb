@@ -46,9 +46,9 @@ IPC_PKGS = " \
 DPAA_PKGS = " \
     eth-config \
     fmc \
-    ppfe-firmware \
 "
 DPAA_PKGS_ls102xa = ""
+DPAA_PKGS_fsl-lsch3 = ""
 
 PMETOOLS ?= "pme-tools"
 
@@ -57,11 +57,19 @@ RDEPENDS_${PN}_append_qoriq = "\
     ${DPAA_PKGS} \
 "
 
+#RDEPENDS_${PN}_append_e500v2 = " \
+#    libppc \
+#    testfloat \
+#"
+
 RDEPENDS_${PN}_append_qoriq = " gptfdisk"
+RDEPENDS_${PN}_append_ls1012a = " hostapd"
 
 RDEPENDS_${PN}_remove_p2020rdb = " fmc"
 RDEPENDS_${PN}_remove_p1020rdb = " fmc"
 RDEPENDS_${PN}_remove_mpc8548cds = " fmc"
+
+DPAA_PKGS_ls1012a = "ppfe-firmware"
 
 RDEPENDS_${PN}_append_qoriq = " pciutils cryptodev-linux cryptodev-module cryptodev-tests ifenslave"
 RDEPENDS_${PN}_append_ls1043a = " \
@@ -84,3 +92,4 @@ RDEPENDS_${PN}_append_qoriq-arm64= " \
     dpdk \
     restool \
 "
+RDEPENDS_${PN}_remove_ls1012a = " dpdk"

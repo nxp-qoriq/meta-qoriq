@@ -33,4 +33,5 @@ DOCKER_PKGS = " \
     docker-registry \
 "
 
-RDEPENDS_${PN}_append_qoriq-arm64 = " ovs-dpdk ${DOCKER_PKGS}"
+RDEPENDS_${PN}_append_qoriq-arm64 = "  ${DOCKER_PKGS}"
+RDEPENDS_${PN}_append_qoriq-arm = "  ${DOCKER_PKGS}"

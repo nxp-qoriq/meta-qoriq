@@ -1,0 +1,25 @@
+From 6a1e07bdffce09ebdf4df51a53f766144c6d01e6 Mon Sep 17 00:00:00 2001
+From: BJ DevOps Team <bjdevops@NXP1.onmicrosoft.com>
+Date: Fri, 7 Feb 2020 19:21:19 +0800
+Subject: [PATCH] disable ccache
+
+---
+ src/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 116bec318..8d9657735 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -18,7 +18,7 @@ project(vpp C)
+ include(CheckCCompilerFlag)
+ include(cmake/message.cmake)
+ include(cmake/cpu.cmake)
+-include(cmake/ccache.cmake)
++#include(cmake/ccache.cmake)
+ 
+ ##############################################################################
+ # VPP Version
+-- 
+2.17.1
+

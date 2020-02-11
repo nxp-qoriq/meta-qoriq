@@ -17,7 +17,6 @@ X11_TOOLS = "${@bb.utils.contains('DISTRO_FEATURES', 'x11', \
 RDEPENDS_${PN} = "\
     bc \
     can-utils \
-    chkconfig \
     crconf \
     db \
     debianutils \

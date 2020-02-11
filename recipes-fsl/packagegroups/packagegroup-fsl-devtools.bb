@@ -26,9 +26,9 @@ RDEPENDS_${PN} = " \
     perl-modules \
     perl-module-re \
     perl-pod \
-    python \
-    python-misc \
-    python-modules \
+    python3 \
+    python3-misc \
+    python3-modules \
     quilt \
     rpm \
     subversion \

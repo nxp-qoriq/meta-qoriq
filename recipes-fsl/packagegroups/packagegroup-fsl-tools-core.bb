@@ -22,9 +22,8 @@ RDEPENDS_${PN} = " \
     lmsensors-sensors \
     memtester \
     pkgconfig \
-    python-subprocess \
-    python-datetime \
-    python-json \
+    python3-datetime \
+    python3-json \
     procps \
     minicom \
     coreutils \

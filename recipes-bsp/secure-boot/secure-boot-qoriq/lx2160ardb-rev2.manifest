@@ -1,5 +1,5 @@
 # [general]
-machine=lx2160ardb
+machine=lx2160ardb-rev2
 
 # [firmware_images]
 uefi_xspiboot=build/firmware/uefi/lx2160ardb/LX2160ARDB_EFI_NORBOOT.fd

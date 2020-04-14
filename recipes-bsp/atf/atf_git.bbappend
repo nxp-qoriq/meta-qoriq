@@ -1,5 +1,5 @@
 SRC_URI = "git://bitbucket.sw.nxp.com/gitam/atf;protocol=ssh;nobranch=1"
-SRCREV= "524d1e92009aa5f56fc2846e48f04b79640b5fd2"
+SRCREV= "4a82c939a0211196e2b80a495f966383803753bb"
 
 PLAT = "${MACHINE}"
 PLAT_ls1088ardb-pb = "ls1088ardb"

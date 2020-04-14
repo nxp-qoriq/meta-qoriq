@@ -14,7 +14,7 @@ python() {
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/yocto_patches:"
 
-SRC_URI = "git://bitbucket.sw.nxp.com/dash/cryptodev-linux.git;protocol=ssh;nobranch=1"
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/cryptodev-linux;nobranch=1"
 SRCREV = "f3007431120a1b4ae983c2b9ea09051311aa5e2f"
 
 S = "${WORKDIR}/git"

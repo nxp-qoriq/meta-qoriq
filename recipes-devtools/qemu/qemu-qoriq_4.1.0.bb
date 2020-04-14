@@ -2,7 +2,7 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
 require recipes-devtools/qemu/qemu.inc
 
-SRC_URI = "git://bitbucket.sw.nxp.com/dash/qemu.git;protocol=ssh;nobranch=1"
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/qemu;nobranch=1"
 SRCREV= "521a0dcf59f1ca11e7d9e2f4e1ef3d2dfaebc0e4"
 LIC_FILES_CHKSUM = "file://COPYING;md5=441c28d2cf86e15a37fa47e15a72fbac \
                     file://COPYING.LIB;endline=24;md5=8c5efda6cf1e1b03dcfd0e6c0d271c7f"

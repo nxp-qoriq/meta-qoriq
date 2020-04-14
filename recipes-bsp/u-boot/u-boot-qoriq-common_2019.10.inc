@@ -10,7 +10,7 @@ LIC_FILES_CHKSUM = " \
     file://Licenses/lgpl-2.1.txt;md5=4fbd65380cdd255951079008b364516c \
 "
 SRC_URI = "git://bitbucket.sw.nxp.com/dash/dash-uboot.git;protocol=ssh;nobranch=1"
-SRCREV= "e6542248fbae12b96fa08865b5802f5650e3a9b6"
+SRCREV= "3cd9bc39934825200822855574fc91d8276e6584"
 
 S = "${WORKDIR}/git"
 PV_append = "+fslgit"

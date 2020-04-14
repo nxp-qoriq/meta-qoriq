@@ -1,8 +1,3 @@
-SRC_URI = "http://yb2.am.freescale.net/${BPN}-${PV}.bin;fsl-eula=true"
-
-# FIXME: Remove this patch when upstream handles backend-specific libGL
-SRC_URI += "file://Add-dummy-libgl.patch"
-
 DEPENDS_append_qoriq = " patchelf-native"
 
 RPROVIDES_${PN}_qoriq += "imx-gpu-viv"

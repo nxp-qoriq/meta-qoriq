@@ -1,4 +1,3 @@
-SRC_URI = "git://bitbucket.sw.nxp.com/gitam/atf;protocol=ssh;nobranch=1"
 SRCREV= "4a82c939a0211196e2b80a495f966383803753bb"
 
 PLAT = "${MACHINE}"

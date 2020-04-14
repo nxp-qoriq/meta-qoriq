@@ -1,4 +1,3 @@
-SRC_URI = "git://bitbucket.sw.nxp.com/dash/dash-rcw.git;protocol=ssh;nobranch=1"
 SRCREV= "5689bf9c9f087f50aaa0d91b43d8a791fedbedd3"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=44a0d0fad189770cc022af4ac6262cbe"
 do_install () {

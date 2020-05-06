@@ -12,7 +12,7 @@ SRCREV = "4110a5fed09fa034963cfc246a6285911ecbd540"
 
 datadir[unexport] = "1"
 
-RDEPENDS_${PN} += "python-subprocess"
+RDEPENDS_${PN} += "python3-core"
 DEPENDS = "virtual/kernel openssl"
 DEPENDS_append_x86-64 = " numactl"
 do_configure[depends] += "virtual/kernel:do_shared_workdir"

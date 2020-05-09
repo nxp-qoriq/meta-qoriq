@@ -1,10 +1,16 @@
+LIC_FILES_CHKSUM = "file://license.rst;md5=1dd070c98a281d18d9eefd938729b031"
+
+DEPENDS_append_lx2162aqds += "ddr-phy"
+
 SRCREV= "4a82c939a0211196e2b80a495f966383803753bb"
 
 PLAT = "${MACHINE}"
 PLAT_ls1088ardb-pb = "ls1088ardb"
 PLAT_lx2160ardb-rev2 = "lx2160ardb"
+PLAT_lx2162aqds = "lx2160aqds"
 PLATFORM_lx2160ardb-rev2 = "lx2160ardb_rev2"
 ddrphyopt_lx2160ardb-rev2 = "fip_ddr_sec"
+ddrphyopt_lx2162aqds = "fip_ddr_sec"
 
 do_compile() {
     export LIBPATH="${RECIPE_SYSROOT_NATIVE}"

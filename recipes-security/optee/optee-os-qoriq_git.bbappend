@@ -1,0 +1,1 @@
+OPTEEMACHINE_lx2162aqds = "lx2160ardb"

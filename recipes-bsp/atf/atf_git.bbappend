@@ -114,3 +114,7 @@ do_compile() {
         uefiboot=""
     done
 }
+
+do_deploy_append_lx2162a () {
+    rm -fr ${DEPLOYDIR}/atf/srk.*
+}

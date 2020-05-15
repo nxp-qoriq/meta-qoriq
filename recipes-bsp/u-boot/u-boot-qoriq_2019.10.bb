@@ -73,6 +73,26 @@ do_compile_append_qoriq() {
     unset i
 }
 
+do_deploy_append_lx2162a () {
+    if [ -n "${UBOOT_CONFIG}" ]
+    then
+        for config in ${UBOOT_MACHINE}; do
+            i=$(expr $i + 1);
+            for type in ${UBOOT_CONFIG}; do
+                j=$(expr $j + 1);
+                if [ $j -eq $i ]
+                then
+                    if [ "tfa-verified-boot" = "${type}" ];then
+                        install -m 644 ${B}/${config}/u-boot.dtb ${DEPLOYDIR}/u-boot.dtb
+                    fi
+                fi
+            done
+            unset  j
+        done
+        unset  i
+    fi
+}
+
 
 PACKAGES += "${PN}-images"
 FILES_${PN}-images += "/boot"

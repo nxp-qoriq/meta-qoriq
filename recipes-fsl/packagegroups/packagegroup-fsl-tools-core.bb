@@ -18,6 +18,8 @@ RDEPENDS_${PN} = " \
     i2c-tools \
     kmod \
     kernel-modules \
+    kdump \
+    kexec \
     libhugetlbfs \
     lmsensors-sensors \
     memtester \
@@ -35,6 +37,7 @@ RDEPENDS_${PN} = " \
     sysfsutils \
     sysklogd \
     sysstat \
+    vmcore-dmesg \
 "
 
 IPC_PKGS = " \
@@ -57,10 +60,10 @@ RDEPENDS_${PN}_append_qoriq = "\
     ${DPAA_PKGS} \
 "
 
-#RDEPENDS_${PN}_append_e500v2 = " \
-#    libppc \
-#    testfloat \
-#"
+RDEPENDS_${PN}_append_e500v2 = " \
+    libppc \
+    testfloat \
+"
 
 RDEPENDS_${PN}_append_qoriq = " gptfdisk"
 RDEPENDS_${PN}_append_ls1012a = " hostapd"
@@ -82,14 +85,23 @@ RDEPENDS_${PN}_append_ls1088a = " \
     devmem2 \
     gpp-aioptool \
     fio \
+    restool \
 "
 RDEPENDS_${PN}_append_ls2088a = " \
     devmem2 \
     gpp-aioptool \
     fio \
+    restool \
+"
+RDEPENDS_${PN}_append_lx2162a = " \
+    dce \
+    devmem2 \
+    gdbserver \
+    glibc-utils \
+    openssh-sftp-server \
+    restool \
 "
 RDEPENDS_${PN}_append_qoriq-arm64= " \
     dpdk \
-    restool \
 "
 RDEPENDS_${PN}_remove_ls1012a = " dpdk"

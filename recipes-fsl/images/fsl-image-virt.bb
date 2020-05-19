@@ -5,8 +5,6 @@ IMAGE_INSTALL += " \
     packagegroup-fsl-virtualization \
 "
 
-IMAGE_FSTYPES = "ext2.gz"
-
 # copy rootfs image into rootfs
 inherit fsl-utils
 ROOTFS_POSTPROCESS_COMMAND += "rootfs_copy_core_image;"

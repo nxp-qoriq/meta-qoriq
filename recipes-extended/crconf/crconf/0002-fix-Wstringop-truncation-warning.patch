@@ -1,0 +1,55 @@
+From 8f7f47a5f754129df550ef27ef6f59d35e4d5fe7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Horia=20Geant=C4=83?= <horia.geanta@nxp.com>
+Date: Wed, 27 May 2020 16:59:05 +0300
+Subject: [PATCH crconf 2/2] fix Wstringop-truncation warning
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+gcc 8 and above warn about a potential misuse of strncpy:
+
+crconf.c: In function ‘copy_name.constprop’:
+crconf.c:120:2: warning: ‘strncpy’ output truncated before terminating nul copying as many bytes from a string as its length [-Wstringop-truncation]
+  120 |  strncpy(dst, src, strlen(src));
+	  |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+crconf.c:115:6: note: length computed here
+  115 |  if (strlen(src) >= maxlen) {
+	  |      ^~~~~~~~~~~
+
+While this warning is a false positive, since:
+-there's an appropriate length check in place
+  length of src (excluding null char) is <  size of dst char array i.e.
+  length of src (including null char) is <= size of dst char array
+  and so there's no possibility of overflowing dst or
+  undetected truncation of src
+-dst has been initially memset to zero
+  this means dst is guaranteed to be null-terminated
+
+it's true that using strncpy is not needed:
+-no need for trailing nulls in dst buffer (anyway memset already did this)
+-strncpy does _not_ guarantee dst will be null-terminated
+-strncpy is _not_ meant to be a "bounded strcpy"
+
+and instead the bare strcpy is safe to use in this case.
+
+Signed-off-by: Horia Geantă <horia.geanta@nxp.com>
+---
+ src/crconf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/crconf.c b/src/crconf.c
+index cd1aa2b68733..5ae195293a27 100644
+--- a/src/crconf.c
++++ b/src/crconf.c
+@@ -146,7 +146,7 @@ static void copy_name(char *dst, char *src, size_t maxlen)
+ 			"length %zu!\n", src, maxlen - 1);
+ 		exit(-1);
+ 	}
+-	strncpy(dst, src, strlen(src));
++	strcpy(dst, src);
+ }
+ 
+ int crconf_update_driver(int argc, char **argv)
+-- 
+2.17.1
+

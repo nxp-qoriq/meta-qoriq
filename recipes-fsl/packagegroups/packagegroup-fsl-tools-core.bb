@@ -24,6 +24,7 @@ RDEPENDS_${PN} = " \
     pkgconfig \
     python3-datetime \
     python3-json \
+    python3-resource \
     procps \
     minicom \
     coreutils \

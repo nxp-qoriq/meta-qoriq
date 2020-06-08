@@ -14,6 +14,7 @@ RDEPENDS_${PN} = " \
     bison \
     ccache \
     chrpath \
+    cmake \
     diffstat \
     dtc \
     gettext-runtime \

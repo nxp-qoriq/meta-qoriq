@@ -1,15 +1,26 @@
-From 957215c474a507fa546b04795b0ce2ffb03a4a40 Mon Sep 17 00:00:00 2001
-From: "mengkun.chen" <mengkun.chen@nxp.com>
-Date: Mon, 16 Sep 2019 15:44:05 +0800
+From 0cecc900a5fac2bd2636f11f5ba6e450f51e7265 Mon Sep 17 00:00:00 2001
+From: Zongchun Yu <zongchun.yu@nxp.com>
+Date: Thu, 18 Jun 2020 14:34:56 +0530
 Subject: [PATCH] lsdk.config: fix issue for unset ramdisk size in LSDK
 
-Signed-off-by: mengkun.chen <mengkun.chen@nxp.com>
+Signed-off-by: Zongchun Yu <zongchun.yu@nxp.com>
 ---
+ arch/arm/configs/lsdk.config   | 2 ++
  arch/arm64/configs/lsdk.config | 1 +
- 1 file changed, 1 insertion(+)
+ 2 files changed, 3 insertions(+)
 
+diff --git a/arch/arm/configs/lsdk.config b/arch/arm/configs/lsdk.config
+index 0a21b724367b..00e1262e340a 100644
+--- a/arch/arm/configs/lsdk.config
++++ b/arch/arm/configs/lsdk.config
+@@ -86,3 +86,5 @@ CONFIG_IKCONFIG_PROC=y
+ # CONFIG_USB_RENESAS_USBHS is not set
+ # CONFIG_TEGRA_HOST1X is not set
+ # CONFIG_SND_SOC_ROCKCHIP is not set
++CONFIG_BLK_DEV_RAM=y
++CONFIG_BLK_DEV_RAM_SIZE=524288
 diff --git a/arch/arm64/configs/lsdk.config b/arch/arm64/configs/lsdk.config
-index 4a050cc..6fa3b8a 100644
+index ca9ca8d70547..3d736ef6e50f 100644
 --- a/arch/arm64/configs/lsdk.config
 +++ b/arch/arm64/configs/lsdk.config
 @@ -14,6 +14,7 @@ CONFIG_SLAB=y
@@ -21,5 +32,5 @@ index 4a050cc..6fa3b8a 100644
  CONFIG_EXPERT=y
  CONFIG_CHECKPOINT_RESTORE=y
 -- 
-2.7.4
+2.17.1
 

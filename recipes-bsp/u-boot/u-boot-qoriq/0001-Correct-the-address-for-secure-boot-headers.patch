@@ -1,0 +1,81 @@
+From 1f7d564a2ee5d4ded2b4a86f00305b51b2e760ee Mon Sep 17 00:00:00 2001
+From: Zongchun Yu <zongchun.yu@nxp.com>
+Date: Thu, 18 Jun 2020 13:46:10 +0530
+Subject: [PATCH] Correct the address for secure boot headers
+
+Signed-off-by: Zongchun Yu <zongchun.yu@nxp.com>
+---
+ include/configs/ls1028ardb.h     | 4 ++--
+ include/configs/ls1043a_common.h | 4 ++--
+ include/configs/lx2160a_common.h | 2 +-
+ include/configs/lx2160ardb.h     | 2 +-
+ 4 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/include/configs/ls1028ardb.h b/include/configs/ls1028ardb.h
+index f6212fa498..885f994b32 100644
+--- a/include/configs/ls1028ardb.h
++++ b/include/configs/ls1028ardb.h
+@@ -94,13 +94,13 @@
+ 	"fdt_addr_r=0x90000000\0"               \
+ 	"ramdisk_addr_r=0xa0000000\0"           \
+ 	"kernel_start=0x1000000\0"		\
+-	"kernelheader_start=0x800000\0"		\
++	"kernelheader_start=0x600000\0"		\
+ 	"kernel_load=0xa0000000\0"		\
+ 	"kernel_size=0x2800000\0"		\
+ 	"kernelheader_size=0x40000\0"		\
+ 	"kernel_addr_sd=0x8000\0"		\
+ 	"kernel_size_sd=0x14000\0"		\
+-	"kernelhdr_addr_sd=0x4000\0"		\
++	"kernelhdr_addr_sd=0x3000\0"		\
+ 	"kernelhdr_size_sd=0x10\0"		\
+ 	"console=ttyS0,115200\0"                \
+ 	"mtdparts=" CONFIG_MTDPARTS_DEFAULT "\0"	\
+diff --git a/include/configs/ls1043a_common.h b/include/configs/ls1043a_common.h
+index 1670476ec3..1f80af794a 100644
+--- a/include/configs/ls1043a_common.h
++++ b/include/configs/ls1043a_common.h
+@@ -247,12 +247,12 @@
+ 	"kernelheader_start=0x800000\0"		\
+ 	"fdt_addr_r=0x90000000\0"		\
+ 	"load_addr=0xa0000000\0"		\
+-	"kernelheader_addr=0x60800000\0"	\
++	"kernelheader_addr=0x60600000\0"	\
+ 	"kernel_size=0x2800000\0"		\
+ 	"kernelheader_size=0x40000\0"		\
+ 	"kernel_addr_sd=0x8000\0"		\
+ 	"kernel_size_sd=0x14000\0"		\
+-	"kernelhdr_addr_sd=0x4000\0"		\
++	"kernelhdr_addr_sd=0x3000\0"		\
+ 	"kernelhdr_size_sd=0x10\0"		\
+ 	"console=ttyS0,115200\0"		\
+ 	"boot_os=y\0"				\
+diff --git a/include/configs/lx2160a_common.h b/include/configs/lx2160a_common.h
+index c6a6a96ff0..8328916d54 100644
+--- a/include/configs/lx2160a_common.h
++++ b/include/configs/lx2160a_common.h
+@@ -255,7 +255,7 @@ int select_i2c_ch_pca9547_sec(unsigned char ch);
+ 	"kernel_size=0x2800000\0"		\
+ 	"kernel_addr_sd=0x8000\0"		\
+ 	"kernelhdr_addr_sd=0x3000\0"            \
+-	"kernel_size_sd=0x1d000\0"              \
++	"kernel_size_sd=0x14000\0"              \
+ 	"kernelhdr_size_sd=0x20\0"              \
+ 	"console=ttyAMA0,38400n8\0"		\
+ 	BOOTENV					\
+diff --git a/include/configs/lx2160ardb.h b/include/configs/lx2160ardb.h
+index e60ba60601..c85bb43670 100644
+--- a/include/configs/lx2160ardb.h
++++ b/include/configs/lx2160ardb.h
+@@ -107,7 +107,7 @@
+ 		"$kernelheader_size && esbc_validate ${kernelheader_addr_r}; "\
+ 		" bootm $load_addr#$BOARD\0"			\
+ 	"sd_bootcmd=echo Trying load from sd card..;"		\
+-		"mmcinfo; mmc read $load_addr "			\
++		"mmc dev 0; mmcinfo; mmc read $load_addr "			\
+ 		"$kernel_addr_sd $kernel_size_sd ;"		\
+ 		"env exists secureboot && mmc read $kernelheader_addr_r "\
+ 		"$kernelhdr_addr_sd $kernelhdr_size_sd "	\
+-- 
+2.17.1
+

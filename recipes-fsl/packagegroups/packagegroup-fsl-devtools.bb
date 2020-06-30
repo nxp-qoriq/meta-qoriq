@@ -15,6 +15,8 @@ RDEPENDS_${PN} = " \
     ccache \
     chrpath \
     cmake \
+    libelf \
+    elfutils-dev \
     diffstat \
     dtc \
     gettext-runtime \

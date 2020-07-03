@@ -8,8 +8,8 @@ KERNEL_IMAGE ?= "${KERNEL_IMAGETYPE}"
 ROOTFS_IMAGE ?= "fsl-image-core"
 KERNEL_ITS ?= "kernel.its"
 
-DEPENDS += "u-boot-mkimage-native openssl-native dtc-native"
-do_compile[depends] += "u-boot:do_deploy rcw:do_deploy virtual/kernel:do_build ${ROOTFS_IMAGE}:do_build"
+DEPENDS += "u-boot-mkimage-native openssl-native dtc-native cst-native"
+do_compile[depends] += "u-boot:do_deploy rcw:do_deploy virtual/kernel:do_build ${ROOTFS_IMAGE}:do_build ddr-phy:do_deploy"
 
 SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/atf;nobranch=1 \
            file://${KERNEL_ITS} \
@@ -34,9 +34,10 @@ do_deploy[nostamp] = "1"
 ITB_SUFFIX ?= "${DATETIME}"
 ITB_SUFFIX[vardepsexclude] = "DATETIME"
 
-BOOTTYPE ?= "flexspi_nor"
-PLATFORM ?= "lx2160aqds"
-RCW_BIN ?= "${DEPLOY_DIR_IMAGE}/rcw/${MACHINE}/${RCWXSPI}.bin"
+BOOTTYPE ?= "flexspi_nor sd emmc"
+PLATFORM ?= "${MACHINE}"
+MBEDTLS_FOLDER ?= "${WORKDIR}/git/mbedtls"
+RCW_FOLDER ?= "${MACHINE}"
 
 CFLAGS[unexport] = "1"
 LDFLAGS[unexport] = "1"
@@ -44,6 +45,8 @@ AS[unexport] = "1"
 LD[unexport] = "1"
 
 EXTRA_OEMAKE += "HOSTCC='${BUILD_CC} ${BUILD_CPPFLAGS} ${BUILD_CFLAGS} ${BUILD_LDFLAGS}'"
+
+ARM_COT = "${@bb.utils.contains('DISTRO_FEATURES', 'arm-cot-with-verified-boot', 'true', 'false', d)}"
 
 do_compile () {
     install -d ${WORKDIR}/build
@@ -75,20 +78,98 @@ do_compile () {
     cp ${DEPLOY_DIR_IMAGE}/u-boot-${MACHINE}.bin-tfa-verified-boot ./u-boot.bin
     cat u-boot.bin u-boot.dtb > u-boot-combine-dtb.bin
 
-    # Generate atf fip binary based on above combined u-boot
+    # Generate atf images based on above combined u-boot
+    cd ${S}
     export CROSS_COMPILE="${TARGET_PREFIX}"
     export ARCH="arm64"
-    oe_runmake -C ${S} realclean
-    oe_runmake -C ${S} all fip pbl PLAT=${PLATFORM} BOOT_MODE=${BOOTTYPE} RCW=${RCW_BIN} BL33=${WORKDIR}/build/u-boot-combine-dtb.bin
+
+    if [ "${ARM_COT}" = "true" ]; then
+        rm -fr ${S}/arm-cot-verified-boot
+        mkdir -p ${S}/arm-cot-verified-boot
+
+        if [ ! -f ${RECIPE_SYSROOT_NATIVE}/usr/bin/cst/srk.pri ]; then
+            ${RECIPE_SYSROOT_NATIVE}/usr/bin/cst/gen_keys 1024
+        else
+            cp ${RECIPE_SYSROOT_NATIVE}/usr/bin/cst/srk.pri ${S}
+            cp ${RECIPE_SYSROOT_NATIVE}/usr/bin/cst/srk.pub ${S}
+        fi
+        outputdir="${S}/arm-cot-verified-boot"
+        secext="_sec"
+    else
+        rm -fr ${S}/verified-boot
+        mkdir -p ${S}/verified-boot
+        outputdir="${S}/verified-boot"
+    fi
+
+    for d in ${BOOTTYPE}; do
+        case $d in
+        sd)
+            rcwimg="${RCWSD}.bin"
+            ;;
+        emmc)
+            rcwimg="${RCWEMMC}.bin"
+            ;;
+        flexspi_nor)
+            rcwimg="${RCWXSPI}.bin"
+            ;;
+        esac
+
+	if [ -f "${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg}" ]; then
+                oe_runmake V=1 -C ${S} realclean
+                if [ "${ARM_COT}" = "true" ]; then
+                    mkdir -p ${S}/build/${PLATFORM}/release
+                    if [ -f ${outputdir}/rot_key.pem ]; then
+                        cp -fr ${outputdir}/*.pem ${S}/build/${PLATFORM}/release
+                    fi
+                    oe_runmake V=1 -C ${S} fip pbl PLAT=${PLATFORM} BOOT_MODE=${d} TRUSTED_BOARD_BOOT=1 \
+                        GENERATE_COT=1 MBEDTLS_DIR=${MBEDTLS_FOLDER} CST_DIR=${RECIPE_SYSROOT_NATIVE}/usr/bin/cst \
+                        BL33=${WORKDIR}/build/u-boot-combine-dtb.bin RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg}
+
+                    if [ ! -f ${outputdir}/ddr_fip_sec.bin ]; then
+                        oe_runmake V=1 -C ${S} fip_ddr PLAT=${PLATFORM} TRUSTED_BOARD_BOOT=1 GENERATE_COT=1 \
+                          MBEDTLS_DIR=${MBEDTLS_FOLDER} DDR_PHY_BIN_PATH=${DEPLOY_DIR_IMAGE}/ddr-phy
+                        cp -r ${S}/build/${PLATFORM}/release/ddr_fip_sec.bin ${outputdir}
+                        cp -r ${S}/build/${PLATFORM}/release/*.pem ${outputdir}
+                    fi
+                else
+                    oe_runmake V=1 -C ${S} all fip pbl PLAT=${PLATFORM} BOOT_MODE=${d} \
+                               RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${WORKDIR}/build/u-boot-combine-dtb.bin
+                fi
+                cp -r ${S}/build/${PLATFORM}/release/bl2_${d}${secext}.pbl ${outputdir}
+                cp -r ${S}/build/${PLATFORM}/release/fip.bin ${outputdir}
+        fi
+        rcwimg=""
+    done
 }
 
 do_deploy () {
     install -d ${DEPLOYDIR}/atf
     install -d ${DEPLOYDIR}/verified-boot-keys
 
+    verifiedbootext="_verified_boot"
+    if [ "${ARM_COT}" = "true" ]; then
+        outputdir="${S}/arm-cot-verified-boot"
+        secext="_sec"
+    else
+        outputdir="${S}/verified-boot"
+    fi
+
+    if [ -f "${outputdir}/fip.bin" ]; then
+        cp -r ${outputdir}/fip.bin ${DEPLOYDIR}/atf/fip_uboot${verifiedbootext}${secext}.bin
+    fi
+
+    if [ -f "${outputdir}/ddr_fip_sec.bin" ]; then
+        cp -r ${outputdir}/ddr_fip_sec.bin ${DEPLOYDIR}/atf/ddr_fip${verifiedbootext}${secext}.bin
+    fi
+
+    for d in ${BOOTTYPE}; do
+        if [ -e  ${outputdir}/bl2_${d}${secext}.pbl ]; then
+            cp -r ${outputdir}/bl2_${d}${secext}.pbl ${DEPLOYDIR}/atf/bl2_${d}${verifiedbootext}${secext}.pbl
+        fi
+    done
+
     ITB_BASENAME=kernel-`basename ${KERNEL_DEVICETREE} |sed -e 's,.dtb$,,'`-signed-${ITB_SUFFIX}
     ITB_SYMLINK=kernel-`basename ${KERNEL_DEVICETREE} |sed -e 's,.dtb$,,'`-signed
-    install -m 644 ${S}/build/${PLATFORM}/release/fip.bin ${DEPLOYDIR}/atf/fip_uboot_verified_boot.bin
     install -m 644 ${WORKDIR}/build/kernel.itb ${DEPLOYDIR}/${ITB_BASENAME}.itb
     ln -sf ${ITB_BASENAME}.itb ${DEPLOYDIR}/${ITB_SYMLINK}.itb
     cp -fr ${WORKDIR}/build/keys/* ${DEPLOYDIR}/verified-boot-keys

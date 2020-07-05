@@ -70,4 +70,8 @@ do_install_prepend_fsl-lsch2-32b() {
     rm -f ${STAGING_KERNEL_DIR}/arch/arm/boot/dts/freescale
 }
 
+do_deploy_append_lx2162a () {
+    rm -fr ${DEPLOYDIR}/fitImage*
+}
+
 FILES_${KERNEL_PACKAGE_NAME}-image += "/boot/zImage*"

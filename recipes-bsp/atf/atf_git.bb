@@ -10,13 +10,16 @@ do_compile[depends] += "u-boot:do_deploy rcw:do_deploy ddr-phy:do_deploy"
 
 S = "${WORKDIR}/git"
 
-SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/atf;nobranch=1"
-SRCREV = "7d748e6f0ec652ba7c43733dc67a3d0b0217390a"
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/atf;nobranch=1 \
+           git://github.com/ARMmbed/mbedtls;nobranch=1;destsuffix=git/mbedtls;name=mbedtls \
+"
+SRCREV = "8c82425a1bd3e1e1d9b5716afb3dda4e2e71df14"
+SRCREV_mbedtls = "85da85555e5b086b0250780693c3ee584f63e79f"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 PLATFORM = "${MACHINE}"
-MBEDTLS_FOLDER ?= "${WORKDIR}/git/mbedtls"
+MBEDTLS_FOLDER ?= "${S}/mbedtls"
 RCW_FOLDER ?= "${MACHINE}"
 
 # requires CROSS_COMPILE set by hand as there is no configure script

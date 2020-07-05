@@ -12,9 +12,11 @@ DEPENDS += "u-boot-mkimage-native openssl-native dtc-native cst-native"
 do_compile[depends] += "u-boot:do_deploy rcw:do_deploy virtual/kernel:do_build ${ROOTFS_IMAGE}:do_build ddr-phy:do_deploy"
 
 SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/atf;nobranch=1 \
+           git://github.com/ARMmbed/mbedtls;nobranch=1;destsuffix=git/mbedtls;name=mbedtls \
            file://${KERNEL_ITS} \
 "
-SRCREV = "4a82c939a0211196e2b80a495f966383803753bb"
+SRCREV = "8c82425a1bd3e1e1d9b5716afb3dda4e2e71df14"
+SRCREV_mbedtls = "85da85555e5b086b0250780693c3ee584f63e79f"
 
 S = "${WORKDIR}/git"
 
@@ -36,7 +38,7 @@ ITB_SUFFIX[vardepsexclude] = "DATETIME"
 
 BOOTTYPE ?= "flexspi_nor sd emmc"
 PLATFORM ?= "${MACHINE}"
-MBEDTLS_FOLDER ?= "${WORKDIR}/git/mbedtls"
+MBEDTLS_FOLDER ?= "${S}/mbedtls"
 RCW_FOLDER ?= "${MACHINE}"
 
 CFLAGS[unexport] = "1"

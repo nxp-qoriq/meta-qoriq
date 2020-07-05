@@ -13,8 +13,8 @@ S = "${WORKDIR}/git"
 
 REGLEX_ls2088a = "ls2088a"
 REGLEX_ls1088a = "ls1088a"
-REGLEX_lx2160a = "lx2160a"
-REGLEX_lx2162a = "lx2160a"
+REGLEX_lx2160a = "lx216xa"
+REGLEX_lx2162a = "lx216xa"
 
 do_install () {
     install -d ${D}/boot

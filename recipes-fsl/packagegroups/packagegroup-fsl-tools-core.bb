@@ -38,6 +38,7 @@ RDEPENDS_${PN} = " \
     sysklogd \
     sysstat \
     vmcore-dmesg \
+    makedumpfile \
 "
 
 IPC_PKGS = " \

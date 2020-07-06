@@ -1,4 +1,4 @@
-SRCREV= "b621749a1d036280ca9bc43751d84f1cba32e493"
+SRCREV= "bd2ce17b429e50e6ea982a9ed6fc7298e06eefea"
 
 MC_CFG_lx2162a = "lx2162aqds"
 

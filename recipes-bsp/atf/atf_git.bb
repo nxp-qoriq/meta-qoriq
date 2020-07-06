@@ -51,6 +51,12 @@ uboot ?= "${DEPLOY_DIR_IMAGE}/u-boot.bin-tfa"
 do_configure[noexec] = "1"
 
 do_compile() {
+    if [ "${NXP_COT}" = "true" -a "${ARM_COT}" = "true" ]; then
+        bbfatal " \
+        Error!, Both ARM CoT and NXP CoT are enabled. Only one CoT is built in a yocto build, \
+        Don't add nxp-cot and arm-cot into DISTRO_FEATURES_append at the same time."
+    fi
+
     if [ "${NXP_COT}" = "true" ]; then
         rm -fr ${S}/nxp-cot
         mkdir -p ${S}/nxp-cot

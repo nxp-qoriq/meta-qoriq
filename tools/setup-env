@@ -308,6 +308,20 @@ SOURCE_MIRROR_URL ?= "http://git.freescale.com/source/"
 INITRAMFS_IMAGE = "fsl-image-networking"
 EOF
 
+if [ "$MACHINE" = "ls1028ardb" ]; then
+   cat >>conf/local.conf <<-EOF
+DISTRO_FEATURES_remove = " x11"
+LICENSE_FLAGS_WHITELIST_append = " commercial"
+PREFERRED_VERSION_weston = "8.0.0.imx"
+PREFERRED_VERSION_wayland-protocols = "1.18.imx"
+PREFERRED_VERSION_libdrm = "2.4.99.imx"
+PREFERRED_PROVIDER_virtual/libgl  = "imx-gpu-viv"
+PREFERRED_PROVIDER_virtual/libgles1 = "imx-gpu-viv"
+PREFERRED_PROVIDER_virtual/libgles2 = "imx-gpu-viv"
+PREFERRED_PROVIDER_virtual/egl      = "imx-gpu-viv"
+EOF
+fi
+
 for s in $HOME/.oe $HOME/.yocto; do
     if [ -e $s/site.conf ]; then
         echo "Linking $s/site.conf to conf/site.conf"

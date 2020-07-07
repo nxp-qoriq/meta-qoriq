@@ -1,4 +1,4 @@
-SRCREV= "43617ebedacdce676ffed151ae12522b8eba9152"
+SRCREV= "29ce1281df4d699f7b35bf7e26b9d9ea0e3de062"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=44a0d0fad189770cc022af4ac6262cbe"
 do_install () {
     if [ ${M} = ls2088ardb ]; then

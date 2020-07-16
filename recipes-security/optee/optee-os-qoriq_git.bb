@@ -10,7 +10,7 @@ inherit deploy python3native
 
 DEPENDS = "python3-pyelftools-native python3-pycryptodome-native dtc-native"
 
-SRCREV = "1ea0544f74e07f743d66a7e93801622c2fbd0181"
+SRCREV = "138aea3378062b8f04cfde3f0037ed482eebe051"
 SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/optee_os;nobranch=1 \
            file://0001-allow-setting-sysroot-for-libgcc-lookup.patch \
            file://0001-scripts-sign_encrypt.py-Correct-the-Crypto-module-na.patch \

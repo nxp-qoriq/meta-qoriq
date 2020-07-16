@@ -7,7 +7,7 @@ LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=bbea815ee2795b2f4230826c0c6b8814"
 
 SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/linux;nobranch=1"
-SRCREV = "8bac9bbc4f38fe4674f47719f54dc52ea6eb0c17"
+SRCREV = "e5c07f978553ef8b07cd359bcd557d05cad43acb"
 
 S = "${WORKDIR}/git"
 

@@ -310,15 +310,21 @@ EOF
 
 if [ "$MACHINE" = "ls1028ardb" ]; then
    cat >>conf/local.conf <<-EOF
-DISTRO_FEATURES_remove = " x11"
-LICENSE_FLAGS_WHITELIST_append = " commercial"
-PREFERRED_VERSION_weston = "8.0.0.imx"
-PREFERRED_VERSION_wayland-protocols = "1.18.imx"
-PREFERRED_VERSION_libdrm = "2.4.99.imx"
-PREFERRED_PROVIDER_virtual/libgl  = "imx-gpu-viv"
-PREFERRED_PROVIDER_virtual/libgles1 = "imx-gpu-viv"
-PREFERRED_PROVIDER_virtual/libgles2 = "imx-gpu-viv"
-PREFERRED_PROVIDER_virtual/egl      = "imx-gpu-viv"
+# uncomment the below lines when building fsl-image-multimedia-full
+#DISTRO_FEATURES_remove = " x11"
+#PREFERRED_VERSION_weston = "8.0.0.imx"
+#PREFERRED_VERSION_wayland-protocols = "1.18.imx"
+#PREFERRED_VERSION_libdrm = "2.4.99.imx"
+#PREFERRED_PROVIDER_virtual/libgl  = "imx-gpu-viv"
+#PREFERRED_PROVIDER_virtual/libgles1 = "imx-gpu-viv"
+#PREFERRED_PROVIDER_virtual/libgles2 = "imx-gpu-viv"
+#PREFERRED_PROVIDER_virtual/egl      = "imx-gpu-viv"
+
+# Some gstream plugins require "commercial" be set in LICENSE_FLAGS_WHITELIST
+# For exmaple, gstreamer1.0-plugins-ugly-asf/gstreamer1.0-libav
+# uncomment the below one line to include them into fsl-image-multimedia-full
+#LICENSE_FLAGS_WHITELIST_append = " commercial"
+
 EOF
 fi
 

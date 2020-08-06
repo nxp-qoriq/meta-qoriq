@@ -9,8 +9,10 @@ LIC_FILES_CHKSUM = " \
     file://Licenses/lgpl-2.0.txt;md5=5f30f0716dfdd0d91eb439ebec522ec2 \
     file://Licenses/lgpl-2.1.txt;md5=4fbd65380cdd255951079008b364516c \
 "
-SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/u-boot;nobranch=1"
-SRCREV= "1e55b2f9e7f56b76569089b9e950f49c1579580e"
+#SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/u-boot;nobranch=1"
+#SRCREV= "1e55b2f9e7f56b76569089b9e950f49c1579580e"
+SRC_URI = "git://bitbucket.sw.nxp.com/dash/dash-uboot.git;protocol=ssh;branch=China_key_account_support"
+SRCREV= "${AUTOREV}"
 
 S = "${WORKDIR}/git"
 PV_append = "+fslgit"

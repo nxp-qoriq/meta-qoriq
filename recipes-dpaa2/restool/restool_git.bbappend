@@ -1,1 +1,2 @@
-SRCREV= "f0cec094e4c6d1c975b377203a3bf994ba9325a9"
+SRC_URI = "git://bitbucket.sw.nxp.com/dpaa2/restool.git;protocol=ssh;branch=China_key_account_support"
+SRCREV= "${AUTOREV}"

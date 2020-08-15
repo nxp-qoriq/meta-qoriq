@@ -1,6 +1,6 @@
 SUMMARY = "DPAA2 Management Complex Firmware"
 LICENSE = "NXP-Binary-EULA"
-LIC_FILES_CHKSUM = "file://NXP-Binary-EULA.txt;md5=73d4b970c18882e229e4bf1ada5bb8d6"
+LIC_FILES_CHKSUM = "file://NXP-Binary-EULA.txt;md5=afcb1213054384820390d410ab62105f"
 
 inherit deploy fsl-eula-unpack
 
@@ -15,7 +15,7 @@ S = "${WORKDIR}/git"
 
 REGLEX_ls2088a = "ls2088a"
 REGLEX_ls1088a = "ls1088a"
-REGLEX_lx2160a = "lx2160a"
+REGLEX_lx2160a = "lx216xa"
 
 do_install () {
     install -d ${D}/boot

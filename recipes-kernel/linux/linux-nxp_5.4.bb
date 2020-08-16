@@ -6,10 +6,10 @@ SECTION = "kernel"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=bbea815ee2795b2f4230826c0c6b8814"
 
-KERNEL_BRANCH ?= "linux-5.4"
+KERNEL_BRANCH ?= "Key_Account_C_Support"
 KERNEL_SRC ?= "git://source.codeaurora.org/external/qoriq/qoriq-components/linux.git;protocol=https"
 SRC_URI = "${KERNEL_SRC};branch=${KERNEL_BRANCH}"
-SRCREV = "134788b16485dd9fa81988681d2365ee38633fa2"
+SRCREV = "fbe1b60f23ad86ba48ff927d4f39fd706d91f9f5"
 
 S = "${WORKDIR}/git"
 

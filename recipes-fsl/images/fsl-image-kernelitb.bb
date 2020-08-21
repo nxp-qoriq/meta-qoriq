@@ -3,7 +3,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
 KERNEL_IMAGE ?= "${KERNEL_IMAGETYPE}"
-ROOTFS_IMAGE ?= "fsl-image-edgescale"
+ROOTFS_IMAGE ?= "fsl-image-core"
 KERNEL_ITS ?= "kernel.its"
 
 SRC_URI = "file://${KERNEL_ITS}"
@@ -52,27 +52,6 @@ do_deploy () {
         ln -sf ${ITB_BASENAME}.itb ${DEPLOYDIR}/${ITB_SYMLINK}.itb
     done
 }
-do_deploy_ls1021atwr () {
-    install -d ${DEPLOYDIR}
-    cp ${DEPLOY_DIR_IMAGE}/zImage .
-
-    for DTS_FILE in ${KERNEL_DEVICETREE}; do
-        DTB_FILE=`basename ${DTS_FILE}`;
-        ITB_BASENAME=kernel-`basename ${DTS_FILE} |sed -e 's,.dtb$,,'`-${ITB_SUFFIX}
-        ITB_SYMLINK=kernel-`basename ${DTS_FILE} |sed -e 's,.dtb$,,'`
-
-        cp ${WORKDIR}/${KERNEL_ITS} kernel.its
-        sed -i -e "s,freescale.dtb,${DEPLOY_DIR_IMAGE}/${DTB_FILE}," kernel.its
-        sed -i -e "s,rootfs.ext2.gz,${DEPLOY_DIR_IMAGE}/${ROOTFS_IMAGE}-${MACHINE}.ext2.gz," kernel.its
-
-        mkimage -f kernel.its ${ITB_BASENAME}.itb
-
-        install -m 644 ${ITB_BASENAME}.itb ${DEPLOYDIR}/
-        ln -sf ${ITB_BASENAME}.itb ${DEPLOYDIR}/${ITB_SYMLINK}.itb
-    done
-}
-
-
 addtask deploy before build
 
 COMPATIBLE_MACHINE = "(qoriq)"

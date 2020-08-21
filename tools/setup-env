@@ -73,8 +73,13 @@ For more information about OpenEmbedded see their website:
     http://www.openembedded.org/
 
 You can now run 'bitbake <target>'
-    fsl-image-networking
-    fsl-image-networking-full
+    fsl-image-minimal
+    fsl-image-mfgtool
+    fsl-image-core
+    fsl-image-virt
+    fsl-image-full
+    fsl-image-kernelitb
+    fsl-toolchain
 "
     echo "To return to this build environment later please run:"
     echo "    . $PROJECT_DIR/SOURCE_THIS"
@@ -99,7 +104,7 @@ usage() {
         ${ROOTDIR}/sources/meta-fsl*/*/*/conf/machine \
 	${ROOTDIR}/sources/meta-qoriq/conf/machine \
         -name *.conf 2>/dev/null \
-        |egrep "/(mpc|b4|bsc|c29|p1|p2|p3|p4|p5|t1|t2|t4|ls|lx).*conf$" |sort \
+        |egrep "/(lx2160abluebox3).*conf$" |sort \
         |xargs echo |sed -e 's,[^ ]*/,,g;s,.conf,,g'`
 "
 
@@ -305,7 +310,6 @@ DL_DIR = "$DOWNLOADS"
 SSTATE_DIR = "$CACHES"
 INHERIT += "own-mirrors"
 SOURCE_MIRROR_URL ?= "http://git.freescale.com/source/"
-INITRAMFS_IMAGE = "fsl-image-networking"
 EOF
 
 if [ "$MACHINE" = "ls1028ardb" ]; then

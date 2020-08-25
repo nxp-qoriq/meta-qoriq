@@ -2,7 +2,7 @@
 
 # BSD LICENSE
 #
-# Copyright 2017 NXP
+# Copyright 2020 NXP
 #
 #
 
@@ -373,107 +373,8 @@ generate_qoriq_composite_firmware() {
 
 }
 
-generate_composite_fw_2M() {
-    # generate machine-specific firmware to adapt to small footprint flash media, e.g. on LS1012A-FRWY
-    # $1: machine name
-    # $2: boot type: nor, sd, qspi, xspi, nand
-    # $3: bootloader type: uboot or uefi
-    # $4: optional argument, e.g. for 512mb
-
-    echo "Generating $2boot composite firmware image for $1 ..."
-    . $1.manifest
-    . memorylayout.cfg
-    if [ "$SECURE" = "true" ]; then
-	bl2img=`eval echo '${'"atf_bl2_""$2"'_sec}'`
-	fipimg=`eval echo '${'"atf_fip_""$3"'_sec}'`
-	fwimg=$DEPLOYDIR/firmware_${1}_${3}_${2}boot_secure
-        secureboot_headers=`eval echo '${'"secureboot_headers_""$2"'}'`
-    else
-	bl2img=`eval echo '${'"atf_bl2_""$2"'}'`
-	fipimg=`eval echo '${'"atf_fip_""$3"'}'`
-	fwimg=$DEPLOYDIR/firmware_${1}_${3}_${2}boot
-    fi
-
-    if [ "$4" = "512mb" ]; then
-	if [ "$SECURE" = "true" ]; then
-	    fwimg=$DEPLOYDIR/firmware_${1}_512mb_${3}_${2}boot_secure
-	    bl2img=`eval echo '${'"atf_bl2_""$2_$4"'_sec}'`
-	    fipimg=`eval echo '${'"atf_fip_""$3_$4"'_sec}'`
-	else
-	    fwimg=$DEPLOYDIR/firmware_${1}_512mb_${3}_${2}boot
-	    bl2img=`eval echo '${'"atf_bl2_""$2_$4"'}'`
-	    fipimg=`eval echo '${'"atf_fip_""$3_$4"'}'`
-	fi
-    fi
-
-    [ -f $fwimg ] && rm -f $fwimg
-    [ -z "$bl2img" ] && echo ${3} ${2}boot on $1 based on ATF: unsupported! && exit
-
-    # 1. program ATF bl2
-    if [ "$2" = "sd" -o "$2" = "emmc" ]; then
-        dd if=$DEPLOYDIR/$bl2img of=$fwimg bs=512 seek=$sd2_rcw_offset
-    else
-        dd if=$DEPLOYDIR/$bl2img of=$fwimg bs=1K seek=0
-    fi
-
-    # 2. reserved
-
-    # 3. program Ethernet firmware,  e.g. PFE on LS1012A-FRWY
-    if [ -n "$pfe_fw" ]; then
-	if [ "$2" = "nor" -o "$2" = "qspi" -o "$2" = "xspi" -o "$2" = "nand" ]; then
-	    val=`expr $(echo $(($nor2_eth_firmware_offset))) / 1024`
-	    dd if=$DEPLOYDIR/$pfe_fw of=$fwimg bs=1K seek=$val
-	elif [ "$2" = "sd" -o "$2" = "emmc" ]; then
-	    dd if=$DEPLOYDIR/$pfe_fw of=$fwimg bs=512 seek=$sd2_eth_firmware_offset
-	fi
-    fi
-
-    # 4. ATF FIP image
-    if [ "$2" = "sd" -o "$2" = "emmc" ]; then
-	dd if=$DEPLOYDIR/$fipimg of=$fwimg bs=512 seek=$sd2_fip_offset
-    else
-	val=`expr $(echo $(($nor2_fip_offset))) / 1024`
-	dd if=$DEPLOYDIR/$fipimg of=$fwimg bs=1K seek=$val
-    fi
-
-    # 5. program bootloader environment varialbe
-    if [ "$3" = "uefi" ]; then
-	if [ -n "$uefi_env" ]; then
-	    if [ "$2" = "nor" -o "$2" = "qspi" -o "$2" = "xspi" ]; then
-		val=`expr $(echo $(($nor2_bootloader_env_offset))) / 1024`
-		dd if=$DEPLOYDIR/$uefi_env of=$fwimg bs=1K seek=$val
-	    elif [ "$2" = "sd" -o "$2" = "emmc" ]; then
-		dd if=$DEPLOYDIR/$uefi_env of=$fwimg bs=512 seek=$sd2_bootloader_env_offset
-	    fi
-	fi
-    fi
-
-    # 6. flashing image script or reserved, 0x1E0000 64KB
-
-    # 7. program secure boot headers
-    if [ -n "$secureboot_headers" -a "$SECURE" = "true" ]; then
-	if [ "$2" = "nor" -o "$2" = "qspi" -o "$2" = "nand" ]; then
-	    val=`expr $(echo $(($nor2_secureboot_headers_offset))) / 1024`
-	    dd if=$DEPLOYDIR/$secureboot_headers of=$fwimg bs=1K seek=$val
-	elif [ "$2" = "sd" -o "$2" = "emmc" ]; then
-	    dd if=$DEPLOYDIR/$secureboot_headers of=$fwimg bs=512 seek=$sd2_secureboot_headers_offset
-	fi
-    fi
-
-    [ "$2" = "sd" -o "$2" = "emmc" ] &&	tail -c +4097 $fwimg > $fwimg.img && rm $fwimg || mv $fwimg $fwimg.img
-    echo -e "${GREEN} $fwimg.img   [Done]\n${NC}"
-}
-
-generate_distro_bootscr $MACHINE
-if [ "${MACHINE:0:10}" = "lx2160ardb" ]; then
-    machname=${MACHINE:0:10}
-else
-    machname=${MACHINE}
+if [ "$SECURE" = "true" ]; then
+    generate_distro_bootscr $MACHINE
+    secure_sign_image lx2160ardb $BOOTTYPE
 fi
-secure_sign_image $machname $BOOTTYPE
-if [ "$MACHINE" = "ls1012afrwy" ]; then
-    generate_composite_fw_2M $MACHINE $BOOTTYPE uboot
-    generate_composite_fw_2M $MACHINE $BOOTTYPE uboot 512mb
-else
-    generate_qoriq_composite_firmware $MACHINE $BOOTTYPE
-fi
+generate_qoriq_composite_firmware $MACHINE $BOOTTYPE

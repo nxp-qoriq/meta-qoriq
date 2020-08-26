@@ -96,9 +96,6 @@ SECURE_TOOLS = "\
     optee-os-qoriq \
     optee-client-qoriq \
     optee-test-qoriq \
-    libpkcs11 \
-    secure-obj \
-    secure-obj-module \
     gnutls \
     gnutls-bin \
 "

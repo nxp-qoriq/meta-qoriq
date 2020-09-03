@@ -20,7 +20,7 @@ do_deploy[depends] += "virtual/kernel:do_deploy ${ITB_IMAGE}:do_build"
 BOOT_TYPE ?= ""
 BOOT_TYPE_lx2160abluebox3 ?= "xspi sd emmc"
 
-SECURE = "${@bb.utils.contains('DISTRO_FEATURES', 'secure', 'true', 'false', d)}"
+SECURE = "${@bb.utils.contains('DISTRO_FEATURES', 'nxp-cot', 'true', 'false', d)}"
 
 S = "${WORKDIR}"
 

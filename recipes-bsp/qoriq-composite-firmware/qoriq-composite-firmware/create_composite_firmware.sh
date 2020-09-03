@@ -375,6 +375,6 @@ generate_qoriq_composite_firmware() {
 
 if [ "$SECURE" = "true" ]; then
     generate_distro_bootscr $MACHINE
-    secure_sign_image lx2160ardb $BOOTTYPE
+    secure_sign_image $MACHINE $BOOTTYPE
 fi
 generate_qoriq_composite_firmware $MACHINE $BOOTTYPE

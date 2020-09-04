@@ -9,7 +9,7 @@ SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/dpdk;nobr
            file://0001-Add-RTE_KERNELDIR_OUT.patch \
 "
 
-SRCREV = "4110a5fed09fa034963cfc246a6285911ecbd540"
+SRCREV = "d5c9b8f91dd35db9ac50b855c45400e71466a453"
 
 datadir[unexport] = "1"
 

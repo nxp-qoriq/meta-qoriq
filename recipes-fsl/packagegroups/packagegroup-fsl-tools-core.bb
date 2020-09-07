@@ -35,6 +35,9 @@ RDEPENDS_${PN} = " \
     sysfsutils \
     sysklogd \
     sysstat \
+    kdump \
+    kexec \
+    vmcore-dmesg \
 "
 
 IPC_PKGS = " \

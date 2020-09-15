@@ -9,7 +9,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=bbea815ee2795b2f4230826c0c6b8814"
 KERNEL_BRANCH ?= "Key_Account_C_Support"
 KERNEL_SRC ?= "git://source.codeaurora.org/external/qoriq/qoriq-components/linux.git;protocol=https"
 SRC_URI = "${KERNEL_SRC};branch=${KERNEL_BRANCH}"
-SRCREV = "fbe1b60f23ad86ba48ff927d4f39fd706d91f9f5"
+SRCREV = "aea4edf12a026532ed9480703a30beeeaf22e270"
 
 S = "${WORKDIR}/git"
 

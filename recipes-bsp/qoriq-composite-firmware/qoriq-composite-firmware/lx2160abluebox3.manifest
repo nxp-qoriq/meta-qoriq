@@ -17,8 +17,8 @@ secureboot_headers_sd=secboot_hdrs/secboot_hdrs_sdboot.bin
 ddr_phy_fw=ddr-phy/fip_ddr_all.bin
 ddr_phy_fw_sec=atf_nxp-cot/ddr_fip_sec.bin
 dpaa2_mc_fw=mc_app/mc.itb
-dpaa2_mc_dpc=mc-utils/dpc-usxgmii.dtb
-dpaa2_mc_dpl=mc-utils/dpl-eth.19.dtb
+dpaa2_mc_dpc=mc-utils/dpc_10a.dtb
+dpaa2_mc_dpl=mc-utils/dpl-eth.10a.dtb
 
 # [linux, dtb, rfs]
 kernel_img=Image

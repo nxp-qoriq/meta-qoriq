@@ -2,9 +2,9 @@
 machine=lx2160abluebox3
 
 # [firmware_images]
-rcw_xspi=rcw/lx2160abluebox3/PPUUPPUU_PP_RR_10a_2_2/rcw_2200_750_3200_10a_2_2.bin
-rcw_sd=rcw/lx2160abluebox3/PPUUPPUU_PP_RR_10a_2_2/rcw_2200_750_3200_10a_2_2.bin
-rcw_emmc=rcw/lx2160abluebox3/PPUUPPUU_PP_RR_10a_2_2/rcw_2200_750_3200_10a_2_2.bin
+rcw_xspi=rcw/lx2160abluebox3/PPUUPPUU_PP_RR_31_2_2/rcw_2200_750_3200_31_2_2.bin
+rcw_sd=rcw/lx2160abluebox3/PPUUPPUU_PP_RR_31_2_2/rcw_2200_750_3200_31_2_2.bin
+rcw_emmc=rcw/lx2160abluebox3/PPUUPPUU_PP_RR_31_2_2/rcw_2200_750_3200_31_2_2.bin
 atf_bl2_xspi=atf/bl2_flexspi_nor.pbl
 atf_bl2_xspi_sec=atf_nxp-cot/bl2_flexspi_nor_sec.pbl
 atf_bl2_sd=atf/bl2_sd.pbl

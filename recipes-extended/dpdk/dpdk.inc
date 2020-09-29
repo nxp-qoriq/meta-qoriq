@@ -3,12 +3,13 @@ HOMEPAGE = "http://dpdk.org"
 LICENSE = "BSD-3-Clause & LGPLv2 & GPLv2"
 LIC_FILES_CHKSUM = "file://license/README;md5=3383def2d4c82237df281174e981a492"
 
-SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/dpdk;nobranch=1 \
+SRC_URI = "git://bitbucket.sw.nxp.com/gitam/dpdk.git;protocol=ssh;nobranch=1 \
            file://add-RTE_KERNELDIR_OUT-to-split-kernel-bu.patch \
            file://0001-add-Wno-cast-function-type.patch \
            file://0001-Add-RTE_KERNELDIR_OUT.patch \
-"
-SRCREV = "4110a5fed09fa034963cfc246a6285911ecbd540"
+           file://0004-update-WERROR_FLAGS.patch \
+ "
+SRCREV = "ebc58e63377776b8cfbae293a2b0d2100e1b969b"
 
 datadir[unexport] = "1"
 

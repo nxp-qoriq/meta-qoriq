@@ -1,0 +1,234 @@
+diff --git a/Makefile b/Makefile
+index f0654d5..1660fa2 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2,7 +2,7 @@ ifeq ($(origin CC),default)
+ 	CC := $(CROSS_COMPILE)gcc
+ endif
+ 
+-SRC = $(shell find . -name "*.c")
++SRC = $(shell find * -name "*.c")
+ OBJ = $(patsubst %.c, %.o, $(SRC))
+ 
+ RESTOOL_SCRIPT_SYMLINKS = ls-addmux ls-addsw ls-addni ls-listni ls-listmac
+diff --git a/dpaiop_commands.c b/dpaiop_commands.c
+index 111bddd..726a7af 100644
+--- a/dpaiop_commands.c
++++ b/dpaiop_commands.c
+@@ -44,7 +44,7 @@
+ #include "mc_v9/fsl_dpaiop.h"
+ #include "mc_v10/fsl_dpaiop.h"
+ 
+-enum mc_cmd_status mc_status;
++static enum mc_cmd_status mc_status;
+ 
+ /**
+  * dpaiop info command options
+diff --git a/dpbp_commands.c b/dpbp_commands.c
+index 77b12d2..30acf8f 100644
+--- a/dpbp_commands.c
++++ b/dpbp_commands.c
+@@ -43,7 +43,7 @@
+ #include "mc_v9/fsl_dpbp.h"
+ #include "mc_v10/fsl_dpbp.h"
+ 
+-enum mc_cmd_status mc_status;
++static enum mc_cmd_status mc_status;
+ 
+ /**
+  * dpbp info command options
+diff --git a/dpci_commands.c b/dpci_commands.c
+index 00ae25e..71009fe 100644
+--- a/dpci_commands.c
++++ b/dpci_commands.c
+@@ -44,7 +44,7 @@
+ #include "mc_v9/fsl_dpci.h"
+ #include "mc_v10/fsl_dpci.h"
+ 
+-enum mc_cmd_status mc_status;
++static enum mc_cmd_status mc_status;
+ 
+ /**
+  * dpci info command options
+diff --git a/dpcon_commands.c b/dpcon_commands.c
+index 452ca4f..93877ad 100644
+--- a/dpcon_commands.c
++++ b/dpcon_commands.c
+@@ -44,7 +44,7 @@
+ #include "mc_v9/fsl_dpcon.h"
+ #include "mc_v10/fsl_dpcon.h"
+ 
+-enum mc_cmd_status mc_status;
++static enum mc_cmd_status mc_status;
+ 
+ /**
+  * dpcon info command options
+diff --git a/dpdbg_commands.c b/dpdbg_commands.c
+index bc7736e..ea1b4d5 100644
+--- a/dpdbg_commands.c
++++ b/dpdbg_commands.c
+@@ -41,7 +41,7 @@
+ #include "utils.h"
+ #include "mc_v10/fsl_dpdbg.h"
+ 
+-enum mc_cmd_status mc_status;
++static enum mc_cmd_status mc_status;
+ 
+ enum dpdbg_info_options {
+ 	INFO_OPT_HELP = 0,
+diff --git a/dpdcei_commands.c b/dpdcei_commands.c
+index e31b1aa..bebc25f 100644
+--- a/dpdcei_commands.c
++++ b/dpdcei_commands.c
+@@ -43,7 +43,7 @@
+ #include "mc_v9/fsl_dpdcei.h"
+ #include "mc_v10/fsl_dpdcei.h"
+ 
+-enum mc_cmd_status mc_status;
++static enum mc_cmd_status mc_status;
+ 
+ /**
+  * dpdcei info command options
+diff --git a/dpdmai_commands.c b/dpdmai_commands.c
+index 7959561..cdc3029 100644
+--- a/dpdmai_commands.c
++++ b/dpdmai_commands.c
+@@ -42,7 +42,7 @@
+ #include "mc_v9/fsl_dpdmai.h"
+ #include "mc_v10/fsl_dpdmai.h"
+ 
+-enum mc_cmd_status mc_status;
++static enum mc_cmd_status mc_status;
+ 
+ /**
+  * dpdmai info command options
+diff --git a/dpdmux_commands.c b/dpdmux_commands.c
+index 5d698c4..8bafc57 100644
+--- a/dpdmux_commands.c
++++ b/dpdmux_commands.c
+@@ -47,7 +47,7 @@
+ 	DPDMUX_OPT_BRIDGE_EN |		\
+ 	DPDMUX_OPT_CLS_MASK_SUPPORT)
+ 
+-enum mc_cmd_status mc_status;
++static enum mc_cmd_status mc_status;
+ 
+ /**
+  * dpdmux info command options
+diff --git a/dpio_commands.c b/dpio_commands.c
+index 297f1ba..faf25e4 100644
+--- a/dpio_commands.c
++++ b/dpio_commands.c
+@@ -43,7 +43,7 @@
+ #include "mc_v9/fsl_dpio.h"
+ #include "mc_v10/fsl_dpio.h"
+ 
+-enum mc_cmd_status mc_status;
++static enum mc_cmd_status mc_status;
+ 
+ /**
+  * dpio info command options
+diff --git a/dpmac_commands.c b/dpmac_commands.c
+index 58aa029..281d20a 100644
+--- a/dpmac_commands.c
++++ b/dpmac_commands.c
+@@ -43,7 +43,7 @@
+ #include "mc_v9/fsl_dpmac.h"
+ #include "mc_v10/fsl_dpmac.h"
+ 
+-enum mc_cmd_status mc_status;
++static enum mc_cmd_status mc_status;
+ 
+ /**
+  * dpmac info command options
+diff --git a/dpmcp_commands.c b/dpmcp_commands.c
+index 474ad76..1bff915 100644
+--- a/dpmcp_commands.c
++++ b/dpmcp_commands.c
+@@ -43,7 +43,7 @@
+ #include "mc_v9/fsl_dpmcp.h"
+ #include "mc_v10/fsl_dpmcp.h"
+ 
+-enum mc_cmd_status mc_status;
++static enum mc_cmd_status mc_status;
+ 
+ /**
+  * dpmcp info command options
+diff --git a/dpni_commands.c b/dpni_commands.c
+index 9050f09..9e0c754 100644
+--- a/dpni_commands.c
++++ b/dpni_commands.c
+@@ -71,7 +71,7 @@
+ 	DPNI_OPT_SINGLE_SENDER |			\
+ 	DPNI_OPT_CUSTOM_CG)
+ 
+-enum mc_cmd_status mc_status;
++static enum mc_cmd_status mc_status;
+ 
+ /**
+  * max_dist: Maximum distribution size for Rx traffic class;
+diff --git a/dprc_commands.c b/dprc_commands.c
+index 1996b86..3ad3d86 100644
+--- a/dprc_commands.c
++++ b/dprc_commands.c
+@@ -52,7 +52,7 @@
+ 	DPRC_CFG_OPT_IRQ_CFG_ALLOWED |		\
+ 	DPRC_CFG_OPT_PL_ALLOWED)
+ 
+-enum mc_cmd_status mc_status;
++static enum mc_cmd_status mc_status;
+ 
+ /**
+  * dprc sync command options
+diff --git a/dprc_commands_generate_dpl.c b/dprc_commands_generate_dpl.c
+index 66cc282..6a1a84c 100644
+--- a/dprc_commands_generate_dpl.c
++++ b/dprc_commands_generate_dpl.c
+@@ -189,7 +189,7 @@ static struct container_list *container_head;
+ static struct obj_list *obj_head;
+ static struct conn_list *conn_head;
+ 
+-enum mc_cmd_status mc_status;
++static enum mc_cmd_status mc_status;
+ 
+ /**
+  * compare_insert_obj - compare the newly added object node with existing ones,
+diff --git a/dprtc_commands.c b/dprtc_commands.c
+index 65b04fb..fa780a0 100644
+--- a/dprtc_commands.c
++++ b/dprtc_commands.c
+@@ -42,7 +42,7 @@
+ #include "mc_v9/fsl_dprtc.h"
+ #include "mc_v10/fsl_dprtc.h"
+ 
+-enum mc_cmd_status mc_status;
++static enum mc_cmd_status mc_status;
+ 
+ /**
+  * dprtc info command options
+diff --git a/dpseci_commands.c b/dpseci_commands.c
+index f369a0d..59c520b 100644
+--- a/dpseci_commands.c
++++ b/dpseci_commands.c
+@@ -43,7 +43,7 @@
+ #include "mc_v9/fsl_dpseci.h"
+ #include "mc_v10/fsl_dpseci.h"
+ 
+-enum mc_cmd_status mc_status;
++static enum mc_cmd_status mc_status;
+ 
+ /**
+  * dpseci info command options
+diff --git a/dpsw_commands.c b/dpsw_commands.c
+index addf7b9..492a0b6 100644
+--- a/dpsw_commands.c
++++ b/dpsw_commands.c
+@@ -50,7 +50,7 @@
+ 	DPSW_OPT_FLOODING_METERING_DIS |	\
+ 	DPSW_OPT_METERING_EN)
+ 
+-enum mc_cmd_status mc_status;
++static enum mc_cmd_status mc_status;
+ 
+ /**
+  * dpsw info command options

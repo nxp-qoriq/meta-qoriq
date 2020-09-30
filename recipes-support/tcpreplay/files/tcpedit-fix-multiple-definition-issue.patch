@@ -1,0 +1,25 @@
+From 31e5535df41ec60d5724ac06864ea5515c40b8ab Mon Sep 17 00:00:00 2001
+From: Gabriel Ganne <gabriel.ganne@gmail.com>
+Date: Fri, 24 Apr 2020 16:18:35 +0200
+Subject: [PATCH] tcpedit - fix multiple definition issue
+
+tcpedit_tcpedit_optDesc_p is defined within the *.def files, the
+variable itself is defined in the generated C files.
+
+---
+ src/tcpedit/tcpedit.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/tcpedit/tcpedit.c b/src/tcpedit/tcpedit.c
+index d7612c5..a95f478 100644
+--- a/src/tcpedit/tcpedit.c
++++ b/src/tcpedit/tcpedit.c
+@@ -54,7 +54,7 @@
+ #include "lib/sll.h"
+ #include "dlt.h"
+ 
+-tOptDesc *const tcpedit_tcpedit_optDesc_p;
++extern tOptDesc *const tcpedit_tcpedit_optDesc_p;
+ 
+ /**
+  * \brief Edit the given packet

@@ -14,7 +14,6 @@ FSL_WEBSERVER ?= ""
 RDEPENDS_${PN} = " \
     bind \
     curl \
-    dhcp-client \
     libnfnetlink \
     linuxptp \
     ntpdate \

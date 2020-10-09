@@ -1,5 +1,9 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
+SRC_URI_append_qoriq = "\
+    file://0001-add-typedef-to-avoid-multiple-definition-issue.patch \
+"
+
 SECURE_PATCHES = " file://0001-Correct-the-address-for-secure-boot-headers.patch \
 "
 

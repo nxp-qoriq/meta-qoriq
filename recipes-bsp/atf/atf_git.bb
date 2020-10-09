@@ -11,7 +11,7 @@ do_compile[depends] += "u-boot:do_deploy rcw:do_deploy ddr-phy:do_deploy"
 S = "${WORKDIR}/git"
 
 SRC_URI = "git://bitbucket.sw.nxp.com/gitam/atf.git;protocol=ssh;branch=blue_box3_tfa_next"
-SRCREV = "${AUTOREV}"
+SRCREV = "e72a3356547a955c4cdda96b2240c17ffca13cc6"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 

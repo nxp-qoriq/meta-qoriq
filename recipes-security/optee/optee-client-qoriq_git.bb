@@ -9,7 +9,7 @@ PV="3.8.0+fslgit"
 inherit python3native systemd
 
 SRC_URI = "git://bitbucket.sw.nxp.com/dash/optee_client.git;protocol=ssh;branch=optee_client_3.8.0"
-SRCREV = "${AUTOREV}"
+SRCREV = "be4fa2e36f717f03ca46e574aa66f697a897d090"
 
 S = "${WORKDIR}/git"
 

@@ -82,11 +82,17 @@ RDEPENDS_${PN}_append_qoriq = "\
     ${@multilib_pkg_extend(d, "libgcc-dev")} \
     ${EXTRA_TOOLS} \
 "
-LSDK_TOOLS = "\
-    dce \
+
+DPDK_PKGS = " \
     dpdk-examples \
     ovs-dpdk \
     pktgen-dpdk \
+"
+DPDK_PKGS_lx2160abluebox3 = ""
+
+LSDK_TOOLS = "\
+    dce \
+    ${DPDK_PKGS} \
     ceetm \
     spc \
     tsntool \

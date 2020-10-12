@@ -96,3 +96,4 @@ RDEPENDS_${PN}_append_qoriq-arm64= " \
     restool \
 "
 RDEPENDS_${PN}_remove_ls1012a = " dpdk"
+RDEPENDS_${PN}_remove_lx2160abluebox3 = " dpdk"

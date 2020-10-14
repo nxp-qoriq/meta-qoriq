@@ -23,6 +23,7 @@ RDEPENDS_${PN} = "\
     lsof \
     ltp \
     lldpd \
+    lvm2 \
     tcpreplay \
     man \
     man-pages \
@@ -101,6 +102,8 @@ SECURE_TOOLS = "\
     secure-obj-module \
     gnutls \
     gnutls-bin \
+    keyctl-caam \
+    keyutils \
 "
 
 RDEPENDS_${PN}_append_qoriq-arm64 = "\ 

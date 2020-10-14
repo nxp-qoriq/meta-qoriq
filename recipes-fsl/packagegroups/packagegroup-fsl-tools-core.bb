@@ -11,6 +11,7 @@ inherit packagegroup
 PACKAGES = "${PN}"
 
 RDEPENDS_${PN} = " \
+    crconf \
     e2fsprogs \
     e2fsprogs-badblocks \
     e2fsprogs-e2fsck \

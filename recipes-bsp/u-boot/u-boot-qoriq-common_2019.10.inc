@@ -10,7 +10,7 @@ LIC_FILES_CHKSUM = " \
     file://Licenses/lgpl-2.1.txt;md5=4fbd65380cdd255951079008b364516c \
 "
 SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/u-boot;nobranch=1"
-SRCREV= "509b59f179fd8c57169b22602768eab745321476"
+SRCREV= "7ef6ac4e8137dee84573a44cc59539f529258df8"
 
 S = "${WORKDIR}/git"
 PV_append = "+fslgit"

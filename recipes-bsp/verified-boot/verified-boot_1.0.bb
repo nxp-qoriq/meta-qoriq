@@ -15,7 +15,7 @@ SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/atf;nobra
            git://github.com/ARMmbed/mbedtls;nobranch=1;destsuffix=git/mbedtls;name=mbedtls \
            file://${KERNEL_ITS} \
 "
-SRCREV = "80dbb310f8a456500dfd6a57aa5ab79957dd2bef"
+SRCREV = "4e40e24590ab908773ef842cd0e17faf233767d4"
 SRCREV_mbedtls = "85da85555e5b086b0250780693c3ee584f63e79f"
 
 S = "${WORKDIR}/git"

@@ -105,6 +105,11 @@ SECURE_TOOLS = "\
     keyctl-caam \
     keyutils \
 "
+SECURE_TOOLS_remove_lx2162a = "\
+    libpkcs11 \
+    secure-obj \
+    secure-obj-module \
+"
 
 RDEPENDS_${PN}_append_qoriq-arm64 = "\ 
     ${LSDK_TOOLS} \

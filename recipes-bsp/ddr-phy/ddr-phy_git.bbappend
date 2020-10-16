@@ -1,0 +1,3 @@
+REGLEX_lx2162a = "lx2160a"
+
+COMPATIBLE_MACHINE = "(lx2160a|lx2162a)"

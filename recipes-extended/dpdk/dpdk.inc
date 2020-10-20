@@ -8,8 +8,9 @@ SRC_URI = "git://bitbucket.sw.nxp.com/gitam/dpdk.git;protocol=ssh;nobranch=1 \
            file://0001-add-Wno-cast-function-type.patch \
            file://0001-Add-RTE_KERNELDIR_OUT.patch \
            file://0004-update-WERROR_FLAGS.patch \
+           file://0001-add-depedency-for-dpaa_qdma-on-dpaa2_qdma.patch \
  "
-SRCREV = "ebc58e63377776b8cfbae293a2b0d2100e1b969b"
+SRCREV = "eb263dbb50f4ab7c3a95cc96f16df6a1412b98db"
 
 datadir[unexport] = "1"
 

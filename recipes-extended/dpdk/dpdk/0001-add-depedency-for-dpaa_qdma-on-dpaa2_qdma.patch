@@ -1,0 +1,29 @@
+From 5a5073e7322d41b78c259e5c65d2178836fa0915 Mon Sep 17 00:00:00 2001
+From: Ting Liu <ting.liu@nxp.com>
+Date: Tue, 20 Oct 2020 13:21:23 +0530
+Subject: [PATCH] add depedency for dpaa_qdma on dpaa2_qdma
+
+Fix:
+drivers/raw/dpaa_qdma/dpaa_qdma.c:16:10: fatal error: rte_pmd_dpaa2_qdma.h: No such file or directory
+|    16 | #include <rte_pmd_dpaa2_qdma.h>
+|       |          ^~~~~~~~~~~~~~~~~~~~~~
+
+Signed-off-by: Ting Liu <ting.liu@nxp.com>
+---
+ drivers/raw/Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/raw/Makefile b/drivers/raw/Makefile
+index 4e39298a7f..68343a7f58 100644
+--- a/drivers/raw/Makefile
++++ b/drivers/raw/Makefile
+@@ -17,4 +17,6 @@ DIRS-$(CONFIG_RTE_LIBRTE_PMD_IOAT_RAWDEV) += ioat
+ DIRS-$(CONFIG_RTE_LIBRTE_PMD_NTB_RAWDEV) += ntb
+ DIRS-$(CONFIG_RTE_LIBRTE_PMD_OCTEONTX2_DMA_RAWDEV) += octeontx2_dma
+ 
++DEPDIRS-dpaa_qdma += dpaa2_qdma
++
+ include $(RTE_SDK)/mk/rte.subdir.mk
+-- 
+2.17.1
+

@@ -1,3 +1,3 @@
 SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/restool;nobranch=1 \
     file://0001-restool-fix-build-error-with-gcc7.patch"
-SRCREV= "155701c8710ebbe9c31b1cca915b52871cd17e60"
+SRCREV= "6e9b7f6f91e7afae1ea0ad2d37483e713fb2450f"

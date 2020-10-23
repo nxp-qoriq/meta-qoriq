@@ -1,3 +1,11 @@
+SRC_URI = "gitsm://bitbucket.sw.nxp.com/sdk/qemu.git;protocol=ssh;nobranch=1 \
+    file://powerpc_rom.bin \
+    file://run-ptest \
+    file://0002-Add-subpackage-ptest-which-runs-all-unit-test-cases-.patch \
+    file://0001-linux-user-remove-host-stime-syscall.patch \
+"
+SRCREV= "0b88a503e43ca629d6e8165638ac6b312e5c66bd"
+
 do_install_ptest() {
         cp -rL ${B}/tests ${D}${PTEST_PATH}
         find ${D}${PTEST_PATH}/tests -type f -name "*.[Sshcod]" | xargs -i rm -rf {}

@@ -37,6 +37,16 @@ RDEPENDS_${PN} = " \
     sysklogd \
     sysstat \
 "
+RDEPENDS_${PN}_append_lx2162a = " \
+    kdump \
+    kexec \
+    vmcore-dmesg \
+    makedumpfile \
+    gdbserver \
+    glibc-utils \
+    openssh-sftp-server \
+    devmem2 \
+"
 
 IPC_PKGS = " \
     ipc-module-multi \
@@ -88,6 +98,10 @@ RDEPENDS_${PN}_append_ls2088a = " \
     devmem2 \
     gpp-aioptool \
     fio \
+"
+RDEPENDS_${PN}_append_lx2162a = " \
+    dce \
+    devmem2 \
 "
 RDEPENDS_${PN}_append_qoriq-arm64= " \
     dpdk \

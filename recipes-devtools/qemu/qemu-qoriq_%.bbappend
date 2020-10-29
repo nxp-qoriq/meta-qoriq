@@ -6,6 +6,8 @@ SRC_URI = "gitsm://bitbucket.sw.nxp.com/sdk/qemu.git;protocol=ssh;nobranch=1 \
 "
 SRCREV= "0b88a503e43ca629d6e8165638ac6b312e5c66bd"
 
+PACKAGECONFIG_append = " vhost"
+
 do_install_ptest() {
         cp -rL ${B}/tests ${D}${PTEST_PATH}
         find ${D}${PTEST_PATH}/tests -type f -name "*.[Sshcod]" | xargs -i rm -rf {}

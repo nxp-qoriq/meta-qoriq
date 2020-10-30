@@ -1,3 +1,2 @@
-SRC_URI = "git://bitbucket.sw.nxp.com/dash/qoriq-engine-pfe-bin.git;protocol=ssh;branch=master"
-
-SRCREV= "7e474f917f938bca25b5c163fef0d646c14c94b4"
+SRC_URI = "git://bitbucket.sw.nxp.com/dncpe/engine-pfe-bin;protocol=ssh;nobranch=1"
+SRCREV= "f55ee9f72090309bbb7ab71f48a498fc02909234"

@@ -1,7 +1,4 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/${BPN}:"
+EXTRA_OEMAKE = 'CC="${CC}" EXTRA_CFLAGS="-O2 -Wno-missing-field-initializers -Wno-missing-braces"'
 
-SRC_URI = "git://bitbucket.sw.nxp.com/dpaa2/restool;protocol=ssh;nobranch=1 \
-    file://0001-restool-fix-build-error-with-gcc7.patch \
-    file://gcc10.patch \
-"
-SRCREV= "d002c5ff28212469b884535c5f64fa7da7731bef"
+SRC_URI = "git://bitbucket.sw.nxp.com/dpaa2/restool;protocol=ssh;nobranch=1"
+SRCREV= "8ddbe4c9559ffad5d7e5dd3cd5f00ceeff7f05d4"

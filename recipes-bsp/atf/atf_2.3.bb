@@ -175,4 +175,4 @@ do_deploy() {
 }
 addtask deploy after do_install
 FILES_${PN} += "/boot"
-COMPATIBLE_MACHINE = "(lx2162a)"
+COMPATIBLE_MACHINE = "(lx2160a|lx2162a)"

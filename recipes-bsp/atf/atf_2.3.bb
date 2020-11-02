@@ -37,11 +37,11 @@ EXTRA_OEMAKE += "HOSTCC='${BUILD_CC} ${BUILD_CPPFLAGS} ${BUILD_CFLAGS} ${BUILD_L
 
 BOOTTYPE ?= "flexspi_nor sd emmc"
 ARM_COT = "${@bb.utils.contains('DISTRO_FEATURES', 'arm-cot', 'true', 'false', d)}"
-NXP_COT = "${@bb.utils.contains('DISTRO_FEATURES', 'nxp-cot', 'true', 'false', d)}"
+NXP_COT = "${@bb.utils.contains('DISTRO_FEATURES', 'secure', 'true', 'false', d)}"
 
 PACKAGECONFIG ??= " \
     ${@bb.utils.contains('DISTRO_FEATURES', 'arm-cot', 'optee', '', d)} \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'nxp-cot', 'optee', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'secure', 'optee', '', d)} \
 "
 PACKAGECONFIG[optee] = ",,optee-os-qoriq"
 

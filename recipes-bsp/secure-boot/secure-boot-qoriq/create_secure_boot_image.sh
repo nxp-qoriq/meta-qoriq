@@ -253,7 +253,7 @@ generate_qoriq_composite_firmware() {
     fi
 
     # DDR PHY firmware
-    if [ "${1:0:7}" = "lx2160a" ]; then
+    if [ "${1:0:7}" = "lx2160a" -o "${1:0:7}" = "lx2162a" ]; then
         if [ "$SECURE" = "true" ]; then
 	    ddrphyfw=$ddr_phy_fw_sec
 	else

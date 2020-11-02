@@ -132,5 +132,11 @@
 			ramdisk = "initrd";
 			fdt = "fdt-dtb";
 		};
+		lx2162aqds {
+			description = "config for lx2162aqds";
+			kernel = "kernel";
+			ramdisk = "initrd";
+			fdt = "fdt-dtb";
+		};
 	};
 };

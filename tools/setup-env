@@ -299,9 +299,7 @@ BB_NUMBER_THREADS = "$THREADS"
 PARALLEL_MAKE = "-j $JOBS"
 DL_DIR = "$DOWNLOADS"
 SSTATE_DIR = "$CACHES"
-INHERIT += "own-mirrors"
-SOURCE_MIRROR_URL ?= "http://git.freescale.com/source/"
-INITRAMFS_IMAGE = "fsl-image-networking"
+INITRAMFS_IMAGE = "core-image-minimal"
 EOF
 
 if [ "$MACHINE" = "ls1028ardb" ]; then

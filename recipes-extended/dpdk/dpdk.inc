@@ -9,7 +9,7 @@ SRC_URI = "git://bitbucket.sw.nxp.com/gitam/dpdk.git;protocol=ssh;nobranch=1 \
            file://0001-Add-RTE_KERNELDIR_OUT.patch \
            file://0004-update-WERROR_FLAGS.patch \
 "
-SRCREV = "518ba39878698ef72f711b220876b33bc0d232a1"
+SRCREV = "e49529d370352f754cb4e4df787728654e78e0c5"
 
 datadir[unexport] = "1"
 

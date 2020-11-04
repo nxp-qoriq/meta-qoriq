@@ -302,6 +302,18 @@ SSTATE_DIR = "$CACHES"
 INITRAMFS_IMAGE = "core-image-minimal"
 EOF
 
+if expr "$MACHINE" : lx216;then
+   cat >>conf/local.conf <<-EOF
+
+# Specify DISTRO_FEATURES to select Chain of Trust(COT) for Trusted Board Boot
+# feature in ATF. Two options:
+# 1. secure: generate COT by cst from NXP (default)
+# 2. arm-cot: generate COT by cert_create from ATF
+DISTRO_FEATURES_append = " secure"
+
+EOF
+fi
+
 if [ "$MACHINE" = "ls1028ardb" ]; then
    cat >>conf/local.conf <<-EOF
 # uncomment the below lines when building fsl-image-multimedia-full

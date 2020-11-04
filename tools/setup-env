@@ -307,9 +307,10 @@ if expr "$MACHINE" : lx216;then
 
 # Specify DISTRO_FEATURES to select Chain of Trust(COT) for Trusted Board Boot
 # feature in ATF. Two options:
-# 1. secure: generate COT by cst from NXP (default)
+# 1. secure: generate COT by cst from NXP
 # 2. arm-cot: generate COT by cert_create from ATF
-DISTRO_FEATURES_append = " secure"
+# uncomment below line to choose one:
+#DISTRO_FEATURES_append = " secure"
 
 EOF
 fi

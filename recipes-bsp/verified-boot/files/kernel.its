@@ -1,0 +1,81 @@
+/*
+ * copyright 2020 NXP
+ *
+ */
+
+/dts-v1/;
+
+/ {
+        description = "arm64 kernel, ramdisk and FDT blob";
+        #address-cells = <1>;
+
+        images {
+                kernel {
+                        description = "ARM64 Kernel";
+                        data = /incbin/("kernel-image.gz");
+                        type = "kernel";
+                        arch = "arm64";
+                        os = "linux";
+                        compression = "gzip";
+                        load = <0x81080000>;
+                        entry = <0x81080000>;
+                        hash {
+                                algo = "sha1";
+                        };
+                        signature {
+                                algo = "sha1,rsa2048";
+                                key-name-hint = "dev";
+                        };
+                };
+
+                dtb {
+                        description = "Device Tree blob";
+                        data = /incbin/("freescale.dtb");
+                        type = "flat_dt";
+                        arch = "arm64";
+                        os = "linux";
+                        compression = "none";
+                        load = <0x90000000>;
+                        hash {
+                                algo = "sha1";
+                        };
+                        signature {
+                                algo = "sha1,rsa2048";
+                                key-name-hint = "dev";
+                        };
+                };
+                initrd {
+                        description = "initrd for arm64";
+                        data = /incbin/("rootfs.ext2.gz");
+                        type = "ramdisk";
+                        arch = "arm64";
+                        os = "linux";
+                        compression = "none";
+                        load = <0x00000000>;
+                        entry = <0x00000000>;
+                        hash {
+                                algo = "sha1";
+                        };
+                        signature {
+                                algo = "sha1,rsa2048";
+                                key-name-hint = "dev";
+                        };
+                };
+
+        };
+
+        configurations {
+                default = "lx2162aqds";
+                lx2162aqds {
+                        description = "config for lx2162aqds";
+                        kernel = "kernel";
+                        ramdisk = "initrd";
+                        fdt = "dtb";
+                        signature {
+                                algo = "sha1,rsa2048";
+                                key-name-hint = "dev";
+                                sign-images = "kernel", "fdt","ramdisk";
+                        };
+                };
+        };
+};

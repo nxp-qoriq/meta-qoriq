@@ -15,7 +15,7 @@ INSANE_SKIP_libegl-imx += "dev-deps"
 IMX_PACKAGES_GBM_qoriq = "libgbm-imx libgbm-imx-dev"
 HAS_GBM_qoriq = "true"
 IS_MX8_qoriq = "1"
-FILES_libgbm-imx_qoriq = "${libdir}/libgbm*${SOLIBS}"
+FILES_libgbm-imx_qoriq = "${libdir}/libgbm${REALSOLIBS} ${libdir}/libgbm${SOLIBSDEV} ${libdir}/libgbm_viv${SOLIBSDEV}"
 
 RDEPENDS_libgal-imx_remove = "kernel-module-imx-gpu-viv"
 COMPATIBLE_MACHINE = "(imxfbdev|imxgpu|qoriq)"

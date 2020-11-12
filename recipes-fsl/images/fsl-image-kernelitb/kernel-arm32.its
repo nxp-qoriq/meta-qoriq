@@ -24,7 +24,7 @@
 
 		initrd {
 			description = "initrd for arm32";
-			data = /incbin/("rootfs.ext2.gz");
+			data = /incbin/("rootfs.cpio.gz");
 			type = "ramdisk";
 			arch = "arm";
 			os = "linux";

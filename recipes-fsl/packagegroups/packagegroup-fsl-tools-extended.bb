@@ -20,6 +20,10 @@ RDEPENDS_${PN} = "\
     crconf \
     db \
     debianutils \
+    devmem2 \
+    gnutls \
+    gnutls-bin \
+    keyutils \
     lsof \
     ltp \
     lldpd \
@@ -46,26 +50,6 @@ RDEPENDS_${PN} = "\
     ${X11_TOOLS} \
 "
 
-RDEPENDS_${PN}_append_ls1088a = " \
-    aiopsl \
-"
-RDEPENDS_${PN}_append_ls2088a = " \
-    aiopsl \
-"
-
-RDEPENDS_${PN}_imx = " \
-    imx-kobs \
-    ${SOC_TOOLS_TEST} \
-"
-
-SOC_TOOLS_TEST = ""
-SOC_TOOLS_TEST_vf  = "imx-test"
-SOC_TOOLS_TEST_mxs = "imx-test"
-SOC_TOOLS_TEST_mx3 = "imx-test"
-SOC_TOOLS_TEST_mx5 = "imx-test"
-SOC_TOOLS_TEST_mx6 = "imx-test"
-SOC_TOOLS_TEST_mx7 = "imx-test"
-
 # extra packages for QorIQ targets
 EXTRA_TOOLS ?= ""
 EXTRA_TOOLS_p1022ds = " packagegroup-fsl-graphics-minimal"
@@ -84,32 +68,26 @@ RDEPENDS_${PN}_append_qoriq = "\
     ${@multilib_pkg_extend(d, "libgcc-dev")} \
     ${EXTRA_TOOLS} \
 "
-LSDK_TOOLS = "\
-    dce \
-    dpdk-examples \
-    ovs-dpdk \
-    pktgen-dpdk \
-    ceetm \
-    spc \
-    tsntool \
-"
-SECURE_TOOLS = "\
-    optee-os-qoriq \
-    optee-client-qoriq \
-    optee-test-qoriq \
-    libpkcs11 \
-    secure-obj \
-    secure-obj-module \
-    gnutls \
-    gnutls-bin \
-    keyctl-caam \
-    keyutils \
-"
 
 RDEPENDS_${PN}_append_qoriq-arm64 = "\ 
-    ${LSDK_TOOLS} \
-    ${SECURE_TOOLS} \
+    dpdk-examples \
+    ovs-dpdk \
+    libpkcs11 \
+    pktgen-dpdk \
+    secure-obj \
+    secure-obj-module \
 "
 RDEPENDS_${PN}_append_qoriq-ppc = "\
     ${@multilib_pkg_extend(d, "valgrind")} \
+"
+RDEPENDS_${PN}_append_ls1012a = "\
+    ceetm \
+    dce \
+    dpdk \
+    keyctl-caam \
+    optee-os-qoriq \
+    optee-client-qoriq \
+    optee-test-qoriq \
+    spc \
+    tsntool \
 "

@@ -10,34 +10,49 @@ inherit packagegroup
 
 PACKAGES = "${PN}"
 
+# pkgs from community
 RDEPENDS_${PN} = " \
+    coreutils \
     crconf \
+    cryptodev-linux \
+    cryptodev-module \
+    cryptodev-tests \
     e2fsprogs \
     e2fsprogs-badblocks \
     e2fsprogs-e2fsck \
     e2fsprogs-tune2fs  \
+    elfutils \
+    file \
+    gptfdisk \
     i2c-tools \
+    ifenslave \
     kmod \
     kernel-modules \
     libhugetlbfs \
     lmsensors-sensors \
     memtester \
+    minicom \
+    pciutils \
     pkgconfig \
     python3-datetime \
     python3-json \
     python3-resource \
     procps \
-    minicom \
-    coreutils \
-    elfutils \
-    file \
     psmisc \
     ptpd \
     sysfsutils \
     sysklogd \
     sysstat \
 "
-RDEPENDS_${PN}_append_lx2162a = " \
+EXTRA_PKGS_COMMUNITY = " \
+    devmem2 \
+    fio \
+    keyutils \
+"
+EXTRA_PKGS_COMMUNITY_ls1012a = " \
+    hostapd \
+"
+EXTRA_PKGS_COMMUNITY_append_lx2162a = " \
     kdump \
     kexec \
     vmcore-dmesg \
@@ -45,66 +60,46 @@ RDEPENDS_${PN}_append_lx2162a = " \
     gdbserver \
     glibc-utils \
     openssh-sftp-server \
-    devmem2 \
 "
+RDEPENDS_${PN}_append_qoriq-arm64= "${EXTRA_PKGS_COMMUNITY}"
 
-IPC_PKGS = " \
-    ipc-module-multi \
-    ipc-module-single \
-    ipc-ust \
+# pkgs from NXP
+RDEPENDS_${PN}_append_qoriq = "merge-files"
+PKGS ?= " \
+    ceetm \
+    dce \
+    dpdk \
+    keyctl-caam \
+    optee-os-qoriq \
+    optee-client-qoriq \
+    optee-test-qoriq \
+    restool \
+    spc \
+    tsntool \
 "
+PKGS_ls1012a = " \
+    ppfe-firmware \
+    restool \
+"
+RDEPENDS_${PN}_append_qoriq-arm64 = "${PKGS}"
 
-DPAA_PKGS = " \
+RDEPENDS_${PN}_append_qoriq-ppc = " \
     eth-config \
     fmc \
 "
-DPAA_PKGS_ls102xa = ""
-DPAA_PKGS_fsl-lsch3 = ""
-
-PMETOOLS ?= "pme-tools"
-
-RDEPENDS_${PN}_append_qoriq = "\
-    merge-files \
-    ${DPAA_PKGS} \
-"
-
-#RDEPENDS_${PN}_append_e500v2 = " \
-#    libppc \
-#    testfloat \
-#"
-
-RDEPENDS_${PN}_append_qoriq = " gptfdisk"
-RDEPENDS_${PN}_append_ls1012a = " hostapd"
-
-RDEPENDS_${PN}_remove_p2020rdb = " fmc"
-RDEPENDS_${PN}_remove_p1020rdb = " fmc"
-RDEPENDS_${PN}_remove_mpc8548cds = " fmc"
-
-DPAA_PKGS_ls1012a = "ppfe-firmware"
-
-RDEPENDS_${PN}_append_qoriq = " pciutils cryptodev-linux cryptodev-module cryptodev-tests ifenslave"
 RDEPENDS_${PN}_append_ls1043a = " \
-    fio \
+    eth-config \
+    fmc \
 "
 RDEPENDS_${PN}_append_ls1046a = " \
-    fio \
+    eth-config \
+    fmc \
 "
 RDEPENDS_${PN}_append_ls1088a = " \
-    devmem2 \
+    aiopsl \
     gpp-aioptool \
-    fio \
 "
 RDEPENDS_${PN}_append_ls2088a = " \
-    devmem2 \
+    aiopsl \
     gpp-aioptool \
-    fio \
 "
-RDEPENDS_${PN}_append_lx2162a = " \
-    dce \
-    devmem2 \
-"
-RDEPENDS_${PN}_append_qoriq-arm64= " \
-    dpdk \
-    restool \
-"
-RDEPENDS_${PN}_remove_ls1012a = " dpdk"

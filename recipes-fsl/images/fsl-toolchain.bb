@@ -1,5 +1,7 @@
 require recipes-core/meta/meta-toolchain.bb
 
+TOOLCHAIN_OUTPUTNAME = "${DISTRO}-${TCLIBC}-${SDKMACHINE}-${TUNE_PKGARCH}-toolchain-${SDK_VERSION}"
+
 MULTILIBS_pn-${PN} = ""
 TOOLCHAIN_NEED_CONFIGSITE_CACHE += "zlib"
 TOOLCHAIN_TARGET_TASK += " \

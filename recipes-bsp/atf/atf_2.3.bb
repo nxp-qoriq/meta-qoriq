@@ -38,10 +38,12 @@ EXTRA_OEMAKE += "HOSTCC='${BUILD_CC} ${BUILD_CPPFLAGS} ${BUILD_CFLAGS} ${BUILD_L
 BOOTTYPE ?= "flexspi_nor sd emmc"
 ARM_COT = "${@bb.utils.contains('DISTRO_FEATURES', 'arm-cot', 'true', 'false', d)}"
 NXP_COT = "${@bb.utils.contains('DISTRO_FEATURES', 'secure', 'true', 'false', d)}"
+BUILD_OPTEE = "${@bb.utils.contains('COMBINED_FEATURES', 'optee', 'true', 'false', d)}"
 
 PACKAGECONFIG ??= " \
     ${@bb.utils.contains('DISTRO_FEATURES', 'arm-cot', 'optee', '', d)} \
     ${@bb.utils.contains('DISTRO_FEATURES', 'secure', 'optee', '', d)} \
+    ${@bb.utils.filter('COMBINED_FEATURES', 'optee', d)} \
 "
 PACKAGECONFIG[optee] = ",,optee-os-qoriq"
 
@@ -124,6 +126,10 @@ do_compile() {
                           CST_DIR=${RECIPE_SYSROOT_NATIVE}/usr/bin/cst DDR_PHY_BIN_PATH=${DEPLOY_DIR_IMAGE}/ddr-phy
                         cp -r ${S}/build/${PLATFORM}/release/ddr_fip_sec.bin ${outputdir}
                     fi
+		elif [ "${BUILD_OPTEE}" = "true" ]; then
+                    bl32="${RECIPE_SYSROOT}${nonarch_base_libdir}/firmware/tee_${MACHINE}.bin"
+                    oe_runmake V=1 -C ${S} all fip pbl PLAT=${PLATFORM} BOOT_MODE=${d} SPD=opteed BL32=${bl32} \
+                               RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${bl33}
                 else
                     oe_runmake V=1 -C ${S} all fip pbl PLAT=${PLATFORM} BOOT_MODE=${d} \
                                RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${bl33}

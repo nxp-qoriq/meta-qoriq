@@ -1,30 +1,37 @@
 SUMMARY = "OPTEE Client"
-HOMEPAGE = "https://github.com/qoriq-open-source/optee_client"
-
+HOMEPAGE = "http://www.optee.org/"
 LICENSE = "BSD"
-LIC_FILES_CHKSUM = "file://${S}/LICENSE;md5=69663ab153298557a59c67a60a743e5b"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=69663ab153298557a59c67a60a743e5b"
 
-PV="3.8.0+fslgit"
+PV="3.10.0+fslgit"
 
 inherit python3native systemd
 
-SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/optee_client;nobranch=1"
-SRCREV = "be4fa2e36f717f03ca46e574aa66f697a897d090"
+SRC_URI = "git://bitbucket.sw.nxp.com/lfac/optee-client.git;protocol=ssh;branch=ls_3.10.y \
+           file://tee-supplicant.service \
+"
+SRCREV = "${AUTOREV}"
 
 S = "${WORKDIR}/git"
+B = "${WORKDIR}/build"
 
-EXTRA_OEMAKE = "ARCH=arm64"
+EXTRA_OEMAKE = "ARCH=arm64 O=${B}"
 
 do_install() {
-    oe_runmake install
+    oe_runmake -C ${S} install
 
-    install -D -p -m0755 ${S}/out/export/usr/sbin/tee-supplicant ${D}${bindir}/tee-supplicant
-    install -D -p -m0755 ${S}/out/export/usr/lib/libteec.so.1.0.0 ${D}${libdir}/libteec.so.1.0.0
+    install -D -p -m0755 ${B}/export/usr/sbin/tee-supplicant ${D}${bindir}/tee-supplicant
+    install -D -p -m0755 ${B}/export/usr/lib/libteec.so.1.0.0 ${D}${libdir}/libteec.so.1.0.0
     ln -sf libteec.so.1.0.0 ${D}${libdir}/libteec.so.1.0
     ln -sf libteec.so.1.0.0 ${D}${libdir}/libteec.so.1
     ln -sf libteec.so.1 ${D}${libdir}/libteec.so
 
-    cp -a ${S}/out/export/usr/include ${D}/usr/
+    cp -a ${B}/export/usr/include ${D}/usr/
+
+    sed -i -e s:@sysconfdir@:${sysconfdir}:g -e s:@bindir@:${bindir}:g ${WORKDIR}/tee-supplicant.service
+    install -D -p -m0644 ${WORKDIR}/tee-supplicant.service ${D}${systemd_system_unitdir}/tee-supplicant.service
 }
 
-COMPATIBLE_MACHINE = "(qoriq)"
+SYSTEMD_SERVICE_${PN} = "tee-supplicant.service"
+
+COMPATIBLE_MACHINE = "(qoriq-arm64)"

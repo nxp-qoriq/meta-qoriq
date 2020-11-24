@@ -1,82 +1,88 @@
 SUMMARY = "OP-TEE Trusted OS"
 DESCRIPTION = "OPTEE OS"
-
 LICENSE = "BSD"
-LIC_FILES_CHKSUM = "file://${S}/LICENSE;md5=c1f21c4f72f372ef38a5a4aee55ec173"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=c1f21c4f72f372ef38a5a4aee55ec173"
 
-PV="3.8.0+fslgit"
+PV="3.10.0+fslgit"
 
 inherit deploy python3native
 
 DEPENDS = "python3-pyelftools-native python3-pycryptodome-native dtc-native"
 
-SRCREV = "0cb01f7f6aee552ead49990c06f69f73f459cc65"
-SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/optee_os;nobranch=1 \
+SRCREV = "${AUTOREV}"
+SRC_URI = "git://bitbucket.sw.nxp.com/lfac/optee-os.git;protocol=ssh;branch=ls_3.10.y \
            file://0001-allow-setting-sysroot-for-libgcc-lookup.patch \
-           file://0001-scripts-sign_encrypt.py-Correct-the-Crypto-module-na.patch \
-          "
-S = "${WORKDIR}/git"
+           file://0001-Correct-the-Crypto-module-name.patch \
+"
 
-OPTEEMACHINE ?= "${MACHINE}"
-OPTEEMACHINE_ls1088ardb-pb = "ls1088ardb"
-OPTEEMACHINE_ls1046afrwy = "ls1046ardb"
-OPTEEMACHINE_lx2162aqds = "lx2160aqds"
+PLATFORM = "ls"
+PLATFORM_FLAVOR                 ?= "${MACHINE}"
+PLATFORM_FLAVOR_ls1088ardb-pb   = "ls1088ardb"
+PLATFORM_FLAVOR_ls1046afrwy     = "ls1046ardb"
+PLATFORM_FLAVOR_lx2162aqds      = "lx2160aqds"
 
-EXTRA_OEMAKE = "PLATFORM=ls-${OPTEEMACHINE} CFG_ARM64_core=y \
-                ARCH=arm \
-                CROSS_COMPILE_core=${HOST_PREFIX} \
-                CROSS_COMPILE_ta_arm64=${HOST_PREFIX} \
-                NOWERROR=1 \
-                LDFLAGS= \
-                LIBGCC_LOCATE_CFLAGS=--sysroot=${STAGING_DIR_HOST} \
-        "
-
-EXTRA_OEMAKE_append_lx2162aqds = " CFG_EMBED_DTB_SOURCE_FILE=fsl-lx2160a-qds.dts CFG_EMBED_DT=y"
-
+OPTEE_ARCH ?= "arm32"
 OPTEE_ARCH_armv7a = "arm32"
 OPTEE_ARCH_aarch64 = "arm64"
 
+OPTEE_CORE_LOG_LEVEL ?= "1"
+OPTEE_TA_LOG_LEVEL ?= "0"
+
+EXTRA_OEMAKE = "PLATFORM=${PLATFORM} \
+                PLATFORM_FLAVOR=${PLATFORM_FLAVOR} \
+                CROSS_COMPILE=${HOST_PREFIX} \
+                CROSS_COMPILE64=${HOST_PREFIX} \
+                -C ${S} O=${B} \
+                CFG_WERROR=y \
+                CFG_TEE_CORE_LOG_LEVEL=${OPTEE_CORE_LOG_LEVEL} \
+                CFG_TEE_TA_LOG_LEVEL=${OPTEE_TA_LOG_LEVEL} \
+                CFG_ARM64_core=y \
+                LIBGCC_LOCATE_CFLAGS=--sysroot=${STAGING_DIR_HOST} \
+"
+
+S = "${WORKDIR}/git"
+B = "${WORKDIR}/build.${PLATFORM_FLAVOR}"
+
 do_compile() {
     unset LDFLAGS
-    oe_runmake all CFG_TEE_TA_LOG_LEVEL=0
-    ${OBJCOPY} -v -O binary ${B}/out/arm-plat-ls/core/tee.elf   ${B}/out/arm-plat-ls/core/tee.bin
+
+    oe_runmake all
     
-    if [ ${MACHINE} = ls1012afrwy ]; then
-        mv ${B}/out/arm-plat-ls/core/tee.bin  ${B}/out/arm-plat-ls/core/tee_512mb.bin
-        oe_runmake CFG_DRAM0_SIZE=0x40000000 all CFG_TEE_TA_LOG_LEVEL=0
-        ${OBJCOPY} -v -O binary ${B}/out/arm-plat-ls/core/tee.elf   ${B}/out/arm-plat-ls/core/tee.bin
+    if [ "${MACHINE}" = "ls1012afrwy" ]; then
+        mv ${B}/core/tee-raw.bin  ${B}/core/tee_512mb.bin
+        oe_runmake CFG_DRAM0_SIZE=0x40000000 all
     fi
+
+    mv ${B}/core/tee-raw.bin  ${B}/core/tee.bin
 }
 
 do_install() {
-    #install core on boot directory
-    install -d ${D}/lib/firmware/
-    if [ ${MACHINE} = ls1012afrwy ]; then
-        install -m 644 ${B}/out/arm-plat-ls/core/tee_512mb.bin ${D}/lib/firmware/tee_${MACHINE}_512mb.bin
+    #install core in firmware
+    install -d ${D}${nonarch_base_libdir}/firmware/
+    if [ "${MACHINE}" = "ls1012afrwy" ]; then
+        install -m 644 ${B}/core/tee_512mb.bin ${D}${nonarch_base_libdir}/firmware/tee_${MACHINE}_512mb.bin
     fi
-    install -m 644 ${B}/out/arm-plat-ls/core/tee.bin ${D}/lib/firmware/tee_${MACHINE}.bin
-    #install TA devkit
-    install -d ${D}/usr/include/optee/export-user_ta/
+    install -m 644 ${B}/core/tee.bin ${D}${nonarch_base_libdir}/firmware/tee_${MACHINE}.bin
 
-    for f in  ${B}/out/arm-plat-ls/export-ta_${OPTEE_ARCH}/* ; do
-        cp -aR  $f  ${D}/usr/include/optee/export-user_ta/
+    #install TA devkit
+    install -d ${D}${includedir}/optee/export-user_ta/
+
+    for f in  ${B}/export-ta_${OPTEE_ARCH}/* ; do
+        cp -aR  $f  ${D}${includedir}/optee/export-user_ta/
     done
 }
 
-PACKAGE_ARCH = "${MACHINE_ARCH}"
-
 do_deploy() {
         install -d ${DEPLOYDIR}/optee
-        for f in ${D}/lib/firmware/*; do
-            cp $f ${DEPLOYDIR}/optee/
-        done
+        install -m 644 ${D}${nonarch_base_libdir}/firmware/* ${DEPLOYDIR}/optee/
 }
 
 addtask deploy before do_build after do_install
 
-FILES_${PN} = "/lib/firmware/"
-FILES_${PN}-dev = "/usr/include/optee"
+FILES_${PN} = "${nonarch_base_libdir}/firmware/"
+FILES_${PN}-dev = "${includedir}/optee"
 
+PACKAGE_ARCH = "${MACHINE_ARCH}"
 INSANE_SKIP_${PN}-dev = "staticdev"
 
 INHIBIT_PACKAGE_STRIP = "1"

@@ -1,13 +1,29 @@
-From 4739dd692eadb1ba4477bb386f05ee963d076c7a Mon Sep 17 00:00:00 2001
+From dd76485d39309ee3a15cca2abbee43c0a7926a95 Mon Sep 17 00:00:00 2001
 From: Zongchun Yu <zongchun.yu@nxp.com>
-Date: Tue, 23 Jun 2020 12:51:21 +0800
-Subject: [PATCH] scripts/sign_encrypt.py: Correct the Crypto module name
+Date: Mon, 23 Nov 2020 14:47:20 +0530
+Subject: [PATCH] Correct the Crypto module name
 
 Signed-off-by: Zongchun Yu <zongchun.yu@nxp.com>
 ---
+ scripts/pem_to_pub_c.py | 4 ++--
  scripts/sign_encrypt.py | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
+diff --git a/scripts/pem_to_pub_c.py b/scripts/pem_to_pub_c.py
+index d3f0e500..3a896a39 100755
+--- a/scripts/pem_to_pub_c.py
++++ b/scripts/pem_to_pub_c.py
+@@ -21,8 +21,8 @@ def get_args():
+ 
+ def main():
+     import array
+-    from Cryptodome.PublicKey import RSA
+-    from Cryptodome.Util.number import long_to_bytes
++    from Crypto.PublicKey import RSA
++    from Crypto.Util.number import long_to_bytes
+ 
+     args = get_args()
+ 
 diff --git a/scripts/sign_encrypt.py b/scripts/sign_encrypt.py
 index ffca483a..a4b13a9c 100755
 --- a/scripts/sign_encrypt.py

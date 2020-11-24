@@ -10,7 +10,7 @@ DEPENDS = "optee-client-qoriq optee-os-qoriq python3-pycryptodome-native"
 inherit python3native
 
 SRC_URI = "git://bitbucket.sw.nxp.com/lfac/optee-test.git;protocol=ssh;branch=ls_3.10.y"
-SRCREV = "${AUTOREV}"
+SRCREV = "30efcbeaf8864d0f2a5c4be593a5411001fab31b"
 
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"

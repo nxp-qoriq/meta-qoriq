@@ -10,7 +10,7 @@ inherit python3native systemd
 SRC_URI = "git://bitbucket.sw.nxp.com/lfac/optee-client.git;protocol=ssh;branch=ls_3.10.y \
            file://tee-supplicant.service \
 "
-SRCREV = "${AUTOREV}"
+SRCREV = "2a77cf88d956c34cb4a1c191bea6113e327f5fe0"
 
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"

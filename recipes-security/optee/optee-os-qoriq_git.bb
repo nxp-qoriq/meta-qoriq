@@ -9,7 +9,7 @@ inherit deploy python3native
 
 DEPENDS = "python3-pyelftools-native python3-pycryptodome-native dtc-native"
 
-SRCREV = "${AUTOREV}"
+SRCREV = "cc56d1b53beb376553641b3164cffccdc85f806c"
 SRC_URI = "git://bitbucket.sw.nxp.com/lfac/optee-os.git;protocol=ssh;branch=ls_3.10.y \
            file://0001-allow-setting-sysroot-for-libgcc-lookup.patch \
            file://0001-Correct-the-Crypto-module-name.patch \

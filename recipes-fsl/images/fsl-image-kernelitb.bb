@@ -4,9 +4,8 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 KERNEL_IMAGE ?= "${KERNEL_IMAGETYPE}"
 ROOTFS_IMAGE ?= "fsl-image-mfgtool"
-KERNEL_ITS ?= "kernel.its"
-KERNEL_ITS_qoriq-arm = "${@bb.utils.contains('DISTRO_FEATURES', 'secure', 'kernel-arm32.its', 'kernel.its', d)}"
-KERNEL_ITS_qoriq-arm64 = "${@bb.utils.contains('DISTRO_FEATURES', 'secure', 'kernel-all.its', 'kernel.its', d)}"
+KERNEL_ITS_qoriq-arm = "kernel-arm32.its"
+KERNEL_ITS_qoriq-arm64 = "kernel-arm64.its"
 
 SRC_URI = "file://${KERNEL_ITS}"
 

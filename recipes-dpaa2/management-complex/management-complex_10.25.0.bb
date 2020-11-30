@@ -7,7 +7,7 @@ inherit deploy fsl-eula-unpack
 INHIBIT_DEFAULT_DEPS = "1"
 
 SRC_URI = "git://github.com/nxp/qoriq-mc-binary.git;nobranch=1"
-SRCREV = "ab07f31d8e4a6e27d568ff3678f586db9957c415"
+SRCREV = "41ca55d1553a7e2a18141366f7b11c50a5f2ca70"
 
 S = "${WORKDIR}/git"
 

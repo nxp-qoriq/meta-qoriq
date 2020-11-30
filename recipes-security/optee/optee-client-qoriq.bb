@@ -7,7 +7,7 @@ PV="3.10.0+fslgit"
 
 inherit python3native systemd
 
-SRC_URI = "git://bitbucket.sw.nxp.com/lfac/optee-client.git;protocol=ssh;branch=ls_3.10.y \
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/optee_client;nobranch=1 \
            file://tee-supplicant.service \
 "
 SRCREV = "2a77cf88d956c34cb4a1c191bea6113e327f5fe0"

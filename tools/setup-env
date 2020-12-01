@@ -319,9 +319,9 @@ if [ "$MACHINE" = "ls1028ardb" ]; then
    cat >>conf/local.conf <<-EOF
 # uncomment the below lines when building fsl-image-multimedia-full
 #DISTRO_FEATURES_remove = " x11"
-#PREFERRED_VERSION_weston = "8.0.0.imx"
-#PREFERRED_VERSION_wayland-protocols = "1.18.imx"
-#PREFERRED_VERSION_libdrm = "2.4.99.imx"
+#PREFERRED_VERSION_weston = "9.0.0.imx"
+#PREFERRED_VERSION_wayland-protocols = "1.20.imx"
+#PREFERRED_VERSION_libdrm = "2.4.102.imx"
 #PREFERRED_PROVIDER_virtual/libgl  = "imx-gpu-viv"
 #PREFERRED_PROVIDER_virtual/libgles1 = "imx-gpu-viv"
 #PREFERRED_PROVIDER_virtual/libgles2 = "imx-gpu-viv"

@@ -9,6 +9,4 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 CORE_IMAGE_EXTRA_INSTALL += "udev-extraconf"
 
-IMAGE_FSTYPES = "ext2.gz ext2.gz.u-boot"
-
 export IMAGE_BASENAME = "fsl-image-minimal"

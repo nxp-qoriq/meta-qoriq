@@ -23,6 +23,4 @@ IMAGE_INSTALL_append = " \
     packagegroup-fsl-tools-extended \
 "
 
-IMAGE_FSTYPES_append = " tar.gz"
-
 export IMAGE_BASENAME = "fsl-image-full"

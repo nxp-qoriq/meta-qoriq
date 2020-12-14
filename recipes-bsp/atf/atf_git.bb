@@ -38,6 +38,7 @@ EXTRA_OEMAKE += "HOSTCC='${BUILD_CC} ${BUILD_CPPFLAGS} ${BUILD_CFLAGS} ${BUILD_L
 BOOTTYPE ?= "flexspi_nor sd emmc"
 ARM_COT = "${@bb.utils.contains('DISTRO_FEATURES', 'arm-cot', 'true', 'false', d)}"
 NXP_COT = "${@bb.utils.contains('DISTRO_FEATURES', 'nxp-cot', 'true', 'false', d)}"
+BUILD_FUSE = "${@bb.utils.contains('DISTRO_FEATURES', 'fuse', 'true', 'false', d)}"
 
 PACKAGECONFIG ??= " \
     ${@bb.utils.contains('DISTRO_FEATURES', 'arm-cot', 'optee', '', d)} \
@@ -47,6 +48,7 @@ PACKAGECONFIG[optee] = ",,optee-os-qoriq"
 
 uboot_sec ?= "${DEPLOY_DIR_IMAGE}/u-boot.bin-tfa-secure-boot"
 uboot ?= "${DEPLOY_DIR_IMAGE}/u-boot.bin-tfa"
+chassistype ?= "ls2088_1088"
 
 do_configure[noexec] = "1"
 
@@ -84,6 +86,11 @@ do_compile() {
         bl33="${uboot}"
     fi
 
+    if [ "${BUILD_FUSE}" = "true" ]; then
+        ${RECIPE_SYSROOT_NATIVE}/usr/bin/cst/gen_fusescr ${RECIPE_SYSROOT_NATIVE}/usr/bin/cst/input_files/gen_fusescr/${chassistype}/input_fuse_file
+        fuseopt="fip_fuse FUSE_PROG=1 FUSE_PROV_FILE=fuse_scr.bin"
+    fi
+
     for d in ${BOOTTYPE}; do
         case $d in
         sd)
@@ -117,7 +124,7 @@ do_compile() {
                 elif [ "${NXP_COT}" = "true" ]; then
                     oe_runmake V=1 -C ${S} fip pbl PLAT=${PLATFORM} BOOT_MODE=${d} SPD=opteed BL32=${bl32} \
                         BL33=${bl33} RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} TRUSTED_BOARD_BOOT=1 \
-                        CST_DIR=${RECIPE_SYSROOT_NATIVE}/usr/bin/cst
+                        CST_DIR=${RECIPE_SYSROOT_NATIVE}/usr/bin/cst ${fuseopt}
 
                     if [ ! -f ${outputdir}/ddr_fip_sec.bin ]; then
                         oe_runmake V=1 -C ${S} fip_ddr PLAT=${PLATFORM} TRUSTED_BOARD_BOOT=1 \
@@ -126,11 +133,14 @@ do_compile() {
                     fi
                 else
                     oe_runmake V=1 -C ${S} all fip pbl PLAT=${PLATFORM} BOOT_MODE=${d} \
-                               RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${bl33}
+                               RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${bl33} ${fuseopt}
                 fi
 
                 cp -r ${S}/build/${PLATFORM}/release/bl2_${d}${secext}.pbl ${outputdir}
                 cp -r ${S}/build/${PLATFORM}/release/fip.bin ${outputdir}
+                if [ "${BUILD_FUSE}" = "true" ]; then
+                    cp -f ${S}/build/${PLATFORM}/release/fuse_fip.bin ${outputdir}
+                fi
         fi
         rcwimg=""
     done
@@ -152,6 +162,9 @@ do_install() {
     fi
     if [ -f "${outputdir}/ddr_fip_sec.bin" ]; then
         cp -r ${outputdir}/ddr_fip_sec.bin ${D}/boot/atf/
+    fi
+    if [ -f "${outputdir}/fuse_fip.bin" ]; then
+        cp -r ${outputdir}/fuse_fip.bin ${D}/boot/atf/
     fi
     for d in ${BOOTTYPE}; do
         if [ -e  ${outputdir}/bl2_${d}${secext}.pbl ]; then

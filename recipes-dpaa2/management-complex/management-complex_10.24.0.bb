@@ -6,12 +6,13 @@ inherit deploy
 
 INHIBIT_DEFAULT_DEPS = "1"
 
-SRC_URI = "git://bitbucket.sw.nxp.com/dpaa2/mc-binary.git;protocol=ssh;nobranch=1"
+SRC_URI = "git://github.com/nxp/qoriq-mc-binary;nobranch=1"
 SRCREV = "324817697a4c89a9a940fb7dba1b18909913ee20"
 
 S = "${WORKDIR}/git"
 
 REGLEX_ls2088a = "ls2088a"
+REGLEX_ls2080a = "ls2080a"
 REGLEX_ls1088a = "ls1088a"
 REGLEX_lx2160a = "lx216xa"
 REGLEX_lx2162a = "lx216xa"
@@ -25,7 +26,7 @@ do_deploy () {
     install -d ${DEPLOYDIR}/mc_app
     install -m 755 ${S}/${REGLEX}/*.itb ${DEPLOYDIR}/mc_app
     # make a symlink to the latest binary
-    for mc_binary in `ls ${DEPLOYDIR}/mc_app |sort`;do
+    for mc_binary in `find ${DEPLOYDIR}/mc_app -type f -printf "%f\n" |sort`;do
         ln -sfT ${mc_binary} ${DEPLOYDIR}/mc_app/mc.itb
     done
 }

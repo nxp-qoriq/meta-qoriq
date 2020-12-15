@@ -1,9 +1,3 @@
-SRC_URI = "gitsm://bitbucket.sw.nxp.com/sdk/qemu.git;protocol=ssh;nobranch=1 \
-    file://powerpc_rom.bin \
-    file://run-ptest \
-    file://0002-Add-subpackage-ptest-which-runs-all-unit-test-cases-.patch \
-    file://0001-linux-user-remove-host-stime-syscall.patch \
-"
 SRCREV= "0b88a503e43ca629d6e8165638ac6b312e5c66bd"
 
 PACKAGECONFIG_append = " vhost"

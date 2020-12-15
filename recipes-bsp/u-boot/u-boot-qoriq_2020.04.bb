@@ -19,6 +19,12 @@ UBOOT_SRC ?= "git://bitbucket.sw.nxp.com/lfac/uboot-nxp.git;protocol=ssh"
 SRC_URI = "${UBOOT_SRC};branch=${UBOOT_BRANCH}"
 SRCREV = "${AUTOREV}"
 
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
+
+SRC_URI_append_qoriq-ppc = "\
+    file://0001-add-typedef-to-avoid-multiple-definition-issue.patch \
+"
+
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"
 PV_append = "+fslgit"

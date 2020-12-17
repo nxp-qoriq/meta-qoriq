@@ -9,8 +9,8 @@ inherit deploy python3native
 
 DEPENDS = "python3-pyelftools-native python3-pycryptodome-native dtc-native"
 
-SRCREV = "cc56d1b53beb376553641b3164cffccdc85f806c"
-SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/optee_os;nobranch=1 \
+SRCREV = "6c18c3f54117fe219a0bda9b34ba80789e077730"
+SRC_URI = "git://bitbucket.sw.nxp.com/lfac/optee-os.git;protocol=ssh;branch=ls_3.10.y \
            file://0001-allow-setting-sysroot-for-libgcc-lookup.patch \
            file://0001-Correct-the-Crypto-module-name.patch \
 "

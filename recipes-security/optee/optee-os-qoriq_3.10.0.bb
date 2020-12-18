@@ -5,6 +5,7 @@ PV = "3.10.0+git${SRCPV}"
 PLATFORM_FLAVOR_ls1088ardb-pb   = "ls1088ardb"
 PLATFORM_FLAVOR_ls1046afrwy     = "ls1046ardb"
 PLATFORM_FLAVOR_lx2162aqds      = "lx2160aqds"
+PLATFORM_FLAVOR_lx2160ardb-rev2 = "lx2160ardb"
 
 EXTRA_OEMAKE += " \
     PLATFORM=ls \

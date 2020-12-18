@@ -13,7 +13,7 @@ S = "${WORKDIR}/git"
 SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/atf;nobranch=1 \
            git://github.com/ARMmbed/mbedtls;nobranch=1;destsuffix=git/mbedtls;name=mbedtls \
 "
-SRCREV = "385fde6dd3859c2d38e4e75c82e0151f673aa5df"
+SRCREV = "1da1e48d785b43d4bb32f1bfd1ffc3e8d21a9cbf"
 SRCREV_mbedtls = "85da85555e5b086b0250780693c3ee584f63e79f"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"

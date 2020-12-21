@@ -14,7 +14,7 @@ LIC_FILES_CHKSUM = " \
     file://Licenses/lgpl-2.1.txt;md5=4fbd65380cdd255951079008b364516c \
 "
 
-UBOOT_BRANCH ?= "lf_uboot"
+UBOOT_BRANCH ?= "lf_v2020.04"
 UBOOT_SRC ?= "git://bitbucket.sw.nxp.com/lfac/uboot-nxp.git;protocol=ssh"
 SRC_URI = "${UBOOT_SRC};branch=${UBOOT_BRANCH}"
 SRCREV = "${AUTOREV}"

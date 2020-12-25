@@ -17,7 +17,7 @@ LIC_FILES_CHKSUM = " \
 UBOOT_BRANCH ?= "lf_v2020.04"
 UBOOT_SRC ?= "git://bitbucket.sw.nxp.com/lfac/uboot-nxp.git;protocol=ssh"
 SRC_URI = "${UBOOT_SRC};branch=${UBOOT_BRANCH}"
-SRCREV = "${AUTOREV}"
+SRCREV = "cbc34d9dccd4c2a5abfede5cddd57cc75aa4aec3"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 

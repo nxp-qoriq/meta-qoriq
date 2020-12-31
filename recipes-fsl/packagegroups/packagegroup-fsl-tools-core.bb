@@ -32,6 +32,7 @@ RDEPENDS_${PN} = " \
     lmsensors-sensors \
     memtester \
     minicom \
+    mmc-utils \
     pciutils \
     pkgconfig \
     python3-datetime \

@@ -10,10 +10,12 @@ do_compile[depends] += "u-boot:do_deploy rcw:do_deploy ddr-phy:do_deploy"
 
 S = "${WORKDIR}/git"
 
-SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/atf;nobranch=1 \
+ATF_BRANCH ?= "lf_v2.4"
+ATF_SRC ?= "git://bitbucket.sw.nxp.com/lfac/atf-nxp.git;protocol=ssh"
+SRC_URI = "${ATF_SRC};branch=${ATF_BRANCH} \
            git://github.com/ARMmbed/mbedtls;nobranch=1;destsuffix=git/mbedtls;name=mbedtls \
 "
-SRCREV = "62fbb8c260d45c1c33fd6d719ff17130e5da0e05"
+SRCREV = "09d7e5bdf29074528a454ac95f87f7c7f24114fc"
 SRCREV_mbedtls = "85da85555e5b086b0250780693c3ee584f63e79f"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"

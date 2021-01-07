@@ -1,6 +1,6 @@
 SUMMARY = "DPAA2 Management Complex Firmware"
 LICENSE = "NXP-Binary-EULA"
-LIC_FILES_CHKSUM = "file://NXP-Binary-EULA.txt;md5=afcb1213054384820390d410ab62105f"
+LIC_FILES_CHKSUM = "file://NXP-Binary-EULA.txt;md5=b0ed5cec17ddea4154a5a78b18d521e4"
 
 inherit deploy fsl-eula-unpack
 

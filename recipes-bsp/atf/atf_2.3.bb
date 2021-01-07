@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://license.rst;md5=1dd070c98a281d18d9eefd938729b031"
 
 inherit deploy
 
-DEPENDS += "cst-native"
+DEPENDS += "cst-native bc-native"
 do_compile[depends] += "u-boot:do_deploy rcw:do_deploy ddr-phy:do_deploy"
 
 S = "${WORKDIR}/git"

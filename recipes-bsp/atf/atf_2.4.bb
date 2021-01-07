@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://license.rst;md5=1dd070c98a281d18d9eefd938729b031"
 
 inherit deploy
 
-DEPENDS += "u-boot-mkimage-native u-boot openssl openssl-native mbedtls rcw cst-native"
+DEPENDS += "u-boot-mkimage-native u-boot openssl openssl-native mbedtls rcw cst-native bc-native"
 DEPENDS_append_lx2160a += "ddr-phy"
 do_compile[depends] += "u-boot:do_deploy rcw:do_deploy uefi:do_deploy"
 

@@ -98,6 +98,7 @@ do_compile() {
             ;;
         flexspi_nor)
             rcwimg="${RCWXSPI}.bin"
+            uefiboot="${UEFI_XSPIBOOT}"
             ;;
         esac
  
@@ -128,13 +129,22 @@ do_compile() {
                           CST_DIR=${RECIPE_SYSROOT_NATIVE}/usr/bin/cst DDR_PHY_BIN_PATH=${DEPLOY_DIR_IMAGE}/ddr-phy
                         cp -r ${S}/build/${PLATFORM}/release/ddr_fip_sec.bin ${outputdir}
                     fi
-		elif [ "${BUILD_OPTEE}" = "true" ]; then
+                elif [ "${BUILD_OPTEE}" = "true" ]; then
                     bl32="${RECIPE_SYSROOT}${nonarch_base_libdir}/firmware/tee_${MACHINE}.bin"
                     oe_runmake V=1 -C ${S} all fip pbl PLAT=${PLATFORM} BOOT_MODE=${d} SPD=opteed BL32=${bl32} \
                                RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${bl33}
                 else
                     oe_runmake V=1 -C ${S} all fip pbl PLAT=${PLATFORM} BOOT_MODE=${d} \
                                RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${bl33}
+                  if [ -n "${uefiboot}" -a -f "${DEPLOY_DIR_IMAGE}/uefi/${PLATFORM}/${uefiboot}" ]; then
+                    cp -r ${S}/build/${PLATFORM}/release/bl2_${d}${secext}.pbl ${outputdir}
+                    cp -r ${S}/build/${PLATFORM}/release/fip.bin ${outputdir}
+                    oe_runmake V=1 -C ${S} realclean
+                    oe_runmake V=1 -C ${S} all fip pbl PLAT=${PLATFORM} BOOT_MODE=${d} RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${DEPLOY_DIR_IMAGE}/uefi/${PLATFORM}/${uefiboot}
+                    cp -r ${S}/build/${PLATFORM}/release/fip.bin ${outputdir}/fip_uefi.bin
+                    cp -r ${outputdir}/bl2_${d}${secext}.pbl ${S}/build/${PLATFORM}/release/
+                    cp -r ${outputdir}/fip.bin ${S}/build/${PLATFORM}/release/
+                  fi
                 fi
 
                 cp -r ${S}/build/${PLATFORM}/release/bl2_${d}${secext}.pbl ${outputdir}
@@ -160,6 +170,9 @@ do_install() {
     fi
     if [ -f "${outputdir}/ddr_fip_sec.bin" ]; then
         cp -r ${outputdir}/ddr_fip_sec.bin ${D}/boot/atf/
+    fi
+    if [ -f "${outputdir}/fip_uefi.bin" ]; then
+        cp -r ${outputdir}/fip_uefi.bin ${D}/boot/atf/
     fi
     for d in ${BOOTTYPE}; do
         if [ -e  ${outputdir}/bl2_${d}${secext}.pbl ]; then

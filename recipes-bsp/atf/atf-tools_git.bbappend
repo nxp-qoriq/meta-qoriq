@@ -6,4 +6,4 @@ SRC_URI = "${ATF_SRC};branch=${ATF_BRANCH} \
            git://github.com/ARMmbed/mbedtls;nobranch=1;destsuffix=git/mbedtls;name=mbedtls \
 "
 SRCREV = "09d7e5bdf29074528a454ac95f87f7c7f24114fc"
-SRCREV_mbedtls = "85da85555e5b086b0250780693c3ee584f63e79f"
+SRCREV_mbedtls = "0795874acdf887290b2571b193cafd3c4041a708"

@@ -70,7 +70,7 @@ do_compile () {
 	cd ${S}/examples/
 	oe_runmake EXTRA_LDFLAGS="-L${STAGING_LIBDIR} --hash-style=gnu -fuse-ld=bfd" \
 		   EXTRA_CFLAGS="${HOST_CC_ARCH} ${TOOLCHAIN_OPTIONS} -O3 -I${STAGING_INCDIR}" \
-		   CROSS="${TARGET_PREFIX}" O="${S}/examples/$@/"
+		   CROSS="${TARGET_PREFIX}" CONFIG_RTE_IP_FRAG=y O="${S}/examples/$@/"
 
         oe_runmake EXTRA_LDFLAGS="-L${STAGING_LIBDIR} --hash-style=gnu -fuse-ld=bfd" \
                    EXTRA_CFLAGS="${HOST_CC_ARCH} ${TOOLCHAIN_OPTIONS} -O3 -I${STAGING_INCDIR}" \

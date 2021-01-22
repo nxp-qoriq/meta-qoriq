@@ -1,0 +1,26 @@
+From 432f79fcd0c18e3eaa353452469461b105a38777 Mon Sep 17 00:00:00 2001
+From: Zongchun Yu <zongchun.yu@nxp.com>
+Date: Fri, 22 Jan 2021 07:09:39 +0100
+Subject: [PATCH] csf_hdr_parser: initialize rotpk_hash_table
+
+Signed-off-by: Zongchun Yu <zongchun.yu@nxp.com>
+---
+ plat/nxp/drivers/auth/csf_hdr_parser/csf_hdr_parser.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/plat/nxp/drivers/auth/csf_hdr_parser/csf_hdr_parser.c b/plat/nxp/drivers/auth/csf_hdr_parser/csf_hdr_parser.c
+index 2b3552201..de9bc805c 100644
+--- a/plat/nxp/drivers/auth/csf_hdr_parser/csf_hdr_parser.c
++++ b/plat/nxp/drivers/auth/csf_hdr_parser/csf_hdr_parser.c
+@@ -40,7 +40,7 @@ static const uint8_t barker_code[CSF_BARKER_LEN] = { 0x68, 0x39, 0x27, 0x81 };
+ 
+ /* Flag to indicate if values are there in rotpk_hash_table */
+ bool rotpk_not_dpld =  true;
+-uint8_t rotpk_hash_table[MAX_KEY_ENTRIES][SHA256_BYTES];
++uint8_t rotpk_hash_table[MAX_KEY_ENTRIES][SHA256_BYTES] = {{0xff}};
+ uint8_t num_rotpk_hash_entries;
+ 
+ /*
+-- 
+2.17.1
+

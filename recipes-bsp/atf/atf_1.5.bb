@@ -12,7 +12,7 @@ do_compile[depends] += "u-boot:do_deploy rcw:do_deploy uefi:do_deploy"
 S = "${WORKDIR}/git"
 
 SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/atf;nobranch=1"
-SRCREV = "7d748e6f0ec652ba7c43733dc67a3d0b0217390a"
+SRCREV = "9225ad51f026975fa6b86db800f43c55db11fa4d"
 
 COMPATIBLE_MACHINE = "(qoriq)"
 
@@ -20,6 +20,7 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 PLATFORM = "${MACHINE}"
 PLATFORM_ls1088ardb-pb = "ls1088ardb"
+PLATFORM_lx2160ardb-rev2 = "lx2160ardb"
 PLATFORM_ADDITIONAL_TARGET ??= ""
 PLATFORM_ADDITIONAL_TARGET_ls1012afrwy = "ls1012afrwy_512mb"
 
@@ -54,8 +55,7 @@ PACKAGECONFIG[optee] = ",,optee-os-qoriq"
 uboot_boot_sec ?= "${DEPLOY_DIR_IMAGE}/u-boot.bin-tfa-secure-boot"
 uboot_boot ?= "${DEPLOY_DIR_IMAGE}/u-boot.bin-tfa"
 rcw ?= ""
-rcw_ls1012afrwy = "_default"
-rcw_ls1012ardb = "_default"
+rcw_ls1012a = "_default"
 rcwsec ?= "_sben"
 
 chassistype ?= "ls2088_1088"
@@ -66,7 +66,7 @@ chassistype_ls1046ardb = "ls104x_1012"
 chassistype_ls1046afrwy = "ls104x_1012"
 
 ddrphyopt ?= ""
-ddrphyopt_lx2160ardb = "fip_ddr_sec"
+ddrphyopt_lx2160a = "fip_ddr_sec"
 
 do_configure[noexec] = "1"
 

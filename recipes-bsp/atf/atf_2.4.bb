@@ -12,7 +12,7 @@ do_compile[depends] += "u-boot:do_deploy rcw:do_deploy uefi:do_deploy"
 ATF_BRANCH ?= "lf_v2.4"
 ATF_SRC ?= "git://bitbucket.sw.nxp.com/lfac/atf-nxp.git;protocol=ssh"
 SRC_URI = "${ATF_SRC};branch=${ATF_BRANCH}"
-SRCREV = "09d7e5bdf29074528a454ac95f87f7c7f24114fc"
+SRCREV = "a8ed9c72d3c41e1113ad32fa790991c4b1bea5a2"
 
 S = "${WORKDIR}/git"
 

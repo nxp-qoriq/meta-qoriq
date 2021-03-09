@@ -1,4 +1,5 @@
-SRCREV= "83a97bf09bb8880933416bc358112503c64ddae4"
+SRC_URI = "git://bitbucket.sw.nxp.com/dash/qoriq-uefi-binary;protocol=ssh;nobranch=1"
+SRCREV= "06e960829ba204f35979440364b9ac7e51ed996b"
 
 do_install_lx2160ardb-rev2 () {
        install -d ${D}/uefi

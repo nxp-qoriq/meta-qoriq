@@ -11,11 +11,8 @@ do_compile[depends] += "u-boot:do_deploy rcw:do_deploy uefi:do_deploy"
 
 S = "${WORKDIR}/git"
 
-SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/atf;nobranch=1"
-SRC_URI_append_ls2088ardb = " \
-           file://0001-csf_hdr_parser-initialize-rotpk_hash_table.patch \
-"
-SRCREV = "9225ad51f026975fa6b86db800f43c55db11fa4d"
+SRC_URI = "git://bitbucket.sw.nxp.com/gitam/atf.git;protocol=ssh;nobranch=1"
+SRCREV = "5ae5233c064e94a8bd1b4a1652a03b87b0be63f6"
 
 COMPATIBLE_MACHINE = "(qoriq)"
 

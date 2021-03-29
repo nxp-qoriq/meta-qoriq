@@ -14,9 +14,8 @@ LIC_FILES_CHKSUM = " \
     file://Licenses/lgpl-2.1.txt;md5=4fbd65380cdd255951079008b364516c \
 "
 
-UBOOT_BRANCH ?= "lf_v2020.04"
-UBOOT_SRC ?= "git://bitbucket.sw.nxp.com/lfac/uboot-nxp.git;protocol=ssh"
-SRC_URI = "${UBOOT_SRC};branch=${UBOOT_BRANCH}"
+UBOOT_SRC ?= "git://source.codeaurora.org/external/qoriq/qoriq-components/u-boot"
+SRC_URI = "${UBOOT_SRC};nobranch=1"
 SRCREV = "ad7b74b415ab5e38dd4ebf935dad1cee3fec4742"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"

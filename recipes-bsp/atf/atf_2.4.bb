@@ -9,9 +9,8 @@ DEPENDS += "u-boot-mkimage-native u-boot openssl openssl-native mbedtls rcw cst-
 DEPENDS_append_lx2160a += "ddr-phy"
 do_compile[depends] += "u-boot:do_deploy rcw:do_deploy uefi:do_deploy"
 
-ATF_BRANCH ?= "lf_v2.4"
-ATF_SRC ?= "git://bitbucket.sw.nxp.com/lfac/atf-nxp.git;protocol=ssh"
-SRC_URI = "${ATF_SRC};branch=${ATF_BRANCH}"
+ATF_SRC ?= "git://source.codeaurora.org/external/qoriq/qoriq-components/atf"
+SRC_URI = "${ATF_SRC};nobranch=1"
 SRCREV = "ba76d337e9564ea97b5024640b6dcca9bd054ffb"
 
 S = "${WORKDIR}/git"

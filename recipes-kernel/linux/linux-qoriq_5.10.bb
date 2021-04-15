@@ -58,7 +58,7 @@ do_merge_delta_config() {
     done
     cp .config ${WORKDIR}/defconfig
 }
-addtask merge_delta_config before do_preconfigure after do_patch
+addtask merge_delta_config before do_kernel_localversion after do_patch
 
 do_compile_kernelmodules_append() {
     if (grep -q -i -e '^CONFIG_MODULES=y$' ${B}/.config); then

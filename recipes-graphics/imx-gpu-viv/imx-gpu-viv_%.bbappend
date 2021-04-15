@@ -1,3 +1,5 @@
+FSL_MIRROR = "http://sun.ap.freescale.net/downloads"
+
 DEPENDS_append_qoriq = " patchelf-native"
 
 RPROVIDES_${PN}_qoriq += "imx-gpu-viv"

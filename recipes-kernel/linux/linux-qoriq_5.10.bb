@@ -60,11 +60,5 @@ do_merge_delta_config() {
 }
 addtask merge_delta_config before do_kernel_localversion after do_patch
 
-do_compile_kernelmodules_append() {
-    if (grep -q -i -e '^CONFIG_MODULES=y$' ${B}/.config); then
-        [ -e ${B}/scripts/module.lds ] && install -Dm 0644 ${B}/scripts/module.lds ${STAGING_KERNEL_BUILDDIR}/scripts/module.lds
-    fi
-}
-
 FILES_${KERNEL_PACKAGE_NAME}-image += "/boot/zImage*"
 COMPATIBLE_MACHINE = "(qoriq)"

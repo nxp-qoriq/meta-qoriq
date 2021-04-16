@@ -9,9 +9,16 @@ DEPENDS += "u-boot-mkimage-native u-boot openssl openssl-native mbedtls rcw cst-
 DEPENDS_append_lx2160a += "ddr-phy"
 do_compile[depends] += "u-boot:do_deploy rcw:do_deploy uefi:do_deploy"
 
-ATF_SRC ?= "git://source.codeaurora.org/external/qoriq/qoriq-components/atf"
-SRC_URI = "${ATF_SRC};nobranch=1"
-SRCREV = "ba76d337e9564ea97b5024640b6dcca9bd054ffb"
+PV_append = "+${SRCPV}"
+
+ATF_BRANCH ?= "lf_v2.4"
+ATF_SRC ?= "git://bitbucket.sw.nxp.com/lfac/atf-nxp.git;protocol=ssh"
+SRC_URI = "${ATF_SRC};branch=${ATF_BRANCH} \
+    git://github.com/ARMmbed/mbedtls;nobranch=1;destsuffix=git/mbedtls;name=mbedtls \
+"
+SRCREV = "${AUTOREV}"
+SRCREV_mbedtls = "0795874acdf887290b2571b193cafd3c4041a708"
+SRCREV_FORMAT = "atf"
 
 S = "${WORKDIR}/git"
 

@@ -8,14 +8,18 @@ inherit deploy
 DEPENDS += "cst-native bc-native"
 do_compile[depends] += "u-boot:do_deploy rcw:do_deploy ddr-phy:do_deploy"
 
-S = "${WORKDIR}/git"
+PV_append = "+${SRCPV}"
 
-ATF_SRC ?= "git://source.codeaurora.org/external/qoriq/qoriq-components/atf"
-SRC_URI = "${ATF_SRC};nobranch=1 \
-           git://github.com/ARMmbed/mbedtls;nobranch=1;destsuffix=git/mbedtls;name=mbedtls \
+ATF_BRANCH ?= "lf_v2.4"
+ATF_SRC ?= "git://bitbucket.sw.nxp.com/lfac/atf-nxp.git;protocol=ssh"
+SRC_URI = "${ATF_SRC};branch=${ATF_BRANCH} \
+    git://github.com/ARMmbed/mbedtls;nobranch=1;destsuffix=git/mbedtls;name=mbedtls \
 "
-SRCREV = "ba76d337e9564ea97b5024640b6dcca9bd054ffb"
+SRCREV = "${AUTOREV}"
 SRCREV_mbedtls = "0795874acdf887290b2571b193cafd3c4041a708"
+SRCREV_FORMAT = "atf"
+
+S = "${WORKDIR}/git"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 

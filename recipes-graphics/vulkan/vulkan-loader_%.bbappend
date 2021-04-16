@@ -1,2 +1,1 @@
-
-RRECOMMENDS_${PN}_remove  = "mesa-vulkan-drivers"
+RRECOMMENDS_${PN}_remove_ls1028a  = "mesa-vulkan-drivers"

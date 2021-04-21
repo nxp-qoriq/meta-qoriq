@@ -1,4 +1,4 @@
-require recipes-security/optee/optee-test.nxp.inc
+require optee-test.nxp.inc
 
 PV = "3.10.0+git${SRCPV}"
 

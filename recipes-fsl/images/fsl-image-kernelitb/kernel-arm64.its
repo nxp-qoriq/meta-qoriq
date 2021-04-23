@@ -20,7 +20,7 @@
 			compression = "gzip";
 			load = <0x84080000>;
 			entry = <0x84080000>;
-			hash@1 {
+			hash-1 {
 				algo = "crc32";
 			};
 		};
@@ -34,7 +34,7 @@
 			compression = "none";
 			load = <0x00000000>;
 			entry = <0x00000000>;
-			hash@1 {
+			hash-1 {
 				algo = "crc32";
 			};
 		};
@@ -47,7 +47,7 @@
 			os = "linux";
 			compression = "none";
 			load = <0x90000000>;
-			hash@1 {
+			hash-1 {
 				algo = "crc32";
 			};
 		};

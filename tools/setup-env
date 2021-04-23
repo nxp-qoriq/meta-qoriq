@@ -299,6 +299,7 @@ BB_NUMBER_THREADS = "$THREADS"
 PARALLEL_MAKE = "-j $JOBS"
 DL_DIR = "$DOWNLOADS"
 SSTATE_DIR = "$CACHES"
+INITRAMFS_IMAGE = "core-image-minimal"
 EOF
 
 if expr "$MACHINE" : lx216;then

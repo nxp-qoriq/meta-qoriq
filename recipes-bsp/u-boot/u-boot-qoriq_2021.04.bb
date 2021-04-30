@@ -16,7 +16,7 @@ LIC_FILES_CHKSUM = " \
 
 PV_append = "+${SRCPV}"
 
-UBOOT_BRANCH ?= "lf_v2020.04"
+UBOOT_BRANCH ?= "lf_v2021.04"
 UBOOT_SRC ?= "git://bitbucket.sw.nxp.com/lfac/uboot-nxp.git;protocol=ssh"
 SRC_URI = "${UBOOT_SRC};branch=${UBOOT_BRANCH}"
 SRCREV = "${AUTOREV}"

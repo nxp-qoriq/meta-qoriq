@@ -7,7 +7,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=69663ab153298557a59c67a60a743e5b"
 
 inherit python3native systemd
 
-OPTEE_CLIENT_BRANCH ?= "lf-5.10.y_1.0.0"
+OPTEE_CLIENT_BRANCH ?= "lf-5.10.y_2.0.0"
 OPTEE_CLIENT_SRC ?= "git://bitbucket.sw.nxp.com/lfac/optee-client.git;protocol=ssh"
 SRC_URI = "${OPTEE_CLIENT_SRC};branch=${OPTEE_CLIENT_BRANCH}"
 SRCREV = "${AUTOREV}"
@@ -33,10 +33,14 @@ do_install () {
 	ln -sf libteec.so.1.0.0 ${D}${libdir}/libteec.so.1
 	ln -sf libteec.so.1 ${D}${libdir}/libteec.so
 
-	install -d ${D}${bindir}/
-	install -m0755 ${B}/export/usr/sbin/tee-supplicant ${D}${bindir}/
+	install -D -p -m0644 ${B}/export/usr/lib/libckteec.so.0.1.0 ${D}${libdir}/libckteec.so.0.1.0
+	ln -sf libckteec.so.0.1.0 ${D}${libdir}/libckteec.so.0.1
+	ln -sf libckteec.so.0.1.0 ${D}${libdir}/libckteec.so.0
+	ln -sf libckteec.so.0.1.0 ${D}${libdir}/libckteec.so
 
-	cp -a ${B}/export/usr/include ${D}/usr/
+	install -D -p -m0755 ${B}/export/usr/sbin/tee-supplicant ${D}${bindir}/tee-supplicant
+
+	cp -a ${B}/export/usr/include ${D}${includedir}
 
 	install -d ${D}${systemd_system_unitdir}/
 	install -m0644 ${WORKDIR}/tee-supplicant.service ${D}${systemd_system_unitdir}/

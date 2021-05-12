@@ -18,7 +18,7 @@ MC_CFG_ls2088a = "ls2088a"
 MC_CFG_lx2160a = "lx2160a"
 MC_CFG_lx2162a = "lx2162a"
 
-MC_FLAVOUR ?= "${@oe.utils.ifelse(d.getVar('MACHINE').endswith('rdb'), 'RDB', 'QDS')}"
+MC_FLAVOUR ?= "${@oe.utils.ifelse(d.getVar('MACHINE').endswith('qds'), 'QDS', 'RDB')}"
 MC_FOLDER ?= "${@d.getVar('MC_CFG').upper() + '-' + d.getVar('MC_FLAVOUR')}"
 
 do_compile () {

@@ -1,5 +1,5 @@
 require optee-client.nxp.inc
 
-PV = "3.10.0+git${SRCPV}"
+PV_append = "+git${SRCPV}"
 
 COMPATIBLE_MACHINE = "(qoriq-arm64)"

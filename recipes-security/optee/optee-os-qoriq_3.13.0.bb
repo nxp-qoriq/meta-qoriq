@@ -1,6 +1,6 @@
 require optee-os.nxp.inc
 
-PV = "3.10.0+git${SRCPV}"
+PV_append = "+git${SRCPV}"
 
 PLATFORM_FLAVOR_ls1088ardb-pb   = "ls1088ardb"
 PLATFORM_FLAVOR_ls1046afrwy     = "ls1046ardb"

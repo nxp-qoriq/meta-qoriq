@@ -25,7 +25,7 @@ ZIMAGE_BASE_NAME = "zImage-${PKGE}-${PKGV}-${PKGR}-${MACHINE}-${DATETIME}"
 ZIMAGE_BASE_NAME[vardepsexclude] = "DATETIME"
 
 # Set the PV to the correct kernel version to satisfy the kernel version sanity check
-LINUX_VERSION = "5.10.9"
+LINUX_VERSION = "5.10.35"
 PV = "${LINUX_VERSION}+git${SRCPV}"
 
 SCMVERSION ?= "y"

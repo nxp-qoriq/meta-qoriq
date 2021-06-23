@@ -19,6 +19,7 @@ TOOLCHAIN_HOST_TASK += " \
     nativesdk-dtc \
     nativesdk-u-boot-mkimage \
     nativesdk-cst \
+    nativesdk-perl-module-integer \
 "
 
 TOOLCHAIN_HOST_TASK_append_e500v2 = " \

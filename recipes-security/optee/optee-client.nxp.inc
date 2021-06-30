@@ -7,10 +7,10 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=69663ab153298557a59c67a60a743e5b"
 
 inherit python3native systemd
 
-OPTEE_CLIENT_BRANCH ?= "lf_3.13.y"
-OPTEE_CLIENT_SRC ?= "git://source.codeaurora.org/external/qoriq/qoriq-components/optee_client.git;protocol=https"
+OPTEE_CLIENT_BRANCH ?= "lf-5.10.y_2.0.0"
+OPTEE_CLIENT_SRC ?= "git://bitbucket.sw.nxp.com/lfac/optee-client.git;protocol=ssh"
 SRC_URI = "${OPTEE_CLIENT_SRC};branch=${OPTEE_CLIENT_BRANCH}"
-SRCREV = "7c9c423d00e96bf51debd5fe10fd70dce83be5cc"
+SRCREV = "${AUTOREV}"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/optee-client:"
 SRC_URI += "file://tee-supplicant.service"

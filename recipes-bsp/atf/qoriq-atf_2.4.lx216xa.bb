@@ -11,11 +11,11 @@ do_compile[depends] += "u-boot:do_deploy rcw:do_deploy ddr-phy:do_deploy"
 PV_append = "+${SRCPV}"
 
 ATF_BRANCH ?= "lf_v2.4"
-ATF_SRC ?= "git://source.codeaurora.org/external/qoriq/qoriq-components/atf.git;protocol=https"
+ATF_SRC ?= "git://bitbucket.sw.nxp.com/lfac/atf-nxp.git;protocol=ssh"
 SRC_URI = "${ATF_SRC};branch=${ATF_BRANCH} \
     git://github.com/ARMmbed/mbedtls;nobranch=1;destsuffix=git/mbedtls;name=mbedtls \
 "
-SRCREV = "ec35fef92b71a79075f214f8cff0738cd4482ed0"
+SRCREV = "${AUTOREV}"
 SRCREV_mbedtls = "0795874acdf887290b2571b193cafd3c4041a708"
 SRCREV_FORMAT = "atf"
 

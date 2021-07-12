@@ -32,6 +32,9 @@ RDEPENDS_${PN} = " \
     python3 \
     python3-misc \
     python3-modules \
+    python3-nacl \
+    python3-pip \
+    python3-monotonic \
     quilt \
     rpm \
     subversion \

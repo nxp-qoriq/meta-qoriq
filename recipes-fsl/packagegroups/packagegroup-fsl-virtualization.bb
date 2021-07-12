@@ -14,6 +14,7 @@ RDEPENDS_${PN} = "${@bb.utils.contains('DISTRO_FEATURES', 'x11', \
     'libvirt \
     libvirt-libvirtd \
     libvirt-virsh \
+    libvirt-python \
     lxc \
     qemu', \
     '', d)} \

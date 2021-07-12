@@ -15,6 +15,7 @@ X11_TOOLS = "${@bb.utils.contains('DISTRO_FEATURES', 'x11', \
 "
 
 RDEPENDS_${PN} = "\
+    apt \
     bc \
     can-utils \
     crconf \
@@ -24,9 +25,12 @@ RDEPENDS_${PN} = "\
     gnutls \
     gnutls-bin \
     keyutils \
+    libnl \
+    libxml2 \
+    libxslt \
+    lldpd \
     lsof \
     ltp \
-    lldpd \
     lvm2 \
     tcpreplay \
     man \
@@ -43,8 +47,10 @@ RDEPENDS_${PN} = "\
     unzip \
     usbutils \
     util-linux-lscpu \
+    vim \
     which \
     xz  \
+    yajl \
     zip \
     kexec-tools \
     ${X11_TOOLS} \

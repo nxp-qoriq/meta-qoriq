@@ -53,6 +53,11 @@ EXTRA_PKGS_COMMUNITY = " \
 EXTRA_PKGS_COMMUNITY_ls1012a = " \
     hostapd \
 "
+EXTRA_PKGS_COMMUNITY_ls1046a = " \
+    hostapd \
+    iw \
+    wpa-supplicant \
+"
 EXTRA_PKGS_COMMUNITY_append_lx2162a = " \
     kdump \
     kexec \

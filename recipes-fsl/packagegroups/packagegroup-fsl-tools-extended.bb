@@ -97,3 +97,8 @@ RDEPENDS_${PN}_append_ls1012a = "\
     spc \
     tsntool \
 "
+RDEPENDS_${PN}_append_ls1046a = "\
+    kernel-module-nxp89xx \
+    linux-firmware-nxp89xx \
+    nxp-wlan-sdk \
+"

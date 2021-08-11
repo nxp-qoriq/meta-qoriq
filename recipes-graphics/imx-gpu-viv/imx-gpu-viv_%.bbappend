@@ -17,8 +17,6 @@ IMX_PACKAGES_GBM_ls1028a = "libgbm-imx libgbm-imx-dev"
 HAS_GBM_ls1028a = "true"
 IS_MX8_ls1028a = "1"
 
-GLES3_HEADER_REMOVALS_ls1028a   = "gl32.h"
-
 FILES_libgbm-imx_ls1028a = "${libdir}/libgbm${REALSOLIBS} ${libdir}/libgbm${SOLIBSDEV} ${libdir}/libgbm_viv${SOLIBSDEV}"
 FILES_libgbm-imx-dev_ls1028a = "${libdir}/pkgconfig/gbm.pc ${includedir}/gbm.h"
 RDEPENDS_libgbm-imx_append_ls1028a = " libdrm"

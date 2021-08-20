@@ -9,7 +9,7 @@ LIC_FILES_CHKSUM = "file://LICENSE.md;md5=daa2bcccc666345ab8940aab1315a4fa"
 DEPENDS = "python3-pycryptodome-native python3-pycryptodomex-native openssl"
 inherit python3native cmake
 
-OPTEE_TEST_BRANCH ?= "lf-5.10.y_2.0.0"
+OPTEE_TEST_BRANCH ?= "lf-5.10.52_2.1.0"
 OPTEE_TEST_SRC ?= "git://bitbucket.sw.nxp.com/lfac/optee-test.git;protocol=ssh"
 SRC_URI = "${OPTEE_TEST_SRC};branch=${OPTEE_TEST_BRANCH}"
 SRCREV = "${AUTOREV}"

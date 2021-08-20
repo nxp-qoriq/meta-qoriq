@@ -57,6 +57,11 @@ do_install() {
     for f in ${B}/export-ta_${OPTEE_ARCH}/*; do
         cp -aR $f ${D}${includedir}/optee/export-user_ta/
     done
+
+    install -d ${D}${nonarch_base_libdir}/optee_armtz
+    find ${B}/export-ta_${OPTEE_ARCH}/ta -name '*.ta' | while read name; do
+        install -m 444 $name ${D}${nonarch_base_libdir}/optee_armtz/
+    done
 }
 
 do_deploy() {
@@ -65,7 +70,7 @@ do_deploy() {
 }
 addtask deploy before do_build after do_install
 
-FILES_${PN} = "${nonarch_base_libdir}/firmware/"
+FILES_${PN} = "${nonarch_base_libdir}/firmware/ ${nonarch_base_libdir}/optee_armtz/"
 FILES_${PN}-staticdev = "/usr/include/optee/"
 RDEPENDS_${PN}-dev += "${PN}-staticdev"
 

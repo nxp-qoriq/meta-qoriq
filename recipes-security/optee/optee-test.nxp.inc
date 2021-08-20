@@ -37,6 +37,7 @@ do_compile() {
     export CXXFLAGS="${CXXFLAGS} --sysroot=${STAGING_DIR_HOST}"
     oe_runmake xtest
     oe_runmake ta
+    oe_runmake test_plugin
 }
 
 do_install() {
@@ -47,8 +48,13 @@ do_install() {
 	find ${B}/ta -name '*.ta' | while read name; do
 		install -m 444 $name ${D}${nonarch_base_libdir}/optee_armtz/
 	done
+
+	install -d ${D}${libdir}/tee-supplicant/plugins/
+	find ${B}/supp_plugin -name '*.plugin' | while read name; do
+		install -m 755 $name ${D}${libdir}/tee-supplicant/plugins/
+	done
 }
 
-FILES_${PN} += "${nonarch_base_libdir}"
+FILES_${PN} += "${nonarch_base_libdir} ${libdir}/tee-supplicant/plugins/"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"

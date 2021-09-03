@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=6f933bdd5214942fcfafa90f40740dfc"
 inherit module
 
 SRC_URI = "git://bitbucket.sw.nxp.com/dash/mdio-proxy-module;protocol=ssh;nobranch=1"
-SRCREV = "0bffcb424cc9483e62e7db8a6d8027cf04a6d1fa"
+SRCREV = "a477f6f1f0112075296d4724f7f043caeeaf3477"
 
 S = "${WORKDIR}/git"
 

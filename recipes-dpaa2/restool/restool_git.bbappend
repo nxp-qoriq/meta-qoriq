@@ -2,7 +2,7 @@ inherit bash-completion
 
 RDEPENDS_${PN}-bash-completion += "bash"
 
-SRCREV = "8fd3a6b3ba28a6d980a612f2064e6f8827744bcd"
+SRCREV = "d29522aef9f92ff2557978d5d3979b771a9576fe"
 
 EXTRA_OEMAKE += "MANPAGE="
 do_compile_prepend() {

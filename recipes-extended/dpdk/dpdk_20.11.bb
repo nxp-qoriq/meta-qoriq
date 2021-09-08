@@ -13,11 +13,12 @@ EXTRA_OEMESON = " -Denable_kmods=false \
 		-Doptimization=3 \
 "
 
-PACKAGECONFIG ??= " "
+PACKAGECONFIG ??= "openssl"
 PACKAGECONFIG[afxdp] = ",,libbpf"
 PACKAGECONFIG[libvirt] = ",,libvirt"
+PACKAGECONFIG[openssl] = ",,openssl"
 
-RDEPENDS_${PN} += "pciutils python3-core"
+RDEPENDS_${PN} += "bash pciutils python3-core"
 RDEPENDS_${PN}-examples += "bash"
 DEPENDS = "numactl"
 
@@ -45,7 +46,7 @@ do_configure() {
 }
 
 do_install_append(){
-    # remove  source files
+    # remove source files
     rm -rf ${D}/${INSTALL_PATH}/examples/*
 
     # Install examples
@@ -56,18 +57,13 @@ do_install_append(){
             install -m 0755 ${dirname} ${D}/${INSTALL_PATH}/examples/
         fi
     done
-
+    cp -rf ${S}/nxp/* ${D}/${INSTALL_PATH}/
 }
 
 PACKAGES =+ "${PN}-examples ${PN}-tools"
 
-FILES_${PN} = " ${bindir}/dpdk-testpmd \
-		 ${bindir}/dpdk-proc-info \
-		 ${libdir}/*.so* \
-		 ${libdir}/dpdk/pmds-21.0/*.so* \
-		 "
 FILES_${PN}-examples = " \
-	${prefix}/share/dpdk/examples/* \
+    ${INSTALL_PATH}/examples/* \
 	"
 
 FILES_${PN}-tools = " \

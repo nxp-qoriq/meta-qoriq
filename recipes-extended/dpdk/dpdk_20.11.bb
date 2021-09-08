@@ -26,23 +26,11 @@ inherit meson
 
 INSTALL_PATH = "${prefix}/share/dpdk"
 
-do_configure() {
+do_configure_prepend() {
     sed -i "/implementor_/d" ${WORKDIR}/meson.cross
     sed -i "/\[properties]/aimplementor_id = 'dpaa'" ${WORKDIR}/meson.cross
     sed -i "/\[properties]/aimplementor_pn = 'default'" ${WORKDIR}/meson.cross
     sed -i "s/cpu =.*/cpu = 'armv8-a'/" ${WORKDIR}/meson.cross
-    
-    # Meson requires this to be 'bfd, 'lld' or 'gold' from 0.53 onwards
-    # https://github.com/mesonbuild/meson/commit/ef9aeb188ea2bc7353e59916c18901cde90fa2b3
-    unset LD
-
-    # Work around "Meson fails if /tmp is mounted with noexec #2972"
-    mkdir -p "${B}/meson-private/tmp"
-    export TMPDIR="${B}/meson-private/tmp"
-    bbnote Executing meson ${MESONOPTS} ${MESON_CROSS_FILE} ${EXTRA_OEMESON} "${B}" "${S}"
-    if ! meson ${MESONOPTS} ${MESON_CROSS_FILE} ${EXTRA_OEMESON} "${B}" "${S}"; then
-        bbfatal_log meson failed
-    fi
 }
 
 do_install_append(){

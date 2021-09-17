@@ -3,13 +3,14 @@ include dpdk.inc
 SRC_URI += " \
             file://0001-meson.build-march-and-mcpu-already-passed-by-Yocto.patch \
             file://0001-ifpga-meson-Fix-finding-librt-using-find_library.patch \
+            file://0001-drivers-net-enetfec-enet_uio.c-fix-multiple-definiti.patch \
 "
 
 MESON_BUILDTYPE = "release"
 
 # kernel module is provide by dpdk-module recipe, so disable here
 EXTRA_OEMESON = " -Denable_kmods=false \
-                -Dexamples="l2fwd,l3fwd,l2fwd-qdma,ip_fragmentation,ip_reassembly,qdma_demo,ethtool,link_status_interrupt,multi_process/symmetric_mp,multi_process/simple_mp,multi_process/symmetric_mp_qdma,kni,ipsec-secgw,qos_sched,multi_process/client_server_mp/mp_server,multi_process/client_server_mp/mp_client,l3fwd-power,l2fwd-event,l2fwd-crypto,bond" \
+                -Dexamples=all \
 		-Doptimization=3 \
 "
 
@@ -48,17 +49,45 @@ do_install_append(){
     cp -rf ${S}/nxp/* ${D}/${INSTALL_PATH}/
 }
 
-PACKAGES =+ "${PN}-examples ${PN}-tools"
-
-FILES_${PN}-examples = " \
-    ${INSTALL_PATH}/examples/* \
-	"
+PACKAGES =+ "${PN}-tools ${PN}-examples ${PN}-misc"
 
 FILES_${PN}-tools = " \
-    ${bindir}/dpdk-pdump \
+    ${bindir}/dpdk-testpmd \
+    ${INSTALL_PATH}/examples/dpdk-l2fwd \
+    ${INSTALL_PATH}/examples/dpdk-l2fwd-crypto \
+    ${INSTALL_PATH}/examples/dpdk-l3fwd \
+    ${INSTALL_PATH}/examples/dpdk-ipsec-secgw \
+"
+
+FILES_${PN}-examples = " \
+    ${bindir}/dpdk-proc-info \
     ${bindir}/dpdk-test \
+    ${bindir}/dpdk-test-crypto-perf \
+    ${bindir}/dpdk-*.py \
+    ${INSTALL_PATH}/examples/dpdk-cmdif \
+    ${INSTALL_PATH}/examples/dpdk-cmdline \
+    ${INSTALL_PATH}/examples/dpdk-ethtool \
+    ${INSTALL_PATH}/examples/dpdk-ip_fragmentation \
+    ${INSTALL_PATH}/examples/dpdk-ip_reassembly \
+    ${INSTALL_PATH}/examples/dpdk-kni \
+    ${INSTALL_PATH}/examples/dpdk-l2fwd-keepalive \
+    ${INSTALL_PATH}/examples/dpdk-l2fwd-qdma \
+    ${INSTALL_PATH}/examples/dpdk-l3fwd-acl \
+    ${INSTALL_PATH}/examples/dpdk-link_status_interrupt \
+    ${INSTALL_PATH}/examples/dpdk-mp_client \
+    ${INSTALL_PATH}/examples/dpdk-mp_server \
+    ${INSTALL_PATH}/examples/dpdk-qdma_demo \
+    ${INSTALL_PATH}/examples/dpdk-simple_mp \
+    ${INSTALL_PATH}/examples/dpdk-symmetric_mp \
+    ${INSTALL_PATH}/examples/dpdk-symmetric_mp_qdma \
+    ${INSTALL_PATH}/examples/dpdk-timer \
+"
+
+FILES_${PN}-misc = " \
+    ${bindir}/dpdk-pdump \
     ${bindir}/dpdk-test-* \
     ${bindir}/dpdk-*.py \
-    "
+    ${INSTALL_PATH}/examples/* \
+"
 
 INSANE_SKIP_${PN} = "dev-so"

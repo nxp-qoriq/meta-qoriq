@@ -77,7 +77,6 @@ RDEPENDS_${PN}_append_qoriq = "\
 
 RDEPENDS_${PN}_append_qoriq-arm64 = "\ 
     dpdk-examples \
-    dpdk-module \
     ovs-dpdk \
     libpkcs11 \
     pktgen-dpdk \

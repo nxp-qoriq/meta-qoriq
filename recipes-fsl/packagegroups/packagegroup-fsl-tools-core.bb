@@ -75,6 +75,8 @@ PKGS ?= " \
     ceetm \
     dce \
     dpdk \
+    dpdk-module \
+    dpdk-tools \
     keyctl-caam \
     optee-os-qoriq \
     optee-client-qoriq \

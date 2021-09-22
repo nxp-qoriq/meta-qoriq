@@ -7,9 +7,9 @@ LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"
 
 KERNEL_BRANCH ?= "lf-5.10.y"
-KERNEL_SRC ?= "git://bitbucket.sw.nxp.com/lfac/linux-lts-nxp.git;protocol=ssh"
+KERNEL_SRC ?= "git://source.codeaurora.org/external/qoriq/qoriq-components/linux.git;protocol=https"
 SRC_URI = "${KERNEL_SRC};branch=${KERNEL_BRANCH}"
-SRCREV = "${AUTOREV}"
+SRCREV = "a11753a89ec610768301d4070e10b8bd60fde8cd"
 
 S = "${WORKDIR}/git"
 
@@ -25,7 +25,7 @@ ZIMAGE_BASE_NAME = "zImage-${PKGE}-${PKGV}-${PKGR}-${MACHINE}-${DATETIME}"
 ZIMAGE_BASE_NAME[vardepsexclude] = "DATETIME"
 
 # Set the PV to the correct kernel version to satisfy the kernel version sanity check
-LINUX_VERSION = "5.10.35"
+LINUX_VERSION = "5.10.52"
 PV = "${LINUX_VERSION}+git${SRCPV}"
 
 SCMVERSION ?= "y"

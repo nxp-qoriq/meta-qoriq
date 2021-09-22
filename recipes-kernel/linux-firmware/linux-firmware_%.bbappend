@@ -2,13 +2,13 @@
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
-IMX_FIRMWARE_SRC ?= "git://bitbucket.sw.nxp.com/imx/imx-firmware.git;protocol=ssh"
+IMX_FIRMWARE_SRC ?= "git://github.com/NXP/imx-firmware.git;protocol=https"
 SRCBRANCH = "lf-5.10.52_2.1.0"
 SRC_URI += " \
     ${IMX_FIRMWARE_SRC};branch=${SRCBRANCH};destsuffix=imx-firmware;name=imx-firmware \
 "
 
-SRCREV_imx-firmware = "605da7a278f31c8054d9807b4a3ca503804226b6"
+SRCREV_imx-firmware = "6d7f77b83164b08334806c4aa2034bc1f7da7b7d"
 
 SRCREV_FORMAT = "default_imx-firmware"
 

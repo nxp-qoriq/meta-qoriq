@@ -15,7 +15,7 @@ LIC_FILES_CHKSUM = " \
 "
 
 SRC_URI = "git://bitbucket.sw.nxp.com/dnnpi/lx2-uboot.git;protocol=ssh;branch=hpcsom"
-SRCREV = "ffab14dcf2d34bb6a457dcb351b908e092155b13"
+SRCREV = "db411c6d6ba5b8ead476508cad8da346796fddfa"
 
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"

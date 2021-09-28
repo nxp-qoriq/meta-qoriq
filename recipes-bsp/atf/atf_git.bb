@@ -10,7 +10,7 @@ do_compile[depends] += "u-boot:do_deploy rcw:do_deploy ddr-phy:do_deploy"
 
 S = "${WORKDIR}/git"
 
-SRC_URI = "git://bitbucket.sw.nxp.com/gitam/atf.git;protocol=ssh;branch=hpcsom"
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/atf;nobranch=1"
 SRCREV = "dbeca9bc905c55c75059e7ff02b6c01499a781f2"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"

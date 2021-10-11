@@ -7,6 +7,7 @@ inherit deploy
 
 DEPENDS += "u-boot-mkimage-native u-boot openssl openssl-native mbedtls rcw cst-native bc-native"
 DEPENDS_append_lx2160a += "ddr-phy"
+DEPENDS_append_lx2162a += "ddr-phy"
 do_compile[depends] += "u-boot:do_deploy rcw:do_deploy uefi:do_deploy"
 
 PV_append = "+${SRCPV}"
@@ -34,6 +35,7 @@ PLATFORM_ADDITIONAL_TARGET_ls1012afrwy = "ls1012afrwy_512mb"
 
 RCW_FOLDER ?= "${MACHINE}"
 RCW_FOLDER_ls1088ardb-pb = "ls1088ardb"
+RCW_FOLDER_lx2160ardb-rev2 = "lx2160ardb_rev2"
 
 RCW_SUFFIX ?= ".bin"
 RCW_SUFFIX_ls1012a = "${@bb.utils.contains('DISTRO_FEATURES', 'secure', '_sben.bin', '_default.bin', d)}"
@@ -51,6 +53,10 @@ chassistype_ls1012a = "ls104x_1012"
 chassistype_ls1043a = "ls104x_1012"
 chassistype_ls1046a = "ls104x_1012"
 
+DDR_PHY_BIN_PATH ?= ""
+DDR_PHY_BIN_PATH_lx2160a = "${DEPLOY_DIR_IMAGE}/ddr-phy"
+DDR_PHY_BIN_PATH_lx2162a = "${DEPLOY_DIR_IMAGE}/ddr-phy"
+
 # requires CROSS_COMPILE set by hand as there is no configure script
 export CROSS_COMPILE="${TARGET_PREFIX}"
 export ARCH="arm64"
@@ -65,7 +71,8 @@ LD[unexport] = "1"
 EXTRA_OEMAKE += "HOSTCC='${BUILD_CC} ${BUILD_CPPFLAGS} ${BUILD_CFLAGS} ${BUILD_LDFLAGS}'"
 EXTRA_OEMAKE += "\
     ${@bb.utils.contains('COMBINED_FEATURES', 'optee', 'BL32=${RECIPE_SYSROOT}${nonarch_base_libdir}/firmware/tee_${MACHINE}.bin SPD=opteed', '', d)} \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'secure', 'TRUSTED_BOARD_BOOT=1 ${ddrphyopt} CST_DIR=${RECIPE_SYSROOT_NATIVE}/usr/bin/cst', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'secure', 'TRUSTED_BOARD_BOOT=1 CST_DIR=${RECIPE_SYSROOT_NATIVE}/usr/bin/cst', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'arm-cot', 'GENERATE_COT=1 MBEDTLS_DIR=${S}/mbedtls', '', d)} \
     ${@bb.utils.contains('DISTRO_FEATURES', 'fuse', 'fip_fuse FUSE_PROG=1 FUSE_PROV_FILE=fuse_scr.bin', '', d)} \
 "
 
@@ -74,9 +81,11 @@ PACKAGECONFIG ??= " \
 "
 PACKAGECONFIG[optee] = ",,optee-os-qoriq"
 
-ddrphyopt ?= ""
-ddrphyopt_lx2160ardb = "fip_ddr_sec"
-ddrphyopt_lx2160ardb-rev2 = "fip_ddr_sec"
+python() {
+    if bb.utils.contains("DISTRO_FEATURES", "arm-cot", True, False, d):
+        if not bb.utils.contains("DISTRO_FEATURES", "secure", True, False, d):
+            bb.fatal("arm-cot needs 'secure' being set in DISTRO_FEATURES")
+}
 
 do_configure[noexec] = "1"
 
@@ -90,10 +99,6 @@ do_compile() {
 
     ${RECIPE_SYSROOT_NATIVE}/usr/bin/cst/gen_fusescr \
         ${RECIPE_SYSROOT_NATIVE}/usr/bin/cst/input_files/gen_fusescr/${chassistype}/input_fuse_file
-
-    if [ -f ${DEPLOY_DIR_IMAGE}/ddr-phy/ddr4_pmu_train_dmem.bin ]; then
-        cp ${DEPLOY_DIR_IMAGE}/ddr-phy/*.bin .
-    fi
 
     for d in ${BOOTTYPE}; do
         case $d in
@@ -126,8 +131,13 @@ do_compile() {
             ;;        
         esac
             
-	if [ -f "${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg}" ]; then
-            oe_runmake V=1 realclean
+	if [ -f ${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/$rcwimg ]; then
+            make V=1 realclean
+            if [ -f rot_key.pem ];then
+                mkdir -p build/${PLATFORM}/release/
+                cp *.pem build/${PLATFORM}/release/
+            fi
+
             oe_runmake V=1 all fip pbl PLAT=${PLATFORM} BOOT_MODE=${d} RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${UBOOT_BINARY}
             cp build/${PLATFORM}/release/bl2_${d}${SECURE_EXTENTION}.pbl .
             cp build/${PLATFORM}/release/fip.bin fip_uboot${SECURE_EXTENTION}.bin
@@ -135,8 +145,19 @@ do_compile() {
                 cp build/${PLATFORM}/release/fuse_fip.bin .
             fi
 
+            if [ -n "${SECURE_EXTENTION}" -a -n "${DDR_PHY_BIN_PATH}" -a ! -f ddr_fip_sec.bin ]; then
+                oe_runmake V=1 fip_ddr PLAT=${PLATFORM} DDR_PHY_BIN_PATH=${DDR_PHY_BIN_PATH}
+                if [ -e build/${PLATFORM}/release/ddr_fip_sec.bin ]; then
+                    cp build/${PLATFORM}/release/ddr_fip_sec.bin .
+                fi
+            fi
+
+            if [ -e build/${PLATFORM}/release/rot_key.pem ] && [ ! -f rot_key.pem ]; then
+                cp build/${PLATFORM}/release/*.pem .
+            fi
+
             if [ -n "${PLATFORM_ADDITIONAL_TARGET}" ]; then
-                oe_runmake V=1 realclean
+                make V=1 realclean
                 oe_runmake V=1 all fip pbl PLAT=${PLATFORM_ADDITIONAL_TARGET} BOOT_MODE=${d} RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${UBOOT_BINARY}
                 cp build/${PLATFORM_ADDITIONAL_TARGET}/release/bl2_${d}${SECURE_EXTENTION}.pbl bl2_${d}${SECURE_EXTENTION}_${PLATFORM_ADDITIONAL_TARGET}.pbl
                 cp build/${PLATFORM_ADDITIONAL_TARGET}/release/fip.bin fip_uboot${SECURE_EXTENTION}_${PLATFORM_ADDITIONAL_TARGET}.bin
@@ -144,8 +165,9 @@ do_compile() {
                     cp build/${PLATFORM_ADDITIONAL_TARGET}/release/fuse_fip.bin fuse_fip_${PLATFORM_ADDITIONAL_TARGET}.bin
                 fi
             fi
-            if [ -n "${uefiboot}" -a -f "${DEPLOY_DIR_IMAGE}/uefi/${PLATFORM}/${uefiboot}" ]; then
-                oe_runmake V=1 realclean
+
+            if [ -z "${SECURE_EXTENTION}" -a -f "${DEPLOY_DIR_IMAGE}/uefi/${PLATFORM}/${uefiboot}" ]; then
+                make V=1 realclean
                 oe_runmake V=1 all fip pbl PLAT=${PLATFORM} BOOT_MODE=${d} RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${DEPLOY_DIR_IMAGE}/uefi/${PLATFORM}/${uefiboot}
                 cp build/${PLATFORM}/release/fip.bin fip_uefi.bin
             fi

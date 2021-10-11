@@ -35,6 +35,11 @@ PLATFORM_ADDITIONAL_TARGET_ls1012afrwy = "ls1012afrwy_512mb"
 RCW_FOLDER ?= "${MACHINE}"
 RCW_FOLDER_ls1088ardb-pb = "ls1088ardb"
 
+RCW_SUFFIX ?= ".bin"
+RCW_SUFFIX_ls1012a = "${@bb.utils.contains('DISTRO_FEATURES', 'secure', '_sben.bin', '_default.bin', d)}"
+RCW_SUFFIX_ls1043a = "${@bb.utils.contains('DISTRO_FEATURES', 'secure', '_sben.bin', '.bin', d)}"
+RCW_SUFFIX_ls1046a = "${@bb.utils.contains('DISTRO_FEATURES', 'secure', '_sben.bin', '.bin', d)}"
+
 # requires CROSS_COMPILE set by hand as there is no configure script
 export CROSS_COMPILE="${TARGET_PREFIX}"
 export ARCH="arm64"
@@ -62,9 +67,6 @@ PACKAGECONFIG[optee] = ",,optee-os-qoriq"
 
 uboot_boot_sec ?= "${DEPLOY_DIR_IMAGE}/u-boot.bin-tfa-secure-boot"
 uboot_boot ?= "${DEPLOY_DIR_IMAGE}/u-boot.bin-tfa"
-rcw ?= ""
-rcw_ls1012a = "_default"
-rcwsec ?= "_sben"
 
 chassistype ?= "ls2088_1088"
 chassistype_ls1012ardb = "ls104x_1012"
@@ -98,14 +100,8 @@ do_compile() {
         secureopt="TRUSTED_BOARD_BOOT=1 ${ddrphyopt} CST_DIR=${RECIPE_SYSROOT_NATIVE}/usr/bin/cst"
         secext="_sec"
         bl33="${uboot_boot_sec}"
-        if [ ${chassistype} = ls104x_1012 ]; then
-            rcwtemp="${rcwsec}"
-        else
-            rcwtemp="${rcw}"
-        fi
     else
         bl33="${uboot_boot}"
-        rcwtemp="${rcw}"
     fi       
 
     if [ "${BUILD_OPTEE}" = "true" ]; then
@@ -128,30 +124,30 @@ do_compile() {
     for d in ${btype}; do
         case $d in
         nor)
-            rcwimg="${RCWNOR}${rcwtemp}.bin"
+            rcwimg="${RCWNOR}${RCW_SUFFIX}"
             uefiboot="${UEFI_NORBOOT}"
             ;;
         nand)
-            rcwimg="${RCWNAND}${rcwtemp}.bin"
+            rcwimg="${RCWNAND}${RCW_SUFFIX}"
             ;;
         qspi)
-            rcwimg="${RCWQSPI}${rcwtemp}.bin"
+            rcwimg="${RCWQSPI}${RCW_SUFFIX}"
             uefiboot="${UEFI_QSPIBOOT}"
             if [ "${BUILD_SECURE}" = "true" ] && [ ${MACHINE} = ls1046ardb ]; then
                 rcwimg="RR_FFSSPPPH_1133_5559/rcw_1600_qspiboot_sben.bin"
             fi
             ;;
         auto)
-            rcwimg="${RCWAUTO}${rcwtemp}.bin"
+            rcwimg="${RCWAUTO}${RCW_SUFFIX}"
             ;;
         sd)
-            rcwimg="${RCWSD}${rcwtemp}.bin"
+            rcwimg="${RCWSD}${RCW_SUFFIX}"
             ;;
         emmc)
-            rcwimg="${RCWEMMC}${rcwtemp}.bin"
+            rcwimg="${RCWEMMC}${RCW_SUFFIX}"
             ;;
         flexspi_nor)
-            rcwimg="${RCWXSPI}${rcwtemp}.bin"
+            rcwimg="${RCWXSPI}${RCW_SUFFIX}"
             uefiboot="${UEFI_XSPIBOOT}"
             ;;        
         esac

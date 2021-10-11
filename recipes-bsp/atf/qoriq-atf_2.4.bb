@@ -81,21 +81,18 @@ ddrphyopt_lx2160ardb-rev2 = "fip_ddr_sec"
 do_configure[noexec] = "1"
 
 do_compile() {
-    export LIBPATH="${RECIPE_SYSROOT_NATIVE}"
-    install -d ${S}/include/tools_share/openssl
-    cp -r ${RECIPE_SYSROOT}/usr/include/openssl/* ${S}/include/tools_share/openssl
     if [ ! -f ${RECIPE_SYSROOT_NATIVE}/usr/bin/cst/srk.pri ]; then
        ${RECIPE_SYSROOT_NATIVE}/usr/bin/cst/gen_keys 1024
     else
-       cp ${RECIPE_SYSROOT_NATIVE}/usr/bin/cst/srk.pri ${S}
-       cp ${RECIPE_SYSROOT_NATIVE}/usr/bin/cst/srk.pub ${S}
+       cp ${RECIPE_SYSROOT_NATIVE}/usr/bin/cst/srk.pri .
+       cp ${RECIPE_SYSROOT_NATIVE}/usr/bin/cst/srk.pub .
     fi
 
     ${RECIPE_SYSROOT_NATIVE}/usr/bin/cst/gen_fusescr \
         ${RECIPE_SYSROOT_NATIVE}/usr/bin/cst/input_files/gen_fusescr/${chassistype}/input_fuse_file
 
     if [ -f ${DEPLOY_DIR_IMAGE}/ddr-phy/ddr4_pmu_train_dmem.bin ]; then
-        cp ${DEPLOY_DIR_IMAGE}/ddr-phy/*.bin ${S}/
+        cp ${DEPLOY_DIR_IMAGE}/ddr-phy/*.bin .
     fi
 
     for d in ${BOOTTYPE}; do
@@ -130,28 +127,28 @@ do_compile() {
         esac
             
 	if [ -f "${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg}" ]; then
-                oe_runmake V=1 -C ${S} realclean
-                oe_runmake V=1 -C ${S} all fip pbl PLAT=${PLATFORM} BOOT_MODE=${d} RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${UBOOT_BINARY}
-                cp -r ${S}/build/${PLATFORM}/release/bl2_${d}${SECURE_EXTENTION}.pbl ${S}
-                cp -r ${S}/build/${PLATFORM}/release/fip.bin ${S}/fip_uboot${SECURE_EXTENTION}.bin
-                if [ -e ${S}/build/${PLATFORM}/release/fuse_fip.bin ]; then
-                    cp -f ${S}/build/${PLATFORM}/release/fuse_fip.bin ${S}
-                fi
+            oe_runmake V=1 realclean
+            oe_runmake V=1 all fip pbl PLAT=${PLATFORM} BOOT_MODE=${d} RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${UBOOT_BINARY}
+            cp build/${PLATFORM}/release/bl2_${d}${SECURE_EXTENTION}.pbl .
+            cp build/${PLATFORM}/release/fip.bin fip_uboot${SECURE_EXTENTION}.bin
+            if [ -e build/${PLATFORM}/release/fuse_fip.bin ]; then
+                cp build/${PLATFORM}/release/fuse_fip.bin .
+            fi
 
-                if [ -n "${PLATFORM_ADDITIONAL_TARGET}" ]; then
-                    oe_runmake V=1 -C ${S} realclean
-                    oe_runmake V=1 -C ${S} all fip pbl PLAT=${PLATFORM_ADDITIONAL_TARGET} BOOT_MODE=${d} RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${UBOOT_BINARY}
-                    cp -r ${S}/build/${PLATFORM_ADDITIONAL_TARGET}/release/bl2_${d}${SECURE_EXTENTION}.pbl ${S}/bl2_${d}${SECURE_EXTENTION}_${PLATFORM_ADDITIONAL_TARGET}.pbl
-                    cp -r ${S}/build/${PLATFORM_ADDITIONAL_TARGET}/release/fip.bin ${S}/fip_uboot${SECURE_EXTENTION}_${PLATFORM_ADDITIONAL_TARGET}.bin
-                    if [ -e ${S}/build/${PLATFORM_ADDITIONAL_TARGET}/release/fuse_fip.bin ]; then
-                        cp -r ${S}/build/${PLATFORM_ADDITIONAL_TARGET}/release/fuse_fip.bin ${S}/fuse_fip_${PLATFORM_ADDITIONAL_TARGET}.bin
-                    fi
+            if [ -n "${PLATFORM_ADDITIONAL_TARGET}" ]; then
+                oe_runmake V=1 realclean
+                oe_runmake V=1 all fip pbl PLAT=${PLATFORM_ADDITIONAL_TARGET} BOOT_MODE=${d} RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${UBOOT_BINARY}
+                cp build/${PLATFORM_ADDITIONAL_TARGET}/release/bl2_${d}${SECURE_EXTENTION}.pbl bl2_${d}${SECURE_EXTENTION}_${PLATFORM_ADDITIONAL_TARGET}.pbl
+                cp build/${PLATFORM_ADDITIONAL_TARGET}/release/fip.bin fip_uboot${SECURE_EXTENTION}_${PLATFORM_ADDITIONAL_TARGET}.bin
+                if [ -e build/${PLATFORM_ADDITIONAL_TARGET}/release/fuse_fip.bin ]; then
+                    cp build/${PLATFORM_ADDITIONAL_TARGET}/release/fuse_fip.bin fuse_fip_${PLATFORM_ADDITIONAL_TARGET}.bin
                 fi
-                if [ -n "${uefiboot}" -a -f "${DEPLOY_DIR_IMAGE}/uefi/${PLATFORM}/${uefiboot}" ]; then
-                    oe_runmake V=1 -C ${S} realclean
-                    oe_runmake V=1 -C ${S} all fip pbl PLAT=${PLATFORM} BOOT_MODE=${d} RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${DEPLOY_DIR_IMAGE}/uefi/${PLATFORM}/${uefiboot}
-                    cp -r ${S}/build/${PLATFORM}/release/fip.bin ${S}/fip_uefi.bin
-                fi
+            fi
+            if [ -n "${uefiboot}" -a -f "${DEPLOY_DIR_IMAGE}/uefi/${PLATFORM}/${uefiboot}" ]; then
+                oe_runmake V=1 realclean
+                oe_runmake V=1 all fip pbl PLAT=${PLATFORM} BOOT_MODE=${d} RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${DEPLOY_DIR_IMAGE}/uefi/${PLATFORM}/${uefiboot}
+                cp build/${PLATFORM}/release/fip.bin fip_uefi.bin
+            fi
         fi
         rcwimg=""
         uefiboot=""

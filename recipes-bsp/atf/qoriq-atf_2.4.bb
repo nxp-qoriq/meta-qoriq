@@ -57,10 +57,8 @@ EXTRA_OEMAKE += "\
 "
 
 BOOTTYPE ?= "nor nand qspi flexspi_nor sd emmc"
-OTABOOTTYPE ?= "nor qspi flexspi_nor"
 BUILD_SECURE = "${@bb.utils.contains('DISTRO_FEATURES', 'secure', 'true', 'false', d)}"
 BUILD_FUSE = "${@bb.utils.contains('DISTRO_FEATURES', 'fuse', 'true', 'false', d)}"
-BUILD_OTA = "${@bb.utils.contains('DISTRO_FEATURES', 'ota', 'true', 'false', d)}"
 
 PACKAGECONFIG ??= " \
     ${@bb.utils.filter('COMBINED_FEATURES', 'optee', d)} \
@@ -106,19 +104,11 @@ do_compile() {
         bl33="${uboot_boot}"
     fi       
 
-
-    if [ "${BUILD_OTA}" = "true" ]; then
-        otaopt="POLICY_OTA=1"
-        btype="${OTABOOTTYPE}"
-    else
-        btype="${BOOTTYPE}"
-    fi
-
     if [ -f ${DEPLOY_DIR_IMAGE}/ddr-phy/ddr4_pmu_train_dmem.bin ]; then
         cp ${DEPLOY_DIR_IMAGE}/ddr-phy/*.bin ${S}/
     fi
 
-    for d in ${btype}; do
+    for d in ${BOOTTYPE}; do
         case $d in
         nor)
             rcwimg="${RCWNOR}${RCW_SUFFIX}"
@@ -151,7 +141,7 @@ do_compile() {
             
 	if [ -f "${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg}" ]; then
                 oe_runmake V=1 -C ${S} realclean
-                oe_runmake V=1 -C ${S} all fip pbl PLAT=${PLATFORM} BOOT_MODE=${d} RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${bl33} ${secureopt} ${fuseopt} ${otaopt}
+                oe_runmake V=1 -C ${S} all fip pbl PLAT=${PLATFORM} BOOT_MODE=${d} RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${bl33} ${secureopt} ${fuseopt}
                 cp -r ${S}/build/${PLATFORM}/release/bl2_${d}*.pbl ${S}
                 cp -r ${S}/build/${PLATFORM}/release/fip.bin ${S}
                 if [ "${BUILD_FUSE}" = "true" ]; then
@@ -160,7 +150,7 @@ do_compile() {
 
                 if [ -n "${PLATFORM_ADDITIONAL_TARGET}" ]; then
                     oe_runmake V=1 -C ${S} realclean
-                    oe_runmake V=1 -C ${S} all fip pbl PLAT=${PLATFORM_ADDITIONAL_TARGET} BOOT_MODE=${d} RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${bl33} ${secureopt} ${fuseopt} ${otaopt}
+                    oe_runmake V=1 -C ${S} all fip pbl PLAT=${PLATFORM_ADDITIONAL_TARGET} BOOT_MODE=${d} RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${bl33} ${secureopt} ${fuseopt}
                     cp -r ${S}/build/${PLATFORM_ADDITIONAL_TARGET}/release/bl2_qspi${secext}.pbl ${S}/bl2_${d}${secext}_${PLATFORM_ADDITIONAL_TARGET}.pbl
                     cp -r ${S}/build/${PLATFORM_ADDITIONAL_TARGET}/release/fip.bin ${S}/fip_${PLATFORM_ADDITIONAL_TARGET}.bin
                     if [ "${BUILD_FUSE}" = "true" ]; then
@@ -169,7 +159,7 @@ do_compile() {
                 fi
                 if [ -n "${uefiboot}" -a -f "${DEPLOY_DIR_IMAGE}/uefi/${PLATFORM}/${uefiboot}" ]; then
                     oe_runmake V=1 -C ${S} realclean
-                    oe_runmake V=1 -C ${S} all fip pbl PLAT=${PLATFORM} BOOT_MODE=${d} RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${DEPLOY_DIR_IMAGE}/uefi/${PLATFORM}/${uefiboot} ${secureopt} ${fuseopt} ${otaopt}
+                    oe_runmake V=1 -C ${S} all fip pbl PLAT=${PLATFORM} BOOT_MODE=${d} RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${DEPLOY_DIR_IMAGE}/uefi/${PLATFORM}/${uefiboot} ${secureopt} ${fuseopt}
                     cp -r ${S}/build/${PLATFORM}/release/fip.bin ${S}/fip_uefi.bin
                 fi
         fi

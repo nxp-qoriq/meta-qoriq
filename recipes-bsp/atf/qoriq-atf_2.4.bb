@@ -40,6 +40,10 @@ RCW_SUFFIX_ls1012a = "${@bb.utils.contains('DISTRO_FEATURES', 'secure', '_sben.b
 RCW_SUFFIX_ls1043a = "${@bb.utils.contains('DISTRO_FEATURES', 'secure', '_sben.bin', '.bin', d)}"
 RCW_SUFFIX_ls1046a = "${@bb.utils.contains('DISTRO_FEATURES', 'secure', '_sben.bin', '.bin', d)}"
 
+UBOOT_BINARY ?= "${@bb.utils.contains('DISTRO_FEATURES', 'secure', '${DEPLOY_DIR_IMAGE}/u-boot.bin-tfa-secure-boot', '${DEPLOY_DIR_IMAGE}/u-boot.bin-tfa', d)}"
+
+SECURE_EXTENTION ?= "${@bb.utils.contains('DISTRO_FEATURES', 'secure', '_sec', '', d)}"
+
 # requires CROSS_COMPILE set by hand as there is no configure script
 export CROSS_COMPILE="${TARGET_PREFIX}"
 export ARCH="arm64"
@@ -54,19 +58,16 @@ LD[unexport] = "1"
 EXTRA_OEMAKE += "HOSTCC='${BUILD_CC} ${BUILD_CPPFLAGS} ${BUILD_CFLAGS} ${BUILD_LDFLAGS}'"
 EXTRA_OEMAKE += "\
     ${@bb.utils.contains('COMBINED_FEATURES', 'optee', 'BL32=${RECIPE_SYSROOT}${nonarch_base_libdir}/firmware/tee_${MACHINE}.bin SPD=opteed', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'secure', 'TRUSTED_BOARD_BOOT=1 ${ddrphyopt} CST_DIR=${RECIPE_SYSROOT_NATIVE}/usr/bin/cst', '', d)} \
 "
 
 BOOTTYPE ?= "nor nand qspi flexspi_nor sd emmc"
-BUILD_SECURE = "${@bb.utils.contains('DISTRO_FEATURES', 'secure', 'true', 'false', d)}"
 BUILD_FUSE = "${@bb.utils.contains('DISTRO_FEATURES', 'fuse', 'true', 'false', d)}"
 
 PACKAGECONFIG ??= " \
     ${@bb.utils.filter('COMBINED_FEATURES', 'optee', d)} \
 "
 PACKAGECONFIG[optee] = ",,optee-os-qoriq"
-
-uboot_boot_sec ?= "${DEPLOY_DIR_IMAGE}/u-boot.bin-tfa-secure-boot"
-uboot_boot ?= "${DEPLOY_DIR_IMAGE}/u-boot.bin-tfa"
 
 chassistype ?= "ls2088_1088"
 chassistype_ls1012ardb = "ls104x_1012"
@@ -96,13 +97,6 @@ do_compile() {
        ${RECIPE_SYSROOT_NATIVE}/usr/bin/cst/gen_fusescr ${RECIPE_SYSROOT_NATIVE}/usr/bin/cst/input_files/gen_fusescr/${chassistype}/input_fuse_file
        fuseopt="fip_fuse FUSE_PROG=1 FUSE_PROV_FILE=fuse_scr.bin"
     fi
-    if [ "${BUILD_SECURE}" = "true" ]; then
-        secureopt="TRUSTED_BOARD_BOOT=1 ${ddrphyopt} CST_DIR=${RECIPE_SYSROOT_NATIVE}/usr/bin/cst"
-        secext="_sec"
-        bl33="${uboot_boot_sec}"
-    else
-        bl33="${uboot_boot}"
-    fi       
 
     if [ -f ${DEPLOY_DIR_IMAGE}/ddr-phy/ddr4_pmu_train_dmem.bin ]; then
         cp ${DEPLOY_DIR_IMAGE}/ddr-phy/*.bin ${S}/
@@ -120,7 +114,7 @@ do_compile() {
         qspi)
             rcwimg="${RCWQSPI}${RCW_SUFFIX}"
             uefiboot="${UEFI_QSPIBOOT}"
-            if [ "${BUILD_SECURE}" = "true" ] && [ ${MACHINE} = ls1046ardb ]; then
+            if [ -n "${SECURE_EXTENTION}" ] && [ "${MACHINE}" = ls1046ardb ]; then
                 rcwimg="RR_FFSSPPPH_1133_5559/rcw_1600_qspiboot_sben.bin"
             fi
             ;;
@@ -141,25 +135,25 @@ do_compile() {
             
 	if [ -f "${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg}" ]; then
                 oe_runmake V=1 -C ${S} realclean
-                oe_runmake V=1 -C ${S} all fip pbl PLAT=${PLATFORM} BOOT_MODE=${d} RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${bl33} ${secureopt} ${fuseopt}
-                cp -r ${S}/build/${PLATFORM}/release/bl2_${d}*.pbl ${S}
-                cp -r ${S}/build/${PLATFORM}/release/fip.bin ${S}
+                oe_runmake V=1 -C ${S} all fip pbl PLAT=${PLATFORM} BOOT_MODE=${d} RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${UBOOT_BINARY} ${fuseopt}
+                cp -r ${S}/build/${PLATFORM}/release/bl2_${d}${SECURE_EXTENTION}.pbl ${S}
+                cp -r ${S}/build/${PLATFORM}/release/fip.bin ${S}/fip_uboot${SECURE_EXTENTION}.bin
                 if [ "${BUILD_FUSE}" = "true" ]; then
                     cp -f ${S}/build/${PLATFORM}/release/fuse_fip.bin ${S}
                 fi
 
                 if [ -n "${PLATFORM_ADDITIONAL_TARGET}" ]; then
                     oe_runmake V=1 -C ${S} realclean
-                    oe_runmake V=1 -C ${S} all fip pbl PLAT=${PLATFORM_ADDITIONAL_TARGET} BOOT_MODE=${d} RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${bl33} ${secureopt} ${fuseopt}
-                    cp -r ${S}/build/${PLATFORM_ADDITIONAL_TARGET}/release/bl2_qspi${secext}.pbl ${S}/bl2_${d}${secext}_${PLATFORM_ADDITIONAL_TARGET}.pbl
-                    cp -r ${S}/build/${PLATFORM_ADDITIONAL_TARGET}/release/fip.bin ${S}/fip_${PLATFORM_ADDITIONAL_TARGET}.bin
+                    oe_runmake V=1 -C ${S} all fip pbl PLAT=${PLATFORM_ADDITIONAL_TARGET} BOOT_MODE=${d} RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${UBOOT_BINARY} ${fuseopt}
+                    cp -r ${S}/build/${PLATFORM_ADDITIONAL_TARGET}/release/bl2_${d}${SECURE_EXTENTION}.pbl ${S}/bl2_${d}${SECURE_EXTENTION}_${PLATFORM_ADDITIONAL_TARGET}.pbl
+                    cp -r ${S}/build/${PLATFORM_ADDITIONAL_TARGET}/release/fip.bin ${S}/fip_uboot${SECURE_EXTENTION}_${PLATFORM_ADDITIONAL_TARGET}.bin
                     if [ "${BUILD_FUSE}" = "true" ]; then
                         cp -r ${S}/build/${PLATFORM_ADDITIONAL_TARGET}/release/fuse_fip.bin ${S}/fuse_fip_${PLATFORM_ADDITIONAL_TARGET}.bin
                     fi
                 fi
                 if [ -n "${uefiboot}" -a -f "${DEPLOY_DIR_IMAGE}/uefi/${PLATFORM}/${uefiboot}" ]; then
                     oe_runmake V=1 -C ${S} realclean
-                    oe_runmake V=1 -C ${S} all fip pbl PLAT=${PLATFORM} BOOT_MODE=${d} RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${DEPLOY_DIR_IMAGE}/uefi/${PLATFORM}/${uefiboot} ${secureopt} ${fuseopt}
+                    oe_runmake V=1 -C ${S} all fip pbl PLAT=${PLATFORM} BOOT_MODE=${d} RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${DEPLOY_DIR_IMAGE}/uefi/${PLATFORM}/${uefiboot} ${fuseopt}
                     cp -r ${S}/build/${PLATFORM}/release/fip.bin ${S}/fip_uefi.bin
                 fi
         fi
@@ -169,71 +163,19 @@ do_compile() {
 }
 
 do_install() {
-    install -d ${D}/boot/atf
-    cp -r ${S}/srk.pri ${D}/boot/atf
-    cp -r ${S}/srk.pub ${D}/boot/atf
-    if [ "${BUILD_SECURE}" = "true" ]; then
-        secext="_sec"
-    fi
-    if [ -f "${S}/fip_uefi.bin" ]; then
-        cp -r ${S}/fip_uefi.bin ${D}/boot/atf/fip_uefi.bin
-    fi
-    if [ -f "${S}/fuse_fip.bin" ]; then
-        cp -r ${S}/fuse_fip.bin ${D}/boot/atf/fuse_fip.bin
-    fi
-    if [ -f "${S}/fip.bin" ]; then
-        cp -r ${S}/fip.bin ${D}/boot/atf/fip.bin
-    fi
-    for d in ${BOOTTYPE}; do
-        if [ -e  ${S}/bl2_${d}${secext}.pbl ]; then
-            cp -r ${S}/bl2_${d}${secext}.pbl ${D}/boot/atf/bl2_${d}${secext}.pbl
-        fi
-    done
-    if [ -n "${PLATFORM_ADDITIONAL_TARGET}" ]; then
-            cp -r ${S}/fip_${PLATFORM_ADDITIONAL_TARGET}.bin ${D}/boot/atf/fip_${PLATFORM_ADDITIONAL_TARGET}.bin
-            cp -r ${S}/bl2_qspi${secext}_${PLATFORM_ADDITIONAL_TARGET}.pbl ${D}/boot/atf/bl2_qspi${secext}_${PLATFORM_ADDITIONAL_TARGET}.pbl
-            if [ -f "${S}/fuse_fip_${PLATFORM_ADDITIONAL_TARGET}.bin" ]; then
-                cp -r ${S}/fuse_fip_${PLATFORM_ADDITIONAL_TARGET}.bin ${D}/boot/atf/fuse_fip_${PLATFORM_ADDITIONAL_TARGET}.bin
-            fi
-    fi
+    install -d ${D}/boot/atf/
+    cp srk.pri ${D}/boot/atf/
+    cp srk.pub ${D}/boot/atf/
+    cp *.pbl ${D}/boot/atf/
+    cp *.bin ${D}/boot/atf/
     chown -R root:root ${D}
-    if [ -f "${S}/fip_ddr_sec.bin" ]; then
-        cp -r ${S}/fip_ddr_sec.bin ${D}/boot/atf/fip_ddr_sec.bin
-    fi
 }
 
 do_deploy() {
-    install -d ${DEPLOYDIR}/atf
-    cp -r ${D}/boot/atf/srk.pri ${DEPLOYDIR}/atf
-    cp -r  ${D}/boot/atf/srk.pub ${DEPLOYDIR}/atf
-    if [ "${BUILD_SECURE}" = "true" ]; then
-        secext="_sec"
-    fi
-        
-    if [ -f "${S}/fuse_fip.bin" ]; then
-        cp -r ${D}/boot/atf/fuse_fip.bin ${DEPLOYDIR}/atf/fuse_fip${secext}.bin
-    fi
-
-    if [ -e ${D}/boot/atf/fip_uefi.bin ]; then
-        cp -r ${D}/boot/atf/fip_uefi.bin ${DEPLOYDIR}/atf/fip_uefi.bin
-    fi
-    cp -r ${D}/boot/atf/fip.bin ${DEPLOYDIR}/atf/fip_uboot${secext}.bin
-    for d in ${BOOTTYPE}; do
-        if [ -e ${D}/boot/atf/bl2_${d}${secext}.pbl ]; then
-            cp -r ${D}/boot/atf/bl2_${d}${secext}.pbl ${DEPLOYDIR}/atf/bl2_${d}${secext}.pbl
-        fi
-    done
-    if [ -n "${PLATFORM_ADDITIONAL_TARGET}" ]; then
-        cp -r ${S}/bl2_qspi${secext}_${PLATFORM_ADDITIONAL_TARGET}.pbl ${DEPLOYDIR}/atf/
-        cp -r ${S}/fip_${PLATFORM_ADDITIONAL_TARGET}.bin ${DEPLOYDIR}/atf/fip_uboot${secext}_${PLATFORM_ADDITIONAL_TARGET}.bin
-        if [ -f "${S}/fuse_fip_${PLATFORM_ADDITIONAL_TARGET}.bin" ]; then
-                cp -r ${S}/fuse_fip_${PLATFORM_ADDITIONAL_TARGET}.bin ${D}/boot/atf/fuse_fip_${PLATFORM_ADDITIONAL_TARGET}${secext}.bin
-        fi
-    fi
-    if [ -f "${S}/fip_ddr_sec.bin" ]; then
-        cp -r ${D}/boot/atf/fip_ddr_sec.bin ${DEPLOYDIR}/atf/fip_ddr_sec.bin
-    fi
+    install -d ${DEPLOYDIR}/atf/
+    cp ${D}/boot/atf/* ${DEPLOYDIR}/atf/
 }
 addtask deploy after do_install
+
 FILES_${PN} += "/boot"
 BBCLASSEXTEND = "native nativesdk"

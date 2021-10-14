@@ -28,7 +28,6 @@ RDEPENDS:${PN} = " \
     ifenslave \
     kmod \
     kernel-modules \
-    libhugetlbfs \
     lmsensors-sensors \
     memtester \
     minicom \

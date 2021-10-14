@@ -10,7 +10,7 @@ LICENSE = "MIT"
 # copy the manifest and the license text for each package to image
 COPY_LIC_MANIFEST = "1"
 
-IMAGE_INSTALL_append = " \
+IMAGE_INSTALL:append = " \
     packagegroup-core-buildessential \
     packagegroup-core-tools-profile \
     packagegroup-core-eclipse-debug \
@@ -27,13 +27,13 @@ IMAGE_INSTALL_append = " \
     openssl-engines \
 "
 
-IMAGE_FSTYPES_qoriq = "tar.gz ext2.gz.u-boot ext2.gz"
+IMAGE_FSTYPES:qoriq = "tar.gz ext2.gz.u-boot ext2.gz"
 
 inherit fsl-utils
 ROOTFS_POSTPROCESS_COMMAND += "rootfs_copy_core_image;"
 do_image_complete[depends] += "fsl-image-networking:do_image_complete"
 
-IMAGE_INSTALL_append_ls1012a = " \
+IMAGE_INSTALL:append:ls1012a = " \
     packagegroup-fsl-multimedia-gstreamer1.0-core \
     dpdk \
 "

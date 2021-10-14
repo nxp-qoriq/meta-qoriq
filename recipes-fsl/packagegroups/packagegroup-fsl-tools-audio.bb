@@ -31,7 +31,7 @@ ALSA_INSTALL = "${@bb.utils.contains('DISTRO_FEATURES', 'alsa',  \
      alsa-tools', \
     '', d)}"
 
-RDEPENDS_${PN} = " \
+RDEPENDS:${PN} = " \
     ${ALSA_INSTALL} \
     ${PULSEAUDIO_INSTALL} \
 "

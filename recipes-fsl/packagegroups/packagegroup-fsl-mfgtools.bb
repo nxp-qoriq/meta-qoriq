@@ -10,7 +10,7 @@ inherit packagegroup
 
 PACKAGES = "${PN}"
 
-RDEPENDS_${PN} = " \
+RDEPENDS:${PN} = " \
     packagegroup-core-boot \
     bash \
     util-linux \
@@ -22,7 +22,7 @@ RDEPENDS_${PN} = " \
     hdparm \
 "
 
-RDEPENDS_${PN}_append_e500v2 = " \
+RDEPENDS:${PN}:append:e500v2 = " \
     boot-format \
     boot-format-config \
 "

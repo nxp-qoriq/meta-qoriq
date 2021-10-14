@@ -21,7 +21,7 @@ PLATFORM_FLAVOR ?= "${MACHINE}"
 
 OPTEE_ARCH ?= "arm64"
 OPTEE_ARCH_armv7a = "arm32"
-OPTEE_ARCH_aarch64 = "arm64"
+OPTEE_ARCH:aarch64 = "arm64"
 
 OPTEE_CORE_LOG_LEVEL ?= "1"
 OPTEE_TA_LOG_LEVEL ?= "0"
@@ -70,9 +70,9 @@ do_deploy() {
 }
 addtask deploy before do_build after do_install
 
-FILES_${PN} = "${nonarch_base_libdir}/firmware/ ${nonarch_base_libdir}/optee_armtz/"
-FILES_${PN}-staticdev = "/usr/include/optee/"
-RDEPENDS_${PN}-dev += "${PN}-staticdev"
+FILES:${PN} = "${nonarch_base_libdir}/firmware/ ${nonarch_base_libdir}/optee_armtz/"
+FILES:${PN}-staticdev = "/usr/include/optee/"
+RDEPENDS:${PN}-dev += "${PN}-staticdev"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 

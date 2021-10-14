@@ -20,7 +20,7 @@ inherit meson
 MESON_BUILDTYPE = "release"
 EXTRA_OEMESON += '-Dc_args="-DRTE_FORCE_INTRINSICS"'
 
-do_configure_prepend() {
+do_configure:prepend() {
     sed -i "/^add_project_arguments('-march=native'/s/^/#&/" ${S}/meson.build
 }
 
@@ -30,7 +30,7 @@ do_install() {
         install -m 0644 ${S}/Pktgen.lua ${D}${bindir}/
 }
 
-INSANE_SKIP_${PN} = "ldflags"
+INSANE_SKIP:${PN} = "ldflags"
 INHIBIT_PACKAGE_STRIP = "1"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 PARALLEL_MAKE = ""

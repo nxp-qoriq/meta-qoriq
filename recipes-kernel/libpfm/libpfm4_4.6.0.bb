@@ -24,8 +24,8 @@ SRC_URI[sha256sum] = "5ab1e5b0472550f9037a8800834f6bc3b927690070f69fac0b67284b4b
 UPSTREAM_CHECK_URI = "http://sourceforge.net/projects/perfmon2/files/libpfm4/"
 
 EXTRA_OEMAKE = "DESTDIR=\"${D}\" PREFIX=\"${prefix}\" LIBDIR=\"${libdir}\" LDCONFIG=\"true\""
-EXTRA_OEMAKE_append_powerpc = " ARCH=\"powerpc\""
-EXTRA_OEMAKE_append_powerpc64 = " ARCH=\"powerpc\" BITMODE=\"64\""
+EXTRA_OEMAKE:append:powerpc = " ARCH=\"powerpc\""
+EXTRA_OEMAKE:append:powerpc64 = " ARCH=\"powerpc\" BITMODE=\"64\""
 
 S = "${WORKDIR}/libpfm-${PV}"
 

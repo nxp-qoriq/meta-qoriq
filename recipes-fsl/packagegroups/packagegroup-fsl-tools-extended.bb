@@ -14,7 +14,7 @@ X11_TOOLS = "${@bb.utils.contains('DISTRO_FEATURES', 'x11', \
     ' lsb-release ', '', d)} \
 "
 
-RDEPENDS_${PN} = "\
+RDEPENDS:${PN} = "\
     apt \
     bc \
     can-utils \
@@ -59,9 +59,9 @@ RDEPENDS_${PN} = "\
 # extra packages for QorIQ targets
 EXTRA_TOOLS ?= ""
 EXTRA_TOOLS_p1022ds = " packagegroup-fsl-graphics-minimal"
-EXTRA_TOOLS_t4240 = " cairo-dev"
+EXTRA_TOOLS:t4240 = " cairo-dev"
 
-RDEPENDS_${PN}_append_qoriq = "\
+RDEPENDS:${PN}:append:qoriq = "\
     kernel-image \
     ${@multilib_pkg_extend(d, "binutils")} \
     ${@multilib_pkg_extend(d, "cpp")} \
@@ -75,7 +75,7 @@ RDEPENDS_${PN}_append_qoriq = "\
     ${EXTRA_TOOLS} \
 "
 
-RDEPENDS_${PN}_append_qoriq-arm64 = "\ 
+RDEPENDS:${PN}:append:qoriq-arm64 = "\ 
     dpdk-examples \
     ovs-dpdk \
     libpkcs11 \
@@ -83,10 +83,10 @@ RDEPENDS_${PN}_append_qoriq-arm64 = "\
     secure-obj \
     secure-obj-module \
 "
-RDEPENDS_${PN}_append_qoriq-ppc = "\
+RDEPENDS:${PN}:append:qoriq-ppc = "\
     ${@multilib_pkg_extend(d, "valgrind")} \
 "
-RDEPENDS_${PN}_append_ls1012a = "\
+RDEPENDS:${PN}:append:ls1012a = "\
     ceetm \
     dce \
     dpdk \
@@ -99,7 +99,7 @@ RDEPENDS_${PN}_append_ls1012a = "\
     spc \
     tsntool \
 "
-RDEPENDS_${PN}_append_ls1046a = "\
+RDEPENDS:${PN}:append:ls1046a = "\
     kernel-module-nxp89xx \
     linux-firmware-nxp89xx \
     nxp-wlan-sdk \

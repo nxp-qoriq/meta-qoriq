@@ -1,1 +1,1 @@
-FILESEXTRAPATHS_prepend_qoriq := "${THISDIR}/${PN}:"
+FILESEXTRAPATHS:prepend:qoriq := "${THISDIR}/${PN}:"

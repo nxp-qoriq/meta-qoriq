@@ -6,11 +6,11 @@ LIC_FILES_CHKSUM = "file://license.rst;md5=1dd070c98a281d18d9eefd938729b031"
 inherit deploy
 
 DEPENDS += "u-boot-mkimage-native u-boot openssl openssl-native mbedtls rcw cst-native bc-native"
-DEPENDS_append_lx2160a += "ddr-phy"
-DEPENDS_append_lx2162a += "ddr-phy"
+DEPENDS:append:lx2160a += "ddr-phy"
+DEPENDS:append:lx2162a += "ddr-phy"
 do_compile[depends] += "u-boot:do_deploy rcw:do_deploy uefi:do_deploy"
 
-PV_append = "+${SRCPV}"
+PV:append = "+${SRCPV}"
 
 ATF_BRANCH ?= "lf_v2.4"
 ATF_SRC ?= "git://bitbucket.sw.nxp.com/lfac/atf-nxp.git;protocol=ssh"
@@ -28,19 +28,19 @@ COMPATIBLE_MACHINE = "(qoriq)"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 PLATFORM = "${MACHINE}"
-PLATFORM_ls1088ardb-pb = "ls1088ardb"
-PLATFORM_lx2160ardb-rev2 = "lx2160ardb"
+PLATFORM:ls1088ardb-pb = "ls1088ardb"
+PLATFORM:lx2160ardb-rev2 = "lx2160ardb"
 PLATFORM_ADDITIONAL_TARGET ??= ""
-PLATFORM_ADDITIONAL_TARGET_ls1012afrwy = "ls1012afrwy_512mb"
+PLATFORM_ADDITIONAL_TARGET:ls1012afrwy = "ls1012afrwy_512mb"
 
 RCW_FOLDER ?= "${MACHINE}"
-RCW_FOLDER_ls1088ardb-pb = "ls1088ardb"
-RCW_FOLDER_lx2160ardb-rev2 = "lx2160ardb_rev2"
+RCW_FOLDER:ls1088ardb-pb = "ls1088ardb"
+RCW_FOLDER:lx2160ardb-rev2 = "lx2160ardb_rev2"
 
 RCW_SUFFIX ?= ".bin"
-RCW_SUFFIX_ls1012a = "${@bb.utils.contains('DISTRO_FEATURES', 'secure', '_sben.bin', '_default.bin', d)}"
-RCW_SUFFIX_ls1043a = "${@bb.utils.contains('DISTRO_FEATURES', 'secure', '_sben.bin', '.bin', d)}"
-RCW_SUFFIX_ls1046a = "${@bb.utils.contains('DISTRO_FEATURES', 'secure', '_sben.bin', '.bin', d)}"
+RCW_SUFFIX:ls1012a = "${@bb.utils.contains('DISTRO_FEATURES', 'secure', '_sben.bin', '_default.bin', d)}"
+RCW_SUFFIX:ls1043a = "${@bb.utils.contains('DISTRO_FEATURES', 'secure', '_sben.bin', '.bin', d)}"
+RCW_SUFFIX:ls1046a = "${@bb.utils.contains('DISTRO_FEATURES', 'secure', '_sben.bin', '.bin', d)}"
 
 UBOOT_BINARY ?= "${@bb.utils.contains('DISTRO_FEATURES', 'secure', '${DEPLOY_DIR_IMAGE}/u-boot.bin-tfa-secure-boot', '${DEPLOY_DIR_IMAGE}/u-boot.bin-tfa', d)}"
 
@@ -49,13 +49,13 @@ SECURE_EXTENTION ?= "${@bb.utils.contains('DISTRO_FEATURES', 'secure', '_sec', '
 BOOTTYPE ?= "nor nand qspi flexspi_nor sd emmc"
 
 chassistype ?= "ls2088_1088"
-chassistype_ls1012a = "ls104x_1012"
-chassistype_ls1043a = "ls104x_1012"
-chassistype_ls1046a = "ls104x_1012"
+chassistype:ls1012a = "ls104x_1012"
+chassistype:ls1043a = "ls104x_1012"
+chassistype:ls1046a = "ls104x_1012"
 
 DDR_PHY_BIN_PATH ?= ""
-DDR_PHY_BIN_PATH_lx2160a = "${DEPLOY_DIR_IMAGE}/ddr-phy"
-DDR_PHY_BIN_PATH_lx2162a = "${DEPLOY_DIR_IMAGE}/ddr-phy"
+DDR_PHY_BIN_PATH:lx2160a = "${DEPLOY_DIR_IMAGE}/ddr-phy"
+DDR_PHY_BIN_PATH:lx2162a = "${DEPLOY_DIR_IMAGE}/ddr-phy"
 
 # requires CROSS_COMPILE set by hand as there is no configure script
 export CROSS_COMPILE="${TARGET_PREFIX}"
@@ -195,5 +195,5 @@ do_deploy() {
 }
 addtask deploy after do_install
 
-FILES_${PN} += "/boot"
+FILES:${PN} += "/boot"
 BBCLASSEXTEND = "native nativesdk"

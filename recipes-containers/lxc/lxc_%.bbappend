@@ -1,1 +1,1 @@
-PACKAGECONFIG_append = " seccomp"
+PACKAGECONFIG:append = " seccomp"

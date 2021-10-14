@@ -1,15 +1,15 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/${BPN}:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/${BPN}:"
 
-BUSYBOX_SPLIT_SUID_qoriq = "0"
+BUSYBOX_SPLIT_SUID:qoriq = "0"
 ALTERNATIVE_PRIORITY[init] = "40"
 
-SRC_URI_append_qoriq = " file://defconfig-fsl"
+SRC_URI:append:qoriq = " file://defconfig-fsl"
 
-do_configure_prepend_qoriq () {
+do_configure:prepend:qoriq () {
     cp ${WORKDIR}/defconfig-fsl ${WORKDIR}/defconfig
 }
 
-do_install_append_qoriq () {
+do_install:append:qoriq () {
     rm -f ${D}${sysconfdir}/init.d/rcS
     rm -f ${D}${sysconfdir}/init.d/rcK
     rm -f ${D}${sysconfdir}/inittab

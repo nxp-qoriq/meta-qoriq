@@ -9,7 +9,7 @@ a USB stick or a hard drive."
 
 LICENSE = "MIT"
 
-IMAGE_INSTALL_append = " \
+IMAGE_INSTALL:append = " \
     packagegroup-core-ssh-dropbear \
     packagegroup-fsl-mfgtools \
     udev-extraconf \
@@ -21,7 +21,7 @@ IMAGE_INSTALL_append = " \
     sudo \ 
     curl \
 "
-IMAGE_INSTALL_remove_ls1021atwr = "restool"
+IMAGE_INSTALL:remove:ls1021atwr = "restool"
 
 export IMAGE_BASENAME = "fsl-image-mfgtool"
 

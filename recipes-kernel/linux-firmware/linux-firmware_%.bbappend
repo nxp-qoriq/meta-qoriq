@@ -1,6 +1,6 @@
 # Copyright 2017-2021 NXP
 
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 IMX_FIRMWARE_SRC ?= "git://github.com/NXP/imx-firmware.git;protocol=https"
 SRCBRANCH = "lf-5.10.52_2.1.0"
@@ -12,7 +12,7 @@ SRCREV_imx-firmware = "6d7f77b83164b08334806c4aa2034bc1f7da7b7d"
 
 SRCREV_FORMAT = "default_imx-firmware"
 
-do_install_append () {
+do_install:append () {
 
     # Install NXP Connectivity
     install -d ${D}${nonarch_base_libdir}/firmware/nxp
@@ -45,6 +45,6 @@ do_install_append () {
 # Use the latest version of sdma firmware in firmware-imx
 PACKAGES =+ " ${PN}-nxp89xx"
 
-FILES_${PN}-nxp89xx = " \
+FILES:${PN}-nxp89xx = " \
        ${nonarch_base_libdir}/firmware/nxp/* \
 "

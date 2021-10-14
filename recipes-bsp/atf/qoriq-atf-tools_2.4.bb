@@ -4,7 +4,7 @@ LIC_FILES_CHKSUM = "file://license.rst;md5=1dd070c98a281d18d9eefd938729b031"
 
 DEPENDS += "openssl"
 
-PV_append = "+${SRCPV}"
+PV:append = "+${SRCPV}"
 
 ATF_BRANCH ?= "lf_v2.4"
 ATF_SRC ?= "git://bitbucket.sw.nxp.com/lfac/atf-nxp.git;protocol=ssh"

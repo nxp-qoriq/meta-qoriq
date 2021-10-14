@@ -10,7 +10,7 @@ inherit packagegroup
 
 PACKAGES = "${PN} ${PN}-server"
 
-RDEPENDS_${PN} = " \
+RDEPENDS:${PN} = " \
     attr \
     bridge-utils \
     ethtool \
@@ -35,19 +35,19 @@ RDEPENDS_${PN} = " \
     vlan \
 "
 
-RDEPENDS_${PN}-server = " \
+RDEPENDS:${PN}-server = " \
     inetutils-inetd \
     inetutils-rshd \
     inetutils-telnetd \
 "
 
-RDEPENDS_${PN}_append_qoriq = "\
+RDEPENDS:${PN}:append:qoriq = "\
     packagegroup-fsl-networking-core-server \
 "
 
-RDEPENDS_${PN}_remove_ls1012a = "inetutils-tftp"
-RDEPENDS_${PN}-server_remove_ls1012a = "inetutils-tftpd"
-RDEPENDS_${PN}_append_ls2088a = " \
+RDEPENDS:${PN}:remove:ls1012a = "inetutils-tftp"
+RDEPENDS:${PN}-server:remove:ls1012a = "inetutils-tftpd"
+RDEPENDS:${PN}:append:ls2088a = " \
     netcat \
 "
-RDEPENDS_${PN}_append_ls1088a = "vsftpd"
+RDEPENDS:${PN}:append:ls1088a = "vsftpd"

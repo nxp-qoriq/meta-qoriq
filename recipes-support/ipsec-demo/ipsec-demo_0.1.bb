@@ -2,7 +2,7 @@ SUMMARY = "Scripts and configuration files for ipsec demo"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
-RDEPENDS_${PN} = "ipsec-tools bash"
+RDEPENDS:${PN} = "ipsec-tools bash"
 
 inherit allarch
 
@@ -19,7 +19,7 @@ do_install(){
     chown -R root:root ${D}${datadir}/test_setkey
 }
 
-FILES_${PN} = "${datadir}/*"
+FILES:${PN} = "${datadir}/*"
 
 COMPATIBLE_MACHINE = "(qoriq)"
 PACKAGE_ARCH = "${MACHINE_SOCARCH}"

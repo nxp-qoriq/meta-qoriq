@@ -1,4 +1,4 @@
-do_install_append_qoriq () {
+do_install:append:qoriq () {
 	echo 'BOOTLOGD_ENABLE=no' >>${D}${sysconfdir}/default/bootlogd
 }
 

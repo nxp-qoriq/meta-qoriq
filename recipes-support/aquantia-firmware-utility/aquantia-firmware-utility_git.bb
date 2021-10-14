@@ -7,7 +7,7 @@ SRCREV = "c21c209cb22a8ab55864e5cab7a94d4b2b8d1f6c"
 
 S = "${WORKDIR}/git"
 
-do_compile_prepend() {
+do_compile:prepend() {
 	sed -i 's,$(CROSS_COMPILE)gcc,$(CC),g' Makefile
 }
 
@@ -16,4 +16,4 @@ do_install () {
 	install -m0755 aq-firmware-tool ${D}${bindir}
 }
 
-INSANE_SKIP_${PN} = "ldflags"
+INSANE_SKIP:${PN} = "ldflags"

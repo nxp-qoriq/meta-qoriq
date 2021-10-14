@@ -1,5 +1,5 @@
-FILESEXTRAPATHS_prepend_qoriq := "${THISDIR}/${PN}:"
+FILESEXTRAPATHS:prepend:qoriq := "${THISDIR}/${PN}:"
 
-DEPENDS_append = " readline"
+DEPENDS:append = " readline"
 
 PACKAGECONFIG ??= "openssl"

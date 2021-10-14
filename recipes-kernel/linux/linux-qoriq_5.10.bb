@@ -13,12 +13,12 @@ SRCREV = "${AUTOREV}"
 
 S = "${WORKDIR}/git"
 
-DEPENDS_append = " libgcc"
+DEPENDS:append = " libgcc"
 # not put Images into /boot of rootfs, install kernel-image if needed
-RDEPENDS_${KERNEL_PACKAGE_NAME}-base = ""
+RDEPENDS:${KERNEL_PACKAGE_NAME}-base = ""
 
-KERNEL_CC_append = " ${TOOLCHAIN_OPTIONS}"
-KERNEL_LD_append = " ${TOOLCHAIN_OPTIONS}"
+KERNEL_CC:append = " ${TOOLCHAIN_OPTIONS}"
+KERNEL_LD:append = " ${TOOLCHAIN_OPTIONS}"
 KERNEL_EXTRA_ARGS += "LOADADDR=${UBOOT_ENTRYPOINT}"
 
 ZIMAGE_BASE_NAME = "zImage-${PKGE}-${PKGV}-${PKGR}-${MACHINE}-${DATETIME}"
@@ -31,8 +31,8 @@ PV = "${LINUX_VERSION}+git${SRCPV}"
 SCMVERSION ?= "y"
 LOCALVERSION = ""
 DELTA_KERNEL_DEFCONFIG ?= ""
-DELTA_KERNEL_DEFCONFIG_prepend_qoriq-arm64 = "lsdk.config "
-DELTA_KERNEL_DEFCONFIG_prepend_qoriq-arm = "multi_v7_lpae.config lsdk.config "
+DELTA_KERNEL_DEFCONFIG:prepend:qoriq-arm64 = "lsdk.config "
+DELTA_KERNEL_DEFCONFIG:prepend:qoriq-arm = "multi_v7_lpae.config lsdk.config "
 
 do_merge_delta_config[depends] += "virtual/${TARGET_PREFIX}gcc:do_populate_sysroot bison-native:do_populate_sysroot"
 do_merge_delta_config[dirs] = "${B}"
@@ -61,5 +61,5 @@ do_merge_delta_config() {
 }
 addtask merge_delta_config before do_kernel_localversion after do_patch
 
-FILES_${KERNEL_PACKAGE_NAME}-image += "/boot/zImage*"
+FILES:${KERNEL_PACKAGE_NAME}-image += "/boot/zImage*"
 COMPATIBLE_MACHINE = "(qoriq)"

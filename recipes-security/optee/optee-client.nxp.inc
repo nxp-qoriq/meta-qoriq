@@ -12,7 +12,7 @@ OPTEE_CLIENT_SRC ?= "git://bitbucket.sw.nxp.com/lfac/optee-client.git;protocol=s
 SRC_URI = "${OPTEE_CLIENT_SRC};branch=${OPTEE_CLIENT_BRANCH}"
 SRCREV = "${AUTOREV}"
 
-FILESEXTRAPATHS_prepend := "${THISDIR}/optee-client:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/optee-client:"
 SRC_URI += "file://tee-supplicant.service"
 
 S = "${WORKDIR}/git"
@@ -20,7 +20,7 @@ B = "${WORKDIR}/build"
 
 OPTEE_ARCH ?= "arm32"
 OPTEE_ARCH_armv7a = "arm32"
-OPTEE_ARCH_aarch64 = "arm64"
+OPTEE_ARCH:aarch64 = "arm64"
 
 EXTRA_OEMAKE = "ARCH=${OPTEE_ARCH} O=${B}"
 
@@ -47,9 +47,9 @@ do_install () {
 	sed -i -e s:/etc:${sysconfdir}:g -e s:/usr/bin:${bindir}:g ${D}${systemd_system_unitdir}/tee-supplicant.service
 }
 
-SYSTEMD_SERVICE_${PN} = "tee-supplicant.service"
+SYSTEMD_SERVICE:${PN} = "tee-supplicant.service"
 
-FILES_${PN} += "${libdir}/* ${includedir}/*"
+FILES:${PN} += "${libdir}/* ${includedir}/*"
 
-INSANE_SKIP_${PN} = "ldflags dev-elf"
-INSANE_SKIP_${PN}-dev = "ldflags dev-elf"
+INSANE_SKIP:${PN} = "ldflags dev-elf"
+INSANE_SKIP:${PN}-dev = "ldflags dev-elf"

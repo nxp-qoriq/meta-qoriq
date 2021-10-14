@@ -55,7 +55,7 @@ do_install() {
 	done
 }
 
-FILES_${PN} += "${nonarch_base_libdir} ${libdir}/tee-supplicant/plugins/"
+FILES:${PN} += "${nonarch_base_libdir} ${libdir}/tee-supplicant/plugins/"
 
 DEBUG_OPTIMIZATION:append = " -Wno-error=maybe-uninitialized"
 FULL_OPTIMIZATION:append = " -Wno-error=maybe-uninitialized"

@@ -19,22 +19,22 @@ PACKAGECONFIG[afxdp] = ",,libbpf"
 PACKAGECONFIG[libvirt] = ",,libvirt"
 PACKAGECONFIG[openssl] = ",,openssl"
 
-RDEPENDS_${PN} += "bash pciutils python3-core"
-RDEPENDS_${PN}-examples += "bash"
+RDEPENDS:${PN} += "bash pciutils python3-core"
+RDEPENDS:${PN}-examples += "bash"
 DEPENDS = "numactl"
 
 inherit meson
 
 INSTALL_PATH = "${prefix}/share/dpdk"
 
-do_configure_prepend() {
+do_configure:prepend() {
     sed -i "/implementor_/d" ${WORKDIR}/meson.cross
     sed -i "/\[properties]/aimplementor_id = 'dpaa'" ${WORKDIR}/meson.cross
     sed -i "/\[properties]/aimplementor_pn = 'default'" ${WORKDIR}/meson.cross
     sed -i "s/cpu =.*/cpu = 'armv8-a'/" ${WORKDIR}/meson.cross
 }
 
-do_install_append(){
+do_install:append(){
     # remove source files
     rm -rf ${D}/${INSTALL_PATH}/examples/*
 
@@ -51,7 +51,7 @@ do_install_append(){
 
 PACKAGES =+ "${PN}-tools ${PN}-examples ${PN}-misc"
 
-FILES_${PN}-tools = " \
+FILES:${PN}-tools = " \
     ${bindir}/dpdk-testpmd \
     ${INSTALL_PATH}/examples/dpdk-l2fwd \
     ${INSTALL_PATH}/examples/dpdk-l2fwd-crypto \
@@ -59,7 +59,7 @@ FILES_${PN}-tools = " \
     ${INSTALL_PATH}/examples/dpdk-ipsec-secgw \
 "
 
-FILES_${PN}-examples = " \
+FILES:${PN}-examples = " \
     ${bindir}/dpdk-proc-info \
     ${bindir}/dpdk-test \
     ${bindir}/dpdk-test-crypto-perf \
@@ -83,11 +83,11 @@ FILES_${PN}-examples = " \
     ${INSTALL_PATH}/examples/dpdk-timer \
 "
 
-FILES_${PN}-misc = " \
+FILES:${PN}-misc = " \
     ${bindir}/dpdk-pdump \
     ${bindir}/dpdk-test-* \
     ${bindir}/dpdk-*.py \
     ${INSTALL_PATH}/examples/* \
 "
 
-INSANE_SKIP_${PN} = "dev-so"
+INSANE_SKIP:${PN} = "dev-so"

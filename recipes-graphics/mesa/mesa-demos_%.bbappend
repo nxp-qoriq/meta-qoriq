@@ -1,26 +1,26 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
 
-SRC_URI_append_ls1028a = " file://Replace-glWindowPos2iARB-calls-with-glWindowPos2i.patch \
+SRC_URI:append:ls1028a = " file://Replace-glWindowPos2iARB-calls-with-glWindowPos2i.patch \
                     file://fix-clear-build-break.patch \
                     file://Add-OpenVG-demos-to-support-wayland.patch"
 
 PACKAGECONFIG_REMOVE_IF_2D_ONLY          = ""
-PACKAGECONFIG_REMOVE_IF_2D_ONLY_imxgpu2d = "gles1 gles2"
-PACKAGECONFIG_REMOVE_IF_2D_ONLY_ls1028a = ""
+PACKAGECONFIG_REMOVE_IF_2D_ONLY:imxgpu2d = "gles1 gles2"
+PACKAGECONFIG_REMOVE_IF_2D_ONLY:ls1028a = ""
 PACKAGECONFIG_REMOVE_IF_GPU              = ""
-PACKAGECONFIG_REMOVE_IF_GPU_ls1028a       = " \
+PACKAGECONFIG_REMOVE_IF_GPU:ls1028a       = " \
     ${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'glu x11', '', d)} \
 "
-PACKAGECONFIG_remove = " \
+PACKAGECONFIG:remove = " \
     ${PACKAGECONFIG_REMOVE_IF_2D_ONLY} \
     ${PACKAGECONFIG_REMOVE_IF_GPU} \
 "
 
 PACKAGECONFIG_APPEND_IF_GPU        = ""
-PACKAGECONFIG_APPEND_IF_GPU_ls1028a = " \
+PACKAGECONFIG_APPEND_IF_GPU:ls1028a = " \
     ${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'wayland vg', '', d)} \
     ${@bb.utils.contains('DISTRO_FEATURES',     'x11',       'glut', '', d)} \
 "
-PACKAGECONFIG_append = " \
+PACKAGECONFIG:append = " \
     ${PACKAGECONFIG_APPEND_IF_GPU} \
 "

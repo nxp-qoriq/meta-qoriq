@@ -14,6 +14,6 @@ XSERVER ?= ""
 X11_PACKAGES = "${@bb.utils.contains('DISTRO_FEATURES', 'x11', \
    'twm ${XSERVER} x11-common xclock xterm ', '', d)}"
 
-RDEPENDS_${PN} = " \
+RDEPENDS:${PN} = " \
     ${X11_PACKAGES} \
     "

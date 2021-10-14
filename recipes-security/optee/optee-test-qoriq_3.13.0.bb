@@ -1,6 +1,6 @@
 require optee-test.nxp.inc
 
-PV_append = "+git${SRCPV}"
+PV:append = "+git${SRCPV}"
 
 DEPENDS += "optee-client-qoriq optee-os-qoriq"
 

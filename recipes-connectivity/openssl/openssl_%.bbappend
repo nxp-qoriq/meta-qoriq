@@ -1,3 +1,3 @@
-do_install_append_qoriq () {
+do_install:append:qoriq () {
     cp --dereference -R crypto  ${D}${includedir}
 }

@@ -1,5 +1,5 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/${BPN}:"
-SRC_URI_append_use-mainline-bsp = " \
+FILESEXTRAPATHS:prepend := "${THISDIR}/${BPN}:"
+SRC_URI:append:use-mainline-bsp = " \
     file://0001-frontend-dri-copy-image-use-in-dup_image.patch \
     file://0002-dri-bring-back-use-flags-for-createImageWithModifier.patch \
     file://0003-frontend-dri-add-EXPLICIT_FLUSH-hint-in-dri2_resourc.patch \
@@ -8,11 +8,11 @@ SRC_URI_append_use-mainline-bsp = " \
     file://0006-etnaviv-flush-used-render-buffers-on-context-flush-w.patch \
 "
 
-PROVIDES_remove_ls1028a   = "virtual/egl"
-PROVIDES_remove_ls1028a = "virtual/libgl virtual/libgles1 virtual/libgles2"
+PROVIDES:remove:ls1028a   = "virtual/egl"
+PROVIDES:remove:ls1028a = "virtual/libgl virtual/libgles1 virtual/libgles2"
 
-PACKAGECONFIG_remove_ls1028a   = "egl gbm"
-PACKAGECONFIG_remove_ls1028a = "gles"
+PACKAGECONFIG:remove:ls1028a   = "egl gbm"
+PACKAGECONFIG:remove:ls1028a = "gles"
 
 # FIXME: mesa should support 'x11-no-tls' option
 python () {
@@ -25,13 +25,13 @@ python () {
 }
 
 # Enable Etnaviv and Freedreno support
-PACKAGECONFIG_append_use-mainline-bsp = " gallium etnaviv kmsro freedreno"
+PACKAGECONFIG:append:use-mainline-bsp = " gallium etnaviv kmsro freedreno"
 
 # For NXP BSP, GPU drivers don't support dri
-PACKAGECONFIG_remove_ls1028a = "dri"
+PACKAGECONFIG:remove:ls1028a = "dri"
 
 # mainline/etnaviv:
-RRECOMMENDS_${PN}-megadriver_append_use-mainline-bsp = " libdrm-etnaviv mesa-etnaviv-env"
+RRECOMMENDS:${PN}-megadriver:append:use-mainline-bsp = " libdrm-etnaviv mesa-etnaviv-env"
 
 BACKEND = \
     "${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'wayland', \
@@ -39,7 +39,7 @@ BACKEND = \
                                                              'fb', d), d)}"
 
 # FIXME: Dirty hack to allow use of Vivante GPU libGL binary
-do_install_append_ls1028a () {
+do_install:append:ls1028a () {
     rm -f ${D}${libdir}/libGL.* \
           ${D}${includedir}/GL/gl.h \
           ${D}${includedir}/GL/glcorearb.h \
@@ -51,6 +51,6 @@ do_install_append_ls1028a () {
     fi
 }
 
-do_install_append_ls1028a () {
+do_install:append:ls1028a () {
     rm -rf ${D}${includedir}/KHR
 }

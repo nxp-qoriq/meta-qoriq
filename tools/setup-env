@@ -310,7 +310,7 @@ if expr "$MACHINE" : lx216;then
 # 1. secure: generate COT by cst from NXP
 # 2. arm-cot: generate COT by cert_create from ATF
 # uncomment below line to choose one:
-#DISTRO_FEATURES_append = " secure"
+#DISTRO_FEATURES:append = " secure"
 
 EOF
 fi
@@ -328,7 +328,7 @@ PREFERRED_PROVIDER_virtual/egl      = "imx-gpu-viv"
 # Some gstream plugins require "commercial" be set in LICENSE_FLAGS_WHITELIST
 # For exmaple, gstreamer1.0-plugins-ugly-asf/gstreamer1.0-libav
 # uncomment the below one line to include them into fsl-image-multimedia-full
-LICENSE_FLAGS_WHITELIST_append = " commercial"
+LICENSE_FLAGS_WHITELIST:append = " commercial"
 
 EOF
 fi

@@ -12,7 +12,7 @@ PACKAGES = "${PN}-core ${PN}-extended"
 
 FSL_NEON = "${@bb.utils.contains('TUNE_FEATURES', 'neon', 'cpuburn-arm', '', d)}"
 
-RDEPENDS_${PN}-core = "\
+RDEPENDS:${PN}-core = "\
     iozone3 \
     iperf2 \
     iperf3 \
@@ -20,7 +20,7 @@ RDEPENDS_${PN}-core = "\
     netperf \
 "
 
-RDEPENDS_${PN}-extended = " \
+RDEPENDS:${PN}-extended = " \
     bonnie++ \
     dbench \
     fio \

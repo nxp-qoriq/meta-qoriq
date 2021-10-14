@@ -13,10 +13,10 @@ SRCREV = "12ffee82d210cb6b5c8fa30fbc6f5d29e4be2e6f"
 S = "${WORKDIR}/git"
 
 MC_CFG ?= ""
-MC_CFG_ls1088a = "ls1088a"
-MC_CFG_ls2088a = "ls2088a"
-MC_CFG_lx2160a = "lx2160a"
-MC_CFG_lx2162a = "lx2162a"
+MC_CFG:ls1088a = "ls1088a"
+MC_CFG:ls2088a = "ls2088a"
+MC_CFG:lx2160a = "lx2160a"
+MC_CFG:lx2162a = "lx2162a"
 
 MC_FLAVOUR ?= "${@oe.utils.ifelse(d.getVar('MACHINE').endswith('qds'), 'QDS', 'RDB')}"
 MC_FOLDER ?= "${@d.getVar('MC_CFG').upper() + '-' + d.getVar('MC_FLAVOUR')}"
@@ -40,6 +40,6 @@ do_deploy () {
 addtask deploy after do_install
 
 PACKAGES += "${PN}-image"
-FILES_${PN}-image += "/boot"
+FILES:${PN}-image += "/boot"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 COMPATIBLE_MACHINE = "(qoriq-arm64)"

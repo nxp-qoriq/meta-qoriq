@@ -13,7 +13,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=fa01bff138cc98a62b8840a157951c88"
 
 # flex with provide /usr/include/FlexLexer.h
 DEPENDS = "flex-native bison-native flex"
-RDEPENDS_${PN} += "bash"
+RDEPENDS:${PN} += "bash"
 
 SRC_URI = "http://download.savannah.nongnu.org/releases/fbi-improved/${BPN}-${PV}.tar.gz"
 SRC_URI[sha256sum] = "f77f45d38cbd2ddb5a21ce48b6ecb44e7ddcf77d00635d7c7dbe74ea083b8b88"

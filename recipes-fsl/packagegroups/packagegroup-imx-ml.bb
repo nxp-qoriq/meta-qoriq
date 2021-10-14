@@ -12,6 +12,6 @@ ML_PKGS = " \
     tensorflow-lite \
     onnxruntime \
 "
-RDEPENDS_${PN} = " \
+RDEPENDS:${PN} = " \
     ${ML_PKGS} \
 "

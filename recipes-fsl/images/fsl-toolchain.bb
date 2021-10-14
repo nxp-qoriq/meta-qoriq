@@ -2,7 +2,7 @@ require recipes-core/meta/meta-toolchain.bb
 
 TOOLCHAIN_OUTPUTNAME = "${DISTRO}-${TCLIBC}-${SDKMACHINE}-${TUNE_PKGARCH}-toolchain-${SDK_VERSION}"
 
-MULTILIBS_pn-${PN} = ""
+MULTILIBS:pn-${PN} = ""
 TOOLCHAIN_NEED_CONFIGSITE_CACHE += "zlib"
 TOOLCHAIN_TARGET_TASK += " \
     dtc-staticdev \
@@ -22,7 +22,7 @@ TOOLCHAIN_HOST_TASK += " \
     nativesdk-perl-module-integer \
 "
 
-TOOLCHAIN_HOST_TASK_append_e500v2 = " \
+TOOLCHAIN_HOST_TASK:append:e500v2 = " \
     nativesdk-boot-format \
     nativesdk-boot-format-config \
 "

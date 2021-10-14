@@ -4,7 +4,7 @@ LICENSE = "PD"
 LIC_FILES_CHKSUM = "file://utils/start-stop-daemon.c;endline=21;md5=8fbd0497a7d0b01e99820bffcb58e9ad"
 DEPENDS = "zlib bzip2 perl ncurses"
 # start-stop-daemon is usually shipped by dpkg
-RCONFLICTS_${PN} = "dpkg"
+RCONFLICTS:${PN} = "dpkg"
 
 SRC_URI = " \
     ${DEBIAN_MIRROR}/main/d/dpkg/dpkg_${PV}.tar.xz \
@@ -43,7 +43,7 @@ export PERL = "${bindir}/perl"
 export PERL_LIBDIR = "${libdir}/perl/${@get_perl_version(d)}"
 EXTRA_OECONF += "TAR=tar"
 
-EXTRA_OECONF_append_class-target = " DEB_HOST_ARCH=${DPKG_ARCH}"
+EXTRA_OECONF:append:class-target = " DEB_HOST_ARCH=${DPKG_ARCH}"
 
 DPKG_ARCH ??= "${@deb_arch_map(d.getVar('TARGET_ARCH'), d.getVar('TUNE_FEATURES'))}"
 
@@ -72,7 +72,7 @@ def deb_arch_map(arch, tune):
         return arch + ["el", "hf"]["callconvention-hard" in tune_features]
     return arch
 
-do_install_append () {
+do_install:append () {
     # remove everything that is not related to start-stop-daemon, since there
     # is no explicit rule for only installing ssd
     find ${D} -type f -not -name "*start-stop-daemon*" -exec rm {} \;

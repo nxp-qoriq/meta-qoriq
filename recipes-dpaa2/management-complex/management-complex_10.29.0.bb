@@ -11,11 +11,11 @@ SRCREV = "d21bc22000a14b0b6eeafc017fb93bc70499f74a"
 
 S = "${WORKDIR}/git"
 
-REGLEX_ls2088a = "ls2088a"
-REGLEX_ls2080a = "ls2080a"
-REGLEX_ls1088a = "ls1088a"
-REGLEX_lx2160a = "lx216xa"
-REGLEX_lx2162a = "lx216xa"
+REGLEX:ls2088a = "ls2088a"
+REGLEX:ls2080a = "ls2080a"
+REGLEX:ls1088a = "ls1088a"
+REGLEX:lx2160a = "lx216xa"
+REGLEX:lx2162a = "lx216xa"
 
 do_install () {
     install -d ${D}/boot
@@ -33,7 +33,7 @@ do_deploy () {
 addtask deploy before do_build after do_install
 
 PACKAGES += "${PN}-image"
-FILES_${PN}-image += "/boot"
+FILES:${PN}-image += "/boot"
 
 INHIBIT_PACKAGE_STRIP = "1"
 

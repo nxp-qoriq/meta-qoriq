@@ -9,7 +9,7 @@ S = "${WORKDIR}/git"
 
 EXTRA_OEMAKE += "userapp"
 
-do_compile_prepend() {
+do_compile:prepend() {
         sed -i 's,$(CROSS_COMPILE)gcc,$(CC),g' Makefile
 }
 
@@ -19,5 +19,5 @@ do_install() {
 }
 
 COMPATIBLE_MACHINE = "(qoriq-arm64)"
-INSANE_SKIP_${PN} = "ldflags"
+INSANE_SKIP:${PN} = "ldflags"
 CLEANBROKEN = "1"

@@ -3,7 +3,7 @@ LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=1ce5d23a6429dff345518758f13aaeab"
 
 DEPENDS = "dpdk python3-six-native coreutils-native"
-RDEPENDS_${PN} = "bash libcrypto libssl python3"
+RDEPENDS:${PN} = "bash libcrypto libssl python3"
 
 inherit python3native
 
@@ -18,7 +18,7 @@ do_configure() {
 	${S}/configure --host aarch64-fsl-linux --with-dpdk=static --with-openssl=${SYSROOT_DPDK}/usr CFLAGS="-g -Wno-cast-align -Ofast" 
 }
 
-do_install_append() {
+do_install:append() {
         install -d ${D}${bindir}/ovs-dpdk
         cp -rf  ${S}/ovsdb/ovsdb-tool ${D}${bindir}/ovs-dpdk
         cp -rf  ${S}/ovsdb/ovsdb-server ${D}${bindir}/ovs-dpdk
@@ -29,7 +29,7 @@ do_install_append() {
         chmod 777 -R ${D}${bindir}/ovs-dpdk/*
 }
 
-ALLOW_EMPTY_${PN} = "1"
+ALLOW_EMPTY:${PN} = "1"
 INHIBIT_PACKAGE_STRIP = "1"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 COMPATIBLE_MACHINE = "(qoriq-arm64)"

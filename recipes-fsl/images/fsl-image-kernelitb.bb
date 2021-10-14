@@ -4,8 +4,8 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 KERNEL_IMAGE ?= "${KERNEL_IMAGETYPE}"
 ROOTFS_IMAGE ?= "fsl-image-mfgtool"
-KERNEL_ITS_qoriq-arm = "kernel-arm32.its"
-KERNEL_ITS_qoriq-arm64 = "kernel-arm64.its"
+KERNEL_ITS:qoriq-arm = "kernel-arm32.its"
+KERNEL_ITS:qoriq-arm64 = "kernel-arm64.its"
 
 SRC_URI = "file://${KERNEL_ITS}"
 
@@ -53,7 +53,7 @@ do_deploy () {
         ln -sf ${ITB_BASENAME}.itb ${DEPLOYDIR}/${ITB_SYMLINK}.itb
     done
 }
-do_deploy_ls1021atwr () {
+do_deploy:ls1021atwr () {
     install -d ${DEPLOYDIR}
     cp ${DEPLOY_DIR_IMAGE}/zImage .
 

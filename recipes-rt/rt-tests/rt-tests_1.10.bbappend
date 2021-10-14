@@ -1,6 +1,6 @@
-FILESEXTRAPATHS_prepend_qoriq := "${THISDIR}/${BPN}:"
+FILESEXTRAPATHS:prepend:qoriq := "${THISDIR}/${BPN}:"
 
-SRC_URI_append_qoriq = "\
+SRC_URI:append:qoriq = "\
     file://pip_stress-De-constify-prio_min.patch \
 "
 

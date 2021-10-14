@@ -14,29 +14,29 @@ LIC_FILES_CHKSUM = " \
     file://Licenses/lgpl-2.1.txt;md5=4fbd65380cdd255951079008b364516c \
 "
 
-PV_append = "+${SRCPV}"
+PV:append = "+${SRCPV}"
 
 UBOOT_BRANCH ?= "lf_v2021.04"
 UBOOT_SRC ?= "git://bitbucket.sw.nxp.com/lfac/uboot-nxp.git;protocol=ssh"
 SRC_URI = "${UBOOT_SRC};branch=${UBOOT_BRANCH}"
 SRCREV = "${AUTOREV}"
 
-FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
 
-SRC_URI_append_qoriq-ppc = "\
+SRC_URI:append:qoriq-ppc = "\
     file://0001-add-typedef-to-avoid-multiple-definition-issue.patch \
 "
 
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"
-PV_append = "+fslgit"
+PV:append = "+fslgit"
 LOCALVERSION = "+fsl"
 
 INHIBIT_DEFAULT_DEPS = "1"
 DEPENDS = "libgcc virtual/${TARGET_PREFIX}gcc bison-native bc-native swig-native python3-native"
-DEPENDS_append_qoriq-arm64 = " dtc-native"
-DEPENDS_append_qoriq-arm = " dtc-native"
-DEPENDS_append_qoriq-ppc = " boot-format-native"
+DEPENDS:append:qoriq-arm64 = " dtc-native"
+DEPENDS:append:qoriq-arm = " dtc-native"
+DEPENDS:append:qoriq-ppc = " boot-format-native"
 
 python () {
     if d.getVar("TCMODE") == "external-fsl":
@@ -51,8 +51,8 @@ python () {
         sys_multilib = d.getVar('TARGET_VENDOR') + 'mllib32-linux'
         sys_original = d.getVar('TARGET_VENDOR') + '-' + d.getVar('TARGET_OS')
         workdir = d.getVar('WORKDIR')
-        d.setVar('DEPENDS_append', ' lib32-gcc-cross-powerpc lib32-libgcc')
-        d.setVar('PATH_append', ':' + d.getVar('STAGING_BINDIR_NATIVE') + '/powerpc' + sys_multilib)
+        d.setVar('DEPENDS:append', ' lib32-gcc-cross-powerpc lib32-libgcc')
+        d.setVar('PATH:append', ':' + d.getVar('STAGING_BINDIR_NATIVE') + '/powerpc' + sys_multilib)
         d.setVar('TOOLCHAIN_OPTIONS', '--sysroot=' + workdir + '/lib32-recipe-sysroot')
         d.setVar("WRAP_TARGET_PREFIX", 'powerpc' + sys_multilib + '-')
     elif "fsl-lsch2-32b:" in arch:
@@ -61,8 +61,8 @@ python () {
         sys_multilib = d.getVar('TARGET_VENDOR') + 'mllib64-linux'
         sys_original = d.getVar('TARGET_VENDOR') + '-' + d.getVar('TARGET_OS')
         workdir = d.getVar('WORKDIR')
-        d.setVar('DEPENDS_append', ' lib64-gcc-cross-aarch64 lib64-libgcc')
-        d.setVar('PATH_append', ':' + d.getVar('STAGING_BINDIR_NATIVE') + '/aarch64' + sys_multilib)
+        d.setVar('DEPENDS:append', ' lib64-gcc-cross-aarch64 lib64-libgcc')
+        d.setVar('PATH:append', ':' + d.getVar('STAGING_BINDIR_NATIVE') + '/aarch64' + sys_multilib)
         d.setVar('TOOLCHAIN_OPTIONS', '--sysroot=' + workdir + '/lib64-recipe-sysroot')
         d.setVar("WRAP_TARGET_PREFIX", 'aarch64' + sys_multilib + '-')
 }
@@ -76,7 +76,7 @@ EXTRA_OEMAKE = 'CROSS_COMPILE=${WRAP_TARGET_PREFIX} CC="${WRAP_TARGET_PREFIX}gcc
 EXTRA_OEMAKE += 'HOSTCC="${BUILD_CC} ${BUILD_CFLAGS} ${BUILD_LDFLAGS}"'
 EXTRA_OEMAKE += 'STAGING_INCDIR=${STAGING_INCDIR_NATIVE} STAGING_LIBDIR=${STAGING_LIBDIR_NATIVE}'
 
-do_compile_append_qoriq() {
+do_compile:append:qoriq() {
     unset i j k
     for config in ${UBOOT_MACHINE}; do
         i=`expr $i + 1`;
@@ -100,7 +100,7 @@ do_compile_append_qoriq() {
     unset i
 }
 
-do_deploy_append_lx2162a () {
+do_deploy:append:lx2162a () {
     if [ -n "${UBOOT_CONFIG}" ]
     then
         for config in ${UBOOT_MACHINE}; do
@@ -121,5 +121,5 @@ do_deploy_append_lx2162a () {
 }
 
 PACKAGES += "${PN}-images"
-FILES_${PN}-images += "/boot"
+FILES:${PN}-images += "/boot"
 COMPATIBLE_MACHINE = "(qoriq)"

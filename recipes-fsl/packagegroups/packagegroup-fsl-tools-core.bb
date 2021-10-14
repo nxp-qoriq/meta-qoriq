@@ -11,7 +11,7 @@ inherit packagegroup
 PACKAGES = "${PN}"
 
 # pkgs from community
-RDEPENDS_${PN} = " \
+RDEPENDS:${PN} = " \
     coreutils \
     crconf \
     cryptodev-linux \
@@ -50,15 +50,15 @@ EXTRA_PKGS_COMMUNITY = " \
     fio \
     keyutils \
 "
-EXTRA_PKGS_COMMUNITY_ls1012a = " \
+EXTRA_PKGS_COMMUNITY:ls1012a = " \
     hostapd \
 "
-EXTRA_PKGS_COMMUNITY_ls1046a = " \
+EXTRA_PKGS_COMMUNITY:ls1046a = " \
     hostapd \
     iw \
     wpa-supplicant \
 "
-EXTRA_PKGS_COMMUNITY_append_lx2162a = " \
+EXTRA_PKGS_COMMUNITY:append:lx2162a = " \
     kdump \
     kexec \
     vmcore-dmesg \
@@ -67,10 +67,10 @@ EXTRA_PKGS_COMMUNITY_append_lx2162a = " \
     glibc-utils \
     openssh-sftp-server \
 "
-RDEPENDS_${PN}_append_qoriq-arm64= "${EXTRA_PKGS_COMMUNITY}"
+RDEPENDS:${PN}:append:qoriq-arm64= "${EXTRA_PKGS_COMMUNITY}"
 
 # pkgs from NXP
-RDEPENDS_${PN}_append_qoriq = "merge-files"
+RDEPENDS:${PN}:append:qoriq = "merge-files"
 PKGS ?= " \
     ceetm \
     dce \
@@ -85,29 +85,29 @@ PKGS ?= " \
     spc \
     tsntool \
 "
-PKGS_ls1012a = " \
+PKGS:ls1012a = " \
     ppfe-firmware \
     restool \
 "
-RDEPENDS_${PN}_append_qoriq-arm64 = "${PKGS}"
+RDEPENDS:${PN}:append:qoriq-arm64 = "${PKGS}"
 
-RDEPENDS_${PN}_append_qoriq-ppc = " \
+RDEPENDS:${PN}:append:qoriq-ppc = " \
     eth-config \
     fmc \
 "
-RDEPENDS_${PN}_append_ls1043a = " \
+RDEPENDS:${PN}:append:ls1043a = " \
     eth-config \
     fmc \
 "
-RDEPENDS_${PN}_append_ls1046a = " \
+RDEPENDS:${PN}:append:ls1046a = " \
     eth-config \
     fmc \
 "
-RDEPENDS_${PN}_append_ls1088a = " \
+RDEPENDS:${PN}:append:ls1088a = " \
     aiopsl \
     gpp-aioptool \
 "
-RDEPENDS_${PN}_append_ls2088a = " \
+RDEPENDS:${PN}:append:ls2088a = " \
     aiopsl \
     gpp-aioptool \
 "

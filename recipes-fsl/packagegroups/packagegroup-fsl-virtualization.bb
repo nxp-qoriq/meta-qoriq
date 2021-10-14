@@ -10,7 +10,7 @@ inherit packagegroup
 
 PACKAGES = "${PN}"
 
-RDEPENDS_${PN} = "${@bb.utils.contains('DISTRO_FEATURES', 'x11', \
+RDEPENDS:${PN} = "${@bb.utils.contains('DISTRO_FEATURES', 'x11', \
     'libvirt \
     libvirt-libvirtd \
     libvirt-virsh \
@@ -21,7 +21,7 @@ RDEPENDS_${PN} = "${@bb.utils.contains('DISTRO_FEATURES', 'x11', \
 " 
 
 
-RDEPENDS_${PN}_remove_qoriq-ppc = "${@bb.utils.contains('DISTRO_FEATURES', 'x11', \
+RDEPENDS:${PN}:remove:qoriq-ppc = "${@bb.utils.contains('DISTRO_FEATURES', 'x11', \
     'libvirt \
     libvirt-libvirtd \
     libvirt-virsh \
@@ -34,5 +34,5 @@ DOCKER_PKGS = " \
     docker-registry \
 "
 
-RDEPENDS_${PN}_append_qoriq-arm64 = "  ${DOCKER_PKGS}"
-RDEPENDS_${PN}_append_qoriq-arm = "  ${DOCKER_PKGS}"
+RDEPENDS:${PN}:append:qoriq-arm64 = "  ${DOCKER_PKGS}"
+RDEPENDS:${PN}:append:qoriq-arm = "  ${DOCKER_PKGS}"

@@ -1,3 +1,3 @@
 # Enable allow-autospawn-for-root as default
-PACKAGECONFIG_append = " autospawn-for-root"
+PACKAGECONFIG:append = " autospawn-for-root"
 

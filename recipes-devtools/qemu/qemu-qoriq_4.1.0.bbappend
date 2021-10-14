@@ -1,1 +1,1 @@
-PACKAGECONFIG_append_qoriq-arm64 = " numa"
+PACKAGECONFIG:append:qoriq-arm64 = " numa"

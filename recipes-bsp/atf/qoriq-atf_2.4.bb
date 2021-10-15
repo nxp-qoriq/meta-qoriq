@@ -1,7 +1,4 @@
-DESCRIPTION = "ARM Trusted Firmware"
-
-LICENSE = "BSD"
-LIC_FILES_CHKSUM = "file://license.rst;md5=1dd070c98a281d18d9eefd938729b031"
+require qoriq-atf-2.4.inc
 
 inherit deploy
 
@@ -12,16 +9,9 @@ do_compile[depends] += "u-boot:do_deploy rcw:do_deploy uefi:do_deploy"
 
 PV:append = "+${SRCPV}"
 
-ATF_BRANCH ?= "lf_v2.4"
-ATF_SRC ?= "git://bitbucket.sw.nxp.com/lfac/atf-nxp.git;protocol=ssh"
-SRC_URI = "${ATF_SRC};branch=${ATF_BRANCH} \
-    git://github.com/ARMmbed/mbedtls;nobranch=1;destsuffix=git/mbedtls;name=mbedtls \
-"
-SRCREV = "${AUTOREV}"
+SRC_URI += "git://github.com/ARMmbed/mbedtls;nobranch=1;destsuffix=git/mbedtls;name=mbedtls"
 SRCREV_mbedtls = "0795874acdf887290b2571b193cafd3c4041a708"
 SRCREV_FORMAT = "atf"
-
-S = "${WORKDIR}/git"
 
 COMPATIBLE_MACHINE = "(qoriq)"
 
@@ -35,6 +25,7 @@ PLATFORM_ADDITIONAL_TARGET:ls1012afrwy = "ls1012afrwy_512mb"
 
 RCW_FOLDER ?= "${MACHINE}"
 RCW_FOLDER:ls1088ardb-pb = "ls1088ardb"
+RCW_FOLDER:lx2160ardb = "lx2160ardb_rev2"
 RCW_FOLDER:lx2160ardb-rev2 = "lx2160ardb_rev2"
 
 RCW_SUFFIX ?= ".bin"

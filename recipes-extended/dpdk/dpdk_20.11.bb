@@ -1,4 +1,4 @@
-include dpdk.inc
+include dpdk-20.11.inc
 
 SRC_URI += " \
             file://0001-meson.build-march-and-mcpu-already-passed-by-Yocto.patch \

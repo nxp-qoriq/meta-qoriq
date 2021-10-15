@@ -1,4 +1,4 @@
-include dpdk.inc
+include dpdk-20.11.inc
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/dpdk-${PV}:"
 

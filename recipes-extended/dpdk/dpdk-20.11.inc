@@ -10,6 +10,6 @@ SRCREV = "ff07b5044cb4b22e8bc5003966d99f27396b0d00"
 
 S = "${WORKDIR}/git"
 
-COMPATIBLE_MACHINE = "(imx|qoriq)"
+COMPATIBLE_MACHINE = "(qoriq-arm64)"
 
 CVE_PRODUCT = "data_plane_development_kit"

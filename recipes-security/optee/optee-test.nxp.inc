@@ -57,7 +57,7 @@ do_install() {
 
 FILES:${PN} += "${nonarch_base_libdir} ${libdir}/tee-supplicant/plugins/"
 
-DEBUG_OPTIMIZATION:append = " -Wno-error=maybe-uninitialized"
-FULL_OPTIMIZATION:append = " -Wno-error=maybe-uninitialized"
+DEBUG_OPTIMIZATION:append = " -Wno-error=maybe-uninitialized -Wno-deprecated-declarations"
+FULL_OPTIMIZATION:append = " -Wno-error=maybe-uninitialized -Wno-deprecated-declarations"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"

@@ -1,3 +1,1 @@
-SRCREV = "1f431891c7f0e7d4f52327f1fe19504a284491c4"
-
 BOARD_TARGETS:lx2160ardb-rev2 = "lx2160ardb_rev2"

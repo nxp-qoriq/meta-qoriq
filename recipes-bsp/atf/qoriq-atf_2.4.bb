@@ -6,8 +6,6 @@ LIC_FILES_CHKSUM = "file://license.rst;md5=1dd070c98a281d18d9eefd938729b031"
 inherit deploy
 
 DEPENDS += "u-boot-mkimage-native u-boot openssl openssl-native mbedtls rcw cst-native bc-native"
-DEPENDS_append_lx2160a += "ddr-phy"
-DEPENDS_append_lx2162a += "ddr-phy"
 do_compile[depends] += "u-boot:do_deploy rcw:do_deploy uefi:do_deploy"
 
 PV_append = "+${SRCPV}"
@@ -16,9 +14,11 @@ ATF_BRANCH ?= "lf_v2.4"
 ATF_SRC ?= "git://bitbucket.sw.nxp.com/lfac/atf-nxp.git;protocol=ssh"
 SRC_URI = "${ATF_SRC};branch=${ATF_BRANCH} \
     git://github.com/ARMmbed/mbedtls;nobranch=1;destsuffix=git/mbedtls;name=mbedtls \
+    git://github.com/nxp/ddr-phy-binary;nobranch=1;destsuffix=git/ddr-phy-binary;name=ddr \
 "
 SRCREV = "${AUTOREV}"
 SRCREV_mbedtls = "0795874acdf887290b2571b193cafd3c4041a708"
+SRCREV_ddr = "fbc036b88acb6c06ffed02c898cbae9856ec75ba"
 SRCREV_FORMAT = "atf"
 
 S = "${WORKDIR}/git"
@@ -53,9 +53,9 @@ chassistype_ls1012a = "ls104x_1012"
 chassistype_ls1043a = "ls104x_1012"
 chassistype_ls1046a = "ls104x_1012"
 
-DDR_PHY_BIN_PATH ?= ""
-DDR_PHY_BIN_PATH_lx2160a = "${DEPLOY_DIR_IMAGE}/ddr-phy"
-DDR_PHY_BIN_PATH_lx2162a = "${DEPLOY_DIR_IMAGE}/ddr-phy"
+FIP_DDR ?= ""
+FIP_DDR_lx2160a = "${@bb.utils.contains('DISTRO_FEATURES', 'secure', 'fip_ddr', '', d)}"
+FIP_DDR_lx2162a = "${@bb.utils.contains('DISTRO_FEATURES', 'secure', 'fip_ddr', '', d)}"
 
 # requires CROSS_COMPILE set by hand as there is no configure script
 export CROSS_COMPILE="${TARGET_PREFIX}"
@@ -138,18 +138,15 @@ do_compile() {
                 cp *.pem build/${PLATFORM}/release/
             fi
 
-            oe_runmake V=1 all fip pbl PLAT=${PLATFORM} BOOT_MODE=${d} RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${UBOOT_BINARY}
+            oe_runmake V=1 all fip pbl ${FIP_DDR} PLAT=${PLATFORM} BOOT_MODE=${d} RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${UBOOT_BINARY}
             cp build/${PLATFORM}/release/bl2_${d}${SECURE_EXTENTION}.pbl .
             cp build/${PLATFORM}/release/fip.bin fip_uboot${SECURE_EXTENTION}.bin
             if [ -e build/${PLATFORM}/release/fuse_fip.bin ]; then
                 cp build/${PLATFORM}/release/fuse_fip.bin .
             fi
 
-            if [ -n "${SECURE_EXTENTION}" -a -n "${DDR_PHY_BIN_PATH}" -a ! -f ddr_fip_sec.bin ]; then
-                oe_runmake V=1 fip_ddr PLAT=${PLATFORM} DDR_PHY_BIN_PATH=${DDR_PHY_BIN_PATH}
-                if [ -e build/${PLATFORM}/release/ddr_fip_sec.bin ]; then
-                    cp build/${PLATFORM}/release/ddr_fip_sec.bin .
-                fi
+            if [ -e build/${PLATFORM}/release/ddr_fip_sec.bin ] && [ ! -f ddr_fip_sec.bin ]; then
+                cp build/${PLATFORM}/release/ddr_fip_sec.bin .
             fi
 
             if [ -e build/${PLATFORM}/release/rot_key.pem ] && [ ! -f rot_key.pem ]; then

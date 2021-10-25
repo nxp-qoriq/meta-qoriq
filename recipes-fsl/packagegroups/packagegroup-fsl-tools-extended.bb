@@ -82,6 +82,7 @@ RDEPENDS_${PN}_append_qoriq-arm64 = "\
     pktgen-dpdk \
     secure-obj \
     secure-obj-module \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'vpp', 'vpp vpp-data vpp-plugins vpp-plugins-data', '', d)} \
 "
 RDEPENDS_${PN}_append_qoriq-ppc = "\
     ${@multilib_pkg_extend(d, "valgrind")} \

@@ -12,6 +12,7 @@ MESON_BUILDTYPE = "release"
 EXTRA_OEMESON = " -Denable_kmods=false \
                 -Dexamples=all \
 		-Doptimization=3 \
+		${@bb.utils.contains('DISTRO_FEATURES', 'vpp', '-Dc_args="-Ofast -fPIC -ftls-model=local-dynamic"', '', d)} \
 "
 
 PACKAGECONFIG ??= "openssl"

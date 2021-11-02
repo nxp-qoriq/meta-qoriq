@@ -6,16 +6,16 @@ inherit deploy
 
 INHIBIT_DEFAULT_DEPS = "1"
 
-SRC_URI = "git://github.com/nxp/qoriq-mc-binary;nobranch=1"
-SRCREV = "87e1ff28285b3c6488d0daf6f371419c4f60a3e7"
+SRC_URI = "git://bitbucket.sw.nxp.com/dpaa2/mc-binary;protocol=ssh;nobranch=1"
+SRCREV = "06d639d86dacd4959f6489a0a10a26fa00cd8698"
 
 S = "${WORKDIR}/git"
 
 REGLEX_ls2088a = "ls2088a"
 REGLEX_ls2080a = "ls2080a"
 REGLEX_ls1088a = "ls1088a"
-REGLEX_lx2160a = "lx2160a"
-REGLEX_lx2162a = "lx2160a"
+REGLEX_lx2160a = "lx216xa"
+REGLEX_lx2162a = "lx216xa"
 
 do_install () {
     install -d ${D}/boot

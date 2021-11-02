@@ -5,10 +5,10 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 DEPENDS = "dpdk openssl python3-ply util-linux vpp-native"
 DEPENDS_class-native = "openssl-native  python3-ply-native util-linux-native"
 
-SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/vpp;nobranch=1 \
+SRC_URI = "git://bitbucket.sw.nxp.com/dqns/vpp;protocol=ssh;nobranch=1 \
         file://0001-vpp-core-fix-package_qa-error.patch \
 "
-SRCREV = "2dc49092878205ab062a00d4d46240aa0759ba4e"
+SRCREV = "0c66c07f256f29928ae6a07a099624b9e98ebb24"
 
 S = "${WORKDIR}/git"
 

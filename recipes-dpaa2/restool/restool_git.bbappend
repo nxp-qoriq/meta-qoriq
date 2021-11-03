@@ -3,7 +3,7 @@ inherit bash-completion
 RDEPENDS_${PN}-bash-completion += "bash"
 
 SRC_URI = "git://bitbucket.sw.nxp.com/dpaa2/restool;protocol=ssh;nobranch=1"
-SRCREV = "7be71e7d0d0bce3c317c82308247ac901b8aa436"
+SRCREV = "abd2f5b7181db9d03db9e6ccda0194923b73e9a2"
 
 EXTRA_OEMAKE += "MANPAGE="
 do_compile_prepend() {

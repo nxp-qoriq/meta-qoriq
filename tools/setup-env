@@ -191,7 +191,6 @@ LAYER_LIST=" \
     meta-security \
     meta-freescale \
     meta-freescale-distro \
-    meta-nxp-common \
     meta-qoriq \
 "
 EULA_FILE="$FSLROOTDIR/EULA"

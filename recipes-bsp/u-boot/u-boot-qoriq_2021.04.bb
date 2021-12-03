@@ -114,6 +114,27 @@ do_deploy:append:lx2162a () {
     fi
 }
 
+do_deploy:append:ls102xa () {
+    if [ -n "${UBOOT_CONFIG}" ]
+    then
+        for config in ${UBOOT_MACHINE}; do
+            i=$(expr $i + 1);
+            for type in ${UBOOT_CONFIG}; do
+                j=$(expr $j + 1);
+                if [ $j -eq $i ]
+                then
+                    if expr "$type" : sdcard;then
+                        install -m 644 ${B}/${config}/u-boot-dtb.bin ${DEPLOYDIR}/u-boot-dtb.${UBOOT_SUFFIX}-${type}
+                        install -m 644 ${B}/${config}/spl/u-boot-spl.bin ${DEPLOYDIR}/u-boot-spl.${UBOOT_SUFFIX}-${type}
+                    fi
+                fi
+            done
+            unset  j
+        done
+        unset  i
+    fi
+}
+
 PACKAGES += "${PN}-images"
 FILES:${PN}-images += "/boot"
 COMPATIBLE_MACHINE = "(qoriq)"

@@ -11,7 +11,7 @@ ATF_SRC ?= "git://bitbucket.sw.nxp.com/lfac/atf-nxp.git;protocol=ssh"
 SRC_URI = "${ATF_SRC};branch=${ATF_BRANCH} \
     git://github.com/ARMmbed/mbedtls;nobranch=1;destsuffix=git/mbedtls;name=mbedtls \
 "
-SRCREV = "${AUTOREV}"
+SRCREV = "5782363f92a2fdf926784449270433cf3ddf44bd"
 SRCREV_mbedtls = "0795874acdf887290b2571b193cafd3c4041a708"
 SRCREV_FORMAT = "atf"
 

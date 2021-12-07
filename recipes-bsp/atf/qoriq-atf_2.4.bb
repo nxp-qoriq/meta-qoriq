@@ -16,7 +16,7 @@ SRC_URI = "${ATF_SRC};branch=${ATF_BRANCH} \
     git://github.com/ARMmbed/mbedtls;nobranch=1;destsuffix=git/mbedtls;name=mbedtls \
     git://github.com/nxp/ddr-phy-binary;nobranch=1;destsuffix=git/ddr-phy-binary;name=ddr \
 "
-SRCREV = "${AUTOREV}"
+SRCREV = "5782363f92a2fdf926784449270433cf3ddf44bd"
 SRCREV_mbedtls = "0795874acdf887290b2571b193cafd3c4041a708"
 SRCREV_ddr = "fbc036b88acb6c06ffed02c898cbae9856ec75ba"
 SRCREV_FORMAT = "atf"

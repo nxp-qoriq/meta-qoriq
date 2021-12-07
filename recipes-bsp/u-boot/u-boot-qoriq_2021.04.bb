@@ -19,7 +19,7 @@ PV_append = "+${SRCPV}"
 UBOOT_BRANCH ?= "lf_v2021.04"
 UBOOT_SRC ?= "git://bitbucket.sw.nxp.com/lfac/uboot-nxp.git;protocol=ssh"
 SRC_URI = "${UBOOT_SRC};branch=${UBOOT_BRANCH}"
-SRCREV = "${AUTOREV}"
+SRCREV = "263b27e076a0f6e5dcc80227a235f0af73718342"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 

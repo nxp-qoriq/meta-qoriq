@@ -1,5 +1,3 @@
-FSL_MIRROR = "http://sun.ap.freescale.net/downloads"
-
 DEPENDS:append:ls1028a = " patchelf-native"
 
 RPROVIDES:${PN}:ls1028a += "imx-gpu-viv"

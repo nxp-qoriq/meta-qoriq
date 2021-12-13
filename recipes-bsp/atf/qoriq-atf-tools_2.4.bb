@@ -6,9 +6,7 @@ DEPENDS += "openssl"
 
 PV_append = "+${SRCPV}"
 
-ATF_BRANCH ?= "lf_v2.4"
-ATF_SRC ?= "git://bitbucket.sw.nxp.com/lfac/atf-nxp.git;protocol=ssh"
-SRC_URI = "${ATF_SRC};branch=${ATF_BRANCH} \
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/atf;protocol=https;nobranch=1 \
     git://github.com/ARMmbed/mbedtls;nobranch=1;destsuffix=git/mbedtls;name=mbedtls \
 "
 SRCREV = "5782363f92a2fdf926784449270433cf3ddf44bd"

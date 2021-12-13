@@ -6,9 +6,7 @@ SECTION = "kernel"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"
 
-KERNEL_BRANCH ?= "lf-5.10.y"
-KERNEL_SRC ?= "git://bitbucket.sw.nxp.com/lfac/linux-lts-nxp.git;protocol=ssh"
-SRC_URI = "${KERNEL_SRC};branch=${KERNEL_BRANCH}"
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/linux;protocol=https;nobranch=1"
 SRCREV = "a68e31b63f864ff71cd4adb40fbc9e1edc75c250"
 
 S = "${WORKDIR}/git"

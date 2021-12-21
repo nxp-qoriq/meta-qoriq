@@ -78,6 +78,9 @@ PACKAGECONFIG[selinux] = "--enable-security-context,--disable-security-context,l
 
 SYSTEMD_SERVICE:${PN} = "racoon.service"
 
+DEBUG_OPTIMIZATION:append = " -Wno-error=maybe-uninitialized -Wno-deprecated-declarations -Wno-error=discarded-qualifiers"
+FULL_OPTIMIZATION:append = " -Wno-error=maybe-uninitialized -Wno-deprecated-declarations -Wno-error=discarded-qualifiers"
+
 do_install:append() {
     install -d ${D}${sysconfdir}/racoon
     install -m 0644 ${WORKDIR}/racoon.conf.sample ${D}${sysconfdir}/racoon/racoon.conf

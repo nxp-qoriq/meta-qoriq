@@ -38,8 +38,8 @@ index 0000000000..19897ee06e
 +# Makefile for building rte_kni.ko
 +#
 +MODULE_CFLAGS += -include $(S)/config/rte_config.h
-+MODULE_CFLAGS += -I$(S)/lib/librte_eal/include
-+MODULE_CFLAGS += -I$(S)/lib/librte_kni
++MODULE_CFLAGS += -I$(S)/lib/eal/include
++MODULE_CFLAGS += -I$(S)/lib/kni
 +MODULE_CFLAGS += -I$(S)/kernel/linux/kni
 +MODULE_CFLAGS += -I$(S)
 +MODULE_CFLAGS += -I$(STAGING_INCDIR)

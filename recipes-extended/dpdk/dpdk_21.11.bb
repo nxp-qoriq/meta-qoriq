@@ -1,9 +1,7 @@
-include dpdk-20.11.inc
+include dpdk-21.11.inc
 
 SRC_URI += " \
             file://0001-meson.build-march-and-mcpu-already-passed-by-Yocto.patch \
-            file://0001-ifpga-meson-Fix-finding-librt-using-find_library.patch \
-            file://0001-drivers-net-enetfec-enet_uio.c-fix-multiple-definiti.patch \
 "
 
 MESON_BUILDTYPE = "release"
@@ -12,6 +10,7 @@ MESON_BUILDTYPE = "release"
 EXTRA_OEMESON = " -Denable_kmods=false \
                 -Dexamples=all \
 		-Doptimization=3 \
+		--cross-file ${S}/config/arm/arm64_poky_linux_gcc \
 		${@bb.utils.contains('DISTRO_FEATURES', 'vpp', '-Dc_args="-Ofast -fPIC -ftls-model=local-dynamic"', '', d)} \
 "
 
@@ -20,20 +19,13 @@ PACKAGECONFIG[afxdp] = ",,libbpf"
 PACKAGECONFIG[libvirt] = ",,libvirt"
 PACKAGECONFIG[openssl] = ",,openssl"
 
-RDEPENDS:${PN} += "bash pciutils python3-core"
+RDEPENDS:${PN} += "bash pciutils python3-core python3-pyelftools"
 RDEPENDS:${PN}-examples += "bash"
-DEPENDS = "numactl"
+DEPENDS = "numactl python3-pyelftools-native"
 
 inherit meson
 
 INSTALL_PATH = "${prefix}/share/dpdk"
-
-do_configure:prepend() {
-    sed -i "/implementor_/d" ${WORKDIR}/meson.cross
-    sed -i "/\[properties]/aimplementor_id = 'dpaa'" ${WORKDIR}/meson.cross
-    sed -i "/\[properties]/aimplementor_pn = 'default'" ${WORKDIR}/meson.cross
-    sed -i "s/cpu =.*/cpu = 'armv8-a'/" ${WORKDIR}/meson.cross
-}
 
 do_install:append(){
     # remove source files

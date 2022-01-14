@@ -7,7 +7,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=69663ab153298557a59c67a60a743e5b"
 
 inherit python3native systemd
 
-OPTEE_CLIENT_BRANCH ?= "lf-5.10.72_2.2.0"
+OPTEE_CLIENT_BRANCH ?= "lf-5.15.5_1.0.0"
 OPTEE_CLIENT_SRC ?= "git://bitbucket.sw.nxp.com/lfac/optee-client.git;protocol=ssh"
 SRC_URI = "${OPTEE_CLIENT_SRC};branch=${OPTEE_CLIENT_BRANCH}"
 SRCREV = "${AUTOREV}"

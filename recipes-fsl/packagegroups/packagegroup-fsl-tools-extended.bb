@@ -77,7 +77,9 @@ RDEPENDS:${PN}:append:qoriq = "\
 
 RDEPENDS:${PN}:append:qoriq-arm64 = "\ 
     dpdk-examples \
+    ovs-dpdk \
     libpkcs11 \
+    pktgen-dpdk \
     secure-obj \
     secure-obj-module \
     ${@bb.utils.contains('DISTRO_FEATURES', 'vpp', 'vpp vpp-data vpp-plugins vpp-plugins-data', '', d)} \

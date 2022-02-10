@@ -6,7 +6,7 @@ LIC_FILES_CHKSUM = "file://license/gpl-2.0.txt;md5=b234ee4d69f5fce4486a80fdaf4a4
                     file://license/bsd-3-clause.txt;md5=0f00d99239d922ffd13cabef83b33444"
 
 SRC_URI = "git://bitbucket.sw.nxp.com/gitam/dpdk.git;protocol=ssh;nobranch=1"
-SRCREV = "4948477e46772dd980683d4904db41dfb58ab562"
+SRCREV = "fb18f98bbc4d02fbab1e103d2155922f62da2759"
 
 S = "${WORKDIR}/git"
 

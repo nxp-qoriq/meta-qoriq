@@ -4,7 +4,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=0245ceedaef59ae0129500b0ce1e8a45"
 
 DEPENDS += "libpcap dpdk lua lua-native"
 
-SRC_URI = "git://github.com/pktgen/Pktgen-DPDK.git;protocol=ssh;nobranch=1"
+SRC_URI = "git://github.com/pktgen/Pktgen-DPDK.git;protocol=https;nobranch=1"
 SRCREV = "178c06ff7ca242b2485d65ae427fd82b62a71601"
 
 S = "${WORKDIR}/git"

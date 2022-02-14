@@ -2,13 +2,13 @@
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
-IMX_FIRMWARE_SRC ?= "git://github.com/NXP/imx-firmware.git;protocol=https"
-SRCBRANCH = "lf-5.10.52_2.1.0"
+IMX_FIRMWARE_SRC ?= "git://bitbucket.sw.nxp.com/imx/imx-firmware.git;protocol=ssh"
+SRCBRANCH = "lf-5.15.5_1.0.0"
 SRC_URI += " \
     ${IMX_FIRMWARE_SRC};branch=${SRCBRANCH};destsuffix=imx-firmware;name=imx-firmware \
 "
 
-SRCREV_imx-firmware = "6d7f77b83164b08334806c4aa2034bc1f7da7b7d"
+SRCREV_imx-firmware = "6c1841976a9b790a93c25cf0c320fc2d2c6cfc49"
 
 SRCREV_FORMAT = "default_imx-firmware"
 
@@ -17,6 +17,10 @@ do_install:append () {
     # Install NXP Connectivity
     install -d ${D}${nonarch_base_libdir}/firmware/nxp
     install -m 0644 ${WORKDIR}/imx-firmware/nxp/wifi_mod_para.conf    ${D}${nonarch_base_libdir}/firmware/nxp
+
+    # Install NXP Connectivity SD8801 firmware
+    install -m 0644 ${WORKDIR}/imx-firmware/nxp/FwImage_8801_SD/ed_mac_ctrl_V1_8801.conf  ${D}${nonarch_base_libdir}/firmware/nxp
+    install -m 0644 ${WORKDIR}/imx-firmware/nxp/FwImage_8801_SD/sd8801_uapsta.bin         ${D}${nonarch_base_libdir}/firmware/nxp
 
     # Install NXP Connectivity 8987 firmware
     install -m 0644 ${WORKDIR}/imx-firmware/nxp/FwImage_8987/ed_mac_ctrl_V3_8987.conf  ${D}${nonarch_base_libdir}/firmware/nxp
@@ -37,6 +41,9 @@ do_install:append () {
     install -m 0644 ${WORKDIR}/imx-firmware/nxp/FwImage_9098_PCIE/ed_mac_ctrl_V3_909x.conf  ${D}${nonarch_base_libdir}/firmware/nxp
     install -m 0644 ${WORKDIR}/imx-firmware/nxp/FwImage_9098_PCIE/pcieuart9098_combo_v1.bin ${D}${nonarch_base_libdir}/firmware/nxp
     install -m 0644 ${WORKDIR}/imx-firmware/nxp/FwImage_9098_PCIE/txpwrlimit_cfg_9098.conf  ${D}${nonarch_base_libdir}/firmware/nxp
+
+    # Install NXP Connectivity SD9098 firmware
+    install -m 0644 ${WORKDIR}/imx-firmware/nxp/FwImage_9098_SD/sdiouart9098_combo_v1.bin ${D}${nonarch_base_libdir}/firmware/nxp
 
     # Install NXP Connectivity IW416 firmware
     install -m 0644 ${WORKDIR}/imx-firmware/nxp/FwImage_IW416_SD/sdiouartiw416_combo_v0.bin ${D}${nonarch_base_libdir}/firmware/nxp

@@ -1,4 +1,5 @@
 # Copyright (C) 2015 Freescale Semiconductor
+# Copyright 2022 NXP
 # Released under the MIT license (see COPYING.MIT for the terms)
 
 SUMMARY = "Freescale Package group for core tools"
@@ -87,6 +88,9 @@ PKGS ?= " \
 PKGS:ls1012a = " \
     ppfe-firmware \
     restool \
+    optee-os-qoriq \
+    optee-client-qoriq \
+    optee-test-qoriq \
 "
 RDEPENDS:${PN}:append:qoriq-arm64 = "${PKGS}"
 

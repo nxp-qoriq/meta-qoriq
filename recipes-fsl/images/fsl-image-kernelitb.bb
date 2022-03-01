@@ -27,7 +27,7 @@ do_package_write_rpm[noexec] = "1"
 do_fetch[nostamp] = "1"
 do_unpack[nostamp] = "1"
 do_deploy[nostamp] = "1"
-do_deploy[depends] += "u-boot-mkimage-native:do_populate_sysroot virtual/kernel:do_build ${ROOTFS_IMAGE}:do_build"
+do_deploy[depends] += "u-boot-mkimage-native:do_populate_sysroot dtc-native:do_populate_sysroot virtual/kernel:do_build ${ROOTFS_IMAGE}:do_build"
 ITB_SUFFIX ?= "${DATETIME}"
 ITB_SUFFIX[vardepsexclude] = "DATETIME"
 

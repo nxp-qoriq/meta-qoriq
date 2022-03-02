@@ -50,13 +50,22 @@ EXTRA_PKGS_COMMUNITY = " \
     fio \
     keyutils \
 "
-EXTRA_PKGS_COMMUNITY:ls1012a = " \
-    hostapd \
-"
-EXTRA_PKGS_COMMUNITY:ls1046a = " \
+WIFI_TOOL_PKGS = " \
     hostapd \
     iw \
     wpa-supplicant \
+"
+EXTRA_PKGS_COMMUNITY:ls1012a = " \
+    ${WIFI_TOOL_PKGS} \
+"
+EXTRA_PKGS_COMMUNITY:ls1028a = " \
+    ${WIFI_TOOL_PKGS} \
+"
+EXTRA_PKGS_COMMUNITY:ls1043a = " \
+    ${WIFI_TOOL_PKGS} \
+"
+EXTRA_PKGS_COMMUNITY:ls1046a = " \
+    ${WIFI_TOOL_PKGS} \
 "
 EXTRA_PKGS_COMMUNITY:append:lx2162a = " \
     kdump \

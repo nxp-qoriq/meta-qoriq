@@ -12,7 +12,7 @@ DEPENDS += "u-boot-mkimage-native openssl-native dtc-native cst-native"
 do_compile[depends] += "u-boot:do_deploy rcw:do_deploy virtual/kernel:do_build ${ROOTFS_IMAGE}:do_build ddr-phy:do_deploy"
 
 SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/atf;nobranch=1 \
-           git://github.com/ARMmbed/mbedtls;nobranch=1;destsuffix=git/mbedtls;name=mbedtls \
+           git://github.com/ARMmbed/mbedtls;protocol=https;nobranch=1;destsuffix=git/mbedtls;name=mbedtls \
            file://${KERNEL_ITS} \
 "
 SRCREV = "4e40e24590ab908773ef842cd0e17faf233767d4"

@@ -1,9 +1,9 @@
-# Copyright 2020-2021 NXP
+# Copyright 2020-2022 NXP
 
 SUMMARY = "OPTEE test"
 HOMEPAGE = "http://www.optee.org/"
 
-LICENSE = "BSD & GPLv2"
+LICENSE = "GPL-2.0-only & BSD-2-Clause"
 LIC_FILES_CHKSUM = "file://LICENSE.md;md5=daa2bcccc666345ab8940aab1315a4fa"
 
 DEPENDS = "python3-pycryptodome-native python3-pycryptodomex-native openssl"
@@ -20,6 +20,9 @@ B = "${WORKDIR}/build"
 TA_DEV_KIT_DIR ?= "${STAGING_INCDIR}/optee/export-user_ta"
 OPTEE_CLIENT_EXPORT ?= "${STAGING_DIR_HOST}${prefix}"
 
+CFLAGS += "--sysroot=${STAGING_DIR_HOST}"
+CXXFLAGS += "--sysroot=${STAGING_DIR_HOST}"
+
 EXTRA_OEMAKE = " \
     TA_DEV_KIT_DIR=${TA_DEV_KIT_DIR} \
     OPTEE_CLIENT_EXPORT=${OPTEE_CLIENT_EXPORT} \
@@ -34,7 +37,6 @@ EXTRA_OECMAKE = " \
 "
 
 do_compile() {
-    export CXXFLAGS="${CXXFLAGS} --sysroot=${STAGING_DIR_HOST}"
     oe_runmake xtest
     oe_runmake ta
     oe_runmake test_plugin

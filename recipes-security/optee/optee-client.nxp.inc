@@ -5,7 +5,7 @@ HOMEPAGE = "http://www.optee.org/"
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=69663ab153298557a59c67a60a743e5b"
 
-inherit python3native systemd
+inherit update-rc.d python3native systemd
 
 OPTEE_CLIENT_BRANCH ?= "lf-5.15.5_1.0.0"
 OPTEE_CLIENT_SRC ?= "git://bitbucket.sw.nxp.com/lfac/optee-client.git;protocol=ssh"
@@ -14,6 +14,7 @@ SRCREV = "${AUTOREV}"
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/optee-client:"
 SRC_URI += "file://tee-supplicant.service"
+SRC_URI += "file://tee-supplicant.init"
 
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"
@@ -42,12 +43,19 @@ do_install () {
 
 	cp -a ${B}/export/usr/include ${D}${includedir}
 
-	install -d ${D}${systemd_system_unitdir}/
-	install -m0644 ${WORKDIR}/tee-supplicant.service ${D}${systemd_system_unitdir}/
-	sed -i -e s:/etc:${sysconfdir}:g -e s:/usr/bin:${bindir}:g ${D}${systemd_system_unitdir}/tee-supplicant.service
+	if [ "${VIRTUAL-RUNTIME_init_manager}" == "systemd" ]; then
+		install -d ${D}${systemd_system_unitdir}/
+		install -m0644 ${WORKDIR}/tee-supplicant.service ${D}${systemd_system_unitdir}/
+		sed -i -e s:/etc:${sysconfdir}:g -e s:/usr/bin:${bindir}:g ${D}${systemd_system_unitdir}/tee-supplicant.service
+	else
+		install -d ${D}${sysconfdir}/init.d/
+		install -m 0755 ${WORKDIR}/tee-supplicant.init ${D}${sysconfdir}/init.d/
+	fi
 }
 
 SYSTEMD_SERVICE:${PN} = "tee-supplicant.service"
+INITSCRIPT_NAME = "tee-supplicant.init"
+INITSCRIPT_PARAMS = "start 80 2 3 4 5 ."
 
 FILES:${PN} += "${libdir}/* ${includedir}/*"
 

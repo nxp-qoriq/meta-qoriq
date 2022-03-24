@@ -12,7 +12,7 @@ inherit python3native cmake
 OPTEE_TEST_BRANCH ?= "lf-5.15.5_1.0.0"
 OPTEE_TEST_SRC ?= "git://bitbucket.sw.nxp.com/lfac/optee-test.git;protocol=ssh"
 SRC_URI = "${OPTEE_TEST_SRC};branch=${OPTEE_TEST_BRANCH}"
-SRCREV = "${AUTOREV}"
+SRCREV = "e9d8bf6ee121d6686e6e409c727caee76496bb86"
 
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"

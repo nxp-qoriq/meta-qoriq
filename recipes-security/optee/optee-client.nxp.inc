@@ -10,7 +10,7 @@ inherit python3native systemd
 OPTEE_CLIENT_BRANCH ?= "lf-5.15.5_1.0.0"
 OPTEE_CLIENT_SRC ?= "git://bitbucket.sw.nxp.com/lfac/optee-client.git;protocol=ssh"
 SRC_URI = "${OPTEE_CLIENT_SRC};branch=${OPTEE_CLIENT_BRANCH}"
-SRCREV = "${AUTOREV}"
+SRCREV = "182874320395787a389e5b0f7df02b32f3c0a1b0"
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/optee-client:"
 SRC_URI += "file://tee-supplicant.service"

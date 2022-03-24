@@ -12,7 +12,7 @@ DEPENDS = "python3-pycryptodome-native python3-pyelftools-native python3-pycrypt
 OPTEE_OS_BRANCH ?= "lf-5.15.5_1.0.0"
 OPTEE_OS_SRC ?= "git://bitbucket.sw.nxp.com/lfac/optee-os.git;protocol=ssh"
 SRC_URI = "${OPTEE_OS_SRC};branch=${OPTEE_OS_BRANCH}"
-SRCREV = "${AUTOREV}"
+SRCREV = "807629a0889ad5e888f1fd187932ab7f701ddf8c"
 
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build.${PLATFORM_FLAVOR}"

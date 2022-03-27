@@ -37,6 +37,7 @@ RDEPENDS:${PN} = "\
     man-pages \
     oprofile \
     parted \
+    perf \
     rng-tools \
     rt-tests \
     stress-ng \

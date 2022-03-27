@@ -1,32 +1,15 @@
 require recipes-graphics/imx-gpu-viv/imx-gpu-viv-6.inc
 
+PROVIDES_OPENGLES3       = ""
+PROVIDES_OPENGLES3:mx8-nxp-bsp   = "virtual/libgles3"
+PROVIDES_OPENGLES3:mx8mm-nxp-bsp = ""
+PROVIDES += "${PROVIDES_OPENGLES3}"
+
 PACKAGECONFIG ?= "valgrind"
 
 LIBVULKAN_VERSION = "${LIBVULKAN_VERSION_MAJOR}.2.1"
 
-# dri and libVDK.so are removed, make a workaround so base install is not broken
-do_install:prepend() {
-    mkdir -p ${S}/gpu-core/usr/lib/dri
-    mkdir -p ${S}/gpu-core/usr/lib/fb
-    touch ${S}/gpu-core/usr/lib/fb/libVDK.so.1.2.0
-}
-do_install:append() {
-    rm -rf ${D}${libdir}/dri
-    rm -f ${D}${libdir}/libVDK-fb.so.1.2.0
-}
-
 RDEPENDS:libopenvg-imx += "${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'systemd-gpuconfig', '', d)}"
-
-PROVIDES += "libglu"
-PACKAGES =+ "libglu-imx libglu-imx-dev"
-do_install:append() {
-    # NOTE: Drop the if-statement when upstreaming, it's only needed internally
-    if [ -f ${S}/gpu-core/usr/lib/pkgconfig/glu.pc ]; then
-        install -m 0644 ${S}/gpu-core/usr/lib/pkgconfig/glu.pc ${D}${libdir}/pkgconfig/glu.pc
-    fi
-}
-FILES:libglu-imx = "${libdir}/libGLU${SOLIBS}"
-FILES:libglu-imx-dev = "${includedir}/GL/glu.h ${includedir}/GL/glu_mangle.h ${libdir}/pkgconfig/glu.pc"
 
 # FIXME: Don't add .so to main package
 FILES:libvulkan-imx += "${libdir}/libvulkan_VSI${SOLIBS}"

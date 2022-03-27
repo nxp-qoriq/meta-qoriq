@@ -1,4 +1,4 @@
-require qoriq-atf-2.4.inc
+require qoriq-atf-${PV}.inc
 
 DEPENDS += "openssl"
 

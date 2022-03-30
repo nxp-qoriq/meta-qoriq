@@ -4,7 +4,7 @@ DEPENDS += "openssl"
 
 PV:append = "+${SRCPV}"
 
-EXTRA_OEMAKE = "fiptool V=1 HOSTCC='${CC} ${CPPFLAGS} ${CFLAGS} ${LDFLAGS}'"
+EXTRA_OEMAKE = "fiptool V=1 PLAT=lx2162aqds HOSTCC='${CC} ${CPPFLAGS} ${CFLAGS} ${LDFLAGS}'"
 
 do_install () {
     install -m 0755 -d ${D}/${bindir}

@@ -9,9 +9,7 @@ LIC_FILES_CHKSUM = "file://LICENSE.md;md5=daa2bcccc666345ab8940aab1315a4fa"
 DEPENDS = "python3-pycryptodome-native python3-pycryptodomex-native openssl"
 inherit python3native cmake
 
-OPTEE_TEST_BRANCH ?= "lf-5.15.5_1.0.0"
-OPTEE_TEST_SRC ?= "git://bitbucket.sw.nxp.com/lfac/optee-test.git;protocol=ssh"
-SRC_URI = "${OPTEE_TEST_SRC};branch=${OPTEE_TEST_BRANCH}"
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/optee_test;protocol=https;nobranch=1"
 SRCREV = "e9d8bf6ee121d6686e6e409c727caee76496bb86"
 
 S = "${WORKDIR}/git"

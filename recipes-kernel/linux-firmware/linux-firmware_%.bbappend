@@ -2,7 +2,7 @@
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
-IMX_FIRMWARE_SRC ?= "git://bitbucket.sw.nxp.com/imx/imx-firmware.git;protocol=ssh"
+IMX_FIRMWARE_SRC ?= "git://github.com/NXP/imx-firmware.git;protocol=https"
 SRCBRANCH = "lf-5.15.5_1.0.0"
 SRC_URI += " \
     ${IMX_FIRMWARE_SRC};branch=${SRCBRANCH};destsuffix=imx-firmware;name=imx-firmware \

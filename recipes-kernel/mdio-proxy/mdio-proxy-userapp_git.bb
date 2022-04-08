@@ -1,5 +1,5 @@
 DESCRIPTION = "user-space application for accessing any MDIO device."
-LICENSE = "GPLv2+"
+LICENSE = "GPL-2.0-or-later"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=6f933bdd5214942fcfafa90f40740dfc"
 
 SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/mdio-proxy-module;protocol=htpps;nobranch=1"

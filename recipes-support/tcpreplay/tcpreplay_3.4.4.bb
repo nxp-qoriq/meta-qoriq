@@ -3,7 +3,7 @@ SUMMARY = "Use previously captured traffic to test network devices"
 HOMEPAGE = "http://tcpreplay.synfin.net/"
 SECTION = "net"
 
-LICENSE = "GPLv3"
+LICENSE = "GPL-3.0-only"
 LIC_FILES_CHKSUM = "file://docs/LICENSE;md5=c33cccf72cc1603e8a72a84811ae3ac8"
 
 SRC_URI = "http://prdownloads.sourceforge.net/tcpreplay/${PV}/tcpreplay-${PV}.tar.gz \

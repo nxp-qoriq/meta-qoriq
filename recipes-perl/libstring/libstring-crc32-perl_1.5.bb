@@ -3,7 +3,7 @@ DESCRIPTION = "Perl interface for cyclic redundency check generation"
 HOMEPAGE = "http://search.cpan.org/~soenke/String-CRC32-1.5"
 SECTION = "libs"
 
-LICENSE = "Artistic-1.0|GPLv1+"
+LICENSE = "Artistic-1.0|GPL-1.0-or-later"
 LIC_FILES_CHKSUM = "file://README;beginline=13;endline=17;md5=0235c63c95eb33d071a0a9a24ff13fa1"
 
 SRC_URI = "http://search.cpan.org/CPAN/authors/id/S/SO/SOENKE/String-CRC32-${PV}.tar.gz \

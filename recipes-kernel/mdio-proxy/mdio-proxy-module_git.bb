@@ -1,5 +1,5 @@
 DESCRIPTION = "Kernel module for accessing any MDIO device."
-LICENSE = "GPLv2+"
+LICENSE = "GPL-2.0-or-later"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=6f933bdd5214942fcfafa90f40740dfc"
 
 inherit module

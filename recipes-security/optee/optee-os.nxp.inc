@@ -3,7 +3,7 @@
 SUMMARY = "OPTEE OS"
 DESCRIPTION = "OPTEE OS"
 HOMEPAGE = "http://www.optee.org/"
-LICENSE = "BSD"
+LICENSE = "BSD-2-Clause-Views"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=c1f21c4f72f372ef38a5a4aee55ec173"
 
 inherit deploy python3native autotools

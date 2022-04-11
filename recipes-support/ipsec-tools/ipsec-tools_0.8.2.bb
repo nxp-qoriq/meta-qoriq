@@ -2,7 +2,7 @@ DESCRIPTION = "IPsec-Tools is a port of KAME's IPsec utilities to the \
 Linux-2.6 IPsec implementation."
 HOMEPAGE = "http://ipsec-tools.sourceforge.net/"
 SECTION = "net"
-LICENSE = "BSD"
+LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://src/libipsec/pfkey.c;beginline=6;endline=31;md5=bc9b7ff40beff19fe6bc6aef26bd2b24"
 
 DEPENDS = "virtual/kernel openssl readline flex-native bison-native"

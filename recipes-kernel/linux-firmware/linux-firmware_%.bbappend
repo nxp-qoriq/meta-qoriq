@@ -1,14 +1,14 @@
-# Copyright 2017-2021 NXP
+# Copyright 2017-2022 NXP
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 IMX_FIRMWARE_SRC ?= "git://bitbucket.sw.nxp.com/imx/imx-firmware.git;protocol=ssh"
-SRCBRANCH = "lf-5.15.5_1.0.0"
+SRCBRANCH = "master"
 SRC_URI += " \
     ${IMX_FIRMWARE_SRC};branch=${SRCBRANCH};destsuffix=imx-firmware;name=imx-firmware \
 "
 
-SRCREV_imx-firmware = "6c1841976a9b790a93c25cf0c320fc2d2c6cfc49"
+SRCREV_imx-firmware = "961514ba72d6b638a86f00b4564226f7d9ebe91c"
 
 SRCREV_FORMAT = "default_imx-firmware"
 

@@ -8,7 +8,7 @@ SRC_URI += " \
     ${IMX_FIRMWARE_SRC};branch=${SRCBRANCH};destsuffix=imx-firmware;name=imx-firmware \
 "
 
-SRCREV_imx-firmware = "961514ba72d6b638a86f00b4564226f7d9ebe91c"
+SRCREV_imx-firmware = "03975c5dc83a8ebc9cabb411f3cc95873abbebe4"
 
 SRCREV_FORMAT = "default_imx-firmware"
 

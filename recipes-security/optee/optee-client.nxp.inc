@@ -1,13 +1,12 @@
-# Copyright 2020-2021 NXP
+# Copyright 2020-2022 NXP
 
 SUMMARY = "OPTEE Client libs"
 HOMEPAGE = "http://www.optee.org/"
-LICENSE = "BSD-3-Clause"
+LICENSE = "BSD-2-Clause"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=69663ab153298557a59c67a60a743e5b"
 
 inherit update-rc.d python3native systemd
 
-OPTEE_CLIENT_BRANCH ?= "lf-5.15.5_1.0.0"
 OPTEE_CLIENT_SRC ?= "git://bitbucket.sw.nxp.com/lfac/optee-client.git;protocol=ssh"
 SRC_URI = "${OPTEE_CLIENT_SRC};branch=${OPTEE_CLIENT_BRANCH}"
 SRCREV = "${AUTOREV}"
@@ -19,23 +18,22 @@ SRC_URI += "file://tee-supplicant.init"
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"
 
-OPTEE_ARCH ?= "arm32"
-OPTEE_ARCH_armv7a = "arm32"
+OPTEE_ARCH:arm = "arm32"
 OPTEE_ARCH:aarch64 = "arm64"
 
-EXTRA_OEMAKE = "ARCH=${OPTEE_ARCH} O=${B}"
+EXTRA_OEMAKE = " \
+	-C ${S} O=${B} \
+"
 
 do_install () {
-	oe_runmake -C ${S} install
+	oe_runmake install
 
 	install -d ${D}${libdir}/
-	install -p -m0644 ${B}/export${libdir}/libteec.so.1.0.0 ${D}${libdir}/
-	ln -sf libteec.so.1.0.0 ${D}${libdir}/libteec.so.1.0
+	install -D -p -m0644 ${B}/export/usr/lib/libteec.so.1.0.0 ${D}${libdir}/libteec.so.1.0.0
 	ln -sf libteec.so.1.0.0 ${D}${libdir}/libteec.so.1
-	ln -sf libteec.so.1 ${D}${libdir}/libteec.so
+	ln -sf libteec.so.1.0.0 ${D}${libdir}/libteec.so
 
 	install -D -p -m0644 ${B}/export/usr/lib/libckteec.so.0.1.0 ${D}${libdir}/libckteec.so.0.1.0
-	ln -sf libckteec.so.0.1.0 ${D}${libdir}/libckteec.so.0.1
 	ln -sf libckteec.so.0.1.0 ${D}${libdir}/libckteec.so.0
 	ln -sf libckteec.so.0.1.0 ${D}${libdir}/libckteec.so
 

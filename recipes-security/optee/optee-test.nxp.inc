@@ -2,14 +2,11 @@
 
 SUMMARY = "OPTEE test"
 HOMEPAGE = "http://www.optee.org/"
-
 LICENSE = "GPL-2.0-only & BSD-2-Clause"
 LIC_FILES_CHKSUM = "file://LICENSE.md;md5=daa2bcccc666345ab8940aab1315a4fa"
 
-DEPENDS = "python3-pycryptodome-native python3-pycryptodomex-native openssl"
-inherit python3native cmake
+DEPENDS = "python3-cryptography-native optee-os-qoriq optee-client-qoriq"
 
-OPTEE_TEST_BRANCH ?= "lf-5.15.5_1.0.0"
 OPTEE_TEST_SRC ?= "git://bitbucket.sw.nxp.com/lfac/optee-test.git;protocol=ssh"
 SRC_URI = "${OPTEE_TEST_SRC};branch=${OPTEE_TEST_BRANCH}"
 SRCREV = "${AUTOREV}"
@@ -17,49 +14,44 @@ SRCREV = "${AUTOREV}"
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"
 
-TA_DEV_KIT_DIR ?= "${STAGING_INCDIR}/optee/export-user_ta"
-OPTEE_CLIENT_EXPORT ?= "${STAGING_DIR_HOST}${prefix}"
+inherit python3native
+
+OPTEE_ARCH:arm = "arm32"
+OPTEE_ARCH:aarch64 = "arm64"
+
+EXTRA_OEMAKE = " \
+    TA_DEV_KIT_DIR=${STAGING_INCDIR}/optee/export-user_ta_${OPTEE_ARCH}/ \
+    OPTEE_CLIENT_EXPORT=${STAGING_DIR_HOST}/usr \
+    CROSS_COMPILE_HOST=${HOST_PREFIX} \
+    CROSS_COMPILE_TA=${HOST_PREFIX} \
+    CROSS_COMPILE=${HOST_PREFIX} \
+    OPENSSL_MODULES=${STAGING_LIBDIR_NATIVE}/ossl-modules \
+    -C ${S} O=${B} \
+"
 
 CFLAGS += "--sysroot=${STAGING_DIR_HOST}"
 CXXFLAGS += "--sysroot=${STAGING_DIR_HOST}"
 
-EXTRA_OEMAKE = " \
-    TA_DEV_KIT_DIR=${TA_DEV_KIT_DIR} \
-    OPTEE_CLIENT_EXPORT=${OPTEE_CLIENT_EXPORT} \
-    CROSS_COMPILE_HOST=${HOST_PREFIX} \
-    CROSS_COMPILE_TA=${HOST_PREFIX} \
-    OPTEE_OPENSSL_EXPORT=${STAGING_INCDIR}/ \
-    -C ${S} O=${B} \
-"
-
-EXTRA_OECMAKE = " \
-    -DOPTEE_TEST_SDK=${TA_DEV_KIT_DIR} \
-"
-
 do_compile() {
-    oe_runmake xtest
-    oe_runmake ta
-    oe_runmake test_plugin
+    oe_runmake all
 }
+do_compile[cleandirs] = "${B}"
 
-do_install() {
-	install -d ${D}${bindir}/
-	install ${B}/xtest/xtest ${D}${bindir}/
+do_install () {
+	# Install xtest
+	install -D -m 0755 ${B}/xtest/xtest ${D}/usr/bin/xtest
 
-	install -d ${D}${nonarch_base_libdir}/optee_armtz
-	find ${B}/ta -name '*.ta' | while read name; do
-		install -m 444 $name ${D}${nonarch_base_libdir}/optee_armtz/
-	done
+	# Install TAs
+	install -d ${D}/lib/optee_armtz/
+	install -m 444 ${B}/ta/*/*.ta ${D}/lib/optee_armtz/
 
+	# Install plugins
 	install -d ${D}${libdir}/tee-supplicant/plugins/
-	find ${B}/supp_plugin -name '*.plugin' | while read name; do
-		install -m 755 $name ${D}${libdir}/tee-supplicant/plugins/
-	done
+	install -m 444 ${B}/supp_plugin/*.plugin ${D}${libdir}/tee-supplicant/plugins/
 }
+
 
 FILES:${PN} += "${nonarch_base_libdir} ${libdir}/tee-supplicant/plugins/"
 
-DEBUG_OPTIMIZATION:append = " -Wno-error=maybe-uninitialized -Wno-deprecated-declarations"
-FULL_OPTIMIZATION:append = " -Wno-error=maybe-uninitialized -Wno-deprecated-declarations"
-
 PACKAGE_ARCH = "${MACHINE_ARCH}"
+COMPATIBLE_MACHINE = "(qoriq-arm64)"

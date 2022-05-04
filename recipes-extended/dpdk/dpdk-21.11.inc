@@ -6,8 +6,7 @@ LIC_FILES_CHKSUM = "file://license/gpl-2.0.txt;md5=b234ee4d69f5fce4486a80fdaf4a4
                     file://license/bsd-3-clause.txt;md5=0f00d99239d922ffd13cabef83b33444"
 
 SRC_URI = "git://bitbucket.sw.nxp.com/gitam/dpdk.git;protocol=ssh;nobranch=1"
-# Apply to the DPDK tag lf-5.17.0-rc1
-SRCREV = "a831854edfbeadfe7e73b13f37bdb07cf8e91413"
+SRCREV = "a02594c97935a33e395e95b9030acd7a02b6cb50"
 
 S = "${WORKDIR}/git"
 

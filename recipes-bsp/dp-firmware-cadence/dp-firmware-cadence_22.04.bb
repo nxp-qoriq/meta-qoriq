@@ -6,8 +6,8 @@ inherit deploy fsl-eula-unpack
 
 SRC_URI = "${FSL_MIRROR}/firmware-imx-8.16.bin;fsl-eula=true"
 
-SRC_URI[md5sum] = "dc715c2d8e3acf2c19a3f271308b044a"
-SRC_URI[sha256sum] = "b2e16576462658b7e5f6cf4e1d18b300486a2b6ab27d86ff469cc06ba4caa8aa"
+SRC_URI[md5sum] = "607f4e4ec3df972325cc5d2173453596"
+SRC_URI[sha256sum] = "bf9aa12f4dee5a6fad2170201d3a565ad66277eb9c6791aec699c686c7c43e40"
 
 S = "${WORKDIR}/firmware-imx-8.16"
 

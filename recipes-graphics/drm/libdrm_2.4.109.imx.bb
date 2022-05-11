@@ -13,7 +13,7 @@ DEPENDS = "libpthread-stubs"
 IMX_LIBDRM_SRC ?= "git://source.codeaurora.org/external/imx/libdrm-imx.git;protocol=https;nobranch=1"
 IMX_LIBDRM_BRANCH ?= "libdrm-imx-2.4.109"
 SRC_URI = "${IMX_LIBDRM_SRC};branch=${IMX_LIBDRM_BRANCH}"
-SRCREV = "1d943abb1fccc350a129950d2690948f64503bb7"
+SRCREV = "93c9a82bdf31ea055d45cb54ce57cd42e22c90ae"
 S = "${WORKDIR}/git"
 
 DEFAULT_PREFERENCE = "-1"

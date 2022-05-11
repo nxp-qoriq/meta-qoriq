@@ -3,7 +3,7 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 IMX_FIRMWARE_SRC ?= "git://github.com/NXP/imx-firmware.git;protocol=https"
-SRCBRANCH = "master"
+SRCBRANCH = "lf-5.15.32_2.0.0"
 SRC_URI += " \
     ${IMX_FIRMWARE_SRC};branch=${SRCBRANCH};destsuffix=imx-firmware;name=imx-firmware \
 "

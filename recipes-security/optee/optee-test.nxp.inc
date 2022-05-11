@@ -39,11 +39,12 @@ do_compile[cleandirs] = "${B}"
 
 do_install () {
 	# Install xtest
-	install -D -m 0755 ${B}/xtest/xtest ${D}/usr/bin/xtest
+	install -d ${D}${bindir}
+	install -D -m 0755 ${B}/xtest/xtest ${D}${bindir}/
 
 	# Install TAs
-	install -d ${D}/lib/optee_armtz/
-	install -m 444 ${B}/ta/*/*.ta ${D}/lib/optee_armtz/
+	install -d ${D}${nonarch_base_libdir}/optee_armtz/
+	install -m 444 ${B}/ta/*/*.ta ${D}${nonarch_base_libdir}/optee_armtz/
 
 	# Install plugins
 	install -d ${D}${libdir}/tee-supplicant/plugins/

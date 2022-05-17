@@ -19,6 +19,7 @@ IMAGE_INSTALL:append = " \
     packagegroup-core-tools-debug \
     packagegroup-fsl-networking-extended \
     packagegroup-fsl-tools-audio \
+    packagegroup-fsl-virtualization \
     packagegroup-fsl-devtools \
     packagegroup-fsl-benchmark-extended \
     packagegroup-fsl-tools-extended \

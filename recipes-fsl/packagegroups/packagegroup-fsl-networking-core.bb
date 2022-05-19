@@ -29,6 +29,7 @@ RDEPENDS:${PN} = " \
     inetutils-traceroute \
     ipsec-tools \
     ipsec-demo \
+    netcat \
     net-tools \
     tcpdump \
     watchdog \
@@ -45,9 +46,9 @@ RDEPENDS:${PN}:append:qoriq = "\
     packagegroup-fsl-networking-core-server \
 "
 
-RDEPENDS:${PN}:remove:ls1012a = "inetutils-tftp"
+RDEPENDS:${PN}:remove:ls1012a = "netcat inetutils-tftp"
 RDEPENDS:${PN}-server:remove:ls1012a = "inetutils-tftpd"
-RDEPENDS:${PN}:append:ls2088a = " \
-    netcat \
-"
+RDEPENDS:${PN}:remove:ls1021a = "netcat"
+RDEPENDS:${PN}:remove:ls1028a = "netcat"
+
 RDEPENDS:${PN}:append:ls1088a = "vsftpd"

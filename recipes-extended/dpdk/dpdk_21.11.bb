@@ -69,6 +69,7 @@ FILES:${PN}-examples = " \
     ${INSTALL_PATH}/examples/dpdk-link_status_interrupt \
     ${INSTALL_PATH}/examples/dpdk-mp_client \
     ${INSTALL_PATH}/examples/dpdk-mp_server \
+    ${INSTALL_PATH}/examples/dpdk-ptpclient \
     ${INSTALL_PATH}/examples/dpdk-qdma_demo \
     ${INSTALL_PATH}/examples/dpdk-simple_mp \
     ${INSTALL_PATH}/examples/dpdk-symmetric_mp \

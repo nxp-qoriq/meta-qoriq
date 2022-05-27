@@ -23,6 +23,8 @@ IMAGE_INSTALL:append = " \
 "
 IMAGE_INSTALL:remove:ls1021atwr = "restool"
 
+PACKAGE_EXCLUDE = "kernel-image-*"
+
 export IMAGE_BASENAME = "fsl-image-mfgtool"
 
 IMAGE_ROOTFS_EXTRA_SPACE = "262144"

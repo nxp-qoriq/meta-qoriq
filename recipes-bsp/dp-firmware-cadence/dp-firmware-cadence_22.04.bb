@@ -1,13 +1,13 @@
 SUMMARY = "DP firmware"
 LICENSE = "Proprietary"
-LIC_FILES_CHKSUM = "file://COPYING;md5=be5ff43682ed6c57dfcbeb97651c2829"
+LIC_FILES_CHKSUM = "file://COPYING;md5=d0122773a9d62bd492c87ffaf42463b5"
 
 inherit deploy fsl-eula-unpack
 
 SRC_URI = "${FSL_MIRROR}/firmware-imx-8.16.bin;fsl-eula=true"
 
-SRC_URI[md5sum] = "174da3080bec0d6ae9a9eae72af0c9b7"
-SRC_URI[sha256sum] = "b3abc9397b4f99d2547e460c65eeba1f7d3677ee8841881d29aa0897a7708614"
+SRC_URI[md5sum] = "ba7ea200f5c9c877781c657477b163c7"
+SRC_URI[sha256sum] = "b2925c4221147e4666136577eee545ace6cc159a59d8123ee2da68b36ae5280e"
 
 S = "${WORKDIR}/firmware-imx-8.16"
 

@@ -21,7 +21,7 @@ PACKAGECONFIG[openssl] = ",,openssl"
 
 RDEPENDS:${PN} += "bash pciutils python3-core python3-pyelftools"
 RDEPENDS:${PN}-examples += "bash"
-DEPENDS = "numactl python3-pyelftools-native"
+DEPENDS = "python3-pyelftools-native"
 
 inherit meson pkgconfig
 

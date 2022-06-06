@@ -7,6 +7,8 @@ python populate_packages:prepend() {
     packages = " ".join(do_split_packages(d, plugindir, r'^(.*)_plugin\.so$', 'vpp-plugin-%s', 'vpp plugin for %s', extra_depends=''))
     plugindir = d.expand('${libdir}/vpp_api_test_plugins/')
     packages += " " + " ".join(do_split_packages(d, plugindir, r'^(.*)_plugin\.so$', 'vpp-plugin-%s', 'vpp plugin for %s', extra_depends=''))
+    plugindir = d.expand('${libdir}/vat2_plugins/')
+    packages += " " + " ".join(do_split_packages(d, plugindir, r'^(.*)_plugin\.so$', 'vpp-plugin-%s', 'vpp plugin for %s', extra_depends=''))
     d.setVar("RDEPENDS:vpp-plugins", packages)
 }
 

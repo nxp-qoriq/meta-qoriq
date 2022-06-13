@@ -5,7 +5,6 @@ TOOLCHAIN_OUTPUTNAME = "${DISTRO}-${TCLIBC}-${SDKMACHINE}-${TUNE_PKGARCH}-toolch
 MULTILIBS:pn-${PN} = ""
 TOOLCHAIN_NEED_CONFIGSITE_CACHE += "zlib"
 TOOLCHAIN_TARGET_TASK += " \
-    dtc-staticdev \
     glib-2.0 \
     glib-2.0-dev \
     libgomp \

@@ -9,7 +9,7 @@ inherit update-rc.d python3native systemd
 
 OPTEE_CLIENT_SRC ?= "git://source.codeaurora.org/external/qoriq/qoriq-components/optee_client.git;protocol=https"
 SRC_URI = "${OPTEE_CLIENT_SRC};branch=${OPTEE_CLIENT_BRANCH}"
-SRCREV = "${AUTOREV}"
+SRCREV = "9a337049c52495e5e16b4a94decaa3e58fce793e"
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/optee-client:"
 SRC_URI += "file://tee-supplicant.service"

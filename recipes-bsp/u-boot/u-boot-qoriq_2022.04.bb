@@ -16,10 +16,8 @@ LIC_FILES_CHKSUM = " \
 
 PV:append = "+${SRCPV}"
 
-UBOOT_BRANCH ?= "lf_v2022.04"
-UBOOT_SRC ?= "git://bitbucket.sw.nxp.com/lfac/uboot-nxp.git;protocol=ssh"
-SRC_URI = "${UBOOT_SRC};branch=${UBOOT_BRANCH}"
-SRCREV = "${AUTOREV}"
+SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/u-boot;protocol=https;nobranch=1"
+SRCREV = "1c881f4da83cc05bee50f352fa183263d7e2622b"
 
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"

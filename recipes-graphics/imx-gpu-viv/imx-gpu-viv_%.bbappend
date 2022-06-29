@@ -1,4 +1,3 @@
-FSL_MIRROR = "http://sun.ap.freescale.net/downloads"
 
 DEPENDS:append:ls1028a = " patchelf-native"
 
@@ -23,5 +22,3 @@ RDEPENDS:libgbm-imx:append:ls1028a = " libdrm"
 
 RDEPENDS:libgal-imx:remove:ls1028a = "kernel-module-imx-gpu-viv"
 COMPATIBLE_MACHINE = "(imxfbdev|imxgpu|qoriq)"
-FSL_MIRROR = "http://yb2.am.freescale.net"
-LIC_FILES_CHKSUM = "file://${COREBASE}/../meta-freescale/EULA;md5=03bcadc8dc0a788f66ca9e2b89f56c6f"

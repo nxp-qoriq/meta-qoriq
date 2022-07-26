@@ -17,7 +17,7 @@ TOOLCHAIN_TARGET_TASK += " \
 TOOLCHAIN_HOST_TASK += " \
     nativesdk-dtc \
     nativesdk-u-boot-mkimage \
-    nativesdk-cst \
+    nativesdk-qoriq-cst \
     nativesdk-perl-module-integer \
 "
 

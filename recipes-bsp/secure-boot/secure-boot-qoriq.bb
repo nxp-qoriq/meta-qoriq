@@ -13,8 +13,8 @@ inherit deploy
 #set ROOTFS_IMAGE = "fsl-image-mfgtool" in local.conf
 #set KERNEL_ITS = "kernel-all.its" in local.conf
 ITB_IMAGE = "fsl-image-kernelitb"
-DEPENDS = "u-boot-mkimage-native cst-native qoriq-atf"
-DEPENDS:ls1021atwr = "u-boot-mkimage-native cst-native u-boot"
+DEPENDS = "u-boot-mkimage-native qoriq-cst-native qoriq-atf"
+DEPENDS:ls1021atwr = "u-boot-mkimage-native qoriq-cst-native u-boot"
 do_deploy[depends] += "virtual/kernel:do_deploy ${ITB_IMAGE}:do_build"
 
 BOOT_TYPE ??= ""

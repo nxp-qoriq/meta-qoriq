@@ -2,16 +2,16 @@ DESCRIPTION = "Vector Packet Processing"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
-DEPENDS = "gcc-runtime dpdk openssl python3-ply util-linux"
+include vpp-pkgs.inc
+
+DEPENDS = "gcc-runtime dpdk openssl python3-ply util-linux python3-ply-native"
 
 SRC_URI = "git://bitbucket.sw.nxp.com/dqns/vpp.git;protocol=ssh;nobranch=1"
 SRCREV = "bdff4a01e248b307199604b728d5e1b3f2ea5552"
 
 S = "${WORKDIR}/git"
 
-inherit cmake
-inherit pkgconfig
-inherit python3-dir
+inherit cmake pkgconfig python3-dir python3native
 
 OECMAKE_SOURCEPATH = "${S}/src"
 
@@ -29,19 +29,18 @@ EXTRA_OECONF = " \
 
 CFLAGS += " -ftls-model=local-dynamic -DCLIB_LOG2_CACHE_LINE_BYTES=6 -I${OPENSSL_PATH}/usr/include  -L${OPENSSL_PATH}/lib -Wl,--dynamic-linker=/lib/ld-linux-aarch64.so.1 -latomic"
 
-do_install:append() {
-        mkdir -p ${D}/etc/vpp
-        cp ${S}/src/vpp/conf/startup.conf ${D}/etc/vpp/startup.conf
-	rm -rf ${D}/usr/lib/python3.8/
-}
-
 do_configure:prepend() {
 	echo "@@@@ Creating libdpdk.a in ${DPDK_PATH}/lib"
 	cd ${DPDK_PATH}/lib && \
 	echo "GROUP ( "$(ls librte*.a)" )" > libdpdk.a && cd -
 }
 
-include vpp-pkgs.inc
+do_install:append() {
+        mkdir -p ${D}/etc/vpp
+        cp ${S}/src/vpp/conf/startup.conf ${D}/etc/vpp/startup.conf
+	rm -rf ${D}/usr/lib/python3.8/
+	rm -rf ${D}/usr/lib/python3.10/
+}
 
 BBCLASSEXTEND = "native nativesdk"
 

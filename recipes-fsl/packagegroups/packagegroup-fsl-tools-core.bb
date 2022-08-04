@@ -101,6 +101,8 @@ PKGS:ls1012a = " \
     optee-client-qoriq \
     optee-test-qoriq \
 "
+PKGS:remove:ls1012afrwy = "optee-os-qoriq optee-client-qoriq optee-test-qoriq"
+
 RDEPENDS:${PN}:append:qoriq-arm64 = "${PKGS}"
 
 RDEPENDS:${PN}:append:qoriq-ppc = " \

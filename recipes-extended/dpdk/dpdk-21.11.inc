@@ -6,7 +6,7 @@ LIC_FILES_CHKSUM = "file://license/gpl-2.0.txt;md5=b234ee4d69f5fce4486a80fdaf4a4
                     file://license/bsd-3-clause.txt;md5=0f00d99239d922ffd13cabef83b33444"
 
 SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/dpdk;protocol=https;nobranch=1"
-SRCREV = "a02594c97935a33e395e95b9030acd7a02b6cb50"
+SRCREV = "5462698a8311f6cfa43816ddfab692f2b6ab28a0"
 
 S = "${WORKDIR}/git"
 

@@ -10,7 +10,7 @@ DEPENDS = "python3-pyelftools-native dtc-native python3-cryptography-native"
 
 OPTEE_OS_SRC ?= "git://source.codeaurora.org/external/qoriq/qoriq-components/optee_os.git;protocol=https"
 SRC_URI = "${OPTEE_OS_SRC};branch=${OPTEE_OS_BRANCH}"
-SRCREV = "984996422c25c99ebfc5194c1bb393028605bb0c"
+SRCREV = "${AUTOREV}"
 
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"

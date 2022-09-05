@@ -1,1 +1,1 @@
-COMPATIBLE_MACHINE = "(imxfbdev|imxgpu|qoriq)"
+COMPATIBLE_MACHINE = "(imx-nxp-bsp|qoriq)"

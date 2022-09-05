@@ -158,10 +158,10 @@ SUMMARY = "Weston, a Wayland compositor, i.MX fork"
 
 DEFAULT_PREFERENCE = "-1"
 
-SRCBRANCH = "weston-imx-10.0"
+SRCBRANCH = "weston-imx-10.0.1"
 SRC_URI:remove = "https://wayland.freedesktop.org/releases/${BPN}-${PV}.tar.xz"
 SRC_URI:prepend = "git://github.com/nxp-imx/weston-imx.git;protocol=https;branch=${SRCBRANCH} "
-SRCREV = "c8c6e3106b03441db1037afa995f95fcb2f9f17d"
+SRCREV = "3f8f336b5d2cf7ea7aa4e047d669d093fc46dfe6"
 S = "${WORKDIR}/git"
 
 # Disable OpenGL for parts with GPU support for 2D but not 3D
@@ -182,6 +182,7 @@ PACKAGECONFIG:remove:imxfbdev = "kms"
 PACKAGECONFIG:append:imxfbdev = " fbdev clients"
 PACKAGECONFIG:append:imxgpu   = " imxgpu"
 PACKAGECONFIG:append:imxgpu2d = " imxg2d"
+PACKAGECONFIG:append:mx93-nxp-bsp = " imxgpu imxg2d"
 
 SIMPLECLIENTS:imxfbdev = "damage,im,egl,shm,touch,dmabuf-v4l"
 
@@ -200,6 +201,6 @@ EXTRA_OEMESON:append:imxfbdev = " -Dbackend-default=fbdev"
 EXTRA_OEMESON += "-Ddeprecated-wl-shell=true"
 
 PACKAGE_ARCH = "${MACHINE_SOCARCH}"
-COMPATIBLE_MACHINE = "(imxfbdev|imxgpu)"
+COMPATIBLE_MACHINE = "(imx-nxp-bsp)"
 
 ########### End of i.MX overrides #########

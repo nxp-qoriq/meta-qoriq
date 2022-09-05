@@ -12,7 +12,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=c7b12b6702da38ca028ace54aae3d484 \
 WAYLAND_PROTOCOLS_SRC ?= "git://github.com/nxp-imx/wayland-protocols-imx.git;protocol=https"
 SRCBRANCH = "wayland-protocols-imx-1.25"
 SRC_URI = "${WAYLAND_PROTOCOLS_SRC};branch=${SRCBRANCH}"
-SRCREV = "a104fb66d1b899dc04077422c2204638675ee4a6"
+SRCREV = "a104fb66d1b899dc04077422c2204638675ee4a6" 
 S = "${WORKDIR}/git"
 
 UPSTREAM_CHECK_URI = "https://wayland.freedesktop.org/releases.html"
@@ -27,4 +27,4 @@ PACKAGES = "${PN}"
 FILES:${PN} += "${datadir}/pkgconfig/wayland-protocols.pc"
 
 PACKAGE_ARCH = "${MACHINE_SOCARCH}"
-COMPATIBLE_MACHINE = "(imxfbdev|imxgpu)"
+COMPATIBLE_MACHINE = "(imx-nxp-bsp)"

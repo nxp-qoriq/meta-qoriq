@@ -9,7 +9,7 @@ DEPENDS = "python3-cryptography-native optee-os-qoriq optee-client-qoriq"
 
 OPTEE_TEST_SRC ?= "git://github.com/nxp-qoriq/qoriq-components_optee_test.git;protocol=https"
 SRC_URI = "${OPTEE_TEST_SRC};branch=${OPTEE_TEST_BRANCH}"
-SRCREV = "${AUTOREV}"
+SRCREV = "41222c4b8df1adc0f0bdc737e5cb824becd25f63"
 
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"

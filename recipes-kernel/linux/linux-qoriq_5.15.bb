@@ -5,6 +5,6 @@ LINUX_VERSION = "5.15.52"
 KERNEL_BRANCH ?= "lf-5.15.y"
 KERNEL_SRC ?= "git://bitbucket.sw.nxp.com/lfac/linux-lts-nxp.git;protocol=ssh"
 SRC_URI = "${KERNEL_SRC};branch=${KERNEL_BRANCH}"
-SRCREV = "${AUTOREV}"
+SRCREV = "36363d8623ba60858e2632b7d2b70dae932c9a8b"
 
 require linux-qoriq.inc

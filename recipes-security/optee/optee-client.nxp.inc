@@ -7,7 +7,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=69663ab153298557a59c67a60a743e5b"
 
 inherit update-rc.d python3native systemd
 
-OPTEE_CLIENT_SRC ?= "git://github.com/nxp-qoriq/qoriq-components_optee_client.git;protocol=https"
+OPTEE_CLIENT_SRC ?= "git://github.com/nxp-qoriq/optee_client.git;protocol=https"
 SRC_URI = "${OPTEE_CLIENT_SRC};branch=${OPTEE_CLIENT_BRANCH}"
 SRCREV = "9d8f1903bbea3a1e631c8d26ee51c37020569312"
 

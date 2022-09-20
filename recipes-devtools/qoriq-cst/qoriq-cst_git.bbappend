@@ -1,4 +1,4 @@
-SRC_URI = "git://github.com/nxp-qoriq/qoriq-components_cst;protocol=https;nobranch=1 \
+SRC_URI = "git://github.com/nxp-qoriq/cst;protocol=https;nobranch=1 \
            file://0001-tools-Mark-struct-input_field-file_field-extern.patch \
 "
 

@@ -8,7 +8,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=c1f21c4f72f372ef38a5a4aee55ec173"
 
 DEPENDS = "python3-pyelftools-native dtc-native python3-cryptography-native"
 
-OPTEE_OS_SRC ?= "git://github.com/nxp-qoriq/qoriq-components_optee_os.git;protocol=https"
+OPTEE_OS_SRC ?= "git://github.com/nxp-qoriq/optee_os.git;protocol=https"
 SRC_URI = "${OPTEE_OS_SRC};branch=${OPTEE_OS_BRANCH}"
 SRCREV = "${AUTOREV}"
 

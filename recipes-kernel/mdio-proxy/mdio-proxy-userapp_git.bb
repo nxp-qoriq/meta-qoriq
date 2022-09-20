@@ -2,7 +2,7 @@ DESCRIPTION = "user-space application for accessing any MDIO device."
 LICENSE = "GPL-2.0-or-later"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=6f933bdd5214942fcfafa90f40740dfc"
 
-SRC_URI = "git://github.com/nxp-qoriq/qoriq-components_mdio-proxy-module;protocol=htpps;nobranch=1"
+SRC_URI = "git://github.com/nxp-qoriq/mdio-proxy-module;protocol=htpps;nobranch=1"
 SRCREV = "a477f6f1f0112075296d4724f7f043caeeaf3477"
 
 S = "${WORKDIR}/git"

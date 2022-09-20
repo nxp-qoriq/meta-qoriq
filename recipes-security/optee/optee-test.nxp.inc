@@ -7,7 +7,7 @@ LIC_FILES_CHKSUM = "file://LICENSE.md;md5=daa2bcccc666345ab8940aab1315a4fa"
 
 DEPENDS = "python3-cryptography-native optee-os-qoriq optee-client-qoriq"
 
-OPTEE_TEST_SRC ?= "git://github.com/nxp-qoriq/qoriq-components_optee_test.git;protocol=https"
+OPTEE_TEST_SRC ?= "git://github.com/nxp-qoriq/optee_test.git;protocol=https"
 SRC_URI = "${OPTEE_TEST_SRC};branch=${OPTEE_TEST_BRANCH}"
 SRCREV = "${AUTOREV}"
 

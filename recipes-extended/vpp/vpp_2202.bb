@@ -6,8 +6,8 @@ include vpp-pkgs.inc
 
 DEPENDS = "gcc-runtime dpdk openssl python3-ply util-linux python3-ply-native"
 
-SRC_URI = "git://bitbucket.sw.nxp.com/dqns/vpp.git;protocol=ssh;nobranch=1"
-SRCREV = "bdff4a01e248b307199604b728d5e1b3f2ea5552"
+SRC_URI = "git://github.com/nxp-qoriq/vpp.git;protocol=https;nobranch=1"
+SRCREV = "6a75d2df01ef70bd778152e9e374153fe5c762ff"
 
 S = "${WORKDIR}/git"
 

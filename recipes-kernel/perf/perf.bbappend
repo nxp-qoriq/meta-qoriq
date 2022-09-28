@@ -1,3 +1,6 @@
+# Add setuptools build-dependency for Kernel 6.x
+DEPENDS:append = " python3-setuptools-native"
+
 do_configure:prepend:qoriq () {
     # use /usr/bin/env instead of the fixed path of sh
     if [ -e ${S}/tools/perf/scripts/python/bin/flamegraph-record ]; then
@@ -8,4 +11,3 @@ do_configure:prepend:qoriq () {
         sed -i 's,/usr/bin/sh,/usr/bin/env sh,' "${S}/tools/perf/scripts/python/bin/flamegraph-report"
     fi
 }
-

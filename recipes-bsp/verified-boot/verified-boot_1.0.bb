@@ -11,7 +11,7 @@ KERNEL_ITS ?= "kernel.its"
 DEPENDS += "u-boot-mkimage-native openssl-native dtc-native cst-native"
 do_compile[depends] += "u-boot:do_deploy rcw:do_deploy virtual/kernel:do_build ${ROOTFS_IMAGE}:do_build ddr-phy:do_deploy"
 
-SRC_URI = "git://github.com/nxp-qoriq/qoriq-components_atf;nobranch=1 \
+SRC_URI = "git://github.com/nxp-qoriq/atf;nobranch=1 \
            git://github.com/ARMmbed/mbedtls;protocol=https;nobranch=1;destsuffix=git/mbedtls;name=mbedtls \
            file://${KERNEL_ITS} \
 "

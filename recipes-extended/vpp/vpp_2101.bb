@@ -4,7 +4,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
 DEPENDS = "dpdk openssl python3-ply util-linux"
 
-SRC_URI = "git://github.com/nxp-qoriq/qoriq-components_vpp;nobranch=1 \
+SRC_URI = "git://github.com/nxp-qoriq/vpp;nobranch=1 \
         file://0001-vpp-core-fix-package_qa-error.patch \
 "
 SRCREV = "2dc49092878205ab062a00d4d46240aa0759ba4e"

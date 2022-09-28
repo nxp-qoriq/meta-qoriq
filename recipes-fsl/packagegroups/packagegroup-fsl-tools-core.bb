@@ -91,7 +91,6 @@ PKGS ?= " \
     optee-client-qoriq \
     optee-test-qoriq \
     restool \
-    spc \
     tsntool \
 "
 PKGS:ls1012a = " \
@@ -111,11 +110,9 @@ RDEPENDS:${PN}:append:qoriq-ppc = " \
 "
 RDEPENDS:${PN}:append:ls1043a = " \
     eth-config \
-    fmc \
 "
 RDEPENDS:${PN}:append:ls1046a = " \
     eth-config \
-    fmc \
 "
 RDEPENDS:${PN}:append:ls1088a = " \
     aiopsl \

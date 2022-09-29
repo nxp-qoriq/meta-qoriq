@@ -97,7 +97,6 @@ RDEPENDS:${PN}:append:ls1012a = "\
     optee-os-qoriq \
     optee-client-qoriq \
     optee-test-qoriq \
-    spc \
     tsntool \
 "
 NXP_WIFI_PKGS = "\

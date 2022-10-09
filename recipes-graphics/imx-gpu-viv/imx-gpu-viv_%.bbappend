@@ -12,7 +12,8 @@ EXTRA_PROVIDES:append:ls1028a = " \
 "
 PROVIDES_OPENVX:ls1028a   = "virtual/libopenvx"
 
-IMX_PACKAGES_GBM:ls1028a = "libgbm-imx libgbm-imx-dev"
+PACKAGES_GBM:ls1028a          = "libgbm-imx libgbm-imx-dev"
+PACKAGES_VULKAN:ls1028a       = "libvulkan-imx libvulkan-imx-dev"
 HAS_GBM:ls1028a = "true"
 IS_MX8:ls1028a = "1"
 

@@ -12,6 +12,9 @@ EXTRA_PROVIDES:append:ls1028a = " \
 "
 PROVIDES_OPENVX:ls1028a   = "virtual/libopenvx"
 
+# Keep IMX_PACKAGES_GBM to back-compatiable to Q3 release
+IMX_PACKAGES_GBM:ls1028a = "libgbm-imx libgbm-imx-dev"
+
 PACKAGES_GBM:ls1028a          = "libgbm-imx libgbm-imx-dev"
 PACKAGES_VULKAN:ls1028a       = "libvulkan-imx libvulkan-imx-dev"
 HAS_GBM:ls1028a = "true"

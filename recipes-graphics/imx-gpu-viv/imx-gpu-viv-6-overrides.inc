@@ -1,11 +1,27 @@
 require recipes-graphics/imx-gpu-viv/imx-gpu-viv-6.inc
 
-PROVIDES_OPENGLES3       = ""
-PROVIDES_OPENGLES3:mx8-nxp-bsp   = "virtual/libgles3"
-PROVIDES_OPENGLES3:mx8mm-nxp-bsp = ""
-PROVIDES += "${PROVIDES_OPENGLES3}"
+### Section 1: Changes to be upstreamed ###
 
-PACKAGECONFIG ?= "valgrind"
+PROVIDES:remove = "${PROVIDES_REMOVE_OPENCL}"
+
+PROVIDES_REMOVE_OPENCL               = ""
+PROVIDES_REMOVE_OPENCL:mx7-nxp-bsp   = "${PROVIDES_OPENCL}"
+PROVIDES_REMOVE_OPENCL:mx8mm-nxp-bsp = "${PROVIDES_OPENCL}"
+PROVIDES_OPENCL = " \
+    opencl-headers \
+    opencl-clhpp \
+    opencl-icd-loader \
+    virtual/opencl-icd"
+
+PACKAGES_OPENCL:mx8mm-nxp-bsp = ""
+
+# Full OpenVX support is limited to 8QM. However, a limited set of OpenVX
+# functionality is provided for Machine Learning, so provide packages for
+# additional SOCs for this case.
+PACKAGES_OPENVX:mx8-nxp-bsp   = "libopenvx-imx libopenvx-imx-dev"
+PACKAGES_OPENVX:mx8mm-nxp-bsp = ""
+
+PACKAGES_VULKAN:mx8mm-nxp-bsp = "libvulkan-imx libvulkan-imx-dev"
 
 do_install () {
     install -d ${D}${libdir}
@@ -20,6 +36,7 @@ do_install () {
     # Use vulkan header from vulkan-headers recipe to support vkmark
     rm -rf ${D}${includedir}/vulkan/
 
+    # Install SOC-specific drivers
     if [ -d ${S}/gpu-core/usr/lib/${IMX_SOC} ]; then
         cp -r ${S}/gpu-core/usr/lib/${IMX_SOC}/* ${D}${libdir}
     fi
@@ -29,27 +46,67 @@ do_install () {
         install -m 0644 ${S}/gpu-core/usr/lib/pkgconfig/gbm.pc ${D}${libdir}/pkgconfig/gbm.pc
     fi
 
+    install -m 0644 ${S}/gpu-core/usr/lib/pkgconfig/glesv1_cm.pc ${D}${libdir}/pkgconfig/glesv1_cm.pc
+    install -m 0644 ${S}/gpu-core/usr/lib/pkgconfig/glesv2.pc    ${D}${libdir}/pkgconfig/glesv2.pc
+    install -m 0644 ${S}/gpu-core/usr/lib/pkgconfig/vg.pc        ${D}${libdir}/pkgconfig/vg.pc
+
+    # Install backend-specific drivers
     if [ "${BACKEND}" = "wayland" ]; then
+        # Wayland backend
         install -m 0644 ${S}/gpu-core/usr/lib/pkgconfig/egl_wayland.pc ${D}${libdir}/pkgconfig/egl.pc
-        install -m 0644 ${S}/gpu-core/usr/lib/pkgconfig/glesv1_cm.pc ${D}${libdir}/pkgconfig/glesv1_cm.pc
-        install -m 0644 ${S}/gpu-core/usr/lib/pkgconfig/glesv2.pc ${D}${libdir}/pkgconfig/glesv2.pc
-        install -m 0644 ${S}/gpu-core/usr/lib/pkgconfig/vg.pc ${D}${libdir}/pkgconfig/vg.pc
-    else
-        install -m 0644 ${S}/gpu-core/usr/lib/pkgconfig/glesv1_cm.pc ${D}${libdir}/pkgconfig/glesv1_cm.pc
-        install -m 0644 ${S}/gpu-core/usr/lib/pkgconfig/glesv2.pc ${D}${libdir}/pkgconfig/glesv2.pc
-        install -m 0644 ${S}/gpu-core/usr/lib/pkgconfig/vg.pc ${D}${libdir}/pkgconfig/vg.pc
+        cp -r ${S}/gpu-core/usr/lib/wayland/* ${D}${libdir}
+    elif [ "${IS_MX8}" != "1" ]; then
+        # Framebuffer backend for i.MX 6 and 7
         install -m 0644 ${S}/gpu-core/usr/lib/pkgconfig/egl_linuxfb.pc ${D}${libdir}/pkgconfig/egl.pc
+        cp -r ${S}/gpu-core/usr/lib/fb/* ${D}${libdir}
+    else
+        # Framebuffer backend for i.MX 8 and beyond
+        install -m 0644 ${S}/gpu-core/usr/lib/pkgconfig/egl.pc         ${D}${libdir}/pkgconfig/egl.pc
+        cp -r ${S}/gpu-core/usr/lib/wayland/* ${D}${libdir}
+        set -f
+        for f in ${FILES:libvdk-imx} ${FILES:libvdk-imx-dev}; do
+            set +f
+            rm -rf ${D}/$f
+        done
+        rm -rf \
+            ${D}/opt/viv_samples/es20 \
+            ${D}/opt/viv_samples/tiger \
+            ${D}/opt/viv_samples/vdk
     fi
-
-    # Install Vendor ICDs for OpenCL's installable client driver loader (ICDs Loader)
-    install -d ${D}${sysconfdir}/OpenCL/vendors/
-    install -m 0644 ${S}/gpu-core/etc/Vivante.icd ${D}${sysconfdir}/OpenCL/vendors/Vivante.icd
-
-    # Handle backend specific drivers
-    cp -r ${S}/gpu-core/usr/lib/${BACKEND}/* ${D}${libdir}
     if [ "${BACKEND}" = "wayland" ] && [ "${IS_MX8}" != "1" ]; then
         # Special case for libVDK on Wayland backend, deliver fb library as well.
         cp ${S}/gpu-core/usr/lib/fb/libVDK.so.1.2.0 ${D}${libdir}/libVDK-fb.so.1.2.0
+    fi
+
+    if [ -z "${PACKAGES_OPENCL}" ]; then
+        set -f
+        for f in ${FILES:libopencl-imx} ${FILES:libopencl-imx-dev} ${FILES:libclc-imx} ${FILES:libclc-imx-dev}; do
+            set +f
+            rm -rf ${D}$f
+        done
+        rm -rf ${D}/opt/viv_samples/cl11
+    else
+        # Install Vendor ICDs for OpenCL's installable client driver loader (ICDs Loader)
+        install -d ${D}${sysconfdir}/OpenCL/vendors/
+        install -m 0644 ${S}/gpu-core/etc/Vivante.icd ${D}${sysconfdir}/OpenCL/vendors/Vivante.icd
+    fi
+
+    if [ -z "${PACKAGES_OPENVX}" ]; then
+        set -f
+        for f in ${FILES:libopenvx-imx} ${FILES:libopenvx-imx-dev}; do
+            set +f
+            rm -rf ${D}$f
+        done
+    fi
+
+    if [ "${IS_MX8}" = "1" ]; then
+        if [ -z "${PACKAGES_VULKAN}" ]; then
+            set -f
+            for f in ${FILES:libvulkan-imx} ${FILES:libvulkan-imx-dev}; do
+                set +f
+                rm -rf ${D}$f
+            done
+        fi
     fi
 
     # FIXME: MX6SL does not have 3D support; hack it for now
@@ -77,6 +134,10 @@ do_install () {
 
     chown -R root:root "${D}"
 }
+
+### Section 2: Changes to be kept in meta-imx ###
+
+PACKAGECONFIG ?= "valgrind"
 
 RDEPENDS:libopenvg-imx += "${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'systemd-gpuconfig', '', d)}"
 

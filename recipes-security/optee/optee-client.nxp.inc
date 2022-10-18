@@ -5,7 +5,7 @@ HOMEPAGE = "http://www.optee.org/"
 LICENSE = "BSD-2-Clause"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=69663ab153298557a59c67a60a743e5b"
 
-inherit update-rc.d python3native systemd
+inherit update-rc.d python3native systemd pkgconfig
 
 OPTEE_CLIENT_SRC ?= "git://github.com/nxp-qoriq/optee_client.git;protocol=https"
 SRC_URI = "${OPTEE_CLIENT_SRC};branch=${OPTEE_CLIENT_BRANCH}"
@@ -17,6 +17,8 @@ SRC_URI += "file://tee-supplicant.init"
 
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"
+
+DEPENDS = "util-linux-libuuid"
 
 OPTEE_ARCH:arm = "arm32"
 OPTEE_ARCH:aarch64 = "arm64"

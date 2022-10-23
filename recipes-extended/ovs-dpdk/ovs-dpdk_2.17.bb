@@ -8,7 +8,7 @@ RDEPENDS:${PN} = "bash libcrypto libssl python3"
 inherit python3native pkgconfig
 
 SRC_URI = "git://github.com/nxp-qoriq/ovs-dpdk;protocol=https;nobranch=1"
-SRCREV = "ad97b737bd978f8fe08f10f4abf38dc68d3134e0"
+SRCREV = "6f177f352ba4e925eec8d14cbddeea4e16bbf952"
 
 S = "${WORKDIR}/git"
 

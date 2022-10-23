@@ -9,7 +9,7 @@ inherit update-rc.d python3native systemd pkgconfig
 
 OPTEE_CLIENT_SRC ?= "git://github.com/nxp-qoriq/optee_client.git;protocol=https"
 SRC_URI = "${OPTEE_CLIENT_SRC};branch=${OPTEE_CLIENT_BRANCH}"
-SRCREV = "9d8f1903bbea3a1e631c8d26ee51c37020569312"
+SRCREV = "${AUTOREV}"
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/optee-client:"
 SRC_URI += "file://tee-supplicant.service"

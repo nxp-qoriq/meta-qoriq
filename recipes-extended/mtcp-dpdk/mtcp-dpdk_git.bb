@@ -9,7 +9,7 @@ PV = "21.11"
 DEPENDS += "gmp numactl dpdk bc-native"
 
 SRC_URI = "gitsm://github.com/nxpmicro/mtcp;protocol=https;branch=mtcp-dpdk-21.11"
-SRCREV = "dc4e0300b178c5f5cb6ea771c19ffce7a18e4b2f"
+SRCREV = "373f7fc5c0f9c27f15a5f934a85ab2bafab09f1d"
 
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/git"

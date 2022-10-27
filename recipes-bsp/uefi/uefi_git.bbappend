@@ -1,4 +1,4 @@
-SRCREV = "1d5209162fbc78155a08f1245a2245086c864c9d"
+SRCREV = "1d8f02f7c4bfc9bd62f088cd8b582663139e6728"
 
 do_install:lx2160ardb-rev2 () {
        install -d ${D}/uefi

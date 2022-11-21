@@ -158,10 +158,10 @@ SUMMARY = "Weston, a Wayland compositor, i.MX fork"
 
 DEFAULT_PREFERENCE = "-1"
 
-SRCBRANCH = "weston-imx-10.0.1"
 SRC_URI:remove = "https://wayland.freedesktop.org/releases/${BPN}-${PV}.tar.xz"
 SRC_URI:prepend = "git://github.com/nxp-imx/weston-imx.git;protocol=https;branch=${SRCBRANCH} "
-SRCREV = "3f8f336b5d2cf7ea7aa4e047d669d093fc46dfe6"
+SRCBRANCH = "weston-imx-10.0.1"
+SRCREV = "b3ccf36b718d16f5fb38ccfc2cccaf45c79854d8"
 S = "${WORKDIR}/git"
 
 # Disable OpenGL for parts with GPU support for 2D but not 3D
@@ -172,11 +172,11 @@ PACKAGECONFIG_OPENGL              = "opengl"
 PACKAGECONFIG_OPENGL:imxgpu2d     = ""
 PACKAGECONFIG_OPENGL:imxgpu3d     = "opengl"
 
-PACKAGECONFIG:remove = "wayland x11"
+PACKAGECONFIG_IMX_REMOVALS ?= "wayland x11"
+PACKAGECONFIG:remove = "${PACKAGECONFIG_IMX_REMOVALS}"
 PACKAGECONFIG:append = " \
     rdp \
-    ${@bb.utils.filter('DISTRO_FEATURES', '${PACKAGECONFIG_OPENGL}', d)} \
-"
+    ${@bb.utils.filter('DISTRO_FEATURES', '${PACKAGECONFIG_OPENGL}', d)}"
 
 PACKAGECONFIG:remove:imxfbdev = "kms"
 PACKAGECONFIG:append:imxfbdev = " fbdev clients"
@@ -195,10 +195,14 @@ PACKAGECONFIG[imxg2d] = "-Drenderer-g2d=true,-Drenderer-g2d=false,virtual/libg2d
 # Weston with OpenGL support
 PACKAGECONFIG[opengl] = "-Dopengl=true,-Dopengl=false"
 
-PACKAGECONFIG[fbdev] = "-Dbackend-fbdev=true,-Dbackend-fbdev=false,udev mtdev"
+PACKAGECONFIG[fbdev] = "-Dbackend-fbdev=true,-Dbackend-fbdev=false,udev mtdev libdrm"
 EXTRA_OEMESON:append:imxfbdev = " -Dbackend-default=fbdev"
 
 EXTRA_OEMESON += "-Ddeprecated-wl-shell=true"
+
+# links with imx-gpu libs which are pre-built for glibc
+# gcompat will address it during runtime
+LDFLAGS:append:imxgpu:libc-musl = " -Wl,--allow-shlib-undefined"
 
 PACKAGE_ARCH = "${MACHINE_SOCARCH}"
 COMPATIBLE_MACHINE = "(imx-nxp-bsp)"

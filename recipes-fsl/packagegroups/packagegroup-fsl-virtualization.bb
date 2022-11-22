@@ -34,5 +34,5 @@ DOCKER_PKGS = " \
     docker-registry \
 "
 
-RDEPENDS:${PN}:append:qoriq-arm64 = "  ${DOCKER_PKGS}"
-RDEPENDS:${PN}:append:qoriq-arm = "  ${DOCKER_PKGS}"
+#RDEPENDS:${PN}:append:qoriq-arm64 = "  ${DOCKER_PKGS}"
+#RDEPENDS:${PN}:append:qoriq-arm = "  ${DOCKER_PKGS}"

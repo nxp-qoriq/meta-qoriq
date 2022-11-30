@@ -1,0 +1,30 @@
+From fdd7dab564d6885128d4be9664773609849443fc Mon Sep 17 00:00:00 2001
+From: Zelan Zou <zelan.zou@nxp.com>
+Date: Tue, 29 Nov 2022 15:40:05 +0800
+Subject: [PATCH 2/2] Add sudo permission when create symbolink on mount device
+ [YOCIMX-6687]
+
+fix such error when burn SD card
+    -- ln: failed to create symbolic link '/mnt/sdu1/boot.scr': Permission denied
+
+Signed-off-by: Zelan Zou <zelan.zou@nxp.com>
+---
+ .../flex-installer             | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/flex-installer b/flex-installer
+index 6b0a8d2..ffcfb33 100755
+--- a/flex-installer
++++ b/flex-installer
+@@ -320,7 +320,7 @@ flex_install_distro() {
+ 	echo Installing $bootimg_n to $bootdev  ...
+ 	[ $bootimgtype = dir ] && sudo cp -rfp $bootimg_n/* $bootpartition
+ 	[ $bootimgtype = tgz ] && sudo tar xfm $bootimg_n -C $bootpartition
+-	[ -n "$machine" ] && ln -sf ${machine}_boot.scr $bootpartition/boot.scr
++	[ -n "$machine" ] && sudo ln -sf ${machine}_boot.scr $bootpartition/boot.scr
+ 	print_d "Install $bootimg_n in $bootdev"
+     fi
+ 
+-- 
+2.25.1
+

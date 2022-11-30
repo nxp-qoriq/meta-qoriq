@@ -1,0 +1,40 @@
+From 5badf9485d55671960898f8ccc54ea00b35cd6cb Mon Sep 17 00:00:00 2001
+From: Zelan Zou <zelan.zou@nxp.com>
+Date: Tue, 29 Nov 2022 15:29:53 +0800
+Subject: [PATCH 1/2] Modified default partition size to meet have enough size
+ on part2 when boot on uefi [YOCIMX-6687]
+
+default partition 4P=2G:128M:5G:-1,
+but 128M not enough to install boottgz as uefi require boottgz install on part2.
+Signed-off-by: Zelan Zou <zelan.zou@nxp.com>
+---
+ .../flex-installer/flex-installer/flex-installer.sh         | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/flex-installer b/flex-installer
+index 59d7d09..6b0a8d2 100755
+--- a/flex-installer
++++ b/flex-installer
+@@ -13,8 +13,8 @@ set -e
+ 
+ FIVERSION=1.14.2110
+ DEFAULT_PARTITION_NUMBER=4
+-DEFAULT_DISK_PARTITION="4P=2G:128M:5G:-1"
+-DEFAULT_LOOP_DEVICE_PARTITION="4P=1300M:128M:128M:-1"
++DEFAULT_DISK_PARTITION="4P=2G:2G:3G:-1"
++DEFAULT_LOOP_DEVICE_PARTITION="4P=1300M:1300M:128M:-1"
+ DEFAULT_SDCARD_IMG_SIZE_MB=6144
+ DEFAULT_RAW_PARTITION_SIZE_MB=64
+ DEFAULT_DISTRO_SVR_URL=http://www.nxp.com/lgfiles/sdk/sdk2110
+@@ -54,7 +54,7 @@ Examples for various use scenarios:
+   You can specify one or several of '-b <boot> -r <rootfs> -f <firmware> -u <url>' options to override the default settings
+ 
+ - To partition and format target SD/eMMC/USB disk and install custom distro image:
+-  $ flex-installer -i pf -d /dev/mmcblk0                   (default 4 partitions as 4P=2G:128M:5G:-1)
++  $ flex-installer -i pf -d /dev/mmcblk0                   (default 4 partitions as 4P=2G:2G:3G:-1)
+   or
+   $ flex-installer -i pf -d /dev/sdx -p 4P=2G:3G:6G:-1     (specify custom partitions as 4P=2G:3G:6G:-1)
+ 
+-- 
+2.25.1
+

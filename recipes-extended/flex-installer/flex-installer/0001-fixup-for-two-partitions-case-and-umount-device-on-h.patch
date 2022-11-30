@@ -1,0 +1,34 @@
+From b0f41dab41ac9306ddd93f45c0a86aa34a464ebf Mon Sep 17 00:00:00 2001
+From: Shengzhou Liu <Shengzhou.Liu@nxp.com>
+Date: Tue, 15 Nov 2022 13:15:07 +0800
+Subject: [PATCH] fixup for two partitions case and umount device on host
+
+Signed-off-by: Shengzhou Liu <Shengzhou.Liu@nxp.com>
+---
+ flex-installer | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/flex-installer b/flex-installer
+index 832147bc..95b4c096 100755
+--- a/flex-installer
++++ b/flex-installer
+@@ -231,7 +231,7 @@ partition_format_disk() {
+     optimal_io_size=$(sudo cat /sys/block/$devname/queue/optimal_io_size)
+     minimum_io_size=$(sudo cat /sys/block/$devname/queue/minimum_io_size)
+     [ "$optimal_io_size" = "0" ] && aligntype=minimal || aligntype=optimal
+-    [ $pnum -le 2 ] && parttable=gpt || parttable=msdos
++    [ $pnum -le 1 ] && parttable=gpt || parttable=msdos
+ 
+     umount_device
+     sudo rm -rf $mntdir/${devpartname}*/*
+@@ -399,6 +399,7 @@ flex_install_distro() {
+ 
+     echo syncing data ...
+     sync
++    [ $intinyrfs = n ] && umount_device
+ 
+     if [ $instruction = auto -o -n "$bootimg" -o -n "$rootfsimg" ]; then
+ 	if [ -f $bootmountfile ] && ! grep -q $uuid_boot $bootmountfile; then
+-- 
+2.25.1
+

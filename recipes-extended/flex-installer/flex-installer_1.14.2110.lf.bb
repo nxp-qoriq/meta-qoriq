@@ -13,9 +13,10 @@ do_install[noexec] = "1"
 
 RDEPENDS:${PN} += "bash"
 
-do_fetch:append () {
+do_move () {
     mv ${WORKDIR}/flex-installer ${WORKDIR}/${BPN}-${PV}/
 }
+addtask move after do_fetch before do_patch
 
 do_deploy () {
     mkdir -p ${DEPLOY_DIR_IMAGE}

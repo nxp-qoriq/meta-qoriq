@@ -10,7 +10,7 @@ DEPENDS = "python3-pyelftools-native dtc-native python3-cryptography-native"
 
 OPTEE_OS_SRC ?= "git://github.com/nxp-qoriq/optee_os.git;protocol=https"
 SRC_URI = "${OPTEE_OS_SRC};branch=${OPTEE_OS_BRANCH}"
-SRCREV = "${AUTOREV}"
+SRCREV = "00919403f040fad4f8603e605932281ff8451b1d"
 
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"

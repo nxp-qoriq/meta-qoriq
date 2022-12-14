@@ -42,7 +42,7 @@ securevalidate_enforce="setenv secureboot_validate 'load \$devtype \$devnum:\$de
 distroboot=\
 'env exists dtb || setenv dtb fsl-lx2160a-rdb.dtb;'\
 'env exists kernel_image || setenv kernel_image Image;'\
-'env exists devpart_boot || setenv devpart_boot 2;'\
+'env exists devpart_boot || setenv devpart_boot 1;'\
 'env exists devpart_root || setenv devpart_root 4;'\
 'part uuid $devtype $devnum:$devpart_root partuuidr;'\
 'setenv bootargs console=ttyAMA0,115200 earlycon=pl011,mmio32,0x21c0000 root=PARTUUID=$partuuidr rw rootwait pci=pcie_bus_perf $othbootargs;'\
@@ -54,7 +54,7 @@ distroboot=\
 distroboot_ima=\
 'env exists dtb || setenv dtb fsl-lx2160a-rdb.dtb;'\
 'env exists kernel_image || setenv kernel_image Image;'\
-'env exists devpart_boot || setenv devpart_boot 2;'\
+'env exists devpart_boot || setenv devpart_boot 1;'\
 'env exists devpart_root || setenv devpart_root 4;'\
 'part uuid $devtype $devnum:$devpart_root partuuidr;'\
 'load $devtype $devnum:$devpart_boot $kernel_addr_r $kernel_image;'\

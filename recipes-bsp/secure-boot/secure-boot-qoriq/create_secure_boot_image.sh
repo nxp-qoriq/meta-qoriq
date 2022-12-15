@@ -14,15 +14,13 @@ Usage()
         -t        boottype
         -d        topdir
         -s        deploy dir
-        -e        encap
-        -i        ima-evm
         -o   secure
 "
     exit
 }
 
 # get command options
-while getopts "m:t:d:s:e:i:o:" flag
+while getopts "m:t:d:s:o:" flag
 do
         case $flag in
                 m) MACHINE="$OPTARG";
@@ -36,12 +34,6 @@ do
                    ;;
                 s) DEPLOYDIR="$OPTARG";
                    echo "deploy dir : $DEPLOYDIR";
-                   ;;
-                e) ENCAP="$OPTARG";
-                   echo "encap : $ENCAP";
-                   ;;
-                i) IMA_EVM="$OPTARG";
-                   echo "ima_evm : $IMA_EVM";
                    ;;
                 o) SECURE="$OPTARG";
                    echo "secure : $SECURE";
@@ -58,7 +50,7 @@ secure_sign_image() {
     . $1.manifest
 
     secureboot_headers=`eval echo '${'"secureboot_headers_""$2"'}'`
-    [ -z "$secureboot_headers" ] && echo ${2}boot secure on $1: unsupported && exit
+    [ -z "$secureboot_headers" ] && echo ${2}boot secure on $1: unsupported && return
 
     rm -f bootscript uImage.dtb uImage.bin kernel.itb secboot_hdrs*.bin hdr*.out
     cp $TOPDIR/$distro_bootscript $TOPDIR/bootscript && echo "Copying bootscript"
@@ -68,21 +60,21 @@ secure_sign_image() {
 
     rcwimg_nonsec=`eval echo '${'"rcw_""$2"'}'`
     if [ -z "$rcwimg_nonsec" ]; then
-        echo ${2}boot on $1 is not supported && exit
+        echo ${2}boot on $1 is not supported && return
     fi
 
     if [ "${1:0:7}" = "ls1021a" ]; then
         ubootimg_sec=`eval echo '${'"uboot_""$2"'boot_sec}'`
         if [ -z "$ubootimg_sec" ]; then
             echo $2 boot on $1 for secureboot unsupported
-            exit
+            return
         fi
         if [ "$2" = "nor" -o "$2" = "qspi" ]; then
             cp $DEPLOYDIR/$ubootimg_sec $TOPDIR/u-boot-dtb.bin
         elif [ "$2" = "sd" -o "$2" = "emmc" ]; then
             if [ -z "$uboot_sdboot_sec" ]; then
                 echo $2 boot on  for secureboot unsupported
-                exit
+                return
             fi
             cp $DEPLOYDIR/$uboot_sdboot_sec $TOPDIR/u-boot-with-spl-pbl.bin
             cp $DEPLOYDIR/$uboot_spl $TOPDIR/u-boot-spl.bin
@@ -135,58 +127,13 @@ secure_sign_image() {
     if [ "$1"  = "ls1012afrwy" ]; then
         cp $TOPDIR/hdr_kernel.out $DEPLOYDIR/secboot_hdrs/
     fi
-    cp $TOPDIR/$distro_bootscript $DEPLOYDIR/
+
     cp $TOPDIR/hdr_bs.out $DEPLOYDIR/secboot_hdrs/hdr_${1}_bs.out
     cp $TOPDIR/srk_hash.txt $DEPLOYDIR/
     cp $TOPDIR/srk.pri $DEPLOYDIR/
     cp $TOPDIR/srk.pub $DEPLOYDIR/
 }
 
-
-generate_distro_bootscr() {
-    if [ "$ENCAP" = "true" ]; then
-        KEY_ID=0x12345678123456781234567812345678
-        key_id_1=${KEY_ID:2:8}
-        key_id_2=${KEY_ID:10:8}
-        key_id_3=${KEY_ID:18:8}
-        key_id_4=${KEY_ID:26:8}
-    fi
-    . $1.manifest
-    if [ -n "$distro_bootscript" ]; then
-        if [ -n "$securevalidate" ]; then
-            if [ "$ENCAP" = "true" ]; then
-                if [ $bootscript_dec != null ]; then
-                    echo $securevalidate_dec > $bootscript_dec.tmp
-                    echo $distroboot >> $bootscript_dec.tmp
-                    mkimage -A arm64 -O linux -T script -C none -a 0 -e 0  -n "boot.scr" \
-			    -d $bootscript_dec.tmp $bootscript_dec
-                    rm -f $bootscript_dec.tmp
-                fi
-                echo $securevalidate_enc > ${distro_bootscript}.tmp
-            elif [ "$IMA_EVM" = "true" ] ; then
-                if [ -n "$bootscript_enforce" ]; then
-                    echo $securevalidate_enforce > $bootscript_enforce.tmp
-                    echo $distroboot_ima >> $bootscript_enforce.tmp
-                    mkimage -A arm64 -O linux -T script -C none -a 0 -e 0  -n "boot.scr" \
-                             -d $bootscript_enforce.tmp $bootscript_enforce
-                    rm -f $FBDIR/$bootscript_enforce.tmp
-                fi
-                echo $securevalidate_fix > ${distro_bootscript}.tmp
-            else
-                echo $securevalidate > ${distro_bootscript}.tmp
-            fi
-        fi
-        if [ "$IMA_EVM" = "true" ] ; then
-                echo $distroboot_ima >> ${distro_bootscript}.tmp
-        else
-                echo $distroboot >> ${distro_bootscript}.tmp
-        fi
-
-        mkimage -A arm64 -O linux -T script -C none -a 0 -e 0  -n "boot.scr" -d ${distro_bootscript}.tmp $distro_bootscript
-        rm -f ${distro_bootscript}.tmp
-        echo -e "${distro_bootscript}    [Done]\n"
-    fi
-}
 
 generate_qoriq_composite_firmware() {
     # generate machine-specific firmware to be programmed to NOR/SD media
@@ -195,7 +142,7 @@ generate_qoriq_composite_firmware() {
 
     . $1.manifest
     . memorylayout.cfg
-    if [ "$SECURE" = "true" ]; then
+    if [ "$SECURE" = "true" -a $2 != "emmc" ]; then
       fwimg=$DEPLOYDIR/firmware_${1}_uboot_${2}boot_secure
       rcwimg=`eval echo '${'"rcw_""$2"'_sec}'`
       bootloaderimg=`eval echo '${'"uboot"'_'"$2"'boot_sec}'`
@@ -219,8 +166,8 @@ generate_qoriq_composite_firmware() {
             # rcw and uboot/uefi in single image
             dd if=$DEPLOYDIR/$bootloaderimg of=$fwimg bs=512 seek=$sd_rcw_bootloader_offset
         else
-            # program rcw
-            if [ -z "$rcwimg" ]; then echo ${2}boot on ${1} is not unsupported!; exit; fi
+            # program rcw  ls1021atwr secure qspi unsupported
+            if [ -z "$rcwimg" ]; then echo ${2}boot on ${1} is not unsupported!; return; fi
             dd if=$DEPLOYDIR/$rcwimg of=$fwimg bs=1K seek=0
             # program u-boot image
             val=`expr $(echo $(($nor_bootloader_offset))) / 1024`
@@ -255,9 +202,9 @@ generate_qoriq_composite_firmware() {
     # DDR PHY firmware
     if [ "${1:0:7}" = "lx2160a" -o "${1:0:7}" = "lx2162a" ]; then
         if [ "$SECURE" = "true" ]; then
-	    ddrphyfw=$ddr_phy_fw_sec
-	else
-	    ddrphyfw=$ddr_phy_fw
+            ddrphyfw=$ddr_phy_fw_sec
+        else
+            ddrphyfw=$ddr_phy_fw
         fi
         if [ "$2" = "nor" -o "$2" = "qspi" -o "$2" = "xspi" -o "$2" = "nand" ]; then
             val=`expr $(echo $(($nor_ddr_phy_fw_offset))) / 1024`
@@ -363,7 +310,7 @@ generate_qoriq_composite_firmware() {
     elif [ "$2" = "sd" -o "$2" = "emmc" ]; then
         dd if=$DEPLOYDIR/${kernel_itb} of=$fwimg bs=512 seek=$sd_kernel_offset
     fi
-   
+
     if [ "$2" = "sd" -o "$2" = "emmc" ]; then
         tail -c +4097 $fwimg > $fwimg.img && rm $fwimg
     else
@@ -384,14 +331,14 @@ generate_composite_fw_2M() {
     . $1.manifest
     . memorylayout.cfg
     if [ "$SECURE" = "true" ]; then
-	bl2img=`eval echo '${'"atf_bl2_""$2"'_sec}'`
-	fipimg=`eval echo '${'"atf_fip_""$3"'_sec}'`
-	fwimg=$DEPLOYDIR/firmware_${1}_${3}_${2}boot_secure
+        bl2img=`eval echo '${'"atf_bl2_""$2"'_sec}'`
+        fipimg=`eval echo '${'"atf_fip_""$3"'_sec}'`
+        fwimg=$DEPLOYDIR/firmware_${1}_${3}_${2}boot_secure
         secureboot_headers=`eval echo '${'"secureboot_headers_""$2"'}'`
     else
-	bl2img=`eval echo '${'"atf_bl2_""$2"'}'`
-	fipimg=`eval echo '${'"atf_fip_""$3"'}'`
-	fwimg=$DEPLOYDIR/firmware_${1}_${3}_${2}boot
+        bl2img=`eval echo '${'"atf_bl2_""$2"'}'`
+        fipimg=`eval echo '${'"atf_fip_""$3"'}'`
+        fwimg=$DEPLOYDIR/firmware_${1}_${3}_${2}boot
     fi
 
     if [ "$4" = "512mb" ]; then
@@ -407,7 +354,7 @@ generate_composite_fw_2M() {
     fi
 
     [ -f $fwimg ] && rm -f $fwimg
-    [ -z "$bl2img" ] && echo ${3} ${2}boot on $1 based on ATF: unsupported! && exit
+    [ -z "$bl2img" ] && echo ${3} ${2}boot on $1 based on ATF: unsupported! && return
 
     # 1. program ATF bl2
     if [ "$2" = "sd" -o "$2" = "emmc" ]; then
@@ -464,13 +411,9 @@ generate_composite_fw_2M() {
     echo -e "${GREEN} $fwimg.img   [Done]\n${NC}"
 }
 
-generate_distro_bootscr $MACHINE
-if [ "${MACHINE:0:10}" = "lx2160ardb" ]; then
-    machname=${MACHINE:0:10}
-else
-    machname=${MACHINE}
+if $SECURE; then
+    secure_sign_image $MACHINE $BOOTTYPE
 fi
-secure_sign_image $machname $BOOTTYPE
 if [ "$MACHINE" = "ls1012afrwy" ]; then
     generate_composite_fw_2M $MACHINE $BOOTTYPE uboot
     generate_composite_fw_2M $MACHINE $BOOTTYPE uboot 512mb

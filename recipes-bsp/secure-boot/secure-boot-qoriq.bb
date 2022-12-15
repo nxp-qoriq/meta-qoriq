@@ -30,10 +30,7 @@ BOOT_TYPE:ls1012afrwy ?= "qspi"
 BOOT_TYPE:ls1021atwr ?= "nor sd qspi"
 BOOT_TYPE:ls1028ardb ?= "xspi sd emmc"
 
-IMA_EVM = "${@bb.utils.contains('DISTRO_FEATURES', 'ima-evm', 'true', 'false', d)}"
-ENCAP = "${@bb.utils.contains('DISTRO_FEATURES', 'encap', 'true', 'false', d)}"
 SECURE = "${@bb.utils.contains('DISTRO_FEATURES', 'secure', 'true', 'false', d)}"
-EDS = "${@bb.utils.contains('DISTRO_FEATURES', 'edgescale', 'true', 'false', d)}"
 
 S = "${WORKDIR}"
 
@@ -55,15 +52,11 @@ do_deploy () {
             ./gen_keys 1024
         fi
     fi
- 
+
     for d in ${BOOT_TYPE}; do
-        ./create_secure_boot_image.sh -m ${MACHINE} -t ${d} -d . -s ${DEPLOY_DIR_IMAGE} -e ${ENCAP} -i ${IMA_EVM} -o ${SECURE}
+        ./create_secure_boot_image.sh -m ${MACHINE} -t ${d} -d . -s ${DEPLOY_DIR_IMAGE} -o ${SECURE}
     done
-    if [ "${EDS}" = "true" ];then
-        install -d ${DEPLOY_DIR_IMAGE}/bootpartition
-        cp ${DEPLOY_DIR_IMAGE}/Image ${DEPLOY_DIR_IMAGE}/bootpartition
-        cp ${DEPLOY_DIR_IMAGE}/${MACHINE}_boot.scr ${DEPLOY_DIR_IMAGE}/bootpartition
-    fi
+
 }
 
 addtask deploy before do_build after do_compile

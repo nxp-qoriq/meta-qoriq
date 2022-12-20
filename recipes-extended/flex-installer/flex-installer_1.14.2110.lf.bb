@@ -10,17 +10,25 @@ SRC_URI = "file://flex-installer \
 
 inherit deploy
 do_install[noexec] = "1"
-
+old_version ?= "1.14.2110"
+new_version ?= "${PV}"
 RDEPENDS:${PN} += "bash"
 
-do_move () {
-    mv ${WORKDIR}/flex-installer ${WORKDIR}/${BPN}-${PV}/
-}
-addtask move after do_fetch before do_patch
+move_do_patch() {
+    rm -f ${S}/flex-installer
+    cp ${WORKDIR}/flex-installer ${S}/
 
-do_deploy () {
+}
+python do_patch() {
+    bb.build.exec_func('move_do_patch', d)
+    bb.build.exec_func('patch_do_patch', d)
+}
+
+
+do_deploy() {
     mkdir -p ${DEPLOY_DIR_IMAGE}
-    install -m 644 ${WORKDIR}/${BPN}-${PV}/flex-installer ${DEPLOY_DIR_IMAGE}/flex-installer
+    sed -i -e "s,${old_version},${new_version},g" ${S}/flex-installer
+    install -m 644 ${S}/flex-installer ${DEPLOY_DIR_IMAGE}/flex-installer
 }
 addtask deploy after do_install before do_build
 

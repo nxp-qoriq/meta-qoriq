@@ -23,7 +23,7 @@ device_tree=fsl-ls1088a-rdb.dtb
 kernel_itb=kernel-fsl-ls1088a-rdb.itb
 
 # [distro autoboot script]
-uboot_scr=ls1088ardb_boot.scr
+distro_bootscript=ls1088ardb_boot.scr
 bootscript_dec=ls1088ardb_dec_boot.scr
 bootscript_enforce=ls1088ardb_enforce_boot.scr
 

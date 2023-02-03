@@ -22,7 +22,7 @@ inherit deploy
 ITB_IMAGE = "fsl-image-kernelitb"
 DEPENDS = "u-boot-mkimage-native qoriq-cst-native qoriq-atf"
 DEPENDS:ls1021atwr = "u-boot-mkimage-native qoriq-cst-native u-boot"
-do_deploy[depends] += "virtual/kernel:do_deploy ${ITB_IMAGE}:do_build"
+do_deploy[depends] += "virtual/kernel:do_deploy ${ITB_IMAGE}:do_build distro-bootscr:do_deploy"
 
 BOOT_TYPE ??= ""
 BOOT_TYPE:ls1043ardb ?= "nor sd nand"

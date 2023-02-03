@@ -53,7 +53,7 @@ secure_sign_image() {
     [ -z "$secureboot_headers" ] && echo ${2}boot secure on $1: unsupported && return
 
     rm -f bootscript uImage.dtb uImage.bin kernel.itb secboot_hdrs*.bin hdr*.out
-    cp $TOPDIR/$distro_bootscript $TOPDIR/bootscript && echo "Copying bootscript"
+    cp $DEPLOYDIR/$distro_bootscript $TOPDIR/bootscript && echo "Copying bootscript"
     cp $DEPLOYDIR/$device_tree $TOPDIR/uImage.dtb && echo "Copying dtb"
     cp $DEPLOYDIR/$kernel_img $TOPDIR/uImage.bin && echo "Copying kernel"
     cp $DEPLOYDIR/$kernel_itb $TOPDIR/kernel.itb && echo "Copying kernel_itb"

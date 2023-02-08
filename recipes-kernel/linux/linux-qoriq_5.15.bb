@@ -5,6 +5,6 @@ LINUX_VERSION = "5.15.71"
 KERNEL_BRANCH ?= "lf-5.15.y"
 KERNEL_SRC ?= "git://github.com/nxp-qoriq/linux.git;protocol=https"
 SRC_URI = "${KERNEL_SRC};branch=${KERNEL_BRANCH}"
-SRCREV = "3313732e9984cb8a6b10a9085c7e18d58e770d56"
+SRCREV = "95448dd0dc9b621ae027cbefedaaa7c3d0d3ad2d"
 
 require linux-qoriq.inc

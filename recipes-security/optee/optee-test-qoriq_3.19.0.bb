@@ -1,5 +1,5 @@
-# Copyright (C) 2022 NXP
+# Copyright 2022-2023 NXP
 require optee-test.nxp.inc
 
-OPTEE_TEST_BRANCH = "lf-5.15.71_2.2.0"
+OPTEE_TEST_BRANCH = "lf-6.1.1_1.0.0"
 PV:append = "+git${SRCPV}"

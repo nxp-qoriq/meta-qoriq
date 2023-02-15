@@ -7,7 +7,7 @@ HOMEPAGE = "https://www.op-tee.org/"
 
 DEPENDS += "python3-pycryptodome-native"
 
-OPTEE_OS_BRANCH = "lf-5.15.71_2.2.0"
+OPTEE_OS_BRANCH = "lf-6.1.1_1.0.0"
 PV:append = "+git${SRCPV}"
 
 do_install() {

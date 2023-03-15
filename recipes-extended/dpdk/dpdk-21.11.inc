@@ -6,7 +6,7 @@ LIC_FILES_CHKSUM = "file://license/gpl-2.0.txt;md5=b234ee4d69f5fce4486a80fdaf4a4
                     file://license/bsd-3-clause.txt;md5=0f00d99239d922ffd13cabef83b33444"
 
 SRC_URI = "git://github.com/nxp-qoriq/dpdk;protocol=https;nobranch=1"
-SRCREV = "eb28c02bc1221e788688f0de9ff5b2bb1a062006"
+SRCREV = "548e902d12a1884aa3e5f6c379efec970dee6d9e"
 
 S = "${WORKDIR}/git"
 

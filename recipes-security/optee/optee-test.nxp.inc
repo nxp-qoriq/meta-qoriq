@@ -1,4 +1,4 @@
-# Copyright 2020-2022 NXP
+# Copyright 2020-2023 NXP
 
 SUMMARY = "OPTEE test"
 HOMEPAGE = "http://www.optee.org/"
@@ -9,7 +9,7 @@ DEPENDS = "python3-cryptography-native optee-os-qoriq optee-client-qoriq"
 
 OPTEE_TEST_SRC ?= "git://github.com/nxp-qoriq/optee_test.git;protocol=https"
 SRC_URI = "${OPTEE_TEST_SRC};branch=${OPTEE_TEST_BRANCH}"
-SRCREV = "${AUTOREV}"
+SRCREV = "7c314e6a0cec0ba19246eb4f1959859d7a6536d6"
 
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"

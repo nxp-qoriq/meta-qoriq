@@ -1,4 +1,4 @@
-# Copyright 2020-2022 NXP
+# Copyright 2020-2023 NXP
 
 SUMMARY = "OPTEE OS"
 DESCRIPTION = "OPTEE OS"
@@ -10,7 +10,7 @@ DEPENDS = "python3-pyelftools-native dtc-native python3-cryptography-native"
 
 OPTEE_OS_SRC ?= "git://github.com/nxp-qoriq/optee_os.git;protocol=https"
 SRC_URI = "${OPTEE_OS_SRC};branch=${OPTEE_OS_BRANCH}"
-SRCREV = "${AUTOREV}"
+SRCREV = "ad4e8389bb2c38efe39853925eec571ac778c575"
 
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"

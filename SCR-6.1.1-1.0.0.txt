@@ -120,7 +120,7 @@ Package Category:            user space
 Type of Content:             source
 Description and comments:    CEETM TC QDISC
 Release Location:            https://github.com/nxp-qoriq/ceetm -b lf-6.1.1-1.0.0
-Origin:                      NXP (BSD-3-Clause)
+Origin:                      NXP (GPL-2.0)
 
 --------------------------------------------
 
@@ -147,7 +147,7 @@ Origin:                      NXP (BSD-3-Clause)
 --------------------------------------------
 
 Package:                     ddr-phy-binary
-Outgoing License:            LA_OPT_BASE_LICENSE
+Outgoing License:            LA_OPT_BINARY_FIRMWARE_ONLY
 License File:                NXP-Binary-EULA.txt
 Package Category:            firmware
 Type of Content:             binary
@@ -273,7 +273,7 @@ Origin:                      Open vSwitch (Apache-2.0) - https://github.com/open
 --------------------------------------------
 
 Package:                     qoriq-engine-pfe-bin
-Outgoing License:            LA_OPT_BASE_LICENSE
+Outgoing License:            LA_OPT_BINARY_FIRMWARE_ONLY
 License File:                NXP-Binary-EULA.txt
 Package Category:            firmware
 Type of Content:             binary
@@ -309,7 +309,7 @@ Origin:                      NXP (proprietary)
 --------------------------------------------
 
 Package:                     qoriq-fm-ucode
-Outgoing License:            LA_OPT_BASE_LICENSE
+Outgoing License:            LA_OPT_BINARY_FIRMWARE_ONLY
 License File:                LICENSE
 Package Category:            firmware
 Type of Content:             binary
@@ -320,7 +320,7 @@ Origin:                      NXP (proprietary)
 --------------------------------------------
 
 Package:                     qoriq-mc-binary
-Outgoing License:            LA_OPT_BASE_LICENSE
+Outgoing License:            LA_OPT_BINARY_FIRMWARE_ONLY
 License File:                NXP-Binary-EULA.txt
 Package Category:            firmware
 Type of Content:             binary
@@ -331,7 +331,7 @@ Origin:                      NXP (proprietary)
 --------------------------------------------
 
 Package:                     qoriq-qe-ucode
-Outgoing License:            LA_OPT_BASE_LICENSE
+Outgoing License:            LA_OPT_BINARY_FIRMWARE_ONLY
 License File:                NXP-Binary-EULA
 Package Category:            firmware
 Type of Content:             binary

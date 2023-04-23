@@ -76,6 +76,7 @@ RDEPENDS:${PN}:append:qoriq = "\
 
 RDEPENDS:${PN}:append:qoriq-arm64 = "\ 
     dpdk-examples \
+    ovs-dpdk \
     libpkcs11 \
     secure-obj \
     secure-obj-module \

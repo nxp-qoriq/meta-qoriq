@@ -1,5 +1,5 @@
 DESCRIPTION = "OVS DPDK"
-LICENSE = "BSD"
+LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=1ce5d23a6429dff345518758f13aaeab"
 
 DEPENDS = "dpdk python3-six-native coreutils-native autoconf-native automake-native"

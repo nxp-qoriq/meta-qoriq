@@ -16,7 +16,7 @@ RDEPENDS:${PN} = " \
     curl \
     libnfnetlink \
     linuxptp \
-    ntpdate \
+    ntp sntp \
     ppp \
     ppp-dialin \
     resolvconf \

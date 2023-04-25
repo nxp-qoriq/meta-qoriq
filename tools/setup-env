@@ -326,6 +326,7 @@ PREFERRED_PROVIDER_virtual/libgl  = "imx-gpu-viv"
 PREFERRED_PROVIDER_virtual/libgles1 = "imx-gpu-viv"
 PREFERRED_PROVIDER_virtual/libgles2 = "imx-gpu-viv"
 PREFERRED_PROVIDER_virtual/egl      = "imx-gpu-viv"
+PREFERRED_PROVIDER_virtual/opencl-icd = "imx-gpu-viv"
 
 # Some gstream plugins require "commercial" be set in LICENSE_FLAGS_ACCEPTED
 # For exmaple, gstreamer1.0-plugins-ugly-asf/gstreamer1.0-libav

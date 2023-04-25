@@ -8,10 +8,11 @@ MESON_BUILDTYPE = "release"
 
 # kernel module is provide by dpdk-module recipe, so disable here
 EXTRA_OEMESON = " -Denable_kmods=false \
-                -Dexamples=all \
-		-Doptimization=3 \
-		--cross-file ${S}/config/arm/arm64_poky_linux_gcc \
-		${@bb.utils.contains('DISTRO_FEATURES', 'vpp', '-Dc_args="-Ofast -fPIC -ftls-model=local-dynamic"', '', d)} \
+        -Dexamples=all \
+        -Doptimization=3 \
+        --cross-file ${S}/config/arm/arm64_poky_linux_gcc \
+        -Denable_driver_sdk=true \
+        ${@bb.utils.contains('DISTRO_FEATURES', 'vpp', '-Dc_args="-Ofast -fPIC -ftls-model=local-dynamic"', '', d)} \
 "
 
 PACKAGECONFIG ??= "openssl"

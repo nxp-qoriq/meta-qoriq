@@ -38,8 +38,7 @@ do_configure:prepend() {
 do_install:append() {
         mkdir -p ${D}/etc/vpp
         cp ${S}/src/vpp/conf/startup.conf ${D}/etc/vpp/startup.conf
-	rm -rf ${D}/usr/lib/python3.8/
-	rm -rf ${D}/usr/lib/python3.10/
+        rm -rf ${D}/usr/lib/python*/
 }
 
 BBCLASSEXTEND = "native nativesdk"

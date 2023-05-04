@@ -1,3 +1,3 @@
-#Upgrade to v10.36.0
+#Upgrade to v10.37.0
 
-SRCREV = "4af3f4914c45edd3611e10a8a73cb4a052b4581f"
+SRCREV = "8efeeac253ff780cbf1382ff40e09436d65e220d"

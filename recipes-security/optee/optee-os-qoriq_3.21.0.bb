@@ -1,7 +1,7 @@
 # Copyright 2022-2023 NXP
 require optee-os-qoriq.inc
 
-OPTEE_OS_BRANCH = "lf_3.21.y"
+OPTEE_OS_BRANCH = "lf-6.1.22_2.0.0"
 PV:append = "+git${SRCPV}"
 
 do_install:append () {

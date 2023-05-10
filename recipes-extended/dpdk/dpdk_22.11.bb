@@ -47,6 +47,7 @@ PACKAGES =+ "${PN}-tools ${PN}-examples ${PN}-misc"
 
 FILES:${PN}-tools = " \
     ${bindir}/dpdk-testpmd \
+    ${bindir}/dpdk-pdump \
     ${INSTALL_PATH}/examples/dpdk-l2fwd \
     ${INSTALL_PATH}/examples/dpdk-l2fwd-crypto \
     ${INSTALL_PATH}/examples/dpdk-l3fwd \
@@ -67,9 +68,11 @@ FILES:${PN}-examples = " \
     ${INSTALL_PATH}/examples/dpdk-l2fwd-keepalive \
     ${INSTALL_PATH}/examples/dpdk-l2fwd-qdma \
     ${INSTALL_PATH}/examples/dpdk-l3fwd-acl \
+    ${INSTALL_PATH}/examples/dpdk-l3fwd-power \
     ${INSTALL_PATH}/examples/dpdk-link_status_interrupt \
     ${INSTALL_PATH}/examples/dpdk-mp_client \
     ${INSTALL_PATH}/examples/dpdk-mp_server \
+    ${INSTALL_PATH}/examples/dpdk-ptpclien \
     ${INSTALL_PATH}/examples/dpdk-qdma_demo \
     ${INSTALL_PATH}/examples/dpdk-simple_mp \
     ${INSTALL_PATH}/examples/dpdk-symmetric_mp \

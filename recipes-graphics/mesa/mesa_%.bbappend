@@ -2,7 +2,7 @@ PROVIDES:remove:ls1028a = "virtual/egl"
 PROVIDES:remove:ls1028a = "virtual/libgl virtual/libgles1 virtual/libgles2"
 
 PACKAGECONFIG:class-native ?= "gbm gallium egl opengl elf-tls x11"
-PACKAGECONFIG:class-nativesdk ?= "gbm gallium egl opengl elf-tls x11"
+PACKAGECONFIG:class-nativesdk ?= "gbm gallium egl opengl elf-tls x11 dri3"
 
 PACKAGECONFIG:remove:ls1028a = "egl gbm"
 PACKAGECONFIG:remove:ls1028a = "gles"

@@ -3,7 +3,6 @@ require recipes-graphics/imx-gpu-viv/imx-gpu-viv-6.inc
 ### Section 1: Changes to be upstreamed ###
 
 PROVIDES:remove = "${PROVIDES_REMOVE_OPENCL}"
-
 PROVIDES_REMOVE_OPENCL               = ""
 PROVIDES_REMOVE_OPENCL:mx7-nxp-bsp   = "${PROVIDES_OPENCL}"
 PROVIDES_REMOVE_OPENCL:mx8mm-nxp-bsp = "${PROVIDES_OPENCL}"
@@ -13,15 +12,22 @@ PROVIDES_OPENCL = " \
     opencl-icd-loader \
     virtual/opencl-icd"
 
+SRC_URI:remove  = "${FSL_MIRROR}/${BPN}-${PV}.bin;fsl-eula=true"
+SRC_URI:prepend = "${FSL_MIRROR}/${BPN}-${PV}-${IMX_SRCREV_ABBREV}.bin;fsl-eula=true "
+
+S = "${WORKDIR}/${BPN}-${PV}-${IMX_SRCREV_ABBREV}"
+
 PACKAGES_OPENCL:mx8mm-nxp-bsp = ""
 
-# Full OpenVX support is limited to 8QM. However, a limited set of OpenVX
-# functionality is provided for Machine Learning, so provide packages for
-# additional SOCs for this case.
-PACKAGES_OPENVX:mx8-nxp-bsp   = "libopenvx-imx libopenvx-imx-dev"
-PACKAGES_OPENVX:mx8mm-nxp-bsp = ""
-
 PACKAGES_VULKAN:mx8mm-nxp-bsp = "libvulkan-imx libvulkan-imx-dev"
+
+PACKAGES =+ "libspirv-imx"
+FILES:libvulkan-imx:remove = "${libdir}/libSPIRV_viv${SOLIBS}"
+FILES:libspirv-imx = "${libdir}/libSPIRV_viv${SOLIBS}"
+
+PACKAGES_OPENCL = "libclc-imx libclc-imx-dev libopencl-imx libopencl-imx-dev"
+FILES:libclc-imx-dev:remove = "${includedir}/CL"
+FILES:libglslc-imx-dev:remove = "${includedir}/CL"
 
 do_install () {
     install -d ${D}${libdir}
@@ -53,6 +59,9 @@ do_install () {
     # Install backend-specific drivers
     if [ "${BACKEND}" = "wayland" ]; then
         # Wayland backend
+        if ! ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'true', 'false', d)}; then
+            install -m 0644 ${S}/gpu-core/usr/lib/pkgconfig/gl.pc ${D}${libdir}/pkgconfig/gl.pc
+        fi
         install -m 0644 ${S}/gpu-core/usr/lib/pkgconfig/egl_wayland.pc ${D}${libdir}/pkgconfig/egl.pc
         cp -r ${S}/gpu-core/usr/lib/wayland/* ${D}${libdir}
     elif [ "${IS_MX8}" != "1" ]; then
@@ -106,6 +115,10 @@ do_install () {
                 set +f
                 rm -rf ${D}$f
             done
+        else
+            install -Dm 0644 ${WORKDIR}/imx_icd.json ${D}${sysconfdir}/vulkan/icd.d/imx_icd.json
+            sed -i "s,%libdir%,${libdir}," ${D}${sysconfdir}/vulkan/icd.d/imx_icd.json
+            sed -i "s,%api_version%,${LIBVULKAN_API_VERSION}," ${D}${sysconfdir}/vulkan/icd.d/imx_icd.json
         fi
     fi
 
@@ -134,6 +147,9 @@ do_install () {
 
     chown -R root:root "${D}"
 }
+
+FILES:libgl-imx-dev += "${libdir}/pkgconfig/gl.pc"
+
 
 ### Section 2: Changes to be kept in meta-imx ###
 

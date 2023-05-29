@@ -2,7 +2,7 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
 
 SRC_URI:append:ls1028a = " file://Replace-glWindowPos2iARB-calls-with-glWindowPos2i.patch \
                     file://fix-clear-build-break.patch \
-                    file://Add-OpenVG-demos-to-support-wayland.patch"
+"
 
 PACKAGECONFIG_REMOVE_IF_2D_ONLY          = ""
 PACKAGECONFIG_REMOVE_IF_2D_ONLY:imxgpu2d = "gles1 gles2"

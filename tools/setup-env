@@ -319,14 +319,14 @@ fi
 
 if [ "$MACHINE" = "ls1028ardb" ]; then
    cat >>conf/local.conf <<-EOF
-PREFERRED_VERSION_weston = "11.0.1.imx"
-PREFERRED_VERSION_wayland-protocols = "1.31.imx"
-PREFERRED_VERSION_libdrm = "2.4.114.imx"
-PREFERRED_PROVIDER_virtual/libgl  = "imx-gpu-viv"
-PREFERRED_PROVIDER_virtual/libgles1 = "imx-gpu-viv"
-PREFERRED_PROVIDER_virtual/libgles2 = "imx-gpu-viv"
-PREFERRED_PROVIDER_virtual/egl      = "imx-gpu-viv"
-PREFERRED_PROVIDER_virtual/opencl-icd = "imx-gpu-viv"
+PREFERRED_VERSION_weston:ls1028a = "11.0.1.imx"
+PREFERRED_VERSION_wayland-protocols:ls1028a = "1.31.imx"
+PREFERRED_VERSION_libdrm:ls1028a = "2.4.114.imx"
+PREFERRED_PROVIDER_virtual/libgl:ls1028a  = "imx-gpu-viv"
+PREFERRED_PROVIDER_virtual/libgles1:ls1028a = "imx-gpu-viv"
+PREFERRED_PROVIDER_virtual/libgles2:ls1028a = "imx-gpu-viv"
+PREFERRED_PROVIDER_virtual/egl:ls1028a      = "imx-gpu-viv"
+PREFERRED_PROVIDER_virtual/opencl-icd:ls1028a = "imx-gpu-viv"
 
 # Some gstream plugins require "commercial" be set in LICENSE_FLAGS_ACCEPTED
 # For exmaple, gstreamer1.0-plugins-ugly-asf/gstreamer1.0-libav

@@ -10,6 +10,6 @@ SRC_URI:remove = "git://github.com/OP-TEE/optee_client.git;branch=master;protoco
 SRC_URI:prepend = "${OPTEE_CLIENT_SRC};branch=${OPTEE_CLIENT_BRANCH} "
 
 OPTEE_CLIENT_SRC ?= "git://github.com/nxp-qoriq/optee_client.git;protocol=https"
-SRCREV = "${AUTOREV}"
+SRCREV = "8533e0e6329840ee96cf81b6453f257204227e6c"
 
 inherit pkgconfig

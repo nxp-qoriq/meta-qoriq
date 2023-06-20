@@ -97,6 +97,7 @@ Origin:                      NXP (BSD-2-Clause)
 --------------------------------------------
 
 Package:                     aiopsl
+Version:
 Outgoing License:            BSD-3-Clause
 License File:                LICENSE
 Package Category:            user space
@@ -108,6 +109,7 @@ Origin:                      NXP (BSD-3-Clause)
 --------------------------------------------
 
 Package:                     aquantia-firmware-utility
+Version:
 Outgoing License:            BSD-2-Clause
 License File:                LICENSE
 Package Category:            user space
@@ -120,6 +122,7 @@ Origin:                      NXP (BSD-2-Clause)
 --------------------------------------------
 
 Package:                     ceetm
+Version:
 Outgoing License:            GPL-2.0
 License File:                LICENSE
 Package Category:            user space
@@ -131,6 +134,7 @@ Origin:                      NXP (GPL-2.0)
 --------------------------------------------
 
 Package:                     cst
+Version:
 Outgoing License:            BSD-3-Clause
 License File:                LICENSE
 Package Category:            user space
@@ -142,6 +146,7 @@ Origin:                      NXP (BSD-3-Clause)
 --------------------------------------------
 
 Package:                     dce
+Version:
 Outgoing License:            BSD-3-Clause
 License File:                LICENSE
 Package Category:            user space
@@ -153,12 +158,13 @@ Origin:                      NXP (BSD-3-Clause)
 --------------------------------------------
 
 Package:                     ddr-phy-binary
+Version:
 Outgoing License:            LA_OPT_BINARY_FIRMWARE_ONLY
 License File:                NXP-Binary-EULA.txt
 Package Category:            firmware
 Type of Content:             binary
 Description and comments:    DDR PHY firmware
-Release Location:            https://github.com/nxp/ddr-phy-binary -b lf-6.1.22-2.0.0
+Release Location:            https://github.com/nxp-qoriq/ddr-phy-binary -b lf-6.1.22-2.0.0
 Origin：                     NXP (proprietary)
 
 --------------------------------------------
@@ -179,6 +185,7 @@ Origin:                      NXP (BSD-3-Clause)
 --------------------------------------------
 
 Package:                     eth-config
+Version:
 Outgoing License:            BSD-3-Clause
 License File:                LICENSE
 Package Category:            user space
@@ -190,6 +197,7 @@ Origin:                      NXP (BSD-3-Clause)
 --------------------------------------------
 
 Package:                     fmc
+Version:
 Outgoing License:            MIT
 License File:                LICENSE
 Package Category:            user space
@@ -201,6 +209,7 @@ Origin:                      NXP (MIT)
 --------------------------------------------
 
 Package:                     fmlib
+Version:
 Outgoing License:            BSD-3-Clause
 License File:                LICENSE
 Package Category:            user space
@@ -212,6 +221,7 @@ Origin：                     NXP (BSD-3-Clause)
 --------------------------------------------
 
 Package:                     gpp-aioptool
+Version:
 Outgoing License:            BSD-3-Clause
 License File:                LICENSE
 Package Category:            user space
@@ -223,6 +233,7 @@ Origin:                      NXP (BSD-3-Clause)
 --------------------------------------------
 
 Package:                     libpkcs11
+Version:
 Outgoing License:            BSD-3-Clause
 License File:                LICENSE
 Package Category:            user space
@@ -234,6 +245,7 @@ Origin:                      NXP (BSD-3-Clause)
 --------------------------------------------
 
 Package:                     mdio-proxy-module
+Version:
 Outgoing License:            BSD-3-Clause or GPL-2.0+
 License File:                LICENSE
 Package Category:            kernel module, user space
@@ -246,6 +258,7 @@ Origin:                      NXP (BSD-3-Clause)
 --------------------------------------------
 
 Package:                     mc-utils
+Version:                     10.37.0
 Outgoing License:            BSD-3-Clause
 License File:                LICENSE
 Package Category:            firmware
@@ -257,6 +270,7 @@ Origin:                      NXP (BSD-3-Clause)
 --------------------------------------------
 
 Package:                     mtcp
+Version:
 Outgoing License:            BSD-3-Clause
 License File:                LICENSE
 Package Category:            user space
@@ -268,6 +282,7 @@ Origin:                      mTCP (BSD) https://github.com/mtcp-stack/mtcp
 --------------------------------------------
 
 Package:                     ovs-dpdk
+Version:
 Outgoing License:            Apache-2.0
 License File:                LICENSE
 Package Category:            user space
@@ -279,75 +294,82 @@ Origin:                      Open vSwitch (Apache-2.0) - https://github.com/open
 --------------------------------------------
 
 Package:                     qoriq-engine-pfe-bin
+Version:
 Outgoing License:            LA_OPT_BINARY_FIRMWARE_ONLY
 License File:                NXP-Binary-EULA.txt
 Package Category:            firmware
 Type of Content:             binary
 Description and comments:    Linux pfe firmware
-Release Location:            https://github.com/nxp/qoriq-engine-pfe-bin -b lf-6.1.22-2.0.0
+Release Location:            https://github.com/nxp-qoriq/qoriq-engine-pfe-bin -b lf-6.1.22-2.0.0
 Origin:                      NXP (proprietary)
                              kernel.org (GPL-2.0) - https://www.kernel.org/
 
 --------------------------------------------
 
 Package:                     qoriq-firmware-cortina
+Version:
 Outgoing License:            LA_OPT_BASE_LICENSE v20 June 2017
 License File:                EULA.txt
 Package Category:            firmware
 Type of Content:             binary
 Description and comments:    Cortina PHY firmware
-Release Location:            https://github.com/nxp/qoriq-firmware-cortina -b lf-6.1.22-2.0.0
+Release Location:            https://github.com/nxp-qoriq/qoriq-firmware-cortina -b lf-6.1.22-2.0.0
 Origin:                      NXP (proprietary)
                              Cortina (proprietary)
 
 --------------------------------------------
 
 Package:                     qoriq-firmware-inphi
+Version:
 Outgoing License:            LA_OPT_BASE_LICENSE v20 June 2017
 License File:                EULA.txt
 Package Category:            firmware
 Type of Content:             binary
 Description and comments:    IN112525 Phy firmware
-Release Location:            https://github.com/nxp/qoriq-firmware-inphi -b lf-6.1.22-2.0.0
+Release Location:            https://github.com/nxp-qoriq/qoriq-firmware-inphi -b lf-6.1.22-2.0.0
 Origin:                      NXP (proprietary)
                              Inphi (proprietary)
 
 --------------------------------------------
 
 Package:                     qoriq-fm-ucode
+Version:
 Outgoing License:            LA_OPT_BINARY_FIRMWARE_ONLY
 License File:                LICENSE
 Package Category:            firmware
 Type of Content:             binary
 Description and comments:    Fman microcode binary
-Release Location:            https://github.com/nxp/qoriq-fm-ucode -b lf-6.1.22-2.0.0
+Release Location:            https://github.com/nxp-qoriq/qoriq-fm-ucode -b lf-6.1.22-2.0.0
 Origin:                      NXP (proprietary)
 
 --------------------------------------------
 
 Package:                     qoriq-mc-binary
+Version:                     10.37.0
 Outgoing License:            LA_OPT_BINARY_FIRMWARE_ONLY
 License File:                NXP-Binary-EULA.txt
 Package Category:            firmware
 Type of Content:             binary
 Description and comments:    DPAA2 Management Complex Firmware
-Release Location:            https://github.com/nxp/qoriq-mc-binary -b mc_release_10.37.0
+Release Location:            https://github.com/nxp-qoriq/qoriq-mc-binary -b mc_release_10.37.0
 Origin:                      NXP (proprietary)
 
 --------------------------------------------
 
 Package:                     qoriq-qe-ucode
+Version:
 Outgoing License:            LA_OPT_BINARY_FIRMWARE_ONLY
-License File:                NXP-Binary-EULA
+License File:                LICENSE
 Package Category:            firmware
 Type of Content:             binary
 Description and comments:    QE microcode binary
-Release Location:            https://github.com/nxp/qoriq-qe-ucode -b lf-6.1.22-2.0.0
+Release Location:            https://github.com/nxp-qoriq/qoriq-qe-ucode -b lf-6.1.22-2.0.0
 Origin:                      NXP (proprietary)
 
 --------------------------------------------
 
 Package:                     rcw
+Version:
 Outgoing License:            BSD-3-Clause
 License File:                LICENSE
 Package Category:            firmware
@@ -359,6 +381,7 @@ Origin:                      NXP (BSD-3-Clause)
 --------------------------------------------
 
 Package:                     restool
+Version:
 Outgoing License:            BSD-3-Clause
 License File:                LICENSE
 Package Category:            user space
@@ -370,6 +393,7 @@ Origin:                      NXP (BSD-3-Clause)
 --------------------------------------------
 
 Package:                     secure_obj
+Version:
 Outgoing License:            GPL-2.0
 License File:                LICENSE
 Package Category:            user space
@@ -381,6 +405,7 @@ Origin:                      NXP (GPL-2.0 & BSD-3-Clause)
 --------------------------------------------
 
 Package:                     spc
+Version:
 Outgoing License:            MIT
 License File:                LICENSE
 Package Category:            user space
@@ -392,6 +417,7 @@ Origin:                      NXP (MIT)
 --------------------------------------------
 
 Package:                     tsntool
+Version:
 Outgoing License:            MIT or GPL-2.0+
 License File:                LICENSE
 Package Category:            user space

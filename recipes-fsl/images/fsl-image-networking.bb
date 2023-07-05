@@ -5,7 +5,7 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 CORE_IMAGE_EXTRA_INSTALL += "udev-extraconf lsb-release"
 CORE_IMAGE_EXTRA_INSTALL:append:qoriq = " udev-rules-qoriq"
 
-IMAGE_FSTYPES = "tar.gz ext2.gz ext2.gz.u-boot cpio.gz cpio.gz.u-boot"
+IMAGE_FSTYPES = "tar.gz cpio.gz cpio.gz.u-boot"
 
 SUMMARY = "Small image to be used for evaluating the Freescale socs"
 DESCRIPTION = "Small image which includes some helpful tools and \

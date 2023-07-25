@@ -28,4 +28,3 @@ PACKAGE_EXCLUDE = "kernel-image-*"
 export IMAGE_BASENAME = "fsl-image-mfgtool"
 
 IMAGE_ROOTFS_EXTRA_SPACE = "262144"
-IMAGE_FSTYPES += "ext4.gz"

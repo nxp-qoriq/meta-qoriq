@@ -9,6 +9,5 @@ SRC_URI:remove = "file://run-ptest"
 SRC_URI:prepend = "${OPTEE_TEST_SRC};branch=${OPTEE_TEST_BRANCH} "
 
 OPTEE_TEST_SRC ?= "git://github.com/nxp-qoriq/optee_test.git;protocol=https"
-SRCREV = "${AUTOREV}"
 
 COMPATIBLE_MACHINE = "(qoriq-arm64)"

@@ -14,7 +14,6 @@ SRC_URI:remove = "file://0001-allow-setting-sysroot-for-libgcc-lookup.patch \
 "
 
 OPTEE_OS_SRC ?= "git://github.com/nxp-qoriq/optee_os.git;protocol=https"
-SRCREV = "1962aec9581760803b1485d455cd62cb11c14870"
 
 REQUIRED_MACHINE_FEATURES = "optee"
 

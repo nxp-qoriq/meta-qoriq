@@ -16,7 +16,7 @@ LIC_FILES_CHKSUM = " \
 
 PV:append = "+${SRCPV}"
 
-SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/u-boot;protocol=https;nobranch=1"
+SRC_URI = "git://github.com/nxp-qoriq/u-boot;protocol=https;nobranch=1"
 SRCREV = "f7b43f8b4c1e4e3ee6c6ff2fe9c61b2092e8b96b"
 
 S = "${WORKDIR}/git"

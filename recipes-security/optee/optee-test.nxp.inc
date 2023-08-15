@@ -9,7 +9,7 @@ LIC_FILES_CHKSUM = "file://LICENSE.md;md5=daa2bcccc666345ab8940aab1315a4fa"
 DEPENDS = "python3-pycryptodome-native python3-pycryptodomex-native openssl"
 inherit python3native cmake
 
-SRC_URI = "git://source.codeaurora.org/external/qoriq/qoriq-components/optee_test;protocol=https;nobranch=1"
+SRC_URI = "git://github.com/nxp-qoriq/optee_test;protocol=https;nobranch=1"
 SRCREV = "e9d8bf6ee121d6686e6e409c727caee76496bb86"
 
 S = "${WORKDIR}/git"

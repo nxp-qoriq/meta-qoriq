@@ -202,8 +202,6 @@ DISTRO="fsl-qoriq"
 
 # set default jobs and threads
 CPUS=`grep -c processor /proc/cpuinfo`
-JOBS="4"
-THREADS="4"
 
 # check optional jobs and threads
 if echo "$setup_j" | egrep -q "^[0-9]+$"; then
@@ -297,25 +295,43 @@ done
 cat >> conf/local.conf <<-EOF
 
 # Parallelism Options
+EOF
+
+if [ -n "$setup_t" ]; then
+   cat >>conf/local.conf <<-EOF
 BB_NUMBER_THREADS = "$THREADS"
+EOF
+fi
+if [ -n "$setup_j" ]; then
+   cat >>conf/local.conf <<-EOF
 PARALLEL_MAKE = "-j $JOBS"
+EOF
+fi
+
+cat >> conf/local.conf <<-EOF
 DL_DIR = "$DOWNLOADS"
 SSTATE_DIR = "$CACHES"
 INITRAMFS_IMAGE = "core-image-minimal"
 EOF
 
-if expr "$MACHINE" : lx216;then
-   cat >>conf/local.conf <<-EOF
+cat >>conf/local.conf <<-EOF
 
 # Specify DISTRO_FEATURES to select Chain of Trust(COT) for Trusted Board Boot
-# feature in ATF. Two options:
+# feature in ATF
+EOF
+
+if expr "$MACHINE" : lx216;then
+   cat >>conf/local.conf <<-EOF
+# Two options:
 # 1. secure: generate COT by cst from NXP
 # 2. arm-cot: generate COT by cert_create from ATF
 # uncomment below line to choose one:
-#DISTRO_FEATURES:append = " secure"
-
 EOF
 fi
+cat >>conf/local.conf <<-EOF
+#DISTRO_FEATURES:append = " secure"
+EOF
+
 
 if [ "$MACHINE" = "ls1028ardb" ]; then
    cat >>conf/local.conf <<-EOF

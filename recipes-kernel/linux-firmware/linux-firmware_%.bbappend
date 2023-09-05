@@ -3,14 +3,14 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 IMX_FIRMWARE_SRC ?= "git://github.com/NXP/imx-firmware.git;protocol=https"
-SRCBRANCH_imx-firmware = "lf-6.1.22_2.0.0"
+SRCBRANCH_imx-firmware = "lf-6.1.36_2.1.0"
 SRC_URI += " \
     git://github.com/murata-wireless/qca-linux-calibration.git;protocol=https;branch=master;name=murata-qca;destsuffix=murata-qca \
     ${IMX_FIRMWARE_SRC};branch=${SRCBRANCH_imx-firmware};destsuffix=imx-firmware;name=imx-firmware \
 "
 
 SRCREV_murata-qca = "a0026b646ce6adfb72f135ffa8a310f3614b2272"
-SRCREV_imx-firmware = "f775d53ca3a478c85e8c8a880e44cc269bd14db0"
+SRCREV_imx-firmware = "1fb80d0266e8044fb7eea695c7678cddcbbc77c5"
 
 SRCREV_FORMAT = "default_murata-qca_imx-firmware"
 
@@ -103,8 +103,6 @@ do_install:append () {
     install -m 0644 ${WORKDIR}/imx-firmware/nxp/FwImage_IW612_SD/sduart_nw61x_v1.bin.se ${D}${nonarch_base_libdir}/firmware/nxp
     install -m 0644 ${WORKDIR}/imx-firmware/nxp/FwImage_IW612_SD/sd_w61x_v1.bin.se      ${D}${nonarch_base_libdir}/firmware/nxp
     install -m 0644 ${WORKDIR}/imx-firmware/nxp/FwImage_IW612_SD/uartspi_n61x_v1.bin.se ${D}${nonarch_base_libdir}/firmware/nxp
-    install -d ${D}${nonarch_base_libdir}/firmware/nxp/IW612_SD_RFTest
-    install -m 0644 ${WORKDIR}/imx-firmware/nxp/FwImage_IW612_SD/IW612_SD_RFTest/*      ${D}${nonarch_base_libdir}/firmware/nxp/IW612_SD_RFTest
 }
 
 # Use the latest version of sdma firmware in firmware-imx

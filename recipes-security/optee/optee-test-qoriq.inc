@@ -2,7 +2,7 @@
 require recipes-security/optee/optee-test.inc
 
 DEPENDS:remove="optee-client optee-os-tadevkit"
-DEPENDS:append="optee-client-qoriq optee-os-qoriq-tadevkit"
+DEPENDS:append="optee-client-qoriq optee-os-qoriq-tadevkit openssl"
 
 SRC_URI:remove = "git://github.com/OP-TEE/optee_test.git;branch=master;protocol=https"
 SRC_URI:remove = "file://run-ptest"

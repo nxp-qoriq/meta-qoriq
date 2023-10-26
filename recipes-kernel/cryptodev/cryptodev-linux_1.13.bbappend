@@ -1,3 +1,3 @@
-FILESEXTRAPATHS:prepend := "${THISDIR}/cryptodev-module:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/cryptodev-linux:"
 
-SRC_URI += "file://0001-cryptodev_verbosity-Fix-build-for-Linux-6.4.patch"
+SRC_URI += "file://0001-add-support-for-RSA-public-and-private-key-operation.patch"

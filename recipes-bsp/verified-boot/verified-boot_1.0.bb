@@ -17,7 +17,7 @@ SRC_URI = "git://github.com/nxp-qoriq/atf;protocol=https;nobranch=1 \
 "
 SRCREV = "4e40e24590ab908773ef842cd0e17faf233767d4"
 SRCREV_mbedtls = "85da85555e5b086b0250780693c3ee584f63e79f"
-
+SRCREV_FORMAT = "default_mbedtls"
 S = "${WORKDIR}/git"
 
 inherit deploy

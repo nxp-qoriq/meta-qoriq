@@ -45,7 +45,7 @@ do_deploy () {
         cp ${WORKDIR}/${KERNEL_ITS} kernel.its
         sed -i -e "s,kernel-image.gz,${KERNEL_IMAGE}.gz," kernel.its
         sed -i -e "s,freescale.dtb,${DEPLOY_DIR_IMAGE}/${DTB_FILE}," kernel.its
-        sed -i -e "s,rootfs.cpio.gz,${DEPLOY_DIR_IMAGE}/${ROOTFS_IMAGE}-${MACHINE}.cpio.gz," kernel.its
+        sed -i -e "s,rootfs.cpio.gz,${DEPLOY_DIR_IMAGE}/${ROOTFS_IMAGE}-${MACHINE}.rootfs.cpio.gz," kernel.its
 
         mkimage -f kernel.its ${ITB_BASENAME}.itb
 
@@ -64,7 +64,7 @@ do_deploy:ls1021atwr () {
 
         cp ${WORKDIR}/${KERNEL_ITS} kernel.its
         sed -i -e "s,freescale.dtb,${DEPLOY_DIR_IMAGE}/${DTB_FILE}," kernel.its
-        sed -i -e "s,rootfs.cpio.gz,${DEPLOY_DIR_IMAGE}/${ROOTFS_IMAGE}-${MACHINE}.cpio.gz," kernel.its
+        sed -i -e "s,rootfs.cpio.gz,${DEPLOY_DIR_IMAGE}/${ROOTFS_IMAGE}-${MACHINE}.rootfs.cpio.gz," kernel.its
 
         mkimage -f kernel.its ${ITB_BASENAME}.itb
 

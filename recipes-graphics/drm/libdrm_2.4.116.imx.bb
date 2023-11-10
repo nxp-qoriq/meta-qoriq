@@ -12,9 +12,9 @@ PROVIDES = "drm"
 DEPENDS = "libpthread-stubs"
 
 SRC_URI = "${IMX_LIBDRM_SRC};branch=${SRCBRANCH}"
-IMX_LIBDRM_SRC ?= "git://github.com/nxp-imx/libdrm-imx.git;protocol=https;nobranch=1"
-SRCBRANCH ?= "libdrm-imx-2.4.115"
-SRCREV = "41d4fb461624dddcb4c4d89be4c1bb7176a93000"
+IMX_LIBDRM_SRC ?= "git://github.com/nxp-imx/libdrm-imx.git;protocol=https"
+SRCBRANCH = "libdrm-imx-2.4.116"
+SRCREV = "f12b931c498630e6a3ce4c230e9e897131245891"
 
 S = "${WORKDIR}/git"
 
@@ -45,7 +45,7 @@ PACKAGECONFIG[manpages] = "-Dman-pages=enabled,-Dman-pages=disabled,libxslt-nati
 
 ALLOW_EMPTY:${PN}-drivers = "1"
 PACKAGES =+ "${PN}-tests ${PN}-drivers ${PN}-radeon ${PN}-nouveau ${PN}-omap \
-             ${PN}-intel ${PN}-exynos ${PN}-kms ${PN}-freedreno ${PN}-amdgpu \
+             ${PN}-intel ${PN}-exynos ${PN}-freedreno ${PN}-amdgpu \
              ${PN}-etnaviv"
 
 RRECOMMENDS:${PN}-drivers = "${PN}-radeon ${PN}-nouveau ${PN}-omap ${PN}-intel \
@@ -58,7 +58,6 @@ FILES:${PN}-nouveau = "${libdir}/libdrm_nouveau.so.*"
 FILES:${PN}-omap = "${libdir}/libdrm_omap.so.*"
 FILES:${PN}-intel = "${libdir}/libdrm_intel.so.*"
 FILES:${PN}-exynos = "${libdir}/libdrm_exynos.so.*"
-FILES:${PN}-kms = "${libdir}/libkms*.so.*"
 FILES:${PN}-freedreno = "${libdir}/libdrm_freedreno.so.*"
 FILES:${PN}-amdgpu = "${libdir}/libdrm_amdgpu.so.* ${datadir}/${PN}/amdgpu.ids"
 FILES:${PN}-etnaviv = "${libdir}/libdrm_etnaviv.so.*"

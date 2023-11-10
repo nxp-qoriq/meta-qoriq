@@ -2,10 +2,9 @@ require recipes-graphics/imx-gpu-viv/imx-gpu-viv-6.inc
 
 ### Section 1: Changes to be upstreamed ###
 
-SRC_URI:remove  = "${FSL_MIRROR}/${BPN}-${PV}.bin;fsl-eula=true"
-SRC_URI:prepend = "${FSL_MIRROR}/${BPN}-${PV}-${IMX_SRCREV_ABBREV}.bin;fsl-eula=true "
-
-S = "${WORKDIR}/${BPN}-${PV}-${IMX_SRCREV_ABBREV}"
+DEPENDS:remove = "mesa"
+PACKAGES:remove = "libgl-imx libgl-imx-dev"
+PROVIDES:remove = "virtual/libgl"
 
 PROVIDES_OPENGLES3:mx8mm-nxp-bsp = "virtual/libgles3"
 

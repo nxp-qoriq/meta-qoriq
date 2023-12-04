@@ -23,7 +23,7 @@ do_configure[noexec] = "1"
 do_compile[noexec] = "1"
 do_deploy[depends] += "distro-bootscr:do_deploy"
 
-kernel_version ?= "6.1"
+kernel_version ?= "6.6"
 
 do_deploy () {
     cp ${WORKDIR}/create_boottgz.sh ./

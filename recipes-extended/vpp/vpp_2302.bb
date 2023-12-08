@@ -7,7 +7,7 @@ include vpp-pkgs.inc
 DEPENDS = "gcc-runtime dpdk openssl python3-ply util-linux python3-ply-native"
 
 SRC_URI = "git://github.com/nxp-qoriq/vpp.git;protocol=https;nobranch=1"
-SRCREV = "a4337448282fa76b83b20f5c2eaf708327cf9d0e"
+SRCREV = "4ff52a9204f05db6086ce8449c9238d98c12845c"
 
 S = "${WORKDIR}/git"
 
@@ -28,6 +28,8 @@ EXTRA_OECONF = " \
 "
 
 CFLAGS += " -ftls-model=local-dynamic -DCLIB_LOG2_CACHE_LINE_BYTES=6 -I${OPENSSL_PATH}/usr/include  -L${OPENSSL_PATH}/lib -Wl,--dynamic-linker=/lib/ld-linux-aarch64.so.1 -latomic"
+
+CFLAGS += " -Wno-address-of-packed-member"
 
 do_configure:prepend() {
 	echo "@@@@ Creating libdpdk.a in ${DPDK_PATH}/lib"

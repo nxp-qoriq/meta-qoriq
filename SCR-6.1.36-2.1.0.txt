@@ -57,7 +57,7 @@ Origin:                      NXP (BSD-3-clause)
 --------------------------------------------
 
 Package:                     optee_client
-Version:                     3.21.0
+Version:                     4.0.0
 Outgoing License:            BSD-2-Clause
 License File:                LICENSE
 Package Category:            BSP
@@ -70,7 +70,7 @@ Origin:                      NXP (BSD-2-Clause)
 --------------------------------------------
 
 Package:                     optee_os
-Version:                     3.21.0
+Version:                     4.0.0
 Outgoing License:            BSD-2-Clause
 License File:                LICENSE
 Package Category:            BSP
@@ -84,7 +84,7 @@ Origin:                      NXP (BSD-2-Clause)
 --------------------------------------------
 
 Package:                     optee_test
-Version:                     3.21.0
+Version:                     4.0.0
 Outgoing License:            BSD-2-Clause (ta/) and GPL-2.0 (host/)
 License File:                LICENSE.md
 Package Category:            BSP

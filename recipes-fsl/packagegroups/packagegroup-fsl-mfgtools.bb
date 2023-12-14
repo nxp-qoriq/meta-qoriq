@@ -10,6 +10,9 @@ inherit packagegroup
 
 PACKAGES = "${PN}"
 
+MODULE_MDIO ?= "mdio-proxy-module mdio-proxy-userapp aquantia-firmware-utility"
+MODULE_MDIO:ls1021a = ""
+MODULE_MDIO:ls1012a = ""
 RDEPENDS:${PN} = " \
     packagegroup-core-boot \
     bash \
@@ -20,6 +23,7 @@ RDEPENDS:${PN} = " \
     mtd-utils-jffs2 \
     e2fsprogs-mke2fs \
     hdparm \
+    ${MODULE_MDIO} \
 "
 
 RDEPENDS:${PN}:append:e500v2 = " \

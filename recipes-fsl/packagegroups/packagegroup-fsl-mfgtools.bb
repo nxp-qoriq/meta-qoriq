@@ -11,7 +11,7 @@ inherit packagegroup
 PACKAGES = "${PN}"
 
 MODULE_MDIO ?= "mdio-proxy-module mdio-proxy-userapp aquantia-firmware-utility"
-MODULE_MDIO:ls1021a = ""
+MODULE_MDIO:ls102xa = ""
 MODULE_MDIO:ls1012a = ""
 RDEPENDS:${PN} = " \
     packagegroup-core-boot \

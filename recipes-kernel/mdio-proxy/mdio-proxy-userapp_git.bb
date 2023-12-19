@@ -3,7 +3,7 @@ LICENSE = "GPL-2.0-or-later"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=6f933bdd5214942fcfafa90f40740dfc"
 
 SRC_URI = "git://github.com/nxp-qoriq/mdio-proxy-module;protocol=https;nobranch=1"
-SRCREV = "0557e24b518286c660e97b0235b9b7cfa40fc263"
+SRCREV = "d2362c958abf9d17f62fe60817572de7c9714384"
 
 S = "${WORKDIR}/git"
 

@@ -3,7 +3,7 @@ LICENSE = "BSD-2-Clause"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=b177c3bad43f9fbce4ea274a78cd6341"
 
 SRC_URI = "git://github.com/nxp-qoriq/aquantia-firmware-utility;protocol=https;nobranch=1"
-SRCREV = "2e44d8bbcbccf2c5bfbb92f869dff2f4c8aa44d4"
+SRCREV = "5d4b0cd7cbf74e3a64f8f63d58b35239180ef35f"
 
 S = "${WORKDIR}/git"
 

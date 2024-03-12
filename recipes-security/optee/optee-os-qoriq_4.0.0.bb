@@ -1,8 +1,8 @@
-# Copyright 2022-2023 NXP
+# Copyright 2022-2024 NXP
 require optee-os-qoriq.inc
 
 OPTEE_OS_BRANCH = "lf-6.6.3_1.0.0"
-SRCREV = "${AUTOREV}"
+SRCREV = "e0a3e77735941e6057a1994a576b83a93ea0bdb9"
 
 PV:append = "+git${SRCPV}"
 

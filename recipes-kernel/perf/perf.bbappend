@@ -2,6 +2,7 @@
 # include arch/arm64/tools/gen-sysreg.awk
 PERF_SRC += " \
              arch/arm64/tools \
+             arch/${ARCH}/include \
 "
 
 do_configure:prepend:qoriq () {

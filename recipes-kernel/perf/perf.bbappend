@@ -15,3 +15,5 @@ do_configure:prepend:qoriq () {
         sed -i 's,/usr/bin/sh,/usr/bin/env sh,' "${S}/tools/perf/scripts/python/bin/flamegraph-report"
     fi
 }
+
+INSANE_SKIP:perf-tests = "file-rdeps"

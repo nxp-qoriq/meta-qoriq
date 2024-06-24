@@ -293,6 +293,19 @@ Origin:                      Open vSwitch (Apache-2.0) - https://github.com/open
 
 --------------------------------------------
 
+Package:                     qemu
+Version:                     4.2
+Outgoing License:            GPL-2.0
+License File:                LICENSE
+Package Category:            user space
+Type of Content:             source
+Description and comments:    generic and open source machine emulator and virtualizer
+Release Location:            https://github.com/nxp-qoriq/qemu.git -b lf-6.6.23-2.0.0
+Origin:                      NXP (GPL-2.0)
+                             qemu (GPL-2.0) - https://www.qemu.org/
+
+--------------------------------------------
+
 Package:                     qoriq-engine-pfe-bin
 Version:
 Outgoing License:            LA_OPT_BINARY_FIRMWARE_ONLY

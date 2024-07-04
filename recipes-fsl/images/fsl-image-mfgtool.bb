@@ -17,7 +17,7 @@ IMAGE_INSTALL:append = " \
     parted \
     lmsensors-sensors \
     restool \
-    fmc \
+    ${@bb.utils.contains('LINUX_QORIQ_BRANCH', 'next-base', '', 'fmc', d)} \
     sudo \ 
     curl \
 "

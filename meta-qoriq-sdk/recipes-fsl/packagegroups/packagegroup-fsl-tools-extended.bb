@@ -37,6 +37,7 @@ RDEPENDS:${PN} = "\
     man-pages \
     oprofile \
     parted \
+    perf \
     rng-tools \
     rt-tests \
     stress-ng \
@@ -81,7 +82,6 @@ RDEPENDS:${PN}:append:qoriq-arm64 = "\
     secure-obj \
     secure-obj-module \
     ${@bb.utils.contains('DISTRO_FEATURES', 'vpp', 'vpp vpp-data vpp-plugins vpp-plugins-data', '', d)} \
-    perf \
 "
 RDEPENDS:${PN}:append:qoriq-ppc = "\
     ${@multilib_pkg_extend(d, "valgrind")} \

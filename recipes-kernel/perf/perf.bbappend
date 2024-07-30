@@ -4,6 +4,10 @@ PERF_SRC += " \
              arch/arm64/tools \
              arch/${ARCH}/include \
 "
+do_compile:prepend:qoriq-arm() {
+    # include sample.h for 32bit platform
+    sed -i '24 i\#include "util/sample.h"' ${S}/tools/perf/util/python.c
+}
 
 do_configure:prepend:qoriq () {
     # use /usr/bin/env instead of the fixed path of sh

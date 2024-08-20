@@ -7,7 +7,7 @@ LICENSE = "GPL-2.0-only"
 
 S = "${WORKDIR}/git"
 
-DEPENDS:append = " libgcc"
+DEPENDS:append = " libgcc coreutils-native"
 # not put Images into /boot of rootfs, install kernel-image if needed
 RDEPENDS:${KERNEL_PACKAGE_NAME}-base = ""
 

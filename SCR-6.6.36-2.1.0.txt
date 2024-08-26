@@ -264,7 +264,7 @@ License File:                LICENSE
 Package Category:            firmware
 Type of Content:             source
 Description and comments:    MC API and Configuration
-Release Location:            https://github.com/nxp-qoriq/mc-utils -b mc_release_10.38.1
+.elease Location:            https://github.com/nxp-qoriq/mc-utils -b mc_release_10.39.0
 Origin:                      NXP (BSD-3-Clause)
 
 --------------------------------------------
@@ -364,7 +364,7 @@ License File:                NXP-Binary-EULA.txt
 Package Category:            firmware
 Type of Content:             binary
 Description and comments:    DPAA2 Management Complex Firmware
-Release Location:            https://github.com/nxp-qoriq/qoriq-mc-binary -b mc_release_10.38.1
+Release Location:            https://github.com/nxp-qoriq/qoriq-mc-binary -b mc_release_10.39.0
 Origin:                      NXP (proprietary)
 
 --------------------------------------------

@@ -26,7 +26,7 @@ SRC_URI[sha256sum] = "c49c371953aea03f543814dcae37c069e86069333fb2e24e9252e76647
 
 inherit autotools gettext perlnative pkgconfig perl-version
 
-S = "${WORKDIR}/dpkg-${PV}"
+S = "${UNPACKDIR}/dpkg-${PV}"
 
 EXTRA_OECONF = "\
                 --disable-dselect \

@@ -12,7 +12,7 @@ SRC_URI = "http://search.cpan.org/CPAN/authors/id/S/SO/SOENKE/String-CRC32-${PV}
 SRC_URI[md5sum] = "3a9516454722823bd7965d1128d53869"
 SRC_URI[sha256sum] = "5a812f1a7b08330fe49f64cd479970cbc2193285c8bb6951f4dd4291c4947054"
 
-S = "${WORKDIR}/String-CRC32-${PV}"
+S = "${UNPACKDIR}/String-CRC32-${PV}"
 
 inherit cpan ptest
 

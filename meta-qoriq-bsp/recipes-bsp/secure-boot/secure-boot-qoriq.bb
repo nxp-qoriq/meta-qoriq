@@ -39,7 +39,7 @@ BOOT_TYPE:ls1028ardb ?= "xspi sd emmc"
 
 SECURE = "${@bb.utils.contains('DISTRO_FEATURES', 'secure', 'true', 'false', d)}"
 
-S = "${WORKDIR}"
+S = "${UNPACKDIR}"
 
 do_deploy[nostamp] = "1"
 do_patch[noexec] = "1"

@@ -16,7 +16,7 @@ RDEPENDS:${PN} += "bash"
 
 move_do_patch() {
     rm -f ${S}/flex-installer
-    cp ${WORKDIR}/flex-installer ${S}/
+    cp ${UNPACKDIR}/flex-installer ${S}/
 
 }
 python do_patch() {

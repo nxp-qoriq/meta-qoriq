@@ -42,7 +42,7 @@ do_deploy () {
         ITB_BASENAME=kernel-`basename ${DTS_FILE} |sed -e 's,.dtb$,,'`-${ITB_SUFFIX}
         ITB_SYMLINK=kernel-`basename ${DTS_FILE} |sed -e 's,.dtb$,,'`
 
-        cp ${WORKDIR}/${KERNEL_ITS} kernel.its
+        cp ${UNPACKDIR}/${KERNEL_ITS} kernel.its
         sed -i -e "s,kernel-image.gz,${KERNEL_IMAGE}.gz," kernel.its
         sed -i -e "s,freescale.dtb,${DEPLOY_DIR_IMAGE}/${DTB_FILE}," kernel.its
         sed -i -e "s,rootfs.cpio.gz,${DEPLOY_DIR_IMAGE}/${ROOTFS_IMAGE}-${MACHINE}.rootfs.cpio.gz," kernel.its
@@ -62,7 +62,7 @@ do_deploy:ls1021atwr () {
         ITB_BASENAME=kernel-`basename ${DTS_FILE} |sed -e 's,.dtb$,,'`-${ITB_SUFFIX}
         ITB_SYMLINK=kernel-`basename ${DTS_FILE} |sed -e 's,.dtb$,,'`
 
-        cp ${WORKDIR}/${KERNEL_ITS} kernel.its
+        cp ${UNPACKDIR}/${KERNEL_ITS} kernel.its
         sed -i -e "s,freescale.dtb,${DEPLOY_DIR_IMAGE}/${DTB_FILE}," kernel.its
         sed -i -e "s,rootfs.cpio.gz,${DEPLOY_DIR_IMAGE}/${ROOTFS_IMAGE}-${MACHINE}.rootfs.cpio.gz," kernel.its
 

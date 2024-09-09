@@ -27,7 +27,7 @@ EXTRA_OEMAKE = "DESTDIR=\"${D}\" PREFIX=\"${prefix}\" LIBDIR=\"${libdir}\" LDCON
 EXTRA_OEMAKE:append:powerpc = " ARCH=\"powerpc\""
 EXTRA_OEMAKE:append:powerpc64 = " ARCH=\"powerpc\" BITMODE=\"64\""
 
-S = "${WORKDIR}/libpfm-${PV}"
+S = "${UNPACKDIR}/libpfm-${PV}"
 
 do_install () {
 	oe_runmake install

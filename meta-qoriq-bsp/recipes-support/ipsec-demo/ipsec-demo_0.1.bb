@@ -8,14 +8,14 @@ inherit allarch
 
 SRC_URI = "file://test_setkey"
 
-S = "${WORKDIR}"
+S = "${UNPACKDIR}"
 
 do_configure[noexec] = "1"
 do_compile[noexec] = "1"
 
 do_install(){
     install -d  ${D}${datadir}
-    cp -a ${WORKDIR}/test_setkey ${D}${datadir}/
+    cp -a ${UNPACKDIR}/test_setkey ${D}${datadir}/
     chown -R root:root ${D}${datadir}/test_setkey
 }
 

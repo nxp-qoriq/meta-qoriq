@@ -26,8 +26,8 @@ do_deploy[depends] += "distro-bootscr:do_deploy"
 kernel_version ?= "6.6"
 
 do_deploy () {
-    cp ${WORKDIR}/create_boottgz.sh ./
-    cp ${WORKDIR}/${MACHINE}.manifest ./
+    cp ${UNPACKDIR}/create_boottgz.sh ./
+    cp ${UNPACKDIR}/${MACHINE}.manifest ./
     ./create_boottgz.sh -m ${MACHINE} -s ${DEPLOY_DIR_IMAGE} -v ${kernel_version}
 }
 

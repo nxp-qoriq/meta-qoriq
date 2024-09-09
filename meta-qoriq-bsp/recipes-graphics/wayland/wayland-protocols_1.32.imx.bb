@@ -14,7 +14,7 @@ WAYLAND_PROTOCOLS_SRC ?= "git://github.com/nxp-imx/wayland-protocols-imx.git;pro
 SRCBRANCH = "wayland-protocols-imx-${@oe.utils.trim_version("${PV}", 2)}"
 SRCREV = "7ece577d467f8afb2f5a2f7fff3761a1e0ee9dad"
 
-S = "${WORKDIR}/git"
+S = "${UNPACKDIR}/git"
 
 UPSTREAM_CHECK_URI = "https://wayland.freedesktop.org/releases.html"
 

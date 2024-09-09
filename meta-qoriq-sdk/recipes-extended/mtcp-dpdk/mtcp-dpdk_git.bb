@@ -11,8 +11,8 @@ DEPENDS += "gmp numactl dpdk bc-native"
 SRC_URI = "gitsm://github.com/nxpmicro/mtcp;protocol=https;branch=mtcp-dpdk"
 SRCREV = "82cf300c4de96045f8b5b9ae3cd2fcabfe7c2aef"
 
-S = "${WORKDIR}/git"
-B = "${WORKDIR}/git"
+S = "${UNPACKDIR}/git"
+B = "${UNPACKDIR}/git"
 
 export RTE_SDK = "${RECIPE_SYSROOT}/usr"
 EXTRA_OECONF += "--with-dpdk-lib=$RTE_SDK"

@@ -27,8 +27,8 @@ do_configure[noexec] = "1"
 do_compile[noexec] = "1"
 
 do_deploy () {
-    cp ${WORKDIR}/create_distro_bootscr.sh ./
-    cp ${WORKDIR}/${MACHINE}.manifest ./
+    cp ${UNPACKDIR}/create_distro_bootscr.sh ./
+    cp ${UNPACKDIR}/${MACHINE}.manifest ./
 
     ./create_distro_bootscr.sh -m ${MACHINE} -d . -s ${DEPLOY_DIR_IMAGE} -e ${ENCAP} -i ${IMA_EVM}
 

@@ -5,7 +5,7 @@ SUMMARY = "Linux Kernel for NXP QorIQ platforms"
 SECTION = "kernel"
 LICENSE = "GPL-2.0-only"
 
-S = "${WORKDIR}/git"
+S = "${UNPACKDIR}/git"
 
 DEPENDS:append = " libgcc coreutils-native"
 # not put Images into /boot of rootfs, install kernel-image if needed
@@ -44,13 +44,13 @@ do_merge_delta_config() {
     for deltacfg in ${DELTA_KERNEL_DEFCONFIG}; do
         if [ -f ${S}/arch/${ARCH}/configs/${deltacfg} ]; then
             oe_runmake  -C ${S} O=${B} ${deltacfg}
-        elif [ -f "${WORKDIR}/${deltacfg}" ]; then
-            ${S}/scripts/kconfig/merge_config.sh -m .config ${WORKDIR}/${deltacfg}
+        elif [ -f "${UNPACKDIR}/${deltacfg}" ]; then
+            ${S}/scripts/kconfig/merge_config.sh -m .config ${UNPACKDIR}/${deltacfg}
         elif [ -f "${deltacfg}" ]; then
             ${S}/scripts/kconfig/merge_config.sh -m .config ${deltacfg}
         fi
     done
-    cp .config ${WORKDIR}/defconfig
+    cp .config ${UNPACKDIR}/defconfig
 }
 addtask merge_delta_config before do_kernel_localversion after do_patch
 

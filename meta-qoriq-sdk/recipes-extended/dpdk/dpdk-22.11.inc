@@ -8,7 +8,7 @@ LIC_FILES_CHKSUM = "file://license/gpl-2.0.txt;md5=b234ee4d69f5fce4486a80fdaf4a4
 SRC_URI = "git://github.com/nxp-qoriq/dpdk;protocol=https;nobranch=1"
 SRCREV = "9298b898fe38482fbb293d431cdeea4297c17e70"
 
-S = "${WORKDIR}/git"
+S = "${UNPACKDIR}/git"
 
 COMPATIBLE_MACHINE = "(qoriq-arm64)"
 

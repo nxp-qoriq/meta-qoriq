@@ -18,7 +18,7 @@ SRC_URI = "git://github.com/nxp-qoriq/atf;protocol=https;nobranch=1 \
 SRCREV = "4e40e24590ab908773ef842cd0e17faf233767d4"
 SRCREV_mbedtls = "85da85555e5b086b0250780693c3ee584f63e79f"
 SRCREV_FORMAT = "default_mbedtls"
-S = "${WORKDIR}/git"
+S = "${UNPACKDIR}/git"
 
 inherit deploy
 
@@ -51,8 +51,8 @@ EXTRA_OEMAKE += "HOSTCC='${BUILD_CC} ${BUILD_CPPFLAGS} ${BUILD_CFLAGS} ${BUILD_L
 ARM_COT = "${@bb.utils.contains('DISTRO_FEATURES', 'arm-cot-with-verified-boot', 'true', 'false', d)}"
 
 do_compile () {
-    install -d ${WORKDIR}/build
-    cd ${WORKDIR}/build
+    install -d ${UNPACKDIR}/build
+    cd ${UNPACKDIR}/build
 
     # Generate a key pair and certificate (containing the public key)
     rm -fr *
@@ -66,7 +66,7 @@ do_compile () {
     gzip ${KERNEL_IMAGE}
 
     DTB_FILE=`basename ${KERNEL_DEVICETREE}`;
-    cp ${WORKDIR}/${KERNEL_ITS} kernel.its
+    cp ${UNPACKDIR}/${KERNEL_ITS} kernel.its
     sed -i -e "s,kernel-image.gz,${KERNEL_IMAGE}.gz," kernel.its
     sed -i -e "s,freescale.dtb,${DEPLOY_DIR_IMAGE}/${DTB_FILE}," kernel.its
     sed -i -e "s,rootfs.cpio.gz,${DEPLOY_DIR_IMAGE}/${ROOTFS_IMAGE}-${MACHINE}.rootfs.cpio.gz," kernel.its
@@ -125,7 +125,7 @@ do_compile () {
                     fi
                     oe_runmake V=1 -C ${S} fip pbl PLAT=${PLATFORM} BOOT_MODE=${d} TRUSTED_BOARD_BOOT=1 \
                         GENERATE_COT=1 MBEDTLS_DIR=${MBEDTLS_FOLDER} CST_DIR=${RECIPE_SYSROOT_NATIVE}/usr/bin/cst \
-                        BL33=${WORKDIR}/build/u-boot-combine-dtb.bin RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg}
+                        BL33=${UNPACKDIR}/build/u-boot-combine-dtb.bin RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg}
 
                     if [ ! -f ${outputdir}/ddr_fip_sec.bin ]; then
                         oe_runmake V=1 -C ${S} fip_ddr PLAT=${PLATFORM} TRUSTED_BOARD_BOOT=1 GENERATE_COT=1 \
@@ -135,7 +135,7 @@ do_compile () {
                     fi
                 else
                     oe_runmake V=1 -C ${S} all fip pbl PLAT=${PLATFORM} BOOT_MODE=${d} \
-                               RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${WORKDIR}/build/u-boot-combine-dtb.bin
+                               RCW=${DEPLOY_DIR_IMAGE}/rcw/${RCW_FOLDER}/${rcwimg} BL33=${UNPACKDIR}/build/u-boot-combine-dtb.bin
                 fi
                 cp -r ${S}/build/${PLATFORM}/release/bl2_${d}${secext}.pbl ${outputdir}
                 cp -r ${S}/build/${PLATFORM}/release/fip.bin ${outputdir}
@@ -172,9 +172,9 @@ do_deploy () {
 
     ITB_BASENAME=kernel-`basename ${KERNEL_DEVICETREE} |sed -e 's,.dtb$,,'`-signed-${ITB_SUFFIX}
     ITB_SYMLINK=kernel-`basename ${KERNEL_DEVICETREE} |sed -e 's,.dtb$,,'`-signed
-    install -m 644 ${WORKDIR}/build/kernel.itb ${DEPLOYDIR}/${ITB_BASENAME}.itb
+    install -m 644 ${UNPACKDIR}/build/kernel.itb ${DEPLOYDIR}/${ITB_BASENAME}.itb
     ln -sf ${ITB_BASENAME}.itb ${DEPLOYDIR}/${ITB_SYMLINK}.itb
-    cp -fr ${WORKDIR}/build/keys/* ${DEPLOYDIR}/verified-boot-keys
+    cp -fr ${UNPACKDIR}/build/keys/* ${DEPLOYDIR}/verified-boot-keys
 }
 addtask deploy after do_compile
 

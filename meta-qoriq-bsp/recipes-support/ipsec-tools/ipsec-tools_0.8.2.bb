@@ -83,17 +83,17 @@ FULL_OPTIMIZATION:append = " -Wno-error=maybe-uninitialized -Wno-deprecated-decl
 
 do_install:append() {
     install -d ${D}${sysconfdir}/racoon
-    install -m 0644 ${WORKDIR}/racoon.conf.sample ${D}${sysconfdir}/racoon/racoon.conf
+    install -m 0644 ${UNPACKDIR}/racoon.conf.sample ${D}${sysconfdir}/racoon/racoon.conf
 
     if ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'true', 'false', d)}; then
         install -d ${D}${systemd_unitdir}/system
-        install -m 0644 ${WORKDIR}/racoon.service ${D}${systemd_unitdir}/system
+        install -m 0644 ${UNPACKDIR}/racoon.service ${D}${systemd_unitdir}/system
 
         sed -i -e 's#@SYSCONFDIR@#${sysconfdir}#g' ${D}${systemd_unitdir}/system/racoon.service
         sed -i -e 's#@SBINDIR@#${sbindir}#g' ${D}${systemd_unitdir}/system/racoon.service
 
         install -d ${D}${sysconfdir}/default/
-        install -m 0644 ${WORKDIR}/racoon.conf ${D}${sysconfdir}/default/racoon
+        install -m 0644 ${UNPACKDIR}/racoon.conf ${D}${sysconfdir}/default/racoon
     fi
 }
 

@@ -11,7 +11,7 @@ SRC_URI = "https://gcc.gnu.org/pub/gcc/infrastructure/cloog-${PV}.tar.gz \
 SRC_URI[md5sum] = "be78a47bd82523250eb3e91646db5b3d"
 SRC_URI[sha256sum] = "1c4aa8dde7886be9cbe0f9069c334843b21028f61d344a2d685f88cb1dcf2228"
 
-S = "${WORKDIR}/cloog-${PV}"
+S = "${UNPACKDIR}/cloog-${PV}"
 
 EXTRA_OECONF = "--with-bits=gmp --with-gmp-prefix=${STAGING_DIR_HOST}${prefix_native}"
 EXTRA_OECONF:class-native = "--with-bits=gmp --with-gmp-prefix=${STAGING_DIR_NATIVE}${prefix_native}"

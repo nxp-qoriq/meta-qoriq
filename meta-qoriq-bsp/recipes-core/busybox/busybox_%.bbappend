@@ -6,7 +6,7 @@ ALTERNATIVE_PRIORITY[init] = "40"
 SRC_URI:append:qoriq = " file://defconfig-fsl"
 
 do_configure:prepend:qoriq () {
-    cp ${WORKDIR}/defconfig-fsl ${WORKDIR}/defconfig
+    cp ${UNPACKDIR}/defconfig-fsl ${UNPACKDIR}/defconfig
 }
 
 do_install:append:qoriq () {

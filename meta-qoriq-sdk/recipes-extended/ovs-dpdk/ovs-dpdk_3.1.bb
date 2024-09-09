@@ -10,7 +10,7 @@ inherit python3native pkgconfig
 SRC_URI = "git://github.com/nxp-qoriq/ovs-dpdk;protocol=https;nobranch=1"
 SRCREV = "ba61b8457352d80fa6d53a247b000dbeb3a6401a"
 
-S = "${WORKDIR}/git"
+S = "${UNPACKDIR}/git"
 
 do_configure() {
     export SYSROOT_DPDK=${PKG_CONFIG_SYSROOT_DIR}

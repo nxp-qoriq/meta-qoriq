@@ -3,6 +3,8 @@ From: Khem Raj <raj.khem@gmail.com>
 Date: Fri, 11 May 2018 14:09:17 -0700
 Subject: [PATCH] Disable gcc8 specific warnings
 
+Upstream-Status: Pending
+
 Signed-off-by: Khem Raj <raj.khem@gmail.com>
 ---
  src/libipsec/ipsec_dump_policy.c |  5 +++++

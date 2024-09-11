@@ -3,6 +3,8 @@ From: Khem Raj <raj.khem@gmail.com>
 Date: Sat, 22 Apr 2017 10:39:57 -0700
 Subject: [PATCH 2/2] cfparse: clear memory equal to size of array
 
+Upstream-Status: Pending
+
 Fixes compiler error
 cfparse.y: In function 'set_isakmp_proposal':
 cfparse.y:2567:3: error: 'memset' used with length equal to number of elements without multiplication by element size [-Werror=memset-elt-size]

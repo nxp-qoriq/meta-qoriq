@@ -3,6 +3,8 @@ From: Paul Barker <paul@paulbarker.me.uk>
 Date: Wed, 5 Mar 2014 13:39:14 +0000
 Subject: [PATCH] Don't link against libfl
 
+Upstream-Status: Pending
+
 We can remove all references to yywrap by adding "%option noyywrap" statements
 to each flex source file that doesn't override yywrap. After this, we no longer
 need to link against libfl and so no longer get errors about undefined

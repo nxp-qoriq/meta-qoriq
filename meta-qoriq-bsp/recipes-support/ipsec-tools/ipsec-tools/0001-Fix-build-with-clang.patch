@@ -3,6 +3,8 @@ From: Khem Raj <raj.khem@gmail.com>
 Date: Tue, 15 Nov 2016 04:15:44 +0000
 Subject: [PATCH] Fix build with clang
 
+Upstream-Status: Pending
+
 Fixes for following errors found by clang
 
 src/racoon/eaytest.c:316:6: error: comparison of array 'dnstr_w1' not equal to a null pointer is always true

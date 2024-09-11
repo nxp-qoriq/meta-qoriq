@@ -3,6 +3,8 @@ From: Khem Raj <raj.khem@gmail.com>
 Date: Mon, 20 Mar 2017 21:37:47 -0700
 Subject: [PATCH] Fix header issues found with musl libc
 
+Upstream-Status: Pending
+
 Signed-off-by: Khem Raj <raj.khem@gmail.com>
 ---
  src/libipsec/ipsec_strerror.h         | 3 +++

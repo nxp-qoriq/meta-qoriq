@@ -45,4 +45,5 @@ do_install:append() {
 
 BBCLASSEXTEND = "native nativesdk"
 
+INSANE_SKIP:${PN} += " buildpaths"
 COMPATIBLE_MACHINE:class-target = "(qoriq)"

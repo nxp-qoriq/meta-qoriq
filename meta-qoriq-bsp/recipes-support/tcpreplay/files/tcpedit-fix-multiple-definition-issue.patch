@@ -3,6 +3,8 @@ From: Gabriel Ganne <gabriel.ganne@gmail.com>
 Date: Fri, 24 Apr 2020 16:18:35 +0200
 Subject: [PATCH] tcpedit - fix multiple definition issue
 
+Upstream-Status: Pending
+
 tcpedit_tcpedit_optDesc_p is defined within the *.def files, the
 variable itself is defined in the generated C files.
 

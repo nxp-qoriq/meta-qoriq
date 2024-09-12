@@ -19,3 +19,5 @@ do_compile() {
 	    cd ..
         done
 }
+INSANE_SKIP:${PN}-dbg += " buildpaths"
+INSANE_SKIP:${PN} += " buildpaths"

@@ -23,3 +23,5 @@ EXTRA_OECONF += "--with-libpcap=${STAGING_DIR_HOST}/usr"
 CFLAGS += " -Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types -Wno-error=int-conversion"
 inherit siteinfo autotools-brokensep
 
+INSANE_SKIP:${PN}-src += "buildpaths"
+

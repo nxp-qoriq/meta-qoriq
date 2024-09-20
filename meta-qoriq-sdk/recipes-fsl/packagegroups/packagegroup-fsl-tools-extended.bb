@@ -99,9 +99,7 @@ RDEPENDS:${PN}:append:ls1012a = "\
     tsntool \
 "
 NXP_WIFI_PKGS = "\
-    kernel-module-nxp-wlan \
     linux-firmware-nxp89xx \
-    nxp-wlan-sdk \
 "
 RDEPENDS:${PN}:append:ls1012a = " ${NXP_WIFI_PKGS}"
 RDEPENDS:${PN}:append:ls1028a = " ${NXP_WIFI_PKGS}"

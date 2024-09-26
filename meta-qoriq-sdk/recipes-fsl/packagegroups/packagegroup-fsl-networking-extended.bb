@@ -20,7 +20,6 @@ RDEPENDS:${PN} = " \
     ppp \
     ppp-dialin \
     resolvconf \
-    samba \
     wget \
     xinetd \
     ${FSL_WEBSERVER} \

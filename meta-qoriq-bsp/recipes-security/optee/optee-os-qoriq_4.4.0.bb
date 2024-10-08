@@ -1,7 +1,7 @@
 # Copyright 2022-2024 NXP
 require optee-os-qoriq.inc
 
-OPTEE_OS_BRANCH = "lf_4.2.y"
+OPTEE_OS_BRANCH = "lf_4.4.y"
 SRCREV = "${AUTOREV}"
 
 PV:append = "+git${SRCPV}"

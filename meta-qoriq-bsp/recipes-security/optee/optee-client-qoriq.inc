@@ -14,5 +14,7 @@ OPTEE_CLIENT_SRC ?= "git://github.com/nxp-qoriq/optee_client.git;protocol=https"
 inherit pkgconfig
 
 do_install:append () {
-    rm -r ${D}/usr/lib/systemd/
+    if ! ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'true', 'false', d)}; then
+        rm -rf ${D}${libdir}/systemd
+    fi
 }

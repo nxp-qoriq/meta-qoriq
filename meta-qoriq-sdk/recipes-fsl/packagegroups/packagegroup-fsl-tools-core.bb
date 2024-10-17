@@ -71,7 +71,6 @@ EXTRA_PKGS_COMMUNITY:append:lx2162a = " \
     kdump \
     kexec \
     vmcore-dmesg \
-    makedumpfile \
     gdbserver \
     glibc-utils \
     openssh-sftp-server \

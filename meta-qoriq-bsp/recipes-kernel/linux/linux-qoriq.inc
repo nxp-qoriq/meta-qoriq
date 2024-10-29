@@ -55,4 +55,5 @@ do_merge_delta_config() {
 addtask merge_delta_config before do_kernel_localversion after do_patch
 
 FILES:${KERNEL_PACKAGE_NAME}-image += "/boot/zImage*"
+INSANE_SKIP:${PN}-src += " buildpaths"
 COMPATIBLE_MACHINE = "(qoriq)"

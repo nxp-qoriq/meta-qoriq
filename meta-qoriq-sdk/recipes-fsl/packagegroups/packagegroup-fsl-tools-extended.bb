@@ -76,7 +76,7 @@ RDEPENDS:${PN}:append:qoriq = "\
 "
 
 RDEPENDS:${PN}:append:qoriq-arm64 = "\ 
-    dpdk-examples \
+    dpdk \
     ovs-dpdk \
     ${@bb.utils.contains('DISTRO_FEATURES', 'vpp', 'vpp vpp-data vpp-plugins vpp-plugins-data', '', d)} \
 "
@@ -87,7 +87,6 @@ RDEPENDS:${PN}:append:ls1012a = "\
     ceetm \
     dce \
     dpdk \
-    dpdk-tools \
     keyctl-caam \
     optee-os-qoriq \
     optee-client-qoriq \

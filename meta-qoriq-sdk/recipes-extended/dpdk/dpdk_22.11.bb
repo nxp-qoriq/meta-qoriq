@@ -1,90 +1,52 @@
-include dpdk-${PV}.inc
+DESCRIPTION = "Data Plane Development Kit"
+HOMEPAGE = "http://dpdk.org"
+LICENSE = "BSD-3-Clause & LGPL-2.1-only & GPL-2.0-only"
+LIC_FILES_CHKSUM = "file://license/gpl-2.0.txt;md5=b234ee4d69f5fce4486a80fdaf4a4263 \
+                    file://license/lgpl-2.1.txt;md5=4b54a1fd55a448865a0b32d41598759d \
+                    file://license/bsd-3-clause.txt;md5=0f00d99239d922ffd13cabef83b33444"
 
-SRC_URI += " \
-            file://0001-meson.build-march-and-mcpu-already-passed-by-Yocto.patch \
-"
+DEPENDS = "python3-pyelftools-native"
 
-MESON_BUILDTYPE = "release"
+SRC_URI = "git://github.com/nxp-qoriq/dpdk;protocol=https;nobranch=1 \
+           file://0001-meson.build-march-and-mcpu-already-passed-by-Yocto.patch \
+          "
+SRCREV = "9298b898fe38482fbb293d431cdeea4297c17e70"
+
+S = "${WORKDIR}/git"
+
+inherit meson pkgconfig
+
+PACKAGECONFIG ??= "openssl examples"
+
+PACKAGECONFIG[afxdp] = ",,libbpf"
+PACKAGECONFIG[examples] = "-Denable_examples_bin_install=true -Dexamples=${DPDK_EXAMPLES},-Denable_examples_bin_install=false"
+PACKAGECONFIG[libvirt] = ",,libvirt"
+PACKAGECONFIG[openssl] = ",,openssl"
+
+DPDK_EXAMPLES ?= "l2fwd,l3fwd,l2fwd-crypto,ipsec-secgw"
+DPDK_APPS ?= "pdump,test-pmd"
 
 # kernel module is provide by dpdk-module recipe, so disable here
-EXTRA_OEMESON = " -Denable_kmods=false \
-        -Dexamples=all \
+EXTRA_OEMESON = " \
+        -Denable_kmods=false \
         -Doptimization=3 \
         --cross-file ${S}/config/arm/arm64_poky_linux_gcc \
         -Denable_driver_sdk=true \
         ${@bb.utils.contains('DISTRO_FEATURES', 'vpp', '-Dc_args="-Ofast -fPIC -ftls-model=local-dynamic"', '', d)} \
+        -Denable_examples_source_install=false \
+        -Ddrivers_install_subdir= \
+        -Denable_apps=${DPDK_APPS} \
 "
-
-PACKAGECONFIG ??= "openssl"
-PACKAGECONFIG[afxdp] = ",,libbpf"
-PACKAGECONFIG[libvirt] = ",,libvirt"
-PACKAGECONFIG[openssl] = ",,openssl"
-
-RDEPENDS:${PN} += "bash pciutils python3-core python3-pyelftools"
-RDEPENDS:${PN}-examples += "bash"
-DEPENDS = "python3-pyelftools-native"
-
-inherit meson pkgconfig
-
-INSTALL_PATH = "${prefix}/share/dpdk"
 
 do_install:append(){
-    # remove source files
-    rm -rf ${D}/${INSTALL_PATH}/examples/*
-
-    # Install examples
-    install -m 0755 -d ${D}/${INSTALL_PATH}/examples/
-    for dirname in ${B}/examples/dpdk-*
-    do
-        if [ ! -d ${dirname} ] && [ -x ${dirname} ]; then
-            install -m 0755 ${dirname} ${D}/${INSTALL_PATH}/examples/
-        fi
-    done
-    cp -rf ${S}/nxp/* ${D}/${INSTALL_PATH}/
+    install -d ${D}/${sysconfdir}/dpdk
+    cp -rf ${S}/nxp/* ${D}/${sysconfdir}/dpdk
+    rm -f ${D}/${bindir}/dpdk-test
+    rm -f ${D}/${bindir}/dpdk-*.py
 }
 
-PACKAGES =+ "${PN}-tools ${PN}-examples ${PN}-misc"
+RDEPENDS:${PN} += "bash pciutils python3-core python3-pyelftools"
 
-FILES:${PN}-tools = " \
-    ${bindir}/dpdk-testpmd \
-    ${bindir}/dpdk-pdump \
-    ${INSTALL_PATH}/examples/dpdk-l2fwd \
-    ${INSTALL_PATH}/examples/dpdk-l2fwd-crypto \
-    ${INSTALL_PATH}/examples/dpdk-l3fwd \
-    ${INSTALL_PATH}/examples/dpdk-ipsec-secgw \
-"
+COMPATIBLE_MACHINE = "(qoriq-arm64)"
 
-FILES:${PN}-examples = " \
-    ${bindir}/dpdk-proc-info \
-    ${bindir}/dpdk-test \
-    ${bindir}/dpdk-test-crypto-perf \
-    ${bindir}/dpdk-*.py \
-    ${INSTALL_PATH}/examples/dpdk-cmdif \
-    ${INSTALL_PATH}/examples/dpdk-cmdline \
-    ${INSTALL_PATH}/examples/dpdk-ethtool \
-    ${INSTALL_PATH}/examples/dpdk-ip_fragmentation \
-    ${INSTALL_PATH}/examples/dpdk-ip_reassembly \
-    ${INSTALL_PATH}/examples/dpdk-kni \
-    ${INSTALL_PATH}/examples/dpdk-l2fwd-keepalive \
-    ${INSTALL_PATH}/examples/dpdk-l2fwd-qdma \
-    ${INSTALL_PATH}/examples/dpdk-l3fwd-acl \
-    ${INSTALL_PATH}/examples/dpdk-l3fwd-power \
-    ${INSTALL_PATH}/examples/dpdk-link_status_interrupt \
-    ${INSTALL_PATH}/examples/dpdk-mp_client \
-    ${INSTALL_PATH}/examples/dpdk-mp_server \
-    ${INSTALL_PATH}/examples/dpdk-ptpclien \
-    ${INSTALL_PATH}/examples/dpdk-qdma_demo \
-    ${INSTALL_PATH}/examples/dpdk-simple_mp \
-    ${INSTALL_PATH}/examples/dpdk-symmetric_mp \
-    ${INSTALL_PATH}/examples/dpdk-symmetric_mp_qdma \
-    ${INSTALL_PATH}/examples/dpdk-timer \
-"
-
-FILES:${PN}-misc = " \
-    ${bindir}/dpdk-pdump \
-    ${bindir}/dpdk-test-* \
-    ${bindir}/dpdk-*.py \
-    ${INSTALL_PATH}/examples/* \
-"
-
-INSANE_SKIP:${PN} = "dev-so"
+CVE_PRODUCT = "data_plane_development_kit"

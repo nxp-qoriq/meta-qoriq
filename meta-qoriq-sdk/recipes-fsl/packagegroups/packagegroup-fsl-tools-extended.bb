@@ -78,9 +78,6 @@ RDEPENDS:${PN}:append:qoriq = "\
 RDEPENDS:${PN}:append:qoriq-arm64 = "\ 
     dpdk-examples \
     ovs-dpdk \
-    libpkcs11 \
-    secure-obj \
-    secure-obj-module \
     ${@bb.utils.contains('DISTRO_FEATURES', 'vpp', 'vpp vpp-data vpp-plugins vpp-plugins-data', '', d)} \
 "
 RDEPENDS:${PN}:append:qoriq-ppc = "\
@@ -109,4 +106,4 @@ RDEPENDS:${PN}:append:ls1043a = " ${NXP_WIFI_PKGS} mtcp-dpdk"
 RDEPENDS:${PN}:append:ls1046a = " ${NXP_WIFI_PKGS} mtcp-dpdk"
 RDEPENDS:${PN}:append:ls2088a = " mtcp-dpdk"
 RDEPENDS:${PN}:append:lx2160a = " mtcp-dpdk"
-RDEPENDS:${PN}:remove:ls1012afrwy = "optee-os-qoriq optee-client-qoriq optee-test-qoriq secure-obj-module secure-obj libpkcs11"
+RDEPENDS:${PN}:remove:ls1012afrwy = "optee-os-qoriq optee-client-qoriq optee-test-qoriq"

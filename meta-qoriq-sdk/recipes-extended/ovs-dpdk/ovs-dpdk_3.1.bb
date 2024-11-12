@@ -30,6 +30,9 @@ do_install:append() {
     chmod 777 -R ${D}${bindir}/ovs-dpdk/*
 }
 
+INSANE_SKIP:${PN}-dbg += " buildpaths"
+INSANE_SKIP:${PN} += " buildpaths"
+
 ALLOW_EMPTY:${PN} = "1"
 INHIBIT_PACKAGE_STRIP = "1"
 PACKAGE_ARCH = "${MACHINE_ARCH}"

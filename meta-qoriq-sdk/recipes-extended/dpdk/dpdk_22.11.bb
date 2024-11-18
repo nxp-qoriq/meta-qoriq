@@ -10,7 +10,7 @@ DEPENDS = "python3-pyelftools-native"
 SRC_URI = "git://github.com/nxp-qoriq/dpdk;protocol=https;nobranch=1 \
            file://0001-meson.build-march-and-mcpu-already-passed-by-Yocto.patch \
           "
-SRCREV = "9298b898fe38482fbb293d431cdeea4297c17e70"
+SRCREV = "4bd6638cd171c06ba7a289bbcd40c1a6e697de41"
 
 S = "${WORKDIR}/git"
 

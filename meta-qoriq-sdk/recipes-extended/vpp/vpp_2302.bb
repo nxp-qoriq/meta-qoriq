@@ -2,8 +2,6 @@ DESCRIPTION = "Vector Packet Processing"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
-include vpp-pkgs.inc
-
 DEPENDS = "gcc-runtime dpdk openssl python3-ply util-linux python3-ply-native"
 
 SRC_URI = "git://github.com/nxp-qoriq/vpp.git;protocol=https;nobranch=1"
@@ -44,6 +42,37 @@ do_install:append() {
 }
 
 BBCLASSEXTEND = "native nativesdk"
+
+PACKAGES =+ "${PN}-plugins ${PN}-data ${PN}-plugins-data"
+
+FILES:${PN} += " \
+		${prefix}${sysconfdir} \
+		${sysconfdir}/vpp \
+		${sysconfdir}/rc.local \
+		"
+
+FILES:${PN}-dev += " \
+                ${libdir}/cmake/vpp/*.cmake \
+		"
+
+FILES:${PN}-data = " \
+		${datadir}/vpp/api/core/*.json \
+		${datadir}/vpp/C.py \
+		${datadir}/vpp/JSON.py  \
+                ${datadir}/vpp/vppapigen_json.py \
+                ${datadir}/vpp/vppapigen_c.py \
+		"
+
+FILES:${PN}-plugins-data = " \
+		${datadir}/vpp/api/plugins/*.json \
+                ${datadir}/vpp/plugins/perfmon/PerfmonTables.tar.xz \
+		"
+
+FILES:${PN}-plugins = " \
+                ${libdir}/vpp_plugins/*.so \
+                ${libdir}/vat2_plugins/*.so \
+                ${libdir}/vpp_api_test_plugins/*.so \
+                "
 
 INSANE_SKIP:${PN} += " buildpaths"
 COMPATIBLE_MACHINE:class-target = "(qoriq)"

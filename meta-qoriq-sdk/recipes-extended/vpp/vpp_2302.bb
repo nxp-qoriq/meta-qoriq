@@ -14,24 +14,21 @@ inherit cmake pkgconfig python3-dir python3native
 OECMAKE_SOURCEPATH = "${S}/src"
 
 export ARCH ="aarch64"
-export OPENSSL_PATH = "${RECIPE_SYSROOT}/usr"
-export DPDK_PATH = "${RECIPE_SYSROOT}/usr"
 
 EXTRA_OECONF = " \
-	--with-libtool-sysroot=${SYSROOT} \
+        --with-libtool-sysroot=${STAGING_DIR_TARGET} \
 	--srcdir=${S}/src \
         --with-pre-data=128 \
         --without-libnuma \
         --without-ipv6sr \
 "
 
-CFLAGS += " -ftls-model=local-dynamic -DCLIB_LOG2_CACHE_LINE_BYTES=6 -I${OPENSSL_PATH}/usr/include  -L${OPENSSL_PATH}/lib -Wl,--dynamic-linker=/lib/ld-linux-aarch64.so.1 -latomic"
-
-CFLAGS += " -Wno-address-of-packed-member"
+CFLAGS:append = " -ftls-model=local-dynamic -DCLIB_LOG2_CACHE_LINE_BYTES=6 -latomic -Wno-address-of-packed-member"
+LDFLAGS:append = " -I${RECIPE_SYSROOT}/usr/include -L${RECIPE_SYSROOT}/usr/lib -Wl,--dynamic-linker=${base_libdir}/ld-linux-aarch64.so.1"
 
 do_configure:prepend() {
-	echo "@@@@ Creating libdpdk.a in ${DPDK_PATH}/lib"
-	cd ${DPDK_PATH}/lib && \
+	echo "@@@@ Creating libdpdk.a in ${RECIPE_SYSROOT}//usr/lib"
+	cd ${RECIPE_SYSROOT}/usr/lib && \
 	echo "GROUP ( "$(ls librte*.a)" )" > libdpdk.a && cd -
 }
 

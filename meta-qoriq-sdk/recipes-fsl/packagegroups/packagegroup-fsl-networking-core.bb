@@ -15,6 +15,7 @@ RDEPENDS:${PN} = " \
     bridge-utils \
     ethtool \
     iproute2 \
+    iproute2-bridge \
     iproute2-tc \
     iptables \
     iputils \

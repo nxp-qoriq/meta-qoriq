@@ -4,6 +4,8 @@ Date: Mon, 11 Jul 2022 19:38:19 +0000
 Subject: [PATCH] Revert "protocol: no found wayland-scanner with Yocto
  toolchain"
 
+Upstream-Status: Pending
+
 This reverts commit 7859a762617682bd804e210ad3bda6bdcd3ea24a.
 
 With openembedded commit e525db4eb9 ("wayland: update 1.20.0 -> 1.21.0")

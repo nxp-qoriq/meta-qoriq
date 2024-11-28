@@ -1,8 +1,10 @@
 PROVIDES:remove:ls1028a = "virtual/egl"
 PROVIDES:remove:ls1028a = "virtual/libgles1 virtual/libgles2"
 
-PACKAGECONFIG:class-native ?= "gbm gallium egl opengl x11"
-PACKAGECONFIG:class-nativesdk ?= "gbm gallium egl opengl x11 dri3"
+PACKAGECONFIG:class-native ?= "wayland-protocols gbm egl opengl"
+PACKAGECONFIG:class-nativesdk ?= "wayland-protocols gbm egl opengl"
+FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
+SRC_URI:append:ls1028ardb  = " file://0001-MGS-7599-cso-fix-virgl-driver-assert-issue.patch"
 
 PACKAGECONFIG:remove:ls1028a = "egl gbm"
 PACKAGECONFIG:remove:ls1028a = "gles"
@@ -18,13 +20,13 @@ python () {
 }
 
 # Enable Etnaviv and Freedreno support
-PACKAGECONFIG:append:use-mainline-bsp = " gallium etnaviv kmsro freedreno"
+PACKAGECONFIG:append:ls1028ardb = " gallium etnaviv kmsro freedreno"
 
 # For NXP BSP, GPU drivers don't support dri
 PACKAGECONFIG:remove:ls1028a = "dri"
 
 # mainline/etnaviv:
-RRECOMMENDS:${PN}-megadriver:append:use-mainline-bsp = " libdrm-etnaviv mesa-etnaviv-env"
+RRECOMMENDS:${PN}-megadriver:append:ls1028ardb = " libdrm-etnaviv mesa-etnaviv-env"
 
 BACKEND = \
     "${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'wayland', \

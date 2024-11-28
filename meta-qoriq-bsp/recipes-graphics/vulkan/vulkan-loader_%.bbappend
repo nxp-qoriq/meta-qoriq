@@ -1,1 +1,2 @@
-RRECOMMENDS:${PN}:remove:ls1028a  = "mesa-vulkan-drivers"
+# Override default mesa drivers with i.MX GPU drivers
+RRECOMMENDS:${PN}:ls1028ardb = "libvulkan-imx"

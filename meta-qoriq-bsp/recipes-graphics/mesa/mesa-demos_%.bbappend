@@ -1,23 +1,26 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
 
-SRC_URI:append:ls1028a = " file://Replace-glWindowPos2iARB-calls-with-glWindowPos2i.patch \
-                    file://fix-clear-build-break.patch \
-"
+SRC_URI:append:ls1028ardb = " \
+    file://Replace-glWindowPos2iARB-calls-with-glWindowPos2i.patch \
+    file://fix-clear-build-break.patch \
+    file://0001-egl-clear-backgrounds-black.patch"
 
-PACKAGECONFIG_REMOVE_IF_2D_ONLY          = ""
-PACKAGECONFIG_REMOVE_IF_2D_ONLY:imxgpu2d = "gles1 gles2"
-PACKAGECONFIG_REMOVE_IF_2D_ONLY:ls1028a = ""
-PACKAGECONFIG_REMOVE_IF_GPU              = ""
-PACKAGECONFIG_REMOVE_IF_GPU:ls1028a       = "glx x11"
+REQUIRED_DISTRO_FEATURES:remove:ls1028ardb = "x11"
 
 PACKAGECONFIG:remove = " \
     ${PACKAGECONFIG_REMOVE_IF_2D_ONLY} \
-    ${PACKAGECONFIG_REMOVE_IF_GPU} \
-"
-
-PACKAGECONFIG_APPEND_IF_GPU        = ""
-PACKAGECONFIG_APPEND_IF_GPU:ls1028a = "glu"
+    ${PACKAGECONFIG_REMOVE_IF_GPU}"
+PACKAGECONFIG_REMOVE_IF_2D_ONLY          = ""
+PACKAGECONFIG_REMOVE_IF_2D_ONLY:imxgpu2d = "gles1 gles2"
+PACKAGECONFIG_REMOVE_IF_2D_ONLY:imxgpu3d = ""
+PACKAGECONFIG_REMOVE_IF_2D_ONLY:ls1028ardb = ""
+PACKAGECONFIG_REMOVE_IF_GPU              = ""
+PACKAGECONFIG_REMOVE_IF_GPU:ls1028ardb       = "x11"
 
 PACKAGECONFIG:append = " \
-    ${PACKAGECONFIG_APPEND_IF_GPU} \
-"
+    ${PACKAGECONFIG_APPEND_IF_GPU}"
+PACKAGECONFIG_APPEND_IF_GPU        = ""
+PACKAGECONFIG_APPEND_IF_GPU:ls1028ardb = "glu"
+
+PACKAGECONFIG[glu] = ",,libglu"
+

@@ -1,3 +1,0 @@
-LICENSE = "BSD-3-Clause"
-LIC_FILES_CHKSUM = "file://../LICENSE;md5=751419260aa954499f7abaabaa882bbe"
-SRCREV = "4706a6534ec09f9a46bfe305c5e49badca32b4c6"

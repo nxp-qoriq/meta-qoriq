@@ -10,8 +10,8 @@ DEPENDS = "python3-pyelftools-native"
 SRC_URI = "git://github.com/nxp-qoriq/dpdk;protocol=https;nobranch=1 \
            file://0001-meson.build-march-and-mcpu-already-passed-by-Yocto.patch \
           "
-SRCREV = "25e54a672e05b1e46c3480b586677c747fde8e75"
 
+SRCREV = "17ae867ee5d47e66b4f5bb058fbd0f37a86b1361"
 S = "${WORKDIR}/git"
 
 inherit meson pkgconfig

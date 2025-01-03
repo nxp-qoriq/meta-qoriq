@@ -1,15 +1,15 @@
 DESCRIPTION = "mTCP on DPDK"
 LICENSE = "BSD-3-Clause"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=189d0d4d51a8c303a7188b0932b735a9"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=6a36820ca4ad07a1d62df52c596df642"
 
 inherit autotools pkgconfig
 
-PV = "21.11"
+PV = "22.11"
 
-DEPENDS += "gmp numactl dpdk bc-native"
+DEPENDS += "gmp numactl dpdk bc-native zlib"
 
 SRC_URI = "gitsm://github.com/nxpmicro/mtcp;protocol=https;branch=mtcp-dpdk"
-SRCREV = "82cf300c4de96045f8b5b9ae3cd2fcabfe7c2aef"
+SRCREV = "7198e5e38127f847747e2d413b3b449a8dbc20ad"
 
 S = "${UNPACKDIR}/git"
 B = "${UNPACKDIR}/git"
@@ -37,6 +37,10 @@ do_install() {
     install -m 0644 ${S}/apps/perf/README.md    ${D}${bindir}/mtcp
     install -m 0755 ${S}/apps/example/epserver ${D}${bindir}/mtcp
     install -m 0755 ${S}/apps/example/epwget   ${D}${bindir}/mtcp
+    install -m 0644 ${S}/config/sample_route.conf   ${D}${bindir}/mtcp
+    install -m 0644 ${S}/config/sample_arp.conf     ${D}${bindir}/mtcp
+    install -m 0644 ${S}/apps/example/epserver.conf ${D}${bindir}/mtcp
+    install -m 0644 ${S}/apps/example/epwget.conf   ${D}${bindir}/mtcp
 }
 
 COMPATIBLE_MACHINE = "(qoriq-arm64)"

@@ -98,7 +98,6 @@ NXP_WIFI_PKGS = "\
     kernel-module-nxp-wlan \
     firmware-nxp-wifi-all-sdio \
     firmware-nxp-wifi-all-pcie \
-    nxp-wlan-sdk \
 "
 RDEPENDS:${PN}:append:ls1012a = " ${NXP_WIFI_PKGS}"
 RDEPENDS:${PN}:append:ls1028a = " ${NXP_WIFI_PKGS}"

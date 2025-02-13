@@ -27,7 +27,7 @@ PV:append = "+fslgit"
 LOCALVERSION = "+fsl"
 
 INHIBIT_DEFAULT_DEPS = "1"
-DEPENDS = "libgcc virtual/${TARGET_PREFIX}gcc bison-native bc-native swig-native python3-native"
+DEPENDS = "libgcc virtual/cross-cc bison-native bc-native swig-native python3-native"
 DEPENDS:append:qoriq-arm64 = " dtc-native"
 DEPENDS:append:qoriq-arm = " dtc-native"
 DEPENDS:append:qoriq-ppc = " boot-format-native"

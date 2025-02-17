@@ -1,5 +1,5 @@
 require recipes-core/meta/meta-toolchain.bb
-SDK_VERSION = "5.1"
+SDK_VERSION = "6.12-walnascar"
 
 TOOLCHAIN_OUTPUTNAME = "${DISTRO}-${TCLIBC}-${SDKMACHINE}-${TUNE_PKGARCH}-toolchain-${SDK_VERSION}"
 

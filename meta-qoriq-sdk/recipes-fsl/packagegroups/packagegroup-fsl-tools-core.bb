@@ -16,6 +16,7 @@ RDEPENDS:${PN} = " \
     coreutils \
     crconf \
     cryptodev-linux \
+    cryptodev-module \
     cryptodev-tests \
     e2fsprogs \
     e2fsprogs-badblocks \

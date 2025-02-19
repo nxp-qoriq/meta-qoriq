@@ -27,7 +27,7 @@ DELTA_KERNEL_DEFCONFIG ?= ""
 DELTA_KERNEL_DEFCONFIG:prepend:qoriq-arm64 = "lsdk.config "
 DELTA_KERNEL_DEFCONFIG:prepend:qoriq-arm = "multi_v7_lpae.config lsdk.config "
 
-do_merge_delta_config[depends] += " flex-native:do_populate_sysroot bison-native:do_populate_sysroot"
+do_merge_delta_config[depends] += "virtual/cross-cc:do_populate_sysroot bison-native:do_populate_sysroot"
 do_merge_delta_config[dirs] = "${B}"
 
 do_merge_delta_config() {

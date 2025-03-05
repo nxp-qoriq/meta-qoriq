@@ -8,6 +8,6 @@ LIC_FILES_CHKSUM = "file://LICENSE.md;md5=a8fa504109e4cd7ea575bc49ea4be560 \
                     file://LICENSE-GPL;md5=10e86b5d2a6cb0e2b9dcfdd26a9ac58d"
 
 OPTEE_TEST_BRANCH = "lf-6.12.3_1.0.0"
-SRCREV = "${AUTOREV}"
+SRCREV = "dafc98ed8364d7281a9a7f0788dd0a2067844a59"
 
 PV:append = "+git${SRCPV}"

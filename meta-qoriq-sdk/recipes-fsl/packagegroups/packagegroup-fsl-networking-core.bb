@@ -28,8 +28,6 @@ RDEPENDS:${PN} = " \
     inetutils-rsh \
     inetutils-telnet \
     inetutils-traceroute \
-    ipsec-tools \
-    ipsec-demo \
     netcat \
     net-tools \
     tcpdump \

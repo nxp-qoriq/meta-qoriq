@@ -333,25 +333,6 @@ cat >>conf/local.conf <<-EOF
 #DISTRO_FEATURES:append = " secure"
 EOF
 
-
-if [ "$MACHINE" = "ls1028ardb" ]; then
-   cat >>conf/local.conf <<-EOF
-PREFERRED_VERSION_weston:ls1028a = "14.0.2.imx"
-PREFERRED_VERSION_wayland-protocols:ls1028a = "1.41.imx"
-PREFERRED_VERSION_libdrm:ls1028a = "2.4.123.imx"
-PREFERRED_PROVIDER_virtual/libgles1:ls1028a = "imx-gpu-viv"
-PREFERRED_PROVIDER_virtual/libgles2:ls1028a = "imx-gpu-viv"
-PREFERRED_PROVIDER_virtual/egl:ls1028a      = "imx-gpu-viv"
-PREFERRED_PROVIDER_virtual/opencl-icd:ls1028a = "imx-gpu-viv"
-
-# Some gstream plugins require "commercial" be set in LICENSE_FLAGS_ACCEPTED
-# For exmaple, gstreamer1.0-plugins-ugly-asf/gstreamer1.0-libav
-# uncomment the below one line to include them into fsl-image-multimedia-full
-LICENSE_FLAGS_ACCEPTED:append = " commercial"
-
-EOF
-fi
-
 for s in $HOME/.oe $HOME/.yocto; do
     if [ -e $s/site.conf ]; then
         echo "Linking $s/site.conf to conf/site.conf"

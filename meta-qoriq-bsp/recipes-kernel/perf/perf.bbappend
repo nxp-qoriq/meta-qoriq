@@ -3,6 +3,7 @@
 PERF_SRC += " \
              arch/arm64/tools \
              arch/${ARCH}/include \
+             include \
 "
 
 do_configure:prepend:qoriq () {

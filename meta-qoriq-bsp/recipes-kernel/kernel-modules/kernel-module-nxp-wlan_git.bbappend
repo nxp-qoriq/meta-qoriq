@@ -1,6 +1,6 @@
 # Use latest NXP Wi-Fi kernel module
 SRC_URI = "${MRVL_SRC};branch=${SRCBRANCH}"
 SRCBRANCH = "lf-6.12.34_2.1.0"
-SRCREV = "7a8beaa1605cb0870dc7ba3312c76df91cb0d6cf"
+SRCREV = "${AUTOREV}"
 ERROR_QA:remove = "buildpaths"
 COMPATIBLE_MACHINE = "(imx-nxp-bsp|qoriq)"

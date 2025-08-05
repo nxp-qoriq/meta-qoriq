@@ -1,2 +1,2 @@
 SRC_URI:remove = "file://disable-manpage-generation.patch"
-SRCREV = "8f73f2600111440d034227966d6ff03ec47d8f1a"
+SRCREV = "fdbdf591afca43b018f291366c643ffc1fbcf8e1"

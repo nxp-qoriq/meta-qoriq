@@ -8,7 +8,7 @@ HOMEPAGE = "https://www.op-tee.org/"
 DEPENDS += "python3-pycryptodome-native"
 
 OPTEE_OS_BRANCH = "lf-6.12.34_2.1.0"
-SRCREV = "${AUTOREV}"
+SRCREV = "9130f673996b1ed9a653ecb8774c6bd23f9fdad5"
 
 PV:append = "+git${SRCPV}"
 

@@ -1,18 +1,16 @@
 NXP Software Content Register
 
-Release - Linux 6.12.20-2.0.0
- June 2025
+Release - Linux 6.12.34-2.1.0
+ Sept 2025
 
 Outgoing License: GPL-2.0
 License File:     LICENSE
 
 Yocto Project recipe manifest:
-repo init -u https://github.com/nxp-qoriq/yocto-sdk -b walnascar -m ls-6.12.20-2.0.0.xml
+repo init -u https://github.com/nxp-qoriq/yocto-sdk -b walnascar -m ls-6.12.34-2.1.0.xml
 
-Release tag: lf-6.12.20-2.0.0
+Release tag: lf-6.12.34-2.1.0
 
---------------------------------------------
-BSP Packages
 --------------------------------------------
 
 Package:                     linux
@@ -22,7 +20,7 @@ License File:                COPYING
 Package Category:            kernel
 Type of Content:             source
 Description and comments:    The Linux kernel with Layerscape-specific drivers
-Release Location:            https://github.com/nxp-qoriq/linux -b lf-6.12.20-2.0.0
+Release Location:            https://github.com/nxp-qoriq/linux -b lf-6.12.34-2.1.0
 Origin:                      NXP (GPL-2.0)
                              kernel.org (GPL-2.0) - https://www.kernel.org/
 
@@ -35,7 +33,7 @@ License File:                Licenses/gpl-2.0.txt
 Package Category:            firmware
 Type of Content:             source
 Description and comments:    Bootloader with Layerscape-specific capabilities
-Release Location:            https://github.com/nxp-qoriq/u-boot -b lf-6.12.20-2.0.0
+Release Location:            https://github.com/nxp-qoriq/u-boot -b lf-6.12.34-2.1.0
 Origin:                      NXP (GPL-2.0)
                              Das U-Boot - Universal Bootloader (GPL-2.0) - http://www.denx.de/wiki/U-Boot/WebHome
                              Android Open Source Project (BSD-2-Clause) - https://source.android.com/
@@ -50,9 +48,109 @@ License File:                LICENSE.txt
 Package Category:            firmware
 Type of Content:             source
 Description and comments:    ARM Trusted Firmware
-Release Location:            https://github.com/nxp-qoriq/atf -b lf-6.12.20-2.0.0
+Release Location:            https://github.com/nxp-qoriq/atf -b lf-6.12.34-2.1.0
 Origin:                      NXP (BSD-3-clause)
                              arm-trusted-firmware - ARM Limited (BSD-3-clause) - http://github.com/ARM-software/arm-trusted-firmware/
+
+--------------------------------------------
+
+Package:                     ddr-phy-binary
+Version:                     
+Outgoing License:            LA_OPT_BINARY_FIRMWARE_ONLY
+License File:                NXP-Binary-EULA.txt
+Package Category:            firmware
+Type of Content:             source
+Description and comments:    DDR PHY firmware
+Release Location:            https://github.com/nxp-qoriq/ddr-phy-binary -b lf-6.12.34-2.1.0
+Origin:                      NXP (BSD-3-Clause)
+                             DPDK - Intel Corporation (BSD-3-Clause) - https://github.com/DPDK/dpdk
+                             KNI Linux Device driver - Intel Corporation (GPL-2.0) Separate component of DPDK
+                             pmdinfogen - Neil Horman (GPL-2.0) - Separate tool in DPDK
+
+--------------------------------------------
+
+Package:                     mc-utils
+Version:                     
+Outgoing License:            BSD-3-Clause
+License File:                LICENSE
+Package Category:            firmware
+Type of Content:             source
+Description and comments:    MC API and Configuration
+Release Location:            https://github.com/nxp-qoriq/mc-utils -b lf-6.12.34-2.1.0
+Origin:                      NXP (BSD-3-Clause)
+
+--------------------------------------------
+
+Package:                     qoriq-firmware-cortina
+Version:                     
+Outgoing License:            LA_OPT_BASE_LICENSE v20 June 2017
+License File:                EULA.txt
+Package Category:            firmware
+Type of Content:             binary
+Description and comments:    Cortina PHY firmware
+Release Location:            https://github.com/nxp-qoriq/qoriq-firmware-cortina -b lf-6.12.34-2.1.0
+Origin:                      NXP (proprietary)
+                             Cortina (proprietary)
+
+--------------------------------------------
+
+Package:                     qoriq-firmware-inphi
+Version:                     
+Outgoing License:            LA_OPT_BASE_LICENSE v20 June 2017
+License File:                EULA.txt
+Package Category:            firmware
+Type of Content:             binary
+Description and comments:    IN112525 Phy firmware
+Release Location:            https://github.com/nxp-qoriq/qoriq-firmware-inphi -b lf-6.12.34-2.1.0
+Origin:                      NXP (proprietary)
+                             Inphi (proprietary)
+
+--------------------------------------------
+
+Package:                     qoriq-fm-ucode
+Version:                     
+Outgoing License:            LA_OPT_BINARY_FIRMWARE_ONLY
+License File:                EULA
+Package Category:            firmware
+Type of Content:             binary
+Description and comments:    Fman microcode binary
+Release Location:            https://github.com/nxp-qoriq/qoriq-fm-ucode -b lf-6.12.34-2.1.0
+Origin:                      NXP (proprietary)
+
+--------------------------------------------
+
+Package:                     qoriq-mc-binary-10.39.0
+Version:                     10.39.0
+Outgoing License:            LA_OPT_BINARY_FIRMWARE_ONLY
+License File:                LICENSE
+Package Category:            firmware
+Type of Content:             binary
+Description and comments:    DPAA2 Management Complex Firmware
+Release Location:            https://github.com/nxp-qoriq/qoriq-mc-binary -b lf-6.12.34-2.1.0
+Origin:                      NXP (proprietary)
+
+--------------------------------------------
+
+Package:                     qoriq-qe-ucode
+Version:                     
+Outgoing License:            LA_OPT_BINARY_FIRMWARE_ONLY
+License File:                LICNESE
+Package Category:            firmware
+Type of Content:             binary
+Description and comments:    QE microcode binary
+Release Location:            https://github.com/nxp-qoriq/qoriq-qe-ucode -b lf-6.12.34-2.1.0
+Origin:                      NXP (proprietary)
+
+--------------------------------------------
+
+Package:                     dash-rcw
+Version:                     
+Outgoing License:            BSD-3-Clause
+License File:                LICENSE
+Package Category:            firmware
+Type of Content:             source
+Description and comments:    Reset Configuration Word
+Release Location:            https://github.com/nxp-qoriq/rcw -b lf-6.12.34-2.1.0
 
 --------------------------------------------
 
@@ -60,10 +158,10 @@ Package:                     optee_client
 Version:                     4.6.0
 Outgoing License:            BSD-2-Clause
 License File:                LICENSE
-Package Category:            BSP
+Package Category:            bsp
 Type of Content:             source
 Description and comments:    Open Portable Trusted Execution Environment for TEE Client library
-Release Location:            https://github.com/nxp-qoriq/optee_client -b lf-6.12.20-2.0.0
+Release Location:            https://github.com/nxp-qoriq/optee_client -b lf-6.12.34-2.1.0
 Origin:                      NXP (BSD-2-Clause)
                              optee_client (BSD-2-Clause) - https://github.com/OP-TEE/optee_client
 
@@ -73,10 +171,10 @@ Package:                     optee_os
 Version:                     4.6.0
 Outgoing License:            BSD-2-Clause
 License File:                LICENSE
-Package Category:            BSP
+Package Category:            bsp
 Type of Content:             source
 Description and comments:    Open Portable Trusted Execution Environment for Linux on ARM
-Release Location:            https://github.com/nxp-qoriq/optee_os -b lf-6.12.20-2.0.0
+Release Location:            https://github.com/nxp-qoriq/optee_os -b lf-6.12.34-2.1.0
 Origin:                      NXP (BSD-2-Clause)
                              OP-TEE Trusted OS (BSD-2-Clause) - https://github.com/OP-TEE/optee_os
                              Mbed TLS (Apache-2.0) - https://github.com/ARMmbed/mbedtls/
@@ -87,85 +185,73 @@ Package:                     optee_test
 Version:                     4.6.0
 Outgoing License:            BSD-2-Clause (ta/) and GPL-2.0 (host/)
 License File:                LICENSE.md
-Package Category:            BSP
+Package Category:            bsp
 Type of Content:             source
 Description and comments:    Open Portable Trusted Execution Environment sanity tests
-Release Location:            https://github.com/nxp-qoriq/optee_test -b lf-6.12.20-2.0.0
+Release Location:            https://github.com/nxp-qoriq/optee_test -b lf-6.12.34-2.1.0
 Origin:                      NXP (BSD-2-Clause)
                              optee_test (BSD-2-Clause) - https://github.com/OP-TEE/optee_test
 
 --------------------------------------------
 
 Package:                     aiopsl
-Version:
+Version:                     
 Outgoing License:            BSD-3-Clause
 License File:                LICENSE
-Package Category:            user space
+Package Category:            userspace
 Type of Content:             source
 Description and comments:    DPAA2 Accelerated I/O Processing service layer
-Release Location:            https://github.com/nxp-qoriq/aiopsl -b lf-6.12.20-2.0.0
+Release Location:            https://github.com/nxp-qoriq/aiopsl -b lf-6.12.34-2.1.0
 Origin:                      NXP (BSD-3-Clause)
 
 --------------------------------------------
 
 Package:                     aquantia-firmware-utility
-Version:
+Version:                     
 Outgoing License:            BSD-2-Clause
 License File:                LICENSE
-Package Category:            user space
+Package Category:            userspace
 Type of Content:             source
 Description and comments:    Firmware tool for AQuantia Ethernet PHYs
-Release Location:            https://github.com/nxp-qoriq/aquantia-firmware-utility -b lf-6.12.20-2.0.0
+Release Location:            https://github.com/nxp-qoriq/aquantia-firmware-utility -b lf-6.12.34-2.1.0
 Origin:                      NXP (BSD-2-Clause)
                              Aquantia Corp (BSD-2-Clause)
 
 --------------------------------------------
 
 Package:                     ceetm
-Version:
+Version:                     
 Outgoing License:            GPL-2.0
 License File:                LICENSE
-Package Category:            user space
+Package Category:            userspace
 Type of Content:             source
 Description and comments:    CEETM TC QDISC
-Release Location:            https://github.com/nxp-qoriq/ceetm -b lf-6.12.20-2.0.0
+Release Location:            https://github.com/nxp-qoriq/ceetm -b lf-6.12.34-2.1.0
 Origin:                      NXP (GPL-2.0)
 
 --------------------------------------------
 
 Package:                     cst
-Version:
+Version:                     
 Outgoing License:            BSD-3-Clause
 License File:                LICENSE
-Package Category:            user space
+Package Category:            userspace
 Type of Content:             source
 Description and comments:    utility for security boot
-Release Location:            https://github.com/nxp-qoriq/cst -b lf-6.12.20-2.0.0
+Release Location:            https://github.com/nxp-qoriq/cst -b lf-6.12.34-2.1.0
 Origin:                      NXP (BSD-3-Clause)
 
 --------------------------------------------
 
 Package:                     dce
-Version:
+Version:                     
 Outgoing License:            BSD-3-Clause
 License File:                LICENSE
-Package Category:            user space
+Package Category:            userspace
 Type of Content:             source
 Description and comments:    Decompression Compression Engine Userspace Utils
-Release Location:            https://github.com/nxp-qoriq/dce -b lf-6.12.20-2.0.0
+Release Location:            https://github.com/nxp-qoriq/dce -b lf-6.12.34-2.1.0
 Origin:                      NXP (BSD-3-Clause)
-
---------------------------------------------
-
-Package:                     ddr-phy-binary
-Version:
-Outgoing License:            LA_OPT_BINARY_FIRMWARE_ONLY
-License File:                NXP-Binary-EULA.txt
-Package Category:            firmware
-Type of Content:             binary
-Description and comments:    DDR PHY firmware
-Release Location:            https://github.com/nxp-qoriq/ddr-phy-binary -b lf-6.12.20-2.0.0
-Origin：                     NXP (proprietary)
 
 --------------------------------------------
 
@@ -173,10 +259,10 @@ Package:                     dpdk
 Version:                     22.11
 Outgoing License:            BSD-3-Clause
 License File:                LICENSE
-Package Category:            user space
+Package Category:            userspace
 Type of Content:             source
 Description and comments:    Data Plane Development Kit
-Release Location:            https://github.com/nxp-qoriq/dpdk -b lf-6.12.20-2.0.0
+Release Location:            https://github.com/nxp-qoriq/dpdk -b lf-6.12.34-2.1.0
 Origin:                      NXP (BSD-3-Clause)
                              DPDK - Intel Corporation (BSD-3-Clause) - https://github.com/DPDK/dpdk
                              KNI Linux Device driver - Intel Corporation (GPL-2.0) Separate component of DPDK
@@ -185,98 +271,86 @@ Origin:                      NXP (BSD-3-Clause)
 --------------------------------------------
 
 Package:                     eth-config
-Version:
+Version:                     
 Outgoing License:            BSD-3-Clause
 License File:                LICENSE
-Package Category:            user space
+Package Category:            userspace
 Type of Content:             source
 Description and comments:    Ethernet Configuration Files
-Release Location:            https://github.com/nxp-qoriq/eth-config -b lf-6.12.20-2.0.0
+Release Location:            https://github.com/nxp-qoriq/eth-config -b lf-6.12.34-2.1.0
 Origin:                      NXP (BSD-3-Clause)
 
 --------------------------------------------
 
 Package:                     fmc
-Version:
+Version:                     
 Outgoing License:            MIT
 License File:                LICENSE
-Package Category:            user space
+Package Category:            userspace
 Type of Content:             source
 Description and comments:    Frame Manager Configuration tool
-Release Location:            https://github.com/nxp-qoriq/fmc -b lf-6.12.20-2.0.0
+Release Location:            https://github.com/nxp-qoriq/fmc -b lf-6.12.34-2.1.0
 Origin:                      NXP (MIT)
 
 --------------------------------------------
 
 Package:                     fmlib
-Version:
+Version:                     
 Outgoing License:            BSD-3-Clause
 License File:                LICENSE
-Package Category:            user space
+Package Category:            userspace
 Type of Content:             source
 Description and comments:    Frame Manager User Space Library
-Release Location:            https://github.com/nxp-qoriq/fmlib -b lf-6.12.20-2.0.0
-Origin：                     NXP (BSD-3-Clause)
+Release Location:            https://github.com/nxp-qoriq/fmlib -b lf-6.12.34-2.1.0
+Origin:                      NXP (BSD-3-Clause)
 
 --------------------------------------------
 
 Package:                     gpp-aioptool
-Version:
+Version:                     
 Outgoing License:            BSD-3-Clause
 License File:                LICENSE
-Package Category:            user space
+Package Category:            userspace
 Type of Content:             source
 Description and comments:    userspace application for performing operations
-Release Location:            https://github.com/nxp-qoriq/gpp-aioptool -b lf-6.12.20-2.0.0
+Release Location:            https://github.com/nxp-qoriq/gpp-aioptool -b lf-6.12.34-2.1.0
 Origin:                      NXP (BSD-3-Clause)
 
 --------------------------------------------
 
 Package:                     mdio-proxy-module
-Version:
+Version:                     
 Outgoing License:            BSD-3-Clause or GPL-2.0+
 License File:                LICENSE
-Package Category:            kernel module, user space
+Package Category:            userspace
 Type of Content:             source
 Description and comments:    Kernel module and user-space application for accessing any MDIO device
-Release Location:            https://github.com/nxp-qoriq/mdio-proxy-module -b lf-6.12.20-2.0.0
+Release Location:            https://github.com/nxp-qoriq/mdio-proxy-module -b lf-6.12.34-2.1.0
 Origin:                      NXP (BSD-3-Clause)
                              kernel.org (GPL-2.0) - https://www.kernel.org/
 
 --------------------------------------------
 
-Package:                     mc-utils
-Version:                     10.39.0
-Outgoing License:            BSD-3-Clause
-License File:                LICENSE
-Package Category:            firmware
-Type of Content:             source
-Description and comments:    MC API and Configuration
-.elease Location:            https://github.com/nxp-qoriq/mc-utils -b mc_release_10.39.0
-Origin:                      NXP (BSD-3-Clause)
-
---------------------------------------------
-
 Package:                     mtcp
-Version:
+Version:                     
 Outgoing License:            BSD-3-Clause
 License File:                LICENSE
-Package Category:            user space
+Package Category:            userspace
 Type of Content:             source
-Description and comments:    mTCP with DPDK 21.11v and NXP platform support.
-Release Location:            https://github.com/nxp-mcuxpresso/mtcp -b lf-6.12.20-2.0.0
+Description and comments:    mTCP with DPDK 21.11v and NXP platform support
+Release Location:            https://github.com/nxp-mcuxpresso/mtcp -b lf-6.12.34-2.1.0
 Origin:                      mTCP (BSD) https://github.com/mtcp-stack/mtcp
 
 --------------------------------------------
 
 Package:                     ovs-dpdk
-Version:
+Version:                     3.1
 Outgoing License:            Apache-2.0
 License File:                LICENSE
-Package Category:            user space
+Package Category:            userspace
 Type of Content:             source
 Description and comments:    OVS DPDK
-Release Location:            https://github.com/nxp-qoriq/ovs-dpdk -b lf-6.12.20-2.0.0
+Release Location:            https://github.com/nxp-qoriq/ovs-dpdk -b lf-6.12.34-2.1.0
 Origin:                      Open vSwitch (Apache-2.0) - https://github.com/openvswitch/ovs/actions
 
 --------------------------------------------
@@ -284,146 +358,72 @@ Origin:                      Open vSwitch (Apache-2.0) - https://github.com/open
 Package:                     qemu
 Version:                     4.2
 Outgoing License:            GPL-2.0
-License File:                LICENSE
-Package Category:            user space
-Type of Content:             source
-Description and comments:    generic and open source machine emulator and virtualizer
-Release Location:            https://github.com/nxp-qoriq/qemu.git -b lf-6.12.20-2.0.0
+License File:                COPYING
+Package Category:            userspace
+Type of Content:             source
+Description and comments:    generic and open source machine emulator and virtualizer
+Release Location:            https://github.com/nxp-qoriq/qemu.git -b lf-6.12.34-2.1.0
 Origin:                      NXP (GPL-2.0)
                              qemu (GPL-2.0) - https://www.qemu.org/
 
 --------------------------------------------
 
 Package:                     qoriq-engine-pfe-bin
-Version:
+Version:                     
 Outgoing License:            LA_OPT_BINARY_FIRMWARE_ONLY
 License File:                NXP-Binary-EULA.txt
-Package Category:            firmware
-Type of Content:             binary
+Package Category:            userspace
+Type of Content:             source
 Description and comments:    Linux pfe firmware
-Release Location:            https://github.com/nxp-qoriq/qoriq-engine-pfe-bin -b lf-6.12.20-2.0.0
+Release Location:            https://github.com/nxp-qoriq/qoriq-engine-pfe-bin -b lf-6.12.34-2.1.0
 Origin:                      NXP (proprietary)
                              kernel.org (GPL-2.0) - https://www.kernel.org/
 
 --------------------------------------------
 
-Package:                     qoriq-firmware-cortina
-Version:
-Outgoing License:            LA_OPT_BASE_LICENSE v20 June 2017
-License File:                EULA.txt
-Package Category:            firmware
-Type of Content:             binary
-Description and comments:    Cortina PHY firmware
-Release Location:            https://github.com/nxp-qoriq/qoriq-firmware-cortina -b lf-6.12.20-2.0.0
-Origin:                      NXP (proprietary)
-                             Cortina (proprietary)
-
---------------------------------------------
-
-Package:                     qoriq-firmware-inphi
-Version:
-Outgoing License:            LA_OPT_BASE_LICENSE v20 June 2017
-License File:                EULA.txt
-Package Category:            firmware
-Type of Content:             binary
-Description and comments:    IN112525 Phy firmware
-Release Location:            https://github.com/nxp-qoriq/qoriq-firmware-inphi -b lf-6.12.20-2.0.0
-Origin:                      NXP (proprietary)
-                             Inphi (proprietary)
-
---------------------------------------------
-
-Package:                     qoriq-fm-ucode
-Version:
-Outgoing License:            LA_OPT_BINARY_FIRMWARE_ONLY
-License File:                LICENSE
-Package Category:            firmware
-Type of Content:             binary
-Description and comments:    Fman microcode binary
-Release Location:            https://github.com/nxp-qoriq/qoriq-fm-ucode -b lf-6.12.20-2.0.0
-Origin:                      NXP (proprietary)
-
---------------------------------------------
-
-Package:                     qoriq-mc-binary
-Version:                     10.39.0
-Outgoing License:            LA_OPT_BINARY_FIRMWARE_ONLY
-License File:                LICENSE
-Package Category:            firmware
-Type of Content:             binary
-Description and comments:    DPAA2 Management Complex Firmware
-Release Location:            https://github.com/nxp-qoriq/qoriq-mc-binary -b mc_release_10.39.0
-Origin:                      NXP (proprietary)
-
---------------------------------------------
-
-Package:                     qoriq-qe-ucode
-Version:
-Outgoing License:            LA_OPT_BINARY_FIRMWARE_ONLY
-License File:                LICENSE
-Package Category:            firmware
-Type of Content:             binary
-Description and comments:    QE microcode binary
-Release Location:            https://github.com/nxp-qoriq/qoriq-qe-ucode -b lf-6.12.20-2.0.0
-Origin:                      NXP (proprietary)
-
---------------------------------------------
-
-Package:                     rcw
-Version:
-Outgoing License:            BSD-3-Clause
-License File:                LICENSE
-Package Category:            firmware
-Type of Content:             source
-Description and comments:    Reset Configuration Word
-Release Location:            https://github.com/nxp-qoriq/rcw -b lf-6.12.20-2.0.0
-Origin:                      NXP (BSD-3-Clause)
-
---------------------------------------------
-
 Package:                     restool
-Version:
+Version:                     
 Outgoing License:            BSD-3-Clause
 License File:                LICENSE
-Package Category:            user space
+Package Category:            userspace
 Type of Content:             source
 Description and comments:    DPAA2 Resource Manager Tool
-Release Location:            https://github.com/nxp-qoriq/restool -b lf-6.12.20-2.0.0
+Release Location:            https://github.com/nxp-qoriq/restool -b lf-6.12.34-2.1.0
 Origin:                      NXP (BSD-3-Clause)
 
 --------------------------------------------
 
 Package:                     spc
-Version:
+Version:                     
 Outgoing License:            MIT
 License File:                LICENSE
-Package Category:            user space
+Package Category:            userspace
 Type of Content:             source
 Description and comments:    Soft Parser Configuration tool
-Release Location:            https://github.com/nxp-qoriq/spc -b lf-6.12.20-2.0.0
+Release Location:            https://github.com/nxp-qoriq/spc -b lf-6.12.34-2.1.0
 Origin:                      NXP (MIT)
 
 --------------------------------------------
 
 Package:                     tsntool
-Version:
+Version:                     
 Outgoing License:            MIT or GPL-2.0+
 License File:                LICENSE
-Package Category:            user space
+Package Category:            userspace
 Type of Content:             source
 Description and comments:    TSN configuration tool
-Release Location:            https://github.com/nxp-qoriq/tsntool -b lf-6.12.20-2.0.0
+Release Location:            https://github.com/nxp-qoriq/tsntool -b lf-6.12.34-2.1.0
 Origin:                      NXP (MIT or GPL-2.0+)
 
 --------------------------------------------
 
 Package:                     vpp
-Version:                     23.02
+Version:                     2302
 Outgoing License:            Apache-2.0
 License File:                LICENSE
-Package Category:            user space
+Package Category:            userspace
 Type of Content:             source
 Description and comments:    Vector Packet Processor
-Release Location:            https://github.com/nxp-qoriq/vpp -b lf-6.12.20-2.0.0
+Release Location:            https://github.com/nxp-qoriq/vpp -b lf-6.12.34-2.1.0
 Origin:                      DPDK (BSD-3-Clause) - Intel Corporation (BSD-3-Clause) - https://github.com/DPDK/dpdk
                              VPP (Apache-2.0) - https://fd.io/

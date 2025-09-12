@@ -7,8 +7,6 @@ DEPENDS = "gcc-runtime dpdk openssl python3-ply util-linux python3-ply-native"
 SRC_URI = "git://github.com/nxp-qoriq/vpp.git;protocol=https;nobranch=1"
 SRCREV = "9b6de193165e1d409b20eede48456ac5ab2f73e9"
 
-S = "${UNPACKDIR}/git"
-
 inherit cmake pkgconfig python3-dir python3native
 
 OECMAKE_SOURCEPATH = "${S}/src"

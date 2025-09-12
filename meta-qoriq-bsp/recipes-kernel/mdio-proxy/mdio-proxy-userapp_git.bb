@@ -5,8 +5,6 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=6f933bdd5214942fcfafa90f40740dfc"
 SRC_URI = "git://github.com/nxp-qoriq/mdio-proxy-module;protocol=https;nobranch=1"
 SRCREV = "d2362c958abf9d17f62fe60817572de7c9714384"
 
-S = "${UNPACKDIR}/git"
-
 EXTRA_OEMAKE += "userapp"
 
 do_compile:prepend() {

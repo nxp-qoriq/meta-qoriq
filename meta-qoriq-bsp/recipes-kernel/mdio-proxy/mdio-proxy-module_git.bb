@@ -7,8 +7,6 @@ inherit module
 SRC_URI = "git://github.com/nxp-qoriq/mdio-proxy-module;protocol=https;nobranch=1"
 SRCREV = "d2362c958abf9d17f62fe60817572de7c9714384"
 
-S = "${UNPACKDIR}/git"
-
 MAKE_TARGETS = "module"
 EXTRA_OEMAKE='KBUILD_DIR="${STAGING_KERNEL_DIR}"'
 

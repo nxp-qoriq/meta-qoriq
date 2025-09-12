@@ -11,7 +11,6 @@ DPDK_SRC ?= "git://github.com/nxp-qoriq/dpdk;protocol=https"
 SRC_URI = "${DPDK_SRC};nobranch=1 \
           file://0001-meson.build-march-and-mcpu-already-passed-by-Yocto.patch"
 SRCREV = "e1617d2b9bb6255f6d108a9c2558158f4f595480"
-S = "${WORKDIR}/git"
 
 inherit meson pkgconfig
 

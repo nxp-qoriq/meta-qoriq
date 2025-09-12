@@ -7,8 +7,6 @@ DEPENDS += "libpcap dpdk lua lua-native numactl"
 SRC_URI = "git://github.com/pktgen/Pktgen-DPDK.git;protocol=https;nobranch=1"
 SRCREV = "178c06ff7ca242b2485d65ae427fd82b62a71601"
 
-S = "${UNPACKDIR}/git"
-
 DPAA_VER ?= "dpaa"
 export RTE_TARGET = "arm64-${DPAA_VER}-linuxapp-gcc"
 export RTE_SDK = "${RECIPE_SYSROOT}/usr/share/dpdk"

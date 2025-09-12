@@ -75,7 +75,7 @@ EXTRA_PKGS_COMMUNITY:append:lx2162a = " \
     glibc-utils \
     openssh-sftp-server \
 "
-RDEPENDS:${PN}:append:qoriq-arm64= "${EXTRA_PKGS_COMMUNITY}"
+RDEPENDS:${PN}:append:qoriq-arm64 = "${EXTRA_PKGS_COMMUNITY}"
 
 # pkgs from NXP
 RDEPENDS:${PN}:append:qoriq = "merge-files"

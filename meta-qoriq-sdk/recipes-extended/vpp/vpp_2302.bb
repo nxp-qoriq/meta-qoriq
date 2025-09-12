@@ -11,7 +11,7 @@ inherit cmake pkgconfig python3-dir python3native
 
 OECMAKE_SOURCEPATH = "${S}/src"
 
-export ARCH ="aarch64"
+export ARCH = "aarch64"
 
 EXTRA_OECONF = " \
         --with-libtool-sysroot=${STAGING_DIR_TARGET} \

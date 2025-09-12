@@ -1,3 +1,4 @@
+SRCREV = "b8807ef38efdf96d33be59adbe364a6d58703b6b"
 
 PACKAGECONFIG:append = " ${PACKAGECONFIG_G2D}"
 PACKAGECONFIG_G2D              ??= ""

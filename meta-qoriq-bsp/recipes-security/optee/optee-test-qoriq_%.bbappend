@@ -3,3 +3,5 @@
 OPTEE_TEST_BRANCH = "lf_4.6.y"
 SRCREV = "${AUTOREV}"
 PV:append = "+git"
+
+CFLAGS:remove = " -Wno-error=unterminated-string-initialization"

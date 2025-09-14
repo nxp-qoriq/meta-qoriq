@@ -19,6 +19,8 @@ do_configure() {
     ${S}/configure --host aarch64-fsl-linux --with-dpdk-lib=${SYSROOT_DPDK}/usr
 }
 
+B = "${S}"
+
 do_compile() {
     make setup-dpdk
     make

@@ -2,7 +2,7 @@ PROVIDES:remove:ls1028a = "virtual/egl"
 PROVIDES:remove:ls1028a = "virtual/libgles1 virtual/libgles2"
 
 PACKAGECONFIG:class-native ?= "gbm egl opengl gallium"
-PACKAGECONFIG:class-nativesdk ?= "gbm egl opengl gallium dri3"
+PACKAGECONFIG:class-nativesdk ?= "gbm egl opengl gallium"
 FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
 SRC_URI:append:ls1028ardb  = " file://0001-MGS-7599-cso-fix-virgl-driver-assert-issue.patch"
 

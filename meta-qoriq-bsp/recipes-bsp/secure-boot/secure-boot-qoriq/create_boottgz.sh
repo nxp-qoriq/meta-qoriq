@@ -75,7 +75,7 @@ generate_boottgz(){
 
 #-----------------MainEntry--------------------------
 if [ -z "$VERSION" ];then
-    VERSION="6.12"
+    VERSION="6.18"
 fi
 
 img_dir=${DEPLOYDIR}

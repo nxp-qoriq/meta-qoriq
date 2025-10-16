@@ -2,7 +2,7 @@ require recipes-core/images/core-image-minimal.bb
 
 # Configure the image.bbclass to depend on the FIT image instead of only
 # the kernel to ensure the FIT image is built and deployed with the image
-KERNEL_DEPLOY_DEPEND:append = " linux-yocto-fitimage:do_deploy"
+KERNEL_DEPLOY_DEPEND:append:qoriq-arm64 = " linux-yocto-fitimage:do_deploy"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 

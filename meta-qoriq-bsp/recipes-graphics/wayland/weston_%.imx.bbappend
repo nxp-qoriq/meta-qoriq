@@ -1,5 +1,4 @@
-SRCREV = "b8807ef38efdf96d33be59adbe364a6d58703b6b"
-
+SRCREV = "c3d839702294b57e5977a808e0c9cb4cff9581d8"
 PACKAGECONFIG:append = " ${PACKAGECONFIG_G2D}"
 PACKAGECONFIG_G2D              ??= ""
 PACKAGECONFIG_G2D:imxgpu2d     ??= "imxg2d"

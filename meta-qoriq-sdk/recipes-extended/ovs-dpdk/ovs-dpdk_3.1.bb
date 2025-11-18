@@ -8,7 +8,7 @@ RDEPENDS:${PN} = "bash libcrypto libssl python3"
 inherit python3native pkgconfig
 
 SRC_URI = "git://github.com/nxp-qoriq/ovs-dpdk;protocol=https;nobranch=1"
-SRCREV = "7b4861e1f77bbea5ff9952717b66362fdecbca4d"
+SRCREV = "3d21b478f8b2858ee2044d26470fc57fd57c7328"
 
 do_configure() {
     export SYSROOT_DPDK=${PKG_CONFIG_SYSROOT_DIR}

@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 DEPENDS = "gcc-runtime dpdk openssl python3-ply util-linux python3-ply-native"
 
 SRC_URI = "git://github.com/nxp-qoriq/vpp.git;protocol=https;nobranch=1"
-SRCREV = "9b6de193165e1d409b20eede48456ac5ab2f73e9"
+SRCREV = "36556d952821e9f6b373ea0d4ca2f1c143742d9a"
 
 inherit cmake pkgconfig python3-dir python3native
 

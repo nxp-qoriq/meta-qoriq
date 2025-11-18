@@ -1,4 +1,2 @@
-FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
-SRC_URI:append = " file://0001-Fix-the-function-prototype-doesn-t-match-the-impleme.patch"
-SRCREV = "5b13e8858beee5268cf782b9f35743858b55c98b"
+SRCREV = "b19395f230838ab5db5569a11dc6fb6e95eddb50"
 CFLAGS += " -Wno-error=incompatible-pointer-types -Wno-error=implicit-function-declaration -Wno-error=int-conversion"

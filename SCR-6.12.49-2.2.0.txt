@@ -151,7 +151,7 @@ Package Category:            firmware
 Type of Content:             source
 Description and comments:    Reset Configuration Word
 Release Location:            https://github.com/nxp-qoriq/rcw -b lf-6.12.49-2.2.0
-Origin:                      NXP (BSD-2-Clause)
+Origin:                      NXP (BSD-3-Clause)
 
 --------------------------------------------
 

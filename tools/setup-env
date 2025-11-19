@@ -54,7 +54,7 @@ if [ "$(whoami)" = "root" ]; then
     return
 fi
 
-OEROOTDIR=${ROOTDIR}/sources/poky
+OEROOTDIR=${ROOTDIR}/sources/openembedded-core
 if [ -e ${ROOTDIR}/sources/oe-core ]; then
     OEROOTDIR=${ROOTDIR}/sources/oe-core
 fi
@@ -178,6 +178,8 @@ fi
 
 echo "Configuring for ${MACHINE} ..."
 LAYER_LIST=" \
+    meta-yocto/meta-poky  \
+    meta-yocto/meta-yocto-bsp
     meta-openembedded/meta-oe \
     meta-openembedded/meta-multimedia \
     meta-openembedded/meta-python \

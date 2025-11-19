@@ -273,6 +273,9 @@ fi
 sed -i -e '/^#.*/d' -e '/^$/d' conf/local.conf
 
 # Change settings according to the environment
+if ! grep -q "DISTRO ?=" conf/local.conf; then
+    sed "1iDISTRO ?= '$DISTRO'" -i conf/local.conf
+fi
 sed -e "s,MACHINE ??=.*,MACHINE ??= '$MACHINE',g" \
         -e "s,DISTRO ?=.*,DISTRO ?= '$DISTRO',g" \
         -i conf/local.conf

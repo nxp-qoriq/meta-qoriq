@@ -19,27 +19,19 @@
 #
 # Add options for the script
 # Copyright (C) 2013 Freescale Semiconductor, Inc.
+# Copyright 2025 NXP
 
 PROGNAME="setup-env"
 
 if [ -z "$ZSH_NAME" ] && echo "$0" | grep -q "$PROGNAME"; then
     echo "ERROR: This script needs to be sourced."
-    SCRIPT_PATH=`readlink -f $0`
-    if [ "`readlink $SHELL`" = "dash" ];then
-        echo "Try run command \"set -- -h; . $SCRIPT_PATH\" to get help."
-    else
-        echo "Try run command \". $SCRIPT_PATH -h\" to get help."
-    fi
+    SCRIPT_PATH=`readlink $0`
+    echo "Try run command \". $SCRIPT_PATH -h\" to get help."
+
     unset SCRIPT_PATH PROGNAME
     exit
 else
-    if [ -n "$BASH_SOURCE" ]; then
-        ROOTDIR="`readlink -f $BASH_SOURCE | xargs dirname`"
-    elif [ -n "$ZSH_NAME" ]; then
-        ROOTDIR="`readlink -f $0 | xargs dirname`"
-    else
-        ROOTDIR="`readlink -f $PWD | xargs dirname`"
-    fi
+    ROOTDIR=`pwd`
     if ! [ -e "$ROOTDIR/$PROGNAME" ];then
         echo "Go to where $PROGNAME locates, then run: . $PROGNAME <args>"
         unset ROOTDIR PROGNAME

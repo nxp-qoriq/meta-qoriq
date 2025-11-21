@@ -9,7 +9,7 @@ PV = "22.11"
 DEPENDS += "gmp numactl dpdk bc-native zlib"
 
 SRC_URI = "gitsm://github.com/nxpmicro/mtcp;protocol=https;branch=mtcp-dpdk"
-SRCREV = "a62034212be0a41e9eeb83efa75d77226aa7cd05"
+SRCREV = "19eba75f3555284b4e3f883d3fa49b23d1ba225c"
 
 S = "${UNPACKDIR}/git"
 B = "${UNPACKDIR}/git"

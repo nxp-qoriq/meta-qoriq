@@ -1,2 +1,1 @@
-SRCREV = "6a9cd17c22cd58883ac38c27622a72173ca209c9"
 COMPATIBLE_MACHINE = "(imx-nxp-bsp|qoriq)"

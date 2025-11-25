@@ -1,4 +1,4 @@
-SRCREV = "9e42c1b2bfd30a43eafbfc7c45effd3abc0e202d"
+SRCREV = "b72eaf93f30bc6734e72a3d3ab662a4633468c69"
 PACKAGES:prepend:ls1028a = "${PN}-vivante "
 RRECOMMENDS:${PN}-drivers:append:ls1028a = " ${PN}-vivante"
 PACKAGECONFIG:append:ls1028a = " vivante"

@@ -1,4 +1,4 @@
-Layerscape Linux Yocto Project BSP 6.12.20_2.0.0 Release
+Layerscape Linux Yocto Project BSP 6.12.49_2.2.0 Release
 =====================================================
 Supplemental Yocto layer to hold pending patches to be upstreamed.
 
@@ -41,7 +41,7 @@ Download Yocto project BSP
 ```
 $ mkdir yocto-sdk
 $ cd yocto-sdk
-$ repo init -u https://github.com/nxp-qoriq/yocto-sdk -b walnascar -m ls-6.12.20-2.0.0.xml
+$ repo init -u https://github.com/nxp-qoriq/yocto-sdk -b walnascar -m ls-6.12.49-2.2.0.xml
 $ repo sync --force-sync
 ```
 

@@ -3,7 +3,7 @@
 require recipes-security/optee-qoriq/optee-os.nxp.inc
 
 OPTEE_OS_BRANCH = "lf-6.12.49_2.2.0"
-SRCREV = "771a7ca0494110b5eee1229cc175c755ab8c7e00"
+SRCREV = "b3883a773a9d15ec6439f9229e48f540c37e0d00"
 PV:append = "+git"
 
 SRC_URI:remove = " file://0007-allow-setting-sysroot-for-clang.patch"

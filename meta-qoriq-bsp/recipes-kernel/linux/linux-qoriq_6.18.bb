@@ -6,7 +6,7 @@ LINUX_QORIQ_SRC ?= "git://github.com/nxp-qoriq/linux.git;protocol=https"
 SRC_URI = "${LINUX_QORIQ_SRC};branch=${LINUX_QORIQ_BRANCH}"
 SRCREV = "${AUTOREV}"
 
-require recipes-kernel/linux/linux-qoriq.inc
+require linux-qoriq.inc
 #  do_kernel_version_sanity_check will check kernel version with PV,
 # To compatiable multiple kernel version shared the same recipe
 KERNEL_VERSION_SANITY_SKIP = "1"

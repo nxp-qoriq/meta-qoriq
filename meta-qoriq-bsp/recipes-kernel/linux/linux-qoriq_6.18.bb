@@ -10,3 +10,5 @@ require linux-qoriq.inc
 #  do_kernel_version_sanity_check will check kernel version with PV,
 # To compatiable multiple kernel version shared the same recipe
 KERNEL_VERSION_SANITY_SKIP = "1"
+
+INSANE_SKIP:${PN}-src += "buildpaths"

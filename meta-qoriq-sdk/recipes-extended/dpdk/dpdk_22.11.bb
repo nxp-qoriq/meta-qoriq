@@ -10,7 +10,7 @@ DEPENDS = "python3-pyelftools-native"
 DPDK_SRC ?= "git://github.com/nxp-qoriq/dpdk;protocol=https"
 SRC_URI = "${DPDK_SRC};nobranch=1 \
           file://0001-meson.build-march-and-mcpu-already-passed-by-Yocto.patch"
-SRCREV = "e09ece7ebcda131ee3d5a45999ad3396ee2092ae"
+SRCREV = "265682282d4707795ff192330ee9c1913050aa28"
 
 inherit meson pkgconfig
 

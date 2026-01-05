@@ -18,14 +18,13 @@ do_configure() {
 
 do_install:append() {
     install -d ${D}${bindir}/ovs-dpdk
-    cp -rf  ${S}/ovsdb/ovsdb-tool ${D}${bindir}/ovs-dpdk
-    cp -rf  ${S}/ovsdb/ovsdb-server ${D}${bindir}/ovs-dpdk
-    cp -rf  ${S}/ovsdb/ovsdb-client ${D}${bindir}/ovs-dpdk
-    cp -rf  ${S}/vswitchd/vswitch.ovsschema ${D}${bindir}/ovs-dpdk
-    cp -rf  ${S}/vswitchd/ovs-vswitchd ${D}${bindir}/ovs-dpdk
-    cp -rf  ${S}/utilities/ovs-vsctl ${D}${bindir}/ovs-dpdk
-    cp -rf  ${S}/utilities/ovs-ofctl ${D}${bindir}/ovs-dpdk
-    chmod 777 -R ${D}${bindir}/ovs-dpdk/*
+    install -m 0755 ${S}/ovsdb/ovsdb-tool ${D}${bindir}/ovs-dpdk
+    install -m 0755 ${S}/ovsdb/ovsdb-server ${D}${bindir}/ovs-dpdk
+    install -m 0755 ${S}/ovsdb/ovsdb-client ${D}${bindir}/ovs-dpdk
+    install -m 0755 ${S}/vswitchd/vswitch.ovsschema ${D}${bindir}/ovs-dpdk
+    install -m 0755 ${S}/vswitchd/ovs-vswitchd ${D}${bindir}/ovs-dpdk
+    install -m 0755 ${S}/utilities/ovs-vsctl ${D}${bindir}/ovs-dpdk
+    install -m 0755 ${S}/utilities/ovs-ofctl ${D}${bindir}/ovs-dpdk
 }
 
 INSANE_SKIP:${PN}-dbg += " buildpaths"

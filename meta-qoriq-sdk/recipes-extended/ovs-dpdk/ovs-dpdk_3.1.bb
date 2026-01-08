@@ -8,9 +8,8 @@ RDEPENDS:${PN} = "bash libcrypto libssl python3"
 inherit python3native pkgconfig
 
 SRC_URI = "git://github.com/nxp-qoriq/ovs-dpdk;protocol=https;nobranch=1"
-SRC_URI:append = " file://0001-Makefile.am-Add-ignore-file-to-EXTRA_DIST.patch"
 
-SRCREV = "3d21b478f8b2858ee2044d26470fc57fd57c7328"
+SRCREV = "5784c2e84e5e606a45e9d0e0c6c98ffcb92ad419"
 
 do_configure() {
     export SYSROOT_DPDK=${PKG_CONFIG_SYSROOT_DIR}

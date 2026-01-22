@@ -1,0 +1,26 @@
+From e6853fea8effdaea0c4670918d1edfb4a7ac45e6 Mon Sep 17 00:00:00 2001
+From: "Chunguang.Li" <chunguang.li_2@nxp.com>
+Date: Thu, 22 Jan 2026 18:26:53 +0900
+Subject: [PATCH] pktgen-dpdk: fix build issue in cross-compilation env
+
+Upstream-Status: Inappropriate
+---
+ meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index 4514005..48c6d1a 100644
+--- a/meson.build
++++ b/meson.build
+@@ -19,7 +19,7 @@ cc = meson.get_compiler('c')
+ 
+ target = target_machine.cpu_family()
+ if (target != 'riscv64')
+-    add_project_arguments('-march=native', language: 'c')
++#    add_project_arguments('-march=native', language: 'c')
+ endif
+ 
+ if get_option('enable-avx') and cc.has_argument('-mavx')
+-- 
+2.34.1
+

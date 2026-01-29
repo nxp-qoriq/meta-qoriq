@@ -390,6 +390,14 @@ else
     echo "ACCEPT_FSL_EULA = \"$EULA\"" >> conf/local.conf
 fi
 
+# NXP development board images are more useful with the empty root password.
+echo -e "\n====================================== Important Note =========================================="
+echo "This setup is optimized for NXP development boards and is not appropriate for production boards."
+
+bitbake-config-build enable-fragment core/yocto/root-login-with-empty-password
+
+echo -e "================================================================================================\n"
+
 # make a SOURCE_THIS file
 if [ ! -e SOURCE_THIS ]; then
     echo "#!/bin/sh" >> SOURCE_THIS

@@ -9,7 +9,7 @@ PV = "22.11"
 DEPENDS += "gmp numactl dpdk bc-native zlib"
 
 SRC_URI = "gitsm://github.com/nxpmicro/mtcp;protocol=https;branch=mtcp-dpdk"
-SRCREV = "19eba75f3555284b4e3f883d3fa49b23d1ba225c"
+SRCREV = "c1a01163bad0a0805b47892f593676d018b31f73"
 
 export RTE_SDK = "${RECIPE_SYSROOT}/usr"
 EXTRA_OECONF += "--with-dpdk-lib=$RTE_SDK"

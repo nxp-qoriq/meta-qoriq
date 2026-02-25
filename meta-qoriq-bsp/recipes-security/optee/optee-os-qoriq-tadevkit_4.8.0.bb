@@ -8,7 +8,7 @@ require recipes-security/optee-qoriq/optee-os.nxp.inc
 DEPENDS += "python3-pycryptodome-native"
 
 OPTEE_OS_BRANCH = "lf-6.18.2_1.0.0"
-SRCREV = "${AUTOREV}"
+SRCREV = "e7ed997213779e3d1b7417461c5b4847d3230db9"
 PV:append = "+git"
 
 SRC_URI:remove = " file://0007-allow-setting-sysroot-for-clang.patch"

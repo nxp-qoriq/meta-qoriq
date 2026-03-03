@@ -77,8 +77,6 @@ RDEPENDS:${PN}:append:qoriq = "\
 
 RDEPENDS:${PN}:append:qoriq-arm64 = "\ 
     dpdk \
-    ovs-dpdk \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'vpp', 'vpp vpp-data vpp-plugins vpp-plugins-data', '', d)} \
 "
 RDEPENDS:${PN}:append:qoriq-ppc = "\
     ${@multilib_pkg_extend(d, "valgrind")} \
@@ -101,8 +99,6 @@ NXP_WIFI_PKGS = "\
 "
 RDEPENDS:${PN}:append:ls1012a = " ${NXP_WIFI_PKGS}"
 RDEPENDS:${PN}:append:ls1028a = " ${NXP_WIFI_PKGS}"
-RDEPENDS:${PN}:append:ls1043a = " ${NXP_WIFI_PKGS} mtcp-dpdk"
-RDEPENDS:${PN}:append:ls1046a = " ${NXP_WIFI_PKGS} mtcp-dpdk"
-RDEPENDS:${PN}:append:ls2088a = " mtcp-dpdk"
-RDEPENDS:${PN}:append:lx2160a = " mtcp-dpdk"
+RDEPENDS:${PN}:append:ls1043a = " ${NXP_WIFI_PKGS}"
+RDEPENDS:${PN}:append:ls1046a = " ${NXP_WIFI_PKGS}"
 RDEPENDS:${PN}:remove:ls1012afrwy = "optee-os-qoriq optee-client-qoriq optee-test-qoriq"

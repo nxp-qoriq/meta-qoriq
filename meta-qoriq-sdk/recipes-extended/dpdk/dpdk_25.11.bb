@@ -8,9 +8,9 @@ LIC_FILES_CHKSUM = "file://license/gpl-2.0.txt;md5=b234ee4d69f5fce4486a80fdaf4a4
 DEPENDS = "python3-pyelftools-native"
 
 DPDK_SRC ?= "git://github.com/nxp-qoriq/dpdk;protocol=https"
-SRC_URI = "${DPDK_SRC};nobranch=1 \
-          file://0001-meson.build-march-and-mcpu-already-passed-by-Yocto.patch"
-SRCREV = "09c4ac8ed0a8db3ed0852f02184b7daa6997d9b4"
+SRC_URI = "${DPDK_SRC};branch=${SRCBRANCH}"
+SRCBRANCH = "25.11-lf-rel"
+SRCREV = "cd42ae7a4305032705ebc12f5ad845754603dd51"
 
 inherit meson pkgconfig
 
@@ -26,7 +26,6 @@ DPDK_APPS ?= "pdump,test-pmd,proc-info,test-crypto-perf"
 
 # kernel module is provide by dpdk-module recipe, so disable here
 EXTRA_OEMESON = " \
-        -Denable_kmods=false \
         -Doptimization=3 \
         --cross-file ${S}/config/arm/arm64_poky_linux_gcc \
         -Denable_driver_sdk=true \

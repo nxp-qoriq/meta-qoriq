@@ -1,38 +1,34 @@
-From cf8f15824dc2dd306d9c7e111641bef045d623c2 Mon Sep 17 00:00:00 2001
-From: Naveen Saini <naveen.kumar.saini@intel.com>
-Date: Wed, 14 Apr 2021 16:03:10 +0800
+From 6062662f32e22a85e31e2460abbcce4e89eed679 Mon Sep 17 00:00:00 2001
+From: "Chunguang.Li" <chunguang.li_2@nxp.com>
+Date: Wed, 6 May 2026 18:52:29 +0900
 Subject: [PATCH] meson.build:-march and -mcpu already passed by Yocto
 
 Upstream-Status: Inappropriate
 
-Signed-off-by: Naveen Saini <naveen.kumar.saini@intel.com>
+Signed-off-by: Chunguang.Li <chunguang.li_2@nxp.com>
 ---
- config/meson.build | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ config/meson.build | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/config/meson.build b/config/meson.build
-index 2f150de3b8..41bb3e9ec4 100644
+index 8aad59367b..4b38531a9e 100644
 --- a/config/meson.build
 +++ b/config/meson.build
-@@ -127,12 +127,12 @@ dpdk_conf.set('RTE_MACHINE', cpu_instruction_set)
- machine_args = []
- 
- # ppc64 does not support -march= at all, use -mcpu and -mtune for that
--if host_machine.cpu_family().startswith('ppc')
--    machine_args += '-mcpu=' + cpu_instruction_set
--    machine_args += '-mtune=' + cpu_instruction_set
--else
--    machine_args += '-march=' + cpu_instruction_set
--endif
-+#if host_machine.cpu_family().startswith('ppc')
-+#    machine_args += '-mcpu=' + cpu_instruction_set
-+#    machine_args += '-mtune=' + cpu_instruction_set
-+#else
-+#    machine_args += '-march=' + cpu_instruction_set
-+#endif
- 
- toolchain = cc.get_id()
- dpdk_conf.set_quoted('RTE_TOOLCHAIN', toolchain)
+@@ -173,11 +173,11 @@ machine_args = []
+ if not is_ms_compiler
+     # ppc64 does not support -march= at all, use -mcpu and -mtune for that
+     if host_machine.cpu_family().startswith('ppc')
+-        machine_args += '-mcpu=' + cpu_instruction_set
+-        machine_args += '-mtune=' + cpu_instruction_set
++#        machine_args += '-mcpu=' + cpu_instruction_set
++#        machine_args += '-mtune=' + cpu_instruction_set
+         compiler_arch_support = cc.has_argument('-mcpu=' + cpu_instruction_set)
+     else
+-        machine_args += '-march=' + cpu_instruction_set
++#        machine_args += '-march=' + cpu_instruction_set
+         # arm manages generic/auto config in config/arm/meson.build
+         if cpu_instruction_set != 'generic' and cpu_instruction_set != 'auto'
+             compiler_arch_support = cc.has_argument('-march=' + cpu_instruction_set)
 -- 
-2.17.1
+2.34.1
 

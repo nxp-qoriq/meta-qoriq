@@ -34,7 +34,6 @@ EXTRA_OEMESON = " \
         -Denable_driver_sdk=true \
         ${@bb.utils.contains('DISTRO_FEATURES', 'vpp', '-Dc_args="-Ofast -fPIC -ftls-model=local-dynamic"', '', d)} \
         -Denable_examples_source_install=false \
-        -Ddrivers_install_subdir= \
         -Denable_apps=${DPDK_APPS} \
 "
 
@@ -42,8 +41,9 @@ do_install:append(){
     install -d ${D}/${sysconfdir}/dpdk
     cp -rf ${S}/nxp/* ${D}/${sysconfdir}/dpdk
     rm -f ${D}/${bindir}/dpdk-test
-    rm -f ${D}/${bindir}/dpdk-*.py
 }
+
+INSANE_SKIP:${PN} = "dev-so"
 
 RDEPENDS:${PN} += "bash pciutils python3-core python3-pyelftools"
 

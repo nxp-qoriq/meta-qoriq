@@ -1,5 +1,5 @@
 require recipes-core/meta/meta-toolchain.bb
-SDK_VERSION = "6.18-whinlatter"
+SDK_VERSION = "6.18-wrynose"
 
 TOOLCHAIN_OUTPUTNAME = "${DISTRO}-${TCLIBC}-${SDKMACHINE}-${TUNE_PKGARCH}-toolchain-${SDK_VERSION}"
 

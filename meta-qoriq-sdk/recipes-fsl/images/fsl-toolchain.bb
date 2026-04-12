@@ -20,6 +20,7 @@ TOOLCHAIN_HOST_TASK += " \
     nativesdk-u-boot-mkimage \
     nativesdk-qoriq-cst \
     nativesdk-perl-module-integer \
+    nativesdk-openssl-dev \
 "
 
 TOOLCHAIN_HOST_TASK:append:e500v2 = " \

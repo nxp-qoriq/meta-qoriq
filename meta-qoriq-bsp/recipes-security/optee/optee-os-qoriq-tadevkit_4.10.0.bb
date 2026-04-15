@@ -1,4 +1,4 @@
-# Copyright 2022-2025 NXP
+# Copyright 2022-2026 NXP
 SUMMARY = "OP-TEE Trusted OS TA devkit"
 DESCRIPTION = "OP-TEE TA devkit for build TAs"
 HOMEPAGE = "https://www.op-tee.org/"
@@ -7,7 +7,7 @@ HOMEPAGE = "https://www.op-tee.org/"
 require recipes-security/optee-qoriq/optee-os.nxp.inc
 DEPENDS += "python3-pycryptodome-native"
 
-OPTEE_OS_BRANCH = "lf_4.8.y"
+OPTEE_OS_BRANCH = "lf_4.10.y"
 SRCREV = "${AUTOREV}"
 PV:append = "+git"
 

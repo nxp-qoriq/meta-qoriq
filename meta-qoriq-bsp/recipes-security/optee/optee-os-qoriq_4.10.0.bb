@@ -1,8 +1,8 @@
-# Copyright 2022-2025 NXP
+# Copyright 2022-2026 NXP
 
 require recipes-security/optee-qoriq/optee-os.nxp.inc
 
-OPTEE_OS_BRANCH = "lf_4.8.y"
+OPTEE_OS_BRANCH = "lf_4.10.y"
 SRCREV = "${AUTOREV}"
 PV:append = "+git"
 

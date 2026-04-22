@@ -1,0 +1,29 @@
+From dd7270087c5050e7deeb288ce8697178678d1206 Mon Sep 17 00:00:00 2001
+From: Zelan Zou <zelan.zou@nxp.com>
+Date: Wed, 22 Apr 2026 05:22:05 +0200
+Subject: [PATCH] mdio-proxy: Remove of_gpio.h headers
+
+In kernel 7.0, this header was deprecated,The module only uses netlink and MDIO bus operations,
+which are provided by the other included headers. So removed it.
+
+Upstream-Status: Submitted
+Signed-off-by: Zelan Zou <zelan.zou@nxp.com>
+---
+ mdio-proxy.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/mdio-proxy.c b/mdio-proxy.c
+index f199020..396122b 100644
+--- a/mdio-proxy.c
++++ b/mdio-proxy.c
+@@ -9,7 +9,6 @@
+ 
+ #include <linux/of_device.h>
+ #include <linux/of_mdio.h>
+-#include <linux/of_gpio.h>
+ #include <linux/netdevice.h>
+ #include <linux/etherdevice.h>
+ #include <linux/reset.h>
+-- 
+2.43.0
+

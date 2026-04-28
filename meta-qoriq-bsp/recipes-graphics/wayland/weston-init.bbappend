@@ -2,6 +2,10 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
 
 GBM_FORMAT_VALUE = "argb8888"
 
+do_install:prepend() {
+    cp -f ${S}/weston-socket.sh ${WORKDIR}/weston-socket.sh
+}
+
 do_install:append() {
     if ${@bb.utils.contains('DISTRO_FEATURES','systemd','true','false',d)}; then
         # Add weston.log back, used by NXP for testing

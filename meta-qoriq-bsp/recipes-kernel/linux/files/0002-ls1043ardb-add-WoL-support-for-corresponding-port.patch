@@ -1,0 +1,32 @@
+From f5feedb834f0beeb0415057608cd534646747a99 Mon Sep 17 00:00:00 2001
+From: "Chunguang.Li" <chunguang.li_2@nxp.com>
+Date: Wed, 29 Apr 2026 18:13:58 +0900
+Subject: [PATCH 2/2] ls1043ardb: add WoL support for corresponding port
+
+Upstream-Status: Inappropriate
+
+---
+ arch/arm64/boot/dts/freescale/fsl-ls1043a-rdb.dts | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1043a-rdb.dts b/arch/arm64/boot/dts/freescale/fsl-ls1043a-rdb.dts
+index c4532c809f0a..bf872de0b6b4 100644
+--- a/arch/arm64/boot/dts/freescale/fsl-ls1043a-rdb.dts
++++ b/arch/arm64/boot/dts/freescale/fsl-ls1043a-rdb.dts
+@@ -167,11 +167,13 @@ ethernet@e2000 {
+ 	ethernet@e4000 {
+ 		phy-handle = <&rgmii_phy1>;
+ 		phy-connection-type = "rgmii-id";
++		fsl,magic-packet;
+ 	};
+ 
+ 	ethernet@e6000 {
+ 		phy-handle = <&rgmii_phy2>;
+ 		phy-connection-type = "rgmii-id";
++		fsl,magic-packet;
+ 	};
+ 
+ 	ethernet@e8000 {
+-- 
+2.34.1
+

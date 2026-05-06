@@ -1,0 +1,133 @@
+From 821026602b923474aa31d2d2a31c656544bce061 Mon Sep 17 00:00:00 2001
+From: "Chunguang.Li" <chunguang.li_2@nxp.com>
+Date: Mon, 27 Apr 2026 19:18:51 +0900
+Subject: [PATCH 1/2] net: dpaa: fix WoL issue
+
+Upstream-Status: Inappropriate
+
+The original DPAA driver uses a single wol flag (DPAA_WOL_MAGIC)
+to represent both WoL capability and WoL enable state.
+
+The wol field is only compared against DPAA_WOL_MAGIC to determine
+whether WoL is supported, and the same flag is also reused in ethtool
+set_wol() to configure whether WoL is enabled.
+As a result, it cannot distinguish between:
+  - hardware capability of supporting WoL
+  - runtime enable/disable state of WoL
+
+This leads to incorrect WoL behavior, since it has no clear way
+to identify whether WoL is supported but disabled, or not supported
+at all.
+
+Fix this by separating WoL capability and WoL enable state into
+different flags. Introduce DPAA_WOL_ENABLE to explicitly represent
+the enable state, allowing it to correctly handle WoL support
+and configuration.
+---
+ .../net/ethernet/freescale/sdk_dpaa/dpaa_eth.c    | 15 ++++++++++++---
+ .../net/ethernet/freescale/sdk_dpaa/dpaa_eth.h    |  3 ++-
+ .../ethernet/freescale/sdk_dpaa/dpaa_ethtool.c    | 12 +++++-------
+ 3 files changed, 19 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/net/ethernet/freescale/sdk_dpaa/dpaa_eth.c b/drivers/net/ethernet/freescale/sdk_dpaa/dpaa_eth.c
+index 010b47239ccc..aaa855f746ab 100644
+--- a/drivers/net/ethernet/freescale/sdk_dpaa/dpaa_eth.c
++++ b/drivers/net/ethernet/freescale/sdk_dpaa/dpaa_eth.c
+@@ -46,6 +46,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/kthread.h>
+ #include <linux/io.h>
++#include <linux/of.h>
+ #include <linux/if_arp.h>	/* arp_hdr_len() */
+ #include <linux/if_vlan.h>	/* VLAN_HLEN */
+ #include <linux/icmp.h>		/* struct icmphdr */
+@@ -134,7 +135,7 @@ static int dpaa_suspend(struct device *dev)
+ 		priv = netdev_priv(net_dev);
+ 		mac_dev = priv->mac_dev;
+ 
+-		if (priv->wol & DPAA_WOL_MAGIC) {
++		if ((priv->wol & DPAA_WOL_MAGIC) && (priv->wol & DPAA_WOL_ENABLE)) {
+ 			err = priv->mac_dev->set_wol(mac_dev->port_dev[RX],
+ 				priv->mac_dev->get_mac_handle(mac_dev), true);
+ 			if (err) {
+@@ -200,7 +201,7 @@ static int dpaa_resume(struct device *dev)
+ 			goto resume_failed;
+ 		}
+ 
+-		if (priv->wol & DPAA_WOL_MAGIC) {
++		if ((priv->wol & DPAA_WOL_MAGIC) && (priv->wol & DPAA_WOL_ENABLE)) {
+ 			err = priv->mac_dev->set_wol(mac_dev->port_dev[RX],
+ 				priv->mac_dev->get_mac_handle(mac_dev), false);
+ 			if (err) {
+@@ -913,6 +914,7 @@ dpaa_eth_priv_probe(struct platform_device *_of_dev)
+ 	int err = 0, i, channel;
+ 	struct device *dev;
+ 	struct device_node *dpa_node;
++	struct device_node *mac_node;
+ 	struct dpa_bp *dpa_bp;
+ 	size_t count = 1;
+ 	struct net_device *net_dev = NULL;
+@@ -1108,7 +1110,14 @@ dpaa_eth_priv_probe(struct platform_device *_of_dev)
+ 	dpaa_eth_sysfs_init(&net_dev->dev);
+ 
+ #ifdef CONFIG_PM
+-	device_set_wakeup_capable(dev, true);
++	priv->wol = 0;
++	mac_node = of_parse_phandle(dpa_node, "fsl,fman-mac", 0);
++	if (mac_node) {
++		if (of_property_read_bool(mac_node, "fsl,magic-packet")) {
++			priv->wol = DPAA_WOL_MAGIC;
++			device_init_wakeup(dev, true);
++		}
++	}
+ #endif
+ 
+ 	pr_info("fsl_dpa: Probed interface %s\n", net_dev->name);
+diff --git a/drivers/net/ethernet/freescale/sdk_dpaa/dpaa_eth.h b/drivers/net/ethernet/freescale/sdk_dpaa/dpaa_eth.h
+index 7109d33419bd..74fd72815775 100644
+--- a/drivers/net/ethernet/freescale/sdk_dpaa/dpaa_eth.h
++++ b/drivers/net/ethernet/freescale/sdk_dpaa/dpaa_eth.h
+@@ -220,7 +220,8 @@ static inline void DPA_BUG_ON(bool cond)
+ 
+ #ifdef CONFIG_PM
+ /* Magic Packet wakeup */
+-#define DPAA_WOL_MAGIC		0x00000001
++#define DPAA_WOL_MAGIC		(0x01 << 0)
++#define DPAA_WOL_ENABLE		(0x01 << 1)
+ #endif
+ 
+ #if defined(CONFIG_FSL_SDK_FMAN_TEST)
+diff --git a/drivers/net/ethernet/freescale/sdk_dpaa/dpaa_ethtool.c b/drivers/net/ethernet/freescale/sdk_dpaa/dpaa_ethtool.c
+index eeb19fc2c92d..c94bd49261db 100644
+--- a/drivers/net/ethernet/freescale/sdk_dpaa/dpaa_ethtool.c
++++ b/drivers/net/ethernet/freescale/sdk_dpaa/dpaa_ethtool.c
+@@ -279,7 +279,7 @@ static void dpa_get_wol(struct net_device *net_dev, struct ethtool_wolinfo *wol)
+ 
+ 	if (priv->wol & DPAA_WOL_MAGIC) {
+ 		wol->supported = WAKE_MAGIC;
+-		wol->wolopts = WAKE_MAGIC;
++		wol->wolopts = priv->wol & DPAA_WOL_ENABLE ? WAKE_MAGIC : 0;
+ 	}
+ }
+ 
+@@ -301,13 +301,11 @@ static int dpa_set_wol(struct net_device *net_dev, struct ethtool_wolinfo *wol)
+ 		(wol->wolopts & ~WAKE_MAGIC))
+ 		return -EOPNOTSUPP;
+ 
+-	priv->wol = 0;
+-
+-	if (wol->wolopts & WAKE_MAGIC) {
+-		priv->wol = DPAA_WOL_MAGIC;
+-		device_set_wakeup_enable(net_dev->dev.parent, 1);
++	device_set_wakeup_enable(net_dev->dev.parent, wol->wolopts & WAKE_MAGIC);
++	if (device_may_wakeup(net_dev->dev.parent)) {
++		priv->wol |= DPAA_WOL_ENABLE;
+ 	} else {
+-		device_set_wakeup_enable(net_dev->dev.parent, 0);
++		priv->wol &= (~DPAA_WOL_ENABLE);
+ 	}
+ 
+ 	return 0;
+-- 
+2.34.1
+

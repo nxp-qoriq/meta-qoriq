@@ -3,7 +3,7 @@ require recipes-bsp/u-boot/u-boot.inc
 DESCRIPTION = "U-Boot provided by Freescale with focus on QorIQ boards"
 PROVIDES += "u-boot"
 
-inherit fsl-u-boot-localversion
+inherit fsl-u-boot-localversion pkgconfig
 
 LICENSE = "GPL-2.0-only & BSD-3-Clause & BSD-2-Clause & LGPL-2.0-only & LGPL-2.1-only"
 LIC_FILES_CHKSUM = " \

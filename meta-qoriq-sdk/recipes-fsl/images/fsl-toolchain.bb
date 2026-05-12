@@ -15,6 +15,8 @@ TOOLCHAIN_HOST_TASK += " \
     nativesdk-perl-module-integer \
     nativesdk-openssl-dev \
     nativesdk-gnutls-dev \
+    nativesdk-binutils \
+    nativesdk-gcc nativesdk-gcc-symlinks \
 "
 
 TOOLCHAIN_HOST_TASK:append:e500v2 = " \

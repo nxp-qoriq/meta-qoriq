@@ -25,6 +25,7 @@ RDEPENDS:${PN} = "\
     gnutls \
     gnutls-bin \
     keyutils \
+    libhugetlbfs \
     libnl \
     libxml2 \
     libxslt \

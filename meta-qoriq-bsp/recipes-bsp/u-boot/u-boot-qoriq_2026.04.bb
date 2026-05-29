@@ -22,7 +22,7 @@ SRC_URI = "${UBOOT_SRC};branch=${UBOOT_BRANCH}"
 SRC_URI:append:qoriq-ppc = "\
     file://0001-add-typedef-to-avoid-multiple-definition-issue.patch \
 "
-SRCREV = "25bd064c4ecc03c3d5aac0de1dbcc3c85ea6f18c"
+SRCREV = "e25891b25a6dfc627338a26a6e4f45558e4fdc45"
 
 B = "${UNPACKDIR}/build"
 PV:append = "+fslgit"

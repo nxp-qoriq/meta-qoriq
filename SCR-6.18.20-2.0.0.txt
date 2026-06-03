@@ -42,7 +42,7 @@ Origin:                      NXP (GPL-2.0)
 --------------------------------------------
 
 Package:                     atf
-Version:                     2.12
+Version:                     2.14
 Outgoing License:            BSD-3-Clause
 License File:                LICENSE.txt
 Package Category:            firmware
@@ -62,10 +62,7 @@ Package Category:            firmware
 Type of Content:             source
 Description and comments:    DDR PHY firmware
 Release Location:            https://github.com/nxp-qoriq/ddr-phy-binary -b lf-6.18.20-2.0.0
-Origin:                      NXP (BSD-3-Clause)
-                             DPDK - Intel Corporation (BSD-3-Clause) - https://github.com/DPDK/dpdk
-                             KNI Linux Device driver - Intel Corporation (GPL-2.0) Separate component of DPDK
-                             pmdinfogen - Neil Horman (GPL-2.0) - Separate tool in DPDK
+Origin:                      NXP (proprietary)
 
 --------------------------------------------
 
@@ -119,8 +116,8 @@ Origin:                      NXP (proprietary)
 
 --------------------------------------------
 
-Package:                     qoriq-mc-binary-10.39.0
-Version:                     10.39.0
+Package:                     management-complex-10.40.0
+Version:                     10.40.0
 Outgoing License:            LA_OPT_BINARY_FIRMWARE_ONLY
 License File:                LICENSE
 Package Category:            firmware
@@ -134,7 +131,7 @@ Origin:                      NXP (proprietary)
 Package:                     qoriq-qe-ucode
 Version:                     
 Outgoing License:            LA_OPT_BINARY_FIRMWARE_ONLY
-License File:                LICNESE
+License File:                LICENSE
 Package Category:            firmware
 Type of Content:             binary
 Description and comments:    QE microcode binary
@@ -156,7 +153,7 @@ Origin:                      NXP (BSD-3-Clause)
 --------------------------------------------
 
 Package:                     optee_client
-Version:                     4.6.0
+Version:                     4.10.0
 Outgoing License:            BSD-2-Clause
 License File:                LICENSE
 Package Category:            bsp
@@ -169,7 +166,7 @@ Origin:                      NXP (BSD-2-Clause)
 --------------------------------------------
 
 Package:                     optee_os
-Version:                     4.6.0
+Version:                     4.10.0
 Outgoing License:            BSD-2-Clause
 License File:                LICENSE
 Package Category:            bsp
@@ -183,7 +180,7 @@ Origin:                      NXP (BSD-2-Clause)
 --------------------------------------------
 
 Package:                     optee_test
-Version:                     4.6.0
+Version:                     4.10.0
 Outgoing License:            BSD-2-Clause (ta/) and GPL-2.0 (host/)
 License File:                LICENSE.md
 Package Category:            bsp
@@ -257,7 +254,7 @@ Origin:                      NXP (BSD-3-Clause)
 --------------------------------------------
 
 Package:                     dpdk
-Version:                     22.11
+Version:                     25.11
 Outgoing License:            BSD-3-Clause
 License File:                LICENSE
 Package Category:            userspace

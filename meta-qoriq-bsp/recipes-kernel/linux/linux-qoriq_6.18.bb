@@ -4,7 +4,7 @@ LINUX_VERSION = "6.18"
 LINUX_QORIQ_BRANCH ?= "lf-6.18.y"
 LINUX_QORIQ_SRC ?= "git://github.com/nxp-qoriq/linux.git;protocol=https"
 SRC_URI = "${LINUX_QORIQ_SRC};branch=${LINUX_QORIQ_BRANCH}"
-SRCREV = "f838bfdb85f1464d1efda866f4afc56c5854acd6"
+SRCREV = "6477bf29487a82bfb22bf5c63adb7ce50abfba74"
 
 require linux-qoriq.inc
 #  do_kernel_version_sanity_check will check kernel version with PV,

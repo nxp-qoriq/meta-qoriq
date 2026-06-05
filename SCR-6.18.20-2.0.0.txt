@@ -116,7 +116,7 @@ Origin:                      NXP (proprietary)
 
 --------------------------------------------
 
-Package:                     management-complex-10.40.0
+Package:                     qoriq-mc-binary-10.40.0
 Version:                     10.40.0
 Outgoing License:            LA_OPT_BINARY_FIRMWARE_ONLY
 License File:                LICENSE

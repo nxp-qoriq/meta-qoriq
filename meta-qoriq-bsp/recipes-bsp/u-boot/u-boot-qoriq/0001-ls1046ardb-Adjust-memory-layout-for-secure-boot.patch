@@ -1,0 +1,51 @@
+From 523af886433c39fb23caeecd1b5bb557fd1b5569 Mon Sep 17 00:00:00 2001
+From: "Chunguang.Li" <chunguang.li_2@nxp.com>
+Date: Sun, 7 Jun 2026 15:20:43 +0900
+Subject: [PATCH] ls1046ardb: Adjust memory layout for secure boot
+
+Upstream-Status: Inappropriate
+
+Increase malloc heap size and bootm buffer to support kernel
+decompression during secure boot, and adjust kernel/FDT load
+addresses to avoid memory conflicts.
+
+Signed-off-by: Chunguang.Li <chunguang.li_2@nxp.com>
+---
+ configs/ls1046ardb_tfa_SECURE_BOOT_defconfig | 3 ++-
+ include/configs/ls1046a_common.h             | 6 +++---
+ 2 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/configs/ls1046ardb_tfa_SECURE_BOOT_defconfig b/configs/ls1046ardb_tfa_SECURE_BOOT_defconfig
+index 67ea16f2d98..7d729574127 100644
+--- a/configs/ls1046ardb_tfa_SECURE_BOOT_defconfig
++++ b/configs/ls1046ardb_tfa_SECURE_BOOT_defconfig
+@@ -3,7 +3,8 @@ CONFIG_COUNTER_FREQUENCY=25000000
+ CONFIG_TARGET_LS1046ARDB=y
+ CONFIG_TFABOOT=y
+ CONFIG_TEXT_BASE=0x82000000
+-CONFIG_SYS_MALLOC_LEN=0x102000
++CONFIG_SYS_MALLOC_LEN=0x4000000
++CONFIG_SYS_BOOTM_LEN=0x8000000
+ CONFIG_NR_DRAM_BANKS=2
+ CONFIG_ENV_SIZE=0x2000
+ CONFIG_SYS_I2C_MXC_I2C1=y
+diff --git a/include/configs/ls1046a_common.h b/include/configs/ls1046a_common.h
+index 8666aff0f33..dfd3670c89a 100644
+--- a/include/configs/ls1046a_common.h
++++ b/include/configs/ls1046a_common.h
+@@ -94,9 +94,9 @@
+ 	"fdtheader_addr_r=0x80100000\0"         \
+ 	"kernelheader_addr_r=0x80200000\0"      \
+ 	"load_addr=0xa0000000\0"            \
+-	"kernel_addr_r=0x81000000\0"            \
+-	"fdt_addr_r=0x90000000\0"               \
+-	"fdt_addr=0x90000000\0"                 \
++	"kernel_addr_r=0x84000000\0"            \
++	"fdt_addr_r=0x88000000\0"               \
++	"fdt_addr=0x88000000\0"                 \
+ 	"ramdisk_addr_r=0xa0000000\0"           \
+ 	"kernel_start=0x1000000\0"		\
+ 	"kernelheader_start=0x600000\0"		\
+-- 
+2.34.1
+

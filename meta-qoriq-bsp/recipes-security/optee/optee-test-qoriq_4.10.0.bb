@@ -8,6 +8,6 @@ LIC_FILES_CHKSUM = "file://LICENSE.md;md5=a8fa504109e4cd7ea575bc49ea4be560 \
                     file://LICENSE-GPL;md5=10e86b5d2a6cb0e2b9dcfdd26a9ac58d"
 
 OPTEE_TEST_BRANCH = "lf-6.18.20_2.0.0"
-SRCREV = "${AUTOREV}"
+SRCREV = "25f338bbaffec35bbaba5e5ffaa976777256e1d5"
 PV:append = "+git"
 CFLAGS:remove = " -Wno-error=unterminated-string-initialization"

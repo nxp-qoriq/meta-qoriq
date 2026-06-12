@@ -7,9 +7,9 @@ Outgoing License: LA_OPT_NXP_Software_License v63 May 2025 - Additional distribu
 License File:     LICENSE
 
 Yocto Project recipe manifest:
-repo init -u https://github.com/nxp-qoriq/yocto-sdk -b walnascar -m ls-6.12.49-2.2.0.xml
+repo init -u https://github.com/nxp-qoriq/yocto-sdk -b walnascar-lsdk -m lsdk-6.12.49-2.2.0.xml
 
-Release tag: lf-6.12.49-2.2.0
+Release tag: lf-6.12.49-2.2.0-lsdk
 
 --------------------------------------------
 
@@ -76,7 +76,7 @@ License File:                LICENSE
 Package Category:            firmware
 Type of Content:             source
 Description and comments:    MC API and Configuration
-Release Location:            https://github.com/nxp-qoriq/mc-utils -b lf-6.12.49-2.2.0
+Release Location:            https://github.com/nxp-qoriq/mc-utils -b mc_release_10.40.0
 Origin:                      NXP (BSD-3-Clause)
 
 --------------------------------------------
@@ -119,14 +119,14 @@ Origin:                      NXP (proprietary)
 
 --------------------------------------------
 
-Package:                     qoriq-mc-binary-10.39.0
-Version:                     10.39.0
+Package:                     qoriq-mc-binary-10.40.0
+Version:                     10.40.0
 Outgoing License:            LA_OPT_BINARY_FIRMWARE_ONLY
 License File:                LICENSE
 Package Category:            firmware
 Type of Content:             binary
 Description and comments:    DPAA2 Management Complex Firmware
-Release Location:            https://github.com/nxp-qoriq/qoriq-mc-binary -b lf-6.12.49-2.2.0
+Release Location:            https://github.com/nxp-qoriq/qoriq-mc-binary -b mc_release_10.40.0
 Origin:                      NXP (proprietary)
 
 --------------------------------------------
@@ -257,13 +257,13 @@ Origin:                      NXP (BSD-3-Clause)
 --------------------------------------------
 
 Package:                     dpdk
-Version:                     22.11
+Version:                     25.11
 Outgoing License:            BSD-3-Clause
 License File:                LICENSE
 Package Category:            userspace
 Type of Content:             source
 Description and comments:    Data Plane Development Kit
-Release Location:            https://github.com/nxp-qoriq/dpdk -b lf-6.12.49-2.2.0
+Release Location:            https://github.com/nxp-qoriq/dpdk -b 25.11-qoriq
 Origin:                      NXP (BSD-3-Clause)
                              DPDK - Intel Corporation (BSD-3-Clause) - https://github.com/DPDK/dpdk
                              KNI Linux Device driver - Intel Corporation (GPL-2.0) Separate component of DPDK
@@ -332,26 +332,14 @@ Origin:                      NXP (BSD-3-Clause)
 
 --------------------------------------------
 
-Package:                     mtcp
-Version:                     
-Outgoing License:            BSD-3-Clause
-License File:                LICENSE
-Package Category:            userspace
-Type of Content:             source
-Description and comments:    mTCP with DPDK 21.11v and NXP platform support
-Release Location:            https://github.com/nxp-mcuxpresso/mtcp -b lf-6.12.49-2.2.0
-Origin:                      mTCP (BSD) https://github.com/mtcp-stack/mtcp
-
---------------------------------------------
-
 Package:                     ovs-dpdk
-Version:                     3.1
+Version:                     3.7
 Outgoing License:            Apache-2.0
 License File:                LICENSE
 Package Category:            userspace
 Type of Content:             source
 Description and comments:    OVS DPDK
-Release Location:            https://github.com/nxp-qoriq/ovs-dpdk -b lf-6.12.49-2.2.0
+Release Location:            https://github.com/nxp-qoriq/ovs-dpdk -b branch-3.7-qoriq
 Origin:                      Open vSwitch (Apache-2.0) - https://github.com/openvswitch/ovs/actions
 
 --------------------------------------------
@@ -364,8 +352,8 @@ Package Category:            userspace
 Type of Content:             source
 Description and comments:    generic and open source machine emulator and virtualizer
 Release Location:            https://github.com/nxp-qoriq/qemu.git -b lf-6.12.49-2.2.0
-Origin:                      NXP (GPL-2.0)
-                             qemu (GPL-2.0) - https://www.qemu.org/
+Origin:                      NXP (GPL-2.0)
+                             qemu (GPL-2.0) - https://www.qemu.org/
 
 --------------------------------------------
 

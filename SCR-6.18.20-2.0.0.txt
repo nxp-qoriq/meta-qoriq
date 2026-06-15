@@ -3,11 +3,11 @@ NXP Software Content Register
 Release - Linux 6.18.20-2.0.0
  June 2026
 
-Outgoing License: GPL-2.0
+Outgoing License: LA_OPT_NXP_Software_License v63 May 2025 - Additional distribution license granted - Section 2.3 applies
 License File:     LICENSE
 
 Yocto Project recipe manifest:
-repo init -u https://github.com/nxp-qoriq/yocto-sdk -b whinlatter -m ls-6.18.20-2.0.0.xml
+repo init -u https://github.com/nxp-qoriq/yocto-sdk -b wrynose -m ls-6.18.20-2.0.0.xml
 
 Release tag: lf-6.18.20-2.0.0
 

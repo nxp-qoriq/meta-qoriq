@@ -190,7 +190,7 @@ LAYER_LIST=" \
     meta-qoriq/meta-qoriq-bsp \
     meta-qoriq/meta-qoriq-sdk \
 "
-EULA_FILE="$FSLROOTDIR/EULA"
+EULA_FILE="$ROOTDIR/sources/meta-qoriq/LICENSE"
 
 DISTRO="fsl-qoriq"
 

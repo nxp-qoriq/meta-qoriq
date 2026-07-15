@@ -27,7 +27,7 @@ device_tree=fsl-lx2160a-rdb.dtb
 kernel_itb=kernel-fsl-lx2160a-rdb.itb
 
 # [distro autoboot script]
-distro_bootscript=lx2160ardb_boot.scr
+distro_bootscript=boot.scr
 bootscript_dec=lx2160ardb_dec_boot.scr
 bootscript_enforce=lx2160ardb_enforce_boot.scr
 

@@ -28,7 +28,7 @@ device_tree=fsl-ls1046a-rdb-sdk.dtb
 kernel_itb=kernel-fsl-ls1046a-rdb-sdk.itb
 
 # [distro autoboot script]
-distro_bootscript=ls1046ardb_boot.scr
+distro_bootscript=boot.scr
 bootscript_dec=ls1046ardb_dec_boot.scr
 bootscript_enforce=ls1046ardb_enforce_boot.scr
 

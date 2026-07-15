@@ -3,11 +3,7 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/${BPN}:"
 BUSYBOX_SPLIT_SUID:qoriq = "0"
 ALTERNATIVE_PRIORITY[init] = "40"
 
-SRC_URI:append:qoriq = " file://defconfig-fsl"
-
-do_configure:prepend:qoriq () {
-    cp ${UNPACKDIR}/defconfig-fsl ${UNPACKDIR}/defconfig
-}
+SRC_URI += " file://busybox-dd.cfg"
 
 do_install:append:qoriq () {
     rm -f ${D}${sysconfdir}/init.d/rcS

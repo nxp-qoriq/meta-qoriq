@@ -5,7 +5,6 @@ LINUX_QORIQ_BRANCH ?= "lf-6.18.y"
 LINUX_QORIQ_SRC ?= "git://github.com/nxp-qoriq/linux.git;protocol=https"
 SRC_URI = "${LINUX_QORIQ_SRC};branch=${LINUX_QORIQ_BRANCH}"
 SRCREV = "468455c13a5927a8e1378a375333edb9fa570240"
-SRC_URI:append:qoriq-arm = " file://0001-arm-tools-gen-mach-types-use-basename-to-avoid-embed.patch"
 
 require linux-qoriq.inc
 #  do_kernel_version_sanity_check will check kernel version with PV,

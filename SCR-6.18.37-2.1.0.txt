@@ -160,6 +160,7 @@ Package Category:            firmware
 Type of Content:             binary
 Description and comments:    bootloader which responsible for loading
 Release Location:            https://github.com/NXP/qoriq-uefi-binary.git -b lf-6.18.37-2.1.0
+Origin:                      NXP (proprietary)
 
 --------------------------------------------
 
@@ -299,6 +300,7 @@ Package Category:            userspace
 Type of Content:             source
 Description and comments:    Runtime Assembler Library
 Release Location:            https://github.com/nxp-qoriq/flib -b lf-6.18.37-2.1.0
+Origin:                      NXP (BSD-3-Clause)
 
 --------------------------------------------
 
@@ -359,6 +361,7 @@ Package Category:            userspace
 Type of Content:             source
 Description and comments:    Network Queue Buffer Manager
 Release Location:            https://github.com/nxp-qoriq/qbman_userspace -b lf-6.18.37-2.1.0
+Origin:                      NXP (BSD-3-Clause)
 
 --------------------------------------------
 

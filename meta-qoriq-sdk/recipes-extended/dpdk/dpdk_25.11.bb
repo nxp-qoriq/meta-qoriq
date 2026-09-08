@@ -10,7 +10,7 @@ DEPENDS = "python3-pyelftools-native"
 DPDK_SRC ?= "git://github.com/nxp-qoriq/dpdk;protocol=https"
 SRC_URI = "${DPDK_SRC};branch=${SRCBRANCH}"
 SRCBRANCH = "25.11-lf-rel"
-SRCREV = "495aef710fc3cf825bc039daa4961f023914082b"
+SRCREV = "cdc714a50149042ae374f23a7039ab94e6894944"
 
 inherit meson pkgconfig
 

@@ -7,8 +7,8 @@ HOMEPAGE = "https://www.op-tee.org/"
 require recipes-security/optee-qoriq/optee-os.nxp.inc
 DEPENDS += "python3-pycryptodome-native"
 
-OPTEE_OS_BRANCH = "lf-6.18.20_2.0.0"
-SRCREV = "37c7fbf84c40eb9e5828532972ffb133b4917390"
+OPTEE_OS_BRANCH = "lf-6.18.37_2.1.0"
+SRCREV = "3984e7b39e860aad2d2a3f88a973f5c85bec0f9c"
 PV:append = "+git"
 
 SRC_URI:remove = " file://0007-allow-setting-sysroot-for-clang.patch"

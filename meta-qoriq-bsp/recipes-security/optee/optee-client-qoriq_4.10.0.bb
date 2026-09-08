@@ -2,5 +2,5 @@
 require recipes-security/optee-qoriq/optee-client.nxp.inc
 
 OPTEE_CLIENT_BRANCH = "lf-6.18.37_2.1.0"
-SRCREV = "7ec3c4bc64b5971077bc5a54a5c270179939a362"
+SRCREV = "0a2b1e95ba338b79c2a96cd343a96ea3e6157cb0"
 PV:append = "+git"

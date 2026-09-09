@@ -2,13 +2,13 @@
   "SPDXID": "SPDXRef-DOCUMENT",
   "spdxVersion": "SPDX-2.3",
   "creationInfo": {
-    "created": "2026-06-15T08:30:22Z",
+    "created": "2026-09-09T03:39:41Z",
     "creators": [
       "Organization: NXP"
     ],
     "licenseListVersion": "3.28"
   },
-  "name": "Layerscape-lf-6.18.20-2.0.0",
+  "name": "Layerscape-lf-6.18.37-2.1.0",
   "dataLicense": "CC0-1.0",
   "hasExtractedLicensingInfos": [
     {
@@ -32,379 +32,414 @@
       "extractedText": "NXP Binary Firmware License Agreement\nCopyright © 2017 NXP. All rights reserved.\nSoftware License Agreement (“Agreement”)\nANY USE, REPRODUCTION, OR DISTRIBUTION OF THE ACCOMPANYING BINARY SOFTWARE CONSTITUTES LICENSEE'S ACCEPTANCE OF THE TERMS AND CONDITIONS OF THIS AGREEMENT.\nLicensed Software. “Binary Software” means software in binary form specified in ANNEX A. Subject to the terms and conditions of this Agreement, NXP USA, Inc. (\"Licensor\"), grants to you (“Licensee”) a worldwide, non-exclusive, and royalty-free copyright license to reproduce and distribute the Binary Software in its complete and unmodified binary form as provided by Licensor, for use solely in conjunction with a programmable processing unit supplied directly or indirectly from Licensor.\nRestrictions. Licensee must reproduce the Licensor copyright notice above with each binary copy of the Binary Software or in the accompanying documentation. Licensee must not reverse engineer, decompile, disassemble or modify in any way the Binary Software. Licensee must not use the Binary Software in violation of any applicable law or regulation. This Agreement shall automatically terminate upon Licensee's breach of any term or condition of this Agreement in which case, Licensee shall destroy all copies of the Binary Software. Neither the name of Licensor nor the names of its suppliers may be used to endorse or promote products derived from this Binary Software without specific prior written permission.\nDisclaimer. TO THE MAXIMUM EXTENT PERMITTED BY LAW, LICENSOR EXPRESSLY DISCLAIMS ANY WARRANTY FOR THE BINARY SOFTWARE. THE BINARY SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT. WITHOUT LIMITING THE GENERALITY OF THE FOREGOING, LICENSOR DOES NOT WARRANT THAT THE BINARY SOFTWARE IS ERROR-FREE OR WILL OPERATE WITHOUT INTERRUPTION, AND LICENSOR GRANTS NO WARRANTY REGARDING ITS USE OR THE RESULTS THEREFROM, INCLUDING ITS CORRECTNESS, ACCURACY, OR RELIABILITY.\nIntellectual Property Rights. Licensor is not authorized to sell or license any software under the patents of QUALCOMM Incorporated or Snaptrack, Inc. Accordingly, neither the sale, license or provision of the Binary Software nor any provision of this Agreement shall be construed as to grant to Licensee either expressly, by implication or by way of estoppel, any license or other right under any of such patents of QUALCOMM Incorporated or Snaptrack, Inc. Licensee, on behalf of itself and its affiliates, agrees not to contend in any context that, as a result of the provision or use of any Binary Software or any portion thereof, either Licensor or any of its affiliates has any obligation to extend, or Licensee or any other party has obtained any right to, any license, whether express or implied, with respect to any patent of QUALCOMM Incorporated or Snaptrack, Inc. for any purpose.\nLimitation of Liability. IN NO EVENT WILL LICENSOR, OR ANY OF LICENSOR'S LICENSORS HAVE ANY LIABILITY HEREUNDER FOR ANY INDIRECT, SPECIAL, OR\nCONSEQUENTIAL DAMAGES, HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER FOR BREACH OF CONTRACT, TORT (INCLUDING NEGLIGENCE), OR OTHERWISE, ARISING OUT OF THIS AGREEMENT, INCLUDING DAMAGES FOR LOSS OF PROFITS, OR THE COST OF PROCUREMENT OF SUBSTITUTE GOODS, EVEN IF SUCH PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. LICENSOR’S TOTAL LIABILITY FOR ALL COSTS, DAMAGES, CLAIMS, OR LOSSES WHATSOEVER ARISING OUT\nOF OR IN CONNECTION WITH THIS AGREEMENT OR THE BINARY SOFTWARE SUPPLIED UNDER THIS AGREEMENT IS LIMITED TO THE AGGREGATE AMOUNT PAID BY LICENSEE TO LICENSOR IN CONNECTION WITH THE BINARY SOFTWARE TO WHICH LOSSES OR DAMAGES ARE CLAIMED.\nTrade Compliance. Licensee shall comply with all applicable export and import control laws and regulations including but not limited to the US Export Administration Regulation (including prohibited party lists issued by other federal governments), Catch-all regulations and all national and international embargoes. Licensee further agrees that it will not knowingly transfer, divert, export or re-export, directly or indirectly, any product, software, including software source code, or technology restricted by such regulations or by other applicable national regulations, received from Licensor under this Agreement, or any direct product of such software or technical data to any person, firm, entity, country or destination to which such transfer, diversion, export or re-export is restricted or prohibited, without obtaining prior written authorization from the applicable competent government authorities to the extent required by those laws. Licensee acknowledge that the “restricted encryption software” that is subject to the US Export Administration Regulations (EAR), is not intended for use by a government end user, as defined in part 772 of the EAR. This provision shall survive termination or expiration of this Agreement.\nAssignment. Licensee may not assign this Agreement without the prior written consent of Licensor. Licensor may assign this Agreement without Licensee’s consent.\nGoverning Law. This Agreement will be governed by, construed, and enforced in accordance with the laws of the State of Texas, USA, without regard to conflicts of laws principles, will apply to all matters relating to this Agreement or the Binary Software, and Licensee agrees that any litigation will be subject to the exclusive jurisdiction of the state or federal courts Texas, USA. The United Nations Convention on Contracts for the International Sale of Goods will not apply to this Agreement.\nRestrictions, Warranty Disclaimer, Limitation of Liability, Trade Compliance, Assignment, Governing Law, and Third Party Terms shall survive termination or expiration of this Agreement.\nThird Party Terms. The licensed Binary Software includes the following third party software for which the following terms apply:\nLibfdt - Flat Device Tree manipulation\nCopyright © 2006 David Gibson, IBM Corporation All rights reserved.\nRedistributions must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,\nWHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\nLibElf\nCopyright © 2006,2008-2011 Joseph Koshy All rights reserved.\nRedistributions must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
     }
   ],
-  "documentNamespace": "https://nxp.com/spdx/f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+  "documentNamespace": "https://nxp.com/spdx/0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
   "packages": [
     {
-      "SPDXID": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
       "name": "Layerscape",
-      "versionInfo": "lf-6.18.20-2.0.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
       "licenseConcluded": "(LicenseRef-fb01c3d1-c0c8-43a5-a164-c3942c52e011)",
       "licenseDeclared": "(LicenseRef-fb01c3d1-c0c8-43a5-a164-c3942c52e011)",
-      "downloadLocation": "https://github.com/nxp-qoriq/yocto-sdk -b wrynose -m ls-6.18.20-2.0.0.xml",
+      "downloadLocation": "https://github.com/nxp-qoriq/yocto-sdk -b wrynose -m ls-6.18.37-2.1.0.xml",
       "originator": "Organization: NXP",
       "supplier": "NOASSERTION",
       "externalRefs": [],
       "filesAnalyzed": false
     },
     {
-      "SPDXID": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---a33936fa-93c4-4305-a207-413e4385d966",
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---1297da40-77cb-4e1c-9ceb-86940ea2844a",
       "name": "aiopsl",
-      "versionInfo": "lf-6.18.20-2.0.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
       "licenseConcluded": "BSD-3-Clause",
       "licenseDeclared": "BSD-3-Clause",
-      "downloadLocation": "https://github.com/nxp-qoriq/aiopsl -b lf-6.18.20-2.0.0",
+      "downloadLocation": "https://github.com/nxp-qoriq/aiopsl -b lf-6.18.37-2.1.0",
       "originator": "Organization: NXP",
       "supplier": "NOASSERTION",
       "externalRefs": [],
       "filesAnalyzed": false
     },
     {
-      "SPDXID": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---0f49819e-c25c-4fc0-8a94-9f876c0d0cf5",
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---ecf728d9-4b78-45fe-a555-9195b1498f5c",
       "name": "aquantia-firmware-utility",
-      "versionInfo": "lf-6.18.20-2.0.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
       "licenseConcluded": "BSD-2-Clause",
       "licenseDeclared": "BSD-2-Clause",
-      "downloadLocation": "https://github.com/nxp-qoriq/aquantia-firmware-utility -b lf-6.18.20-2.0.0",
+      "downloadLocation": "https://github.com/nxp-qoriq/aquantia-firmware-utility -b lf-6.18.37-2.1.0",
       "originator": "Organization: NXP",
       "supplier": "NOASSERTION",
       "externalRefs": [],
       "filesAnalyzed": false
     },
     {
-      "SPDXID": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---28edca80-03d4-4dd0-ab37-292dc890686f",
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---13d74a02-4cbd-4f1d-96dc-e13d98e1a7eb",
       "name": "ceetm",
-      "versionInfo": "lf-6.18.20-2.0.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
       "licenseConcluded": "GPL-2.0-only",
       "licenseDeclared": "GPL-2.0-only",
-      "downloadLocation": "https://github.com/nxp-qoriq/ceetm -b lf-6.18.20-2.0.0",
+      "downloadLocation": "https://github.com/nxp-qoriq/ceetm -b lf-6.18.37-2.1.0",
       "originator": "Organization: NXP",
       "supplier": "NOASSERTION",
       "externalRefs": [],
       "filesAnalyzed": false
     },
     {
-      "SPDXID": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---9ae34bef-7264-4263-acd4-1910cb6eb4a4",
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---468edc03-f012-4cdc-9f23-c37b0468d401",
       "name": "cst",
-      "versionInfo": "lf-6.18.20-2.0.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
       "licenseConcluded": "BSD-3-Clause",
       "licenseDeclared": "BSD-3-Clause",
-      "downloadLocation": "https://github.com/nxp-qoriq/cst -b lf-6.18.20-2.0.0",
+      "downloadLocation": "https://github.com/nxp-qoriq/cst -b lf-6.18.37-2.1.0",
       "originator": "Organization: NXP",
       "supplier": "NOASSERTION",
       "externalRefs": [],
       "filesAnalyzed": false
     },
     {
-      "SPDXID": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---69ea9fec-4cfd-4846-b0b1-bf605a132b1f",
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---548c937e-7bf5-4424-867a-d55775d9453e",
       "name": "dash-rcw",
-      "versionInfo": "lf-6.18.20-2.0.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
       "licenseConcluded": "BSD-3-Clause",
       "licenseDeclared": "BSD-3-Clause",
-      "downloadLocation": "https://github.com/nxp-qoriq/rcw -b lf-6.12.20-2.0.0",
+      "downloadLocation": "https://github.com/nxp-qoriq/rcw -b lf-6.18.37-2.1.0",
       "originator": "Organization: NXP",
       "supplier": "NOASSERTION",
       "externalRefs": [],
       "filesAnalyzed": false
     },
     {
-      "SPDXID": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---a0bfb97a-036c-4e26-9b71-d80f3a7e226f",
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---4665ce6b-8312-4cd9-9110-8185e8a40f8c",
       "name": "dce",
-      "versionInfo": "lf-6.18.20-2.0.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
       "licenseConcluded": "BSD-3-Clause",
       "licenseDeclared": "BSD-3-Clause",
-      "downloadLocation": "https://github.com/nxp-qoriq/dce -b lf-6.18.20-2.0.0",
+      "downloadLocation": "https://github.com/nxp-qoriq/dce -b lf-6.18.37-2.1.0",
       "originator": "Organization: NXP",
       "supplier": "NOASSERTION",
       "externalRefs": [],
       "filesAnalyzed": false
     },
     {
-      "SPDXID": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---957e2c5b-458c-4864-a7f0-15dc9fb093eb",
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---46213854-c04f-4cdd-bb13-419bc8fbfab3",
       "name": "ddr-phy-binary",
-      "versionInfo": "lf-6.18.20-2.0.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
       "licenseConcluded": "LicenseRef-6621d972-be40-452c-ba47-3bd5ff50fdd4",
       "licenseDeclared": "LicenseRef-6621d972-be40-452c-ba47-3bd5ff50fdd4",
-      "downloadLocation": "https://github.com/nxp-qoriq/ddr-phy-binary -b lf-6.18.20-2.0.0",
+      "downloadLocation": "https://github.com/nxp-qoriq/ddr-phy-binary -b lf-6.18.37-2.1.0",
       "originator": "Organization: NXP (BSD-3-Clause) DPDK - Intel Corporation (BSD-3-Clause)  KNI Linux Device driver - Intel Corporation (GPL-2.0)  pmdinfogen - Neil Horman (GPL-2.0)",
       "supplier": "NOASSERTION",
       "externalRefs": [],
       "filesAnalyzed": false
     },
     {
-      "SPDXID": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---b8e32945-8e5e-4b6e-ab9d-d0642ef4cee4",
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---9d2214e2-521a-4da5-bcfc-d7f071fbf30b",
       "name": "dpdk",
-      "versionInfo": "lf-6.18.20-2.0.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
       "licenseConcluded": "BSD-3-Clause",
       "licenseDeclared": "BSD-3-Clause",
       "homepage": "https://github.com/nxp-qoriq/dpdk",
-      "downloadLocation": "https://github.com/nxp-qoriq/dpdk -b lf-6.18.20-2.0.0",
+      "downloadLocation": "https://github.com/nxp-qoriq/dpdk -b lf-6.18.37-2.1.0",
       "originator": "Organization: NXP",
       "supplier": "NOASSERTION",
       "externalRefs": [],
       "filesAnalyzed": false
     },
     {
-      "SPDXID": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---64e4c58f-6508-442f-bd5a-557905670eec",
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---0a95c3d2-fb43-47a2-bf8d-30bd10c9e0d4",
       "name": "eth-config",
-      "versionInfo": "lf-6.18.20-2.0.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
       "licenseConcluded": "BSD-3-Clause",
       "licenseDeclared": "BSD-3-Clause",
-      "downloadLocation": "https://github.com/nxp-qoriq/eth-config -b lf-6.18.20-2.0.0",
+      "downloadLocation": "https://github.com/nxp-qoriq/eth-config -b lf-6.18.37-2.1.0",
       "originator": "Organization: NXP",
       "supplier": "NOASSERTION",
       "externalRefs": [],
       "filesAnalyzed": false
     },
     {
-      "SPDXID": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---6575b834-1cc2-4b57-99e9-697494510eb6",
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---c604b0c3-f3c5-4bda-9ebd-8bbf25ac21b5",
+      "name": "flib",
+      "versionInfo": "lf-6.18.37-2.1.0",
+      "licenseConcluded": "BSD-3-Clause",
+      "licenseDeclared": "BSD-3-Clause",
+      "downloadLocation": "https://github.com/nxp-qoriq/flib -b lf-6.18.37-2.1.0",
+      "originator": "Organization: NXP",
+      "supplier": "NOASSERTION",
+      "externalRefs": [],
+      "filesAnalyzed": false
+    },
+    {
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---9788ea2b-f0f6-40b5-8732-6a983a3448f3",
       "name": "fmc",
-      "versionInfo": "lf-6.18.20-2.0.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
       "licenseConcluded": "MIT",
       "licenseDeclared": "MIT",
-      "downloadLocation": "https://github.com/nxp-qoriq/fmc -b lf-6.18.20-2.0.0",
+      "downloadLocation": "https://github.com/nxp-qoriq/fmc -b lf-6.18.37-2.1.0",
       "originator": "Organization: NXP",
       "supplier": "NOASSERTION",
       "externalRefs": [],
       "filesAnalyzed": false
     },
     {
-      "SPDXID": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---da9e80e0-942f-476e-8273-f3b29e09fba0",
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---3ff92a44-33ec-486b-ab8e-c91d28e3ff9c",
       "name": "fmlib",
-      "versionInfo": "lf-6.18.20-2.0.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
       "licenseConcluded": "BSD-3-Clause",
       "licenseDeclared": "BSD-3-Clause",
-      "downloadLocation": "https://github.com/nxp-qoriq/fmlib -b lf-6.18.20-2.0.0",
+      "downloadLocation": "https://github.com/nxp-qoriq/fmlib -b lf-6.18.37-2.1.0",
       "originator": "Organization: NXP",
       "supplier": "NOASSERTION",
       "externalRefs": [],
       "filesAnalyzed": false
     },
     {
-      "SPDXID": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---912832f9-b1a4-487c-93ef-16fc2045caa1",
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---760f17e0-ecda-4f56-8d0e-67ab272200bb",
       "name": "gpp-aioptool",
-      "versionInfo": "lf-6.18.20-2.0.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
       "licenseConcluded": "BSD-3-Clause",
       "licenseDeclared": "BSD-3-Clause",
-      "downloadLocation": "https://github.com/nxp-qoriq/gpp-aioptool -b lf-6.18.20-2.0.0",
+      "downloadLocation": "https://github.com/nxp-qoriq/gpp-aioptool -b lf-6.18.37-2.1.0",
       "originator": "Organization: NXP",
       "supplier": "NOASSERTION",
       "externalRefs": [],
       "filesAnalyzed": false
     },
     {
-      "SPDXID": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---061f4cd3-86c3-4324-9587-04e4c6139159",
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---cb58333e-7828-48d2-8cd0-6bec8bc9f099",
       "name": "imx-atf",
-      "versionInfo": "lf-6.18.20-2.0.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
       "licenseConcluded": "BSD-3-Clause",
       "licenseDeclared": "BSD-3-Clause",
       "homepage": "https://github.com/nxp-imx/imx-atf",
-      "downloadLocation": "https://github.com/nxp-imx/imx-atf -b lf-6.18.20-2.0.0",
+      "downloadLocation": "https://github.com/nxp-imx/imx-atf -b lf-6.18.37-2.1.0",
       "originator": "Organization: NXP",
       "supplier": "NOASSERTION",
       "externalRefs": [],
       "filesAnalyzed": false
     },
     {
-      "SPDXID": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---acc0eaff-17c0-4cf1-9a88-783c2961fc16",
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---71ad691c-b861-4900-8b6f-9225d57eedf6",
       "name": "imx-optee-client",
-      "versionInfo": "lf-6.18.20-2.0.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
       "licenseConcluded": "BSD-2-Clause",
       "licenseDeclared": "BSD-2-Clause",
-      "downloadLocation": "https://github.com/nxp-imx/imx-optee-client -b lf-6.18.20-2.0.0",
+      "downloadLocation": "https://github.com/nxp-imx/imx-optee-client -b lf-6.18.37-2.1.0",
       "originator": "Organization: NXP",
       "supplier": "NOASSERTION",
       "externalRefs": [],
       "filesAnalyzed": false
     },
     {
-      "SPDXID": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---ab023a42-a6c0-4d69-b953-06870f24b00a",
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---f9d68497-4df7-44c0-94a4-14f5fa67080b",
       "name": "imx-optee-os",
-      "versionInfo": "lf-6.18.20-2.0.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
       "licenseConcluded": "BSD-2-Clause",
       "licenseDeclared": "BSD-2-Clause",
-      "downloadLocation": "https://github.com/nxp-imx/imx-optee-os -b lf-6.18.20-2.0.0",
+      "downloadLocation": "https://github.com/nxp-imx/imx-optee-os -b lf-6.18.37-2.1.0",
       "originator": "Organization: NXP",
       "supplier": "NOASSERTION",
       "externalRefs": [],
       "filesAnalyzed": false
     },
     {
-      "SPDXID": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---1d6800fa-35ff-4346-9eb3-2bf33dda40a6",
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---68877ad8-cc10-4376-a130-2e2eddb2bc6f",
       "name": "imx-optee-test",
-      "versionInfo": "lf-6.18.20-2.0.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
       "licenseConcluded": "BSD-2-Clause",
       "licenseDeclared": "BSD-2-Clause",
-      "downloadLocation": "https://github.com/nxp-imx/imx-optee-test -b lf-6.18.20-2.0.0",
+      "downloadLocation": "https://github.com/nxp-imx/imx-optee-test -b lf-6.18.37-2.1.0",
       "originator": "Organization: NXP",
       "supplier": "NOASSERTION",
       "externalRefs": [],
       "filesAnalyzed": false
     },
     {
-      "SPDXID": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---1d8e9096-c175-452f-9a6b-104546ed1632",
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---f4d4ff27-0a1d-43f9-8efe-63193ff09c4f",
       "name": "linux-imx",
-      "versionInfo": "lf-6.18.20-2.0.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
       "licenseConcluded": "LicenseRef-d1ff3cc0-134d-4339-9a4d-8a0edc9d2788",
       "licenseDeclared": "LicenseRef-d1ff3cc0-134d-4339-9a4d-8a0edc9d2788",
       "homepage": "https://github.com/nxp-imx/linux-imx",
-      "downloadLocation": "https://github.com/nxp-imx/linux-imx -b lf-6.18.20-2.0.0",
+      "downloadLocation": "https://github.com/nxp-imx/linux-imx -b lf-6.18.37-2.1.0",
       "originator": "Organization: NXP",
       "supplier": "NOASSERTION",
       "externalRefs": [],
       "filesAnalyzed": false
     },
     {
-      "SPDXID": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---4c3aa7f6-51be-4eb5-83cd-1d9cf01f8c6f",
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---24df4b13-7dca-4d38-830d-18f7a9599d44",
       "name": "mc-utils",
-      "versionInfo": "lf-6.18.20-2.0.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
       "licenseConcluded": "BSD-3-Clause",
       "licenseDeclared": "BSD-3-Clause",
-      "downloadLocation": "https://github.com/nxp-qoriq/mc-utils -b lf-6.18.20-2.0.0",
+      "downloadLocation": "https://github.com/nxp-qoriq/mc-utils -b lf-6.18.37-2.1.0",
       "originator": "Organization: NXP",
       "supplier": "NOASSERTION",
       "externalRefs": [],
       "filesAnalyzed": false
     },
     {
-      "SPDXID": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---74cec7c6-0d80-4474-9ec9-68816f8becf3",
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---d7e5a030-b9ae-4fb2-97cb-1cb671bdbc74",
       "name": "mdio-proxy-module",
-      "versionInfo": "lf-6.18.20-2.0.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
       "licenseConcluded": "BSD-3-Clause",
       "licenseDeclared": "BSD-3-Clause",
-      "downloadLocation": "https://github.com/nxp-qoriq/mdio-proxy-module -b lf-6.18.20-2.0.0",
+      "downloadLocation": "https://github.com/nxp-qoriq/mdio-proxy-module -b lf-6.18.37-2.1.0",
       "originator": "Organization: NXP",
       "supplier": "NOASSERTION",
       "externalRefs": [],
       "filesAnalyzed": false
     },
     {
-      "SPDXID": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---53843e69-a56b-4550-bc4d-6fdab63cb130",
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---42663552-9570-42f0-942d-4f79162d07b0",
+      "name": "qbman_userspace",
+      "versionInfo": "lf-6.18.37-2.1.0",
+      "licenseConcluded": "BSD-3-Clause",
+      "licenseDeclared": "BSD-3-Clause",
+      "downloadLocation": "https://github.com/nxp-qoriq/qbman_userspace -b lf-6.18.37-2.1.0",
+      "originator": "Organization: NXP",
+      "supplier": "NOASSERTION",
+      "externalRefs": [],
+      "filesAnalyzed": false
+    },
+    {
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---abaec845-dd21-4390-8f02-9f4836f67b8d",
       "name": "qemu",
-      "versionInfo": "lf-6.18.20-2.0.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
       "licenseConcluded": "GPL-2.0-only",
       "licenseDeclared": "GPL-2.0-only",
-      "downloadLocation": "https://github.com/nxp-qoriq/qemu.git -b lf-6.18.20-2.0.0",
+      "downloadLocation": "https://github.com/nxp-qoriq/qemu.git -b lf-6.18.37-2.1.0",
       "originator": "Organization: NXP",
       "supplier": "NOASSERTION",
       "externalRefs": [],
       "filesAnalyzed": false
     },
     {
-      "SPDXID": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---845a644a-02f7-4e17-8351-897b3d4aca7f",
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---7bb82b08-2817-4225-b917-ff681d70718e",
       "name": "qoriq-engine-pfe-bin",
-      "versionInfo": "lf-6.18.20-2.0.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
       "licenseConcluded": "LicenseRef-6621d972-be40-452c-ba47-3bd5ff50fdd4",
       "licenseDeclared": "LicenseRef-6621d972-be40-452c-ba47-3bd5ff50fdd4",
-      "downloadLocation": "https://github.com/nxp-qoriq/qoriq-engine-pfe-bin -b lf-6.18.20-2.0.0",
+      "downloadLocation": "https://github.com/nxp-qoriq/qoriq-engine-pfe-bin -b lf-6.18.37-2.1.0",
       "originator": "Organization: NXP",
       "supplier": "NOASSERTION",
       "externalRefs": [],
       "filesAnalyzed": false
     },
     {
-      "SPDXID": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---dfc8f729-4be7-4450-b035-76360782ca92",
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---bce8b904-05fd-4048-83dd-fe5ff950bba6",
       "name": "qoriq-firmware-cortina",
-      "versionInfo": "lf-6.18.20-2.0.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
       "licenseConcluded": "LicenseRef-d1f3dace-9143-4aee-964a-9575ad6385e6",
       "licenseDeclared": "LicenseRef-d1f3dace-9143-4aee-964a-9575ad6385e6",
-      "downloadLocation": "https://github.com/nxp-qoriq/qoriq-firmware-cortina -b lf-6.18.20-2.0.0",
+      "downloadLocation": "https://github.com/nxp-qoriq/qoriq-firmware-cortina -b lf-6.18.37-2.1.0",
       "originator": "Organization: NXP",
       "supplier": "NOASSERTION",
       "externalRefs": [],
       "filesAnalyzed": false
     },
     {
-      "SPDXID": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---ca1b1bac-c7f4-48f9-807c-b85d85d9e79b",
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---68c8f09b-24cc-41e0-82ae-c7831601931d",
       "name": "qoriq-firmware-inphi",
-      "versionInfo": "lf-6.18.20-2.0.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
       "licenseConcluded": "LicenseRef-d1f3dace-9143-4aee-964a-9575ad6385e6",
       "licenseDeclared": "LicenseRef-d1f3dace-9143-4aee-964a-9575ad6385e6",
-      "downloadLocation": "https://github.com/nxp-qoriq/qoriq-firmware-inphi -b lf-6.18.20-2.0.0",
+      "downloadLocation": "https://github.com/nxp-qoriq/qoriq-firmware-inphi -b lf-6.18.37-2.1.0",
       "originator": "Organization: NXP",
       "supplier": "NOASSERTION",
       "externalRefs": [],
       "filesAnalyzed": false
     },
     {
-      "SPDXID": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---7c861cdf-5cc8-45c5-89a9-558c5910d29a",
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---bd519131-87fa-4959-b966-8f0ee30563ad",
       "name": "qoriq-fm-ucode",
-      "versionInfo": "lf-6.18.20-2.0.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
       "licenseConcluded": "LicenseRef-6621d972-be40-452c-ba47-3bd5ff50fdd4",
       "licenseDeclared": "LicenseRef-6621d972-be40-452c-ba47-3bd5ff50fdd4",
-      "downloadLocation": "https://github.com/nxp-qoriq/qoriq-fm-ucode -b lf-6.18.20-2.0.0",
+      "downloadLocation": "https://github.com/nxp-qoriq/qoriq-fm-ucode -b lf-6.18.37-2.1.0",
       "originator": "Organization: NXP",
       "supplier": "NOASSERTION",
       "externalRefs": [],
       "filesAnalyzed": false
     },
     {
-      "SPDXID": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---75aeff9d-0073-41c5-a492-a74bcf3329f1",
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---ce0ce915-d17c-4dd4-bc04-036e25387f52",
       "name": "qoriq-mc-binary-10.39.0",
-      "versionInfo": "lf-6.18.20-2.0.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
       "licenseConcluded": "LicenseRef-6621d972-be40-452c-ba47-3bd5ff50fdd4",
       "licenseDeclared": "LicenseRef-6621d972-be40-452c-ba47-3bd5ff50fdd4",
-      "downloadLocation": "https://github.com/nxp-qoriq/qoriq-mc-binary -b lf-6.18.20-2.0.0",
+      "downloadLocation": "https://github.com/nxp-qoriq/qoriq-mc-binary -b lf-6.18.37-2.1.0",
       "originator": "Organization: NXP",
       "supplier": "NOASSERTION",
       "externalRefs": [],
       "filesAnalyzed": false
     },
     {
-      "SPDXID": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---1c127d0b-88a5-43c2-af86-9a092e897f9d",
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---a0ff83e1-8764-4dc6-8588-25fa16461bd4",
       "name": "qoriq-qe-ucode",
-      "versionInfo": "lf-6.18.20-2.0.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
       "licenseConcluded": "LicenseRef-6621d972-be40-452c-ba47-3bd5ff50fdd4",
       "licenseDeclared": "LicenseRef-6621d972-be40-452c-ba47-3bd5ff50fdd4",
-      "downloadLocation": "https://github.com/nxp-qoriq/qoriq-qe-ucode -b lf-6.18.20-2.0.0",
+      "downloadLocation": "https://github.com/nxp-qoriq/qoriq-qe-ucode -b lf-6.18.37-2.1.0",
       "originator": "Organization: NXP",
       "supplier": "NOASSERTION",
       "externalRefs": [],
       "filesAnalyzed": false
     },
     {
-      "SPDXID": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---bae54af4-c31a-45ab-987e-28390390436a",
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---cc415f1a-9459-4cfe-8512-6a77cef34a1a",
       "name": "restool",
-      "versionInfo": "lf-6.18.20-2.0.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
       "licenseConcluded": "BSD-3-Clause",
       "licenseDeclared": "BSD-3-Clause",
-      "downloadLocation": "https://github.com/nxp-qoriq/restool -b lf-6.18.20-2.0.0",
+      "downloadLocation": "https://github.com/nxp-qoriq/restool -b lf-6.18.37-2.1.0",
       "originator": "Organization: NXP",
       "supplier": "NOASSERTION",
       "externalRefs": [],
       "filesAnalyzed": false
     },
     {
-      "SPDXID": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---e2ddd336-f476-4728-9599-507697c660c1",
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---abf26258-3465-42db-85f8-75728af0777f",
       "name": "spc",
-      "versionInfo": "lf-6.18.20-2.0.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
       "licenseConcluded": "MIT",
       "licenseDeclared": "MIT",
-      "downloadLocation": "https://github.com/nxp-qoriq/spc -b lf-6.18.20-2.0.0",
+      "downloadLocation": "https://github.com/nxp-qoriq/spc -b lf-6.18.37-2.1.0",
       "originator": "Organization: NXP",
       "supplier": "NOASSERTION",
       "externalRefs": [],
       "filesAnalyzed": false
     },
     {
-      "SPDXID": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---d9c9c3fc-3a3c-43de-b9c1-14186d06a54d",
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---8360c69e-b70c-4dab-b6b6-255c8954f5b8",
       "name": "tsntool",
-      "versionInfo": "lf-6.18.20-2.0.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
       "licenseConcluded": "GPL-2.0-or-later",
       "licenseDeclared": "GPL-2.0-or-later",
-      "downloadLocation": "https://github.com/nxp-qoriq/tsntool -b lf-6.18.20-2.0.0",
+      "downloadLocation": "https://github.com/nxp-qoriq/tsntool -b lf-6.18.37-2.1.0",
       "originator": "Organization: NXP",
       "supplier": "NOASSERTION",
       "externalRefs": [],
       "filesAnalyzed": false
     },
     {
-      "SPDXID": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---b7f68ba3-77a4-48bb-a777-0387e536c385",
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---768062d0-b93b-4449-93ed-936df7ae2df7",
       "name": "uboot-imx",
-      "versionInfo": "lf-6.18.20-2.0.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
       "licenseConcluded": "GPL-2.0-only",
       "licenseDeclared": "GPL-2.0-only",
-      "homepage": "https://github.com/nxp-imx/uboot-imx",
-      "downloadLocation": "https://github.com/nxp-imx/uboot-imx -b lf-6.18.20-2.0.0",
+      "downloadLocation": "https://github.com/nxp-imx/uboot-imx -b lf-6.18.37-2.1.0",
+      "originator": "Organization: NXP",
+      "supplier": "NOASSERTION",
+      "externalRefs": [],
+      "filesAnalyzed": false
+    },
+    {
+      "SPDXID": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---bd26df8a-3262-43f3-8a62-22557ccf244d",
+      "name": "uefi",
+      "versionInfo": "lf-6.18.37-2.1.0",
+      "licenseConcluded": "LicenseRef-d1f3dace-9143-4aee-964a-9575ad6385e6",
+      "licenseDeclared": "LicenseRef-d1f3dace-9143-4aee-964a-9575ad6385e6",
+      "downloadLocation": "https://github.com/NXP/qoriq-uefi-binary.git -b lf-6.18.37-2.1.0",
       "originator": "Organization: NXP",
       "supplier": "NOASSERTION",
       "externalRefs": [],
@@ -415,157 +450,172 @@
     {
       "spdxElementId": "SPDXRef-DOCUMENT",
       "relationshipType": "DESCRIBES",
-      "relatedSpdxElement": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b"
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856"
     },
     {
-      "spdxElementId": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
       "relationshipType": "DYNAMIC_LINK",
-      "relatedSpdxElement": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---061f4cd3-86c3-4324-9587-04e4c6139159"
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---0a95c3d2-fb43-47a2-bf8d-30bd10c9e0d4"
     },
     {
-      "spdxElementId": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
       "relationshipType": "DYNAMIC_LINK",
-      "relatedSpdxElement": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---0f49819e-c25c-4fc0-8a94-9f876c0d0cf5"
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---1297da40-77cb-4e1c-9ceb-86940ea2844a"
     },
     {
-      "spdxElementId": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
       "relationshipType": "DYNAMIC_LINK",
-      "relatedSpdxElement": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---1c127d0b-88a5-43c2-af86-9a092e897f9d"
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---13d74a02-4cbd-4f1d-96dc-e13d98e1a7eb"
     },
     {
-      "spdxElementId": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
       "relationshipType": "DYNAMIC_LINK",
-      "relatedSpdxElement": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---1d6800fa-35ff-4346-9eb3-2bf33dda40a6"
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---24df4b13-7dca-4d38-830d-18f7a9599d44"
     },
     {
-      "spdxElementId": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
       "relationshipType": "DYNAMIC_LINK",
-      "relatedSpdxElement": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---1d8e9096-c175-452f-9a6b-104546ed1632"
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---3ff92a44-33ec-486b-ab8e-c91d28e3ff9c"
     },
     {
-      "spdxElementId": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
       "relationshipType": "DYNAMIC_LINK",
-      "relatedSpdxElement": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---28edca80-03d4-4dd0-ab37-292dc890686f"
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---42663552-9570-42f0-942d-4f79162d07b0"
     },
     {
-      "spdxElementId": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
       "relationshipType": "DYNAMIC_LINK",
-      "relatedSpdxElement": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---4c3aa7f6-51be-4eb5-83cd-1d9cf01f8c6f"
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---46213854-c04f-4cdd-bb13-419bc8fbfab3"
     },
     {
-      "spdxElementId": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
       "relationshipType": "DYNAMIC_LINK",
-      "relatedSpdxElement": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---53843e69-a56b-4550-bc4d-6fdab63cb130"
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---4665ce6b-8312-4cd9-9110-8185e8a40f8c"
     },
     {
-      "spdxElementId": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
       "relationshipType": "DYNAMIC_LINK",
-      "relatedSpdxElement": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---64e4c58f-6508-442f-bd5a-557905670eec"
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---468edc03-f012-4cdc-9f23-c37b0468d401"
     },
     {
-      "spdxElementId": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
       "relationshipType": "DYNAMIC_LINK",
-      "relatedSpdxElement": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---6575b834-1cc2-4b57-99e9-697494510eb6"
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---548c937e-7bf5-4424-867a-d55775d9453e"
     },
     {
-      "spdxElementId": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
       "relationshipType": "DYNAMIC_LINK",
-      "relatedSpdxElement": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---69ea9fec-4cfd-4846-b0b1-bf605a132b1f"
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---68877ad8-cc10-4376-a130-2e2eddb2bc6f"
     },
     {
-      "spdxElementId": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
       "relationshipType": "DYNAMIC_LINK",
-      "relatedSpdxElement": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---74cec7c6-0d80-4474-9ec9-68816f8becf3"
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---68c8f09b-24cc-41e0-82ae-c7831601931d"
     },
     {
-      "spdxElementId": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
       "relationshipType": "DYNAMIC_LINK",
-      "relatedSpdxElement": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---75aeff9d-0073-41c5-a492-a74bcf3329f1"
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---71ad691c-b861-4900-8b6f-9225d57eedf6"
     },
     {
-      "spdxElementId": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
       "relationshipType": "DYNAMIC_LINK",
-      "relatedSpdxElement": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---7c861cdf-5cc8-45c5-89a9-558c5910d29a"
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---760f17e0-ecda-4f56-8d0e-67ab272200bb"
     },
     {
-      "spdxElementId": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
       "relationshipType": "DYNAMIC_LINK",
-      "relatedSpdxElement": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---845a644a-02f7-4e17-8351-897b3d4aca7f"
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---768062d0-b93b-4449-93ed-936df7ae2df7"
     },
     {
-      "spdxElementId": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
       "relationshipType": "DYNAMIC_LINK",
-      "relatedSpdxElement": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---912832f9-b1a4-487c-93ef-16fc2045caa1"
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---7bb82b08-2817-4225-b917-ff681d70718e"
     },
     {
-      "spdxElementId": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
       "relationshipType": "DYNAMIC_LINK",
-      "relatedSpdxElement": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---957e2c5b-458c-4864-a7f0-15dc9fb093eb"
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---8360c69e-b70c-4dab-b6b6-255c8954f5b8"
     },
     {
-      "spdxElementId": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
       "relationshipType": "DYNAMIC_LINK",
-      "relatedSpdxElement": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---9ae34bef-7264-4263-acd4-1910cb6eb4a4"
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---9788ea2b-f0f6-40b5-8732-6a983a3448f3"
     },
     {
-      "spdxElementId": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
       "relationshipType": "DYNAMIC_LINK",
-      "relatedSpdxElement": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---a0bfb97a-036c-4e26-9b71-d80f3a7e226f"
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---9d2214e2-521a-4da5-bcfc-d7f071fbf30b"
     },
     {
-      "spdxElementId": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
       "relationshipType": "DYNAMIC_LINK",
-      "relatedSpdxElement": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---a33936fa-93c4-4305-a207-413e4385d966"
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---a0ff83e1-8764-4dc6-8588-25fa16461bd4"
     },
     {
-      "spdxElementId": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
       "relationshipType": "DYNAMIC_LINK",
-      "relatedSpdxElement": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---ab023a42-a6c0-4d69-b953-06870f24b00a"
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---abaec845-dd21-4390-8f02-9f4836f67b8d"
     },
     {
-      "spdxElementId": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
       "relationshipType": "DYNAMIC_LINK",
-      "relatedSpdxElement": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---acc0eaff-17c0-4cf1-9a88-783c2961fc16"
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---abf26258-3465-42db-85f8-75728af0777f"
     },
     {
-      "spdxElementId": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
       "relationshipType": "DYNAMIC_LINK",
-      "relatedSpdxElement": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---b7f68ba3-77a4-48bb-a777-0387e536c385"
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---bce8b904-05fd-4048-83dd-fe5ff950bba6"
     },
     {
-      "spdxElementId": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
       "relationshipType": "DYNAMIC_LINK",
-      "relatedSpdxElement": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---b8e32945-8e5e-4b6e-ab9d-d0642ef4cee4"
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---bd26df8a-3262-43f3-8a62-22557ccf244d"
     },
     {
-      "spdxElementId": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
       "relationshipType": "DYNAMIC_LINK",
-      "relatedSpdxElement": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---bae54af4-c31a-45ab-987e-28390390436a"
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---bd519131-87fa-4959-b966-8f0ee30563ad"
     },
     {
-      "spdxElementId": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
       "relationshipType": "DYNAMIC_LINK",
-      "relatedSpdxElement": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---ca1b1bac-c7f4-48f9-807c-b85d85d9e79b"
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---c604b0c3-f3c5-4bda-9ebd-8bbf25ac21b5"
     },
     {
-      "spdxElementId": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
       "relationshipType": "DYNAMIC_LINK",
-      "relatedSpdxElement": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---d9c9c3fc-3a3c-43de-b9c1-14186d06a54d"
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---cb58333e-7828-48d2-8cd0-6bec8bc9f099"
     },
     {
-      "spdxElementId": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
       "relationshipType": "DYNAMIC_LINK",
-      "relatedSpdxElement": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---da9e80e0-942f-476e-8273-f3b29e09fba0"
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---cc415f1a-9459-4cfe-8512-6a77cef34a1a"
     },
     {
-      "spdxElementId": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
       "relationshipType": "DYNAMIC_LINK",
-      "relatedSpdxElement": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---dfc8f729-4be7-4450-b035-76360782ca92"
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---ce0ce915-d17c-4dd4-bc04-036e25387f52"
     },
     {
-      "spdxElementId": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b",
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
       "relationshipType": "DYNAMIC_LINK",
-      "relatedSpdxElement": "SPDXRef-package-f7bc0bca-4a7f-4855-be2d-6bcf6361377b---e2ddd336-f476-4728-9599-507697c660c1"
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---d7e5a030-b9ae-4fb2-97cb-1cb671bdbc74"
+    },
+    {
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
+      "relationshipType": "DYNAMIC_LINK",
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---ecf728d9-4b78-45fe-a555-9195b1498f5c"
+    },
+    {
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
+      "relationshipType": "DYNAMIC_LINK",
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---f4d4ff27-0a1d-43f9-8efe-63193ff09c4f"
+    },
+    {
+      "spdxElementId": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856",
+      "relationshipType": "DYNAMIC_LINK",
+      "relatedSpdxElement": "SPDXRef-package-0574bfff-0d98-4ab9-9b5c-7a7ebe88e856---f9d68497-4df7-44c0-94a4-14f5fa67080b"
     }
   ]
 }

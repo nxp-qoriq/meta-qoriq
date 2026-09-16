@@ -1,100 +1,132 @@
-Layerscape Linux Yocto Project BSP 6.18.37_2.1.0 Release
-=====================================================
+# Layerscape Linux Yocto Project BSP 6.18.37_2.1.0 Release
+
 Supplemental Yocto layer to hold pending patches to be upstreamed.
 
+---
 
-Supported boards:
---------------------------
-  * ls1012ardb
-  * ls1012afrwy
-  * ls1021atwr
-  * ls1043ardb
-  * ls1046ardb
-  * ls1046afrwy
-  * ls1088ardb-pb
-  * ls1028ardb
-  * ls2088ardb
-  * lx2160ardb-rev2
-  * lx2162aqds
+## Supported Boards
 
+> Replace `<machine>` in all commands below with one of the board names listed here.
 
-Install the `repo` utility
---------------------------
-To use this manifest repo, the 'repo' tool must be installed first
-```
-$ mkdir ~/bin
-$ curl http://commondatastorage.googleapis.com/git-repo-downloads/repo  > ~/bin/repo
-$ chmod a+x ~/bin/repo
-$ PATH=${PATH}:~/bin
-```
+| Machine Name       |
+|--------------------|
+| ls1012ardb         |
+| ls1012afrwy        |
+| ls1021atwr         |
+| ls1043ardb         |
+| ls1046ardb         |
+| ls1046afrwy        |
+| ls1088ardb-pb      |
+| ls1028ardb         |
+| ls2088ardb         |
+| lx2160ardb-rev2    |
+| lx2162aqds         |
 
+---
 
-Install essential host packages
-------------------------------
-Your Build Host must install required packages for the Yocto build.
-Reference to the section *Build Host Packages* in the document ***Yocto Project Quick build***.
-- https://docs.yoctoproject.org/brief-yoctoprojectqs/index.html#build-host-packages
+## Install the `repo` Utility
 
+The `repo` tool must be installed before fetching the BSP manifest:
 
-Download Yocto project BSP
-------------------------------
-```
-$ mkdir yocto-sdk
-$ cd yocto-sdk
-$ repo init -u https://github.com/nxp-qoriq/yocto-sdk -b wrynose -m ls-6.18.37-2.1.0.xml
-$ repo sync --force-sync
+```bash
+mkdir ~/bin
+curl https://commondatastorage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+chmod a+x ~/bin/repo
+export PATH=${PATH}:~/bin
 ```
 
+---
 
-Create Layerscape environment
-------------------------------
-```
-$ . ./setup-env -m lx2160ardb-rev2
-```
-If Use an existing build folder
-```
-$ cd build_lx2160ardb-rev2
-$ source SOURCE_THIS
+## Install Essential Host Packages
+
+Your build host must have the required Yocto packages installed.
+See the [Yocto Project Quick Build - Host Packages](https://docs.yoctoproject.org/brief-yoctoprojectqs/index.html#build-host-packages) for details.
+
+---
+
+## Download Yocto Project BSP
+
+```bash
+mkdir yocto-sdk
+cd yocto-sdk
+repo init -u https://github.com/nxp-qoriq/yocto-sdk -b wrynose -m ls-6.18.37-2.1.0.xml
+repo sync --force-sync
 ```
 
+---
 
-Build rootfs image
-------------------------------
-```
-$ bitbake fsl-image-networking
-```
-or:
-```
-$ bitbake fsl-image-networking-full
-```
-fsl-image-networking-<machine>.rootfs.tar.gz will be found under tmp/deploy/images/lx2160ardb-rev2/
+## Create Layerscape Environment
 
+Source the setup script with your target machine name:
 
-Build boot image
-------------------------------
+```bash
+. ./setup-env -m lx2160ardb-rev2
 ```
-$ bitbake qoriq-composite-firmware
-```
-firmware_<machine>_uboot_sdboot.img will be found under tmp/deploy/images/lx2160ardb-rev2/
 
+If resuming an existing build folder:
 
-Generate boot partition tarball
-------------------------------
+```bash
+cd build_lx2160ardb-rev2
+source SOURCE_THIS
 ```
-$ bitbake generate-boottgz
-```
-boot_<machine>_lts_<kernel version>.tgz will be found under tmp/deploy/images/lx2160ardb-rev2/
 
+---
 
-Install image by flex-installer
-------------------------------
-prepare for install flex-installer on Linux host PC
+## Build Rootfs Image
+
+```bash
+bitbake fsl-image-networking
 ```
-$ sudo cp meta-qoriq/meta-qoriq-sdk/recipes-extended/flex-installer/flex-installer/flex-installer  /user/bin/
-$ sudo chmod +x /usr/bin/flex-installer
+
+Or the full variant:
+
+```bash
+bitbake fsl-image-networking-full
 ```
- Plugin SD card on linux host PC and install Layerscape BSP firmware, boot tarball and Yocto-rootfs as below:
+
+**Output:** `tmp/deploy/images/<machine>/fsl-image-networking-<machine>.rootfs.tar.gz`
+
+---
+
+## Build Boot Image
+
+```bash
+bitbake qoriq-composite-firmware
 ```
-$ flex-installer -i pf -d /dev/mmcblkX (format SD card)
-$ flex-installer -m <machine> -d /dev/<sdX/mmcblkX> -f firmware_<machine>_uboot_sdboot.img -b boot_lts_<kernel version>.tgz -r fsl-image-networking-<machine>.rootfs.tar.gz
+
+**Output:** `tmp/deploy/images/<machine>/firmware_<machine>_uboot_sdboot.img`
+
+---
+
+## Generate Boot Partition Tarball
+
+```bash
+bitbake generate-boottgz
+```
+
+**Output:** `tmp/deploy/images/<machine>/boot_<machine>_lts_<kernel_version>.tgz`
+
+---
+
+## Deploy Images via flex-installer
+
+Copy `flex-installer` to the Linux host PC:
+
+```bash
+sudo cp meta-qoriq/meta-qoriq-sdk/recipes-extended/flex-installer/flex-installer/flex-installer /usr/bin/
+sudo chmod +x /usr/bin/flex-installer
+```
+
+Insert the SD card, then format it and deploy the BSP firmware, boot tarball and rootfs:
+
+```bash
+# Step 1: Format the SD card
+flex-installer -i pf -d /dev/mmcblkX
+
+# Step 2: Flash firmware, boot tarball and rootfs
+flex-installer -m <machine> \
+    -d /dev/<sdX or mmcblkX> \
+    -f firmware_<machine>_uboot_sdboot.img \
+    -b boot_<machine>_lts_<kernel_version>.tgz \
+    -r fsl-image-networking-<machine>.rootfs.tar.gz
 ```
